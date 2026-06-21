@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Japanese N1 Path · Sesión de hoy</title>
+<!-- Hace que al "Añadir a pantalla de inicio" se abra a pantalla completa, como una app -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="N1 Path">
+<meta name="theme-color" content="#27407F">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F5F6F9;
+    --card:#FFFFFF;
+    --ink:#161F38;
+    --ink-2:#3A4359;
+    --muted:#828BA0;
+    --faint:#AEB5C6;
+    --indigo:#27407F;
+    --indigo-bright:#3B5FC4;
+    --amber:#C98A2E;
+    --line:#E7E9F0;
+    --line-2:#EEF0F5;
+    --good:#27407F;
+    --shadow:0 1px 2px rgba(22,31,56,.04), 0 12px 30px -12px rgba(22,31,56,.14);
+    --jp:'Zen Kaku Gothic New', 'Hiragino Kaku Gothic ProN', system-ui, sans-serif;
+    --ui:'Inter', system-ui, -apple-system, sans-serif;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+
+  body{
+    font-family:var(--ui);
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:40px 16px;
+    background:
+      radial-gradient(120% 80% at 50% -10%, #EEF1F7 0%, #E4E7EF 55%, #DCE0EA 100%);
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ---------- Phone frame ---------- */
+  .phone{
+    position:relative;
+    width:390px;
+    height:844px;
+    background:var(--paper);
+    border-radius:54px;
+    box-shadow:
+      0 0 0 12px #11151F,
+      0 0 0 13px #2A2F3C,
+      0 50px 90px -30px rgba(17,21,31,.55);
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+  }
+
+  /* ghost kanji signature */
+  .ghost{
+    position:absolute;
+    font-family:var(--jp);
+    font-weight:900;
+    font-size:300px;
+    line-height:1;
+    color:var(--ink);
+    opacity:.025;
+    top:46px;
+    right:-44px;
+    user-select:none;
+    pointer-events:none;
+  }
+
+  /* ---------- Status bar ---------- */
+  .statusbar{
+    height:54px;
+    padding:0 30px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    font-size:15px;
+    font-weight:600;
+    letter-spacing:.2px;
+    flex-shrink:0;
+    z-index:3;
+  }
+  .statusbar .right{display:flex; align-items:center; gap:7px;}
+  .statusbar svg{display:block;}
+
+  /* ---------- Scroll content ---------- */
+  .screen{
+    flex:1;
+    overflow-y:auto;
+    padding:8px 22px 0;
+    z-index:2;
+  }
+  .screen::-webkit-scrollbar{display:none;}
+
+  /* ---------- Header ---------- */
+  .eyebrow{
+    font-size:11px;
+    font-weight:600;
+    letter-spacing:1.4px;
+    color:var(--faint);
+    text-transform:uppercase;
+  }
+  .greeting{
+    font-family:var(--jp);
+    font-weight:700;
+    font-size:27px;
+    letter-spacing:-.2px;
+    margin-top:5px;
+    color:var(--ink);
+  }
+
+  /* ---------- North star + level ascent ---------- */
+  .north{
+    margin-top:22px;
+    display:flex;
+    gap:18px;
+    align-items:stretch;
+  }
+  .north-text{flex:1; padding-top:4px;}
+  .north-label{
+    font-size:12px;
+    font-weight:600;
+    letter-spacing:.4px;
+    color:var(--muted);
+    display:flex; align-items:center; gap:6px;
+  }
+  .north-date{
+    font-family:var(--jp);
+    font-weight:700;
+    font-size:30px;
+    line-height:1.1;
+    margin-top:3px;
+    color:var(--indigo);
+    letter-spacing:-.3px;
+  }
+  .north-sub{
+    font-size:12.5px;
+    color:var(--muted);
+    margin-top:7px;
+    line-height:1.45;
+  }
+  .north-sub b{color:var(--ink-2); font-weight:600;}
+
+  /* the ascent rail = signature element */
+  .ascent{
+    width:72px;
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    padding:2px 0;
+  }
+  .ascent::before{
+    content:"";
+    position:absolute;
+    left:8px; top:9px; bottom:9px;
+    width:2px;
+    background:linear-gradient(to bottom,
+      var(--indigo) 0%, var(--indigo) 52%, var(--line) 52%, var(--line) 100%);
+    border-radius:2px;
+  }
+  .lvl{
+    position:relative;
+    display:flex;
+    align-items:center;
+    gap:9px;
+    height:30px;
+    padding-left:0;
+  }
+  .lvl .dot{
+    width:18px; height:18px;
+    border-radius:50%;
+    background:var(--card);
+    border:2px solid var(--line);
+    flex-shrink:0;
+    margin-left:0;
+    display:flex; align-items:center; justify-content:center;
+    z-index:1;
+  }
+  .lvl .name{
+    font-size:12px;
+    font-weight:600;
+    color:var(--faint);
+    letter-spacing:.3px;
+  }
+  /* done levels */
+  .lvl.done .dot{background:var(--indigo); border-color:var(--indigo);}
+  .lvl.done .name{color:var(--ink-2);}
+  /* goal */
+  .lvl.goal .dot{background:var(--card); border:2px solid var(--indigo);}
+  .lvl.goal .name{color:var(--indigo); font-weight:700;}
+  /* current */
+  .lvl.now .dot{
+    width:22px; height:22px;
+    background:var(--indigo-bright);
+    border:2px solid #fff;
+    box-shadow:0 0 0 4px rgba(59,95,196,.18);
+  }
+  .lvl.now .name{
+    color:var(--ink);
+    font-weight:700;
+    font-size:12.5px;
+  }
+  .lvl.now .tag{
+    font-size:9.5px;
+    font-weight:700;
+    letter-spacing:.5px;
+    color:var(--indigo-bright);
+    background:rgba(59,95,196,.1);
+    padding:1px 6px;
+    border-radius:20px;
+    margin-left:1px;
+  }
+  .lvl .check{width:9px; height:9px;}
+
+  /* ---------- Hero session card ---------- */
+  .session{
+    margin-top:26px;
+    background:var(--card);
+    border-radius:26px;
+    padding:24px 22px 22px;
+    box-shadow:var(--shadow);
+  }
+  .session-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+  }
+  .session-eyebrow{
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:1.4px;
+    color:var(--amber);
+    text-transform:uppercase;
+  }
+  .session-h{
+    font-family:var(--jp);
+    font-weight:700;
+    font-size:25px;
+    margin-top:7px;
+    letter-spacing:-.4px;
+  }
+  .session-h .min{color:var(--ink);}
+  .session-h .sep{color:var(--faint); font-weight:400; margin:0 4px;}
+  .session-h .items{color:var(--ink-2);}
+  .ring{flex-shrink:0; margin-top:2px;}
+
+  .chips{
+    display:flex;
+    gap:8px;
+    margin-top:18px;
+    flex-wrap:wrap;
+  }
+  .chip{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    font-size:12.5px;
+    font-weight:600;
+    color:var(--ink-2);
+    background:var(--line-2);
+    padding:8px 12px 8px 10px;
+    border-radius:12px;
+  }
+  .chip .cdot{width:7px; height:7px; border-radius:50%; flex-shrink:0;}
+  .chip.review .cdot{background:var(--indigo-bright);}
+  .chip.new .cdot{background:var(--amber);}
+  .chip.read .cdot{background:#6E7891;}
+
+  .guide{
+    margin-top:18px;
+    padding-top:17px;
+    border-top:1px solid var(--line-2);
+    font-size:13px;
+    line-height:1.5;
+    color:var(--ink-2);
+  }
+  .guide b{color:var(--ink); font-weight:600;}
+
+  .start{
+    margin-top:18px;
+    width:100%;
+    border:none;
+    border-radius:17px;
+    background:var(--indigo);
+    color:#fff;
+    font-family:var(--ui);
+    font-size:16.5px;
+    font-weight:600;
+    letter-spacing:.2px;
+    height:56px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    cursor:pointer;
+    transition:transform .12s ease, background .15s ease, box-shadow .15s ease;
+    box-shadow:0 8px 20px -8px rgba(39,64,127,.6);
+  }
+  .start:hover{background:#2E4A91; box-shadow:0 10px 24px -8px rgba(39,64,127,.7);}
+  .start:active{transform:scale(.985);}
+  .start:focus-visible{outline:3px solid var(--indigo-bright); outline-offset:3px;}
+  .start svg{display:block;}
+
+  /* ---------- Footer row ---------- */
+  .footer{
+    margin-top:18px;
+    margin-bottom:14px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .streak{
+    display:flex;
+    align-items:center;
+    gap:9px;
+  }
+  .streak .flame{
+    width:34px; height:34px;
+    border-radius:11px;
+    background:rgba(201,138,46,.12);
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+  }
+  .streak-num{font-size:14px; font-weight:700; color:var(--ink); line-height:1.1;}
+  .streak-lbl{font-size:11.5px; color:var(--muted); margin-top:1px;}
+  .seeprogress{
+    font-size:13px;
+    font-weight:600;
+    color:var(--indigo);
+    display:flex; align-items:center; gap:3px;
+    cursor:pointer;
+  }
+
+  /* ---------- Tab bar ---------- */
+  .tabbar{
+    height:84px;
+    flex-shrink:0;
+    background:rgba(255,255,255,.82);
+    backdrop-filter:saturate(180%) blur(20px);
+    -webkit-backdrop-filter:saturate(180%) blur(20px);
+    border-top:1px solid var(--line);
+    display:flex;
+    padding:10px 14px 0;
+    z-index:3;
+  }
+  .tab{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:5px;
+    color:var(--faint);
+    font-size:10.5px;
+    font-weight:600;
+    letter-spacing:.2px;
+    cursor:pointer;
+  }
+  .tab.active{color:var(--indigo);}
+  .tab svg{display:block;}
+
+  .home-indicator{
+    position:absolute;
+    bottom:9px; left:50%;
+    transform:translateX(-50%);
+    width:138px; height:5px;
+    border-radius:3px;
+    background:var(--ink);
+    opacity:.85;
+    z-index:4;
+  }
+
+  /* ---------- Load-in motion ---------- */
+  .anim{opacity:0; transform:translateY(10px); animation:rise .6s cubic-bezier(.2,.7,.3,1) forwards;}
+  .d1{animation-delay:.05s;} .d2{animation-delay:.13s;}
+  .d3{animation-delay:.22s;} .d4{animation-delay:.32s;} .d5{animation-delay:.42s;}
+  @keyframes rise{to{opacity:1; transform:translateY(0);}}
+
+  .lvl.now .dot{animation:pulse 2.6s ease-in-out infinite;}
+  @keyframes pulse{
+    0%,100%{box-shadow:0 0 0 4px rgba(59,95,196,.18);}
+    50%{box-shadow:0 0 0 7px rgba(59,95,196,.07);}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .anim{animation:none; opacity:1; transform:none;}
+    .lvl.now .dot{animation:none;}
+    .start{transition:none;}
+  }
+
+  .caption{
+    margin-top:22px;
+    text-align:center;
+    font-size:12.5px;
+    color:#6A7184;
+    max-width:390px;
+    line-height:1.5;
+  }
+  .wrap{display:flex; flex-direction:column; align-items:center;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="phone">
+    <div class="ghost">道</div>
+
+    <!-- status bar -->
+    <div class="statusbar">
+      <span>9:41</span>
+      <div class="right">
+        <!-- signal -->
+        <svg width="18" height="12" viewBox="0 0 18 12" fill="none"><rect x="0" y="8" width="3" height="4" rx="1" fill="#161F38"/><rect x="5" y="5" width="3" height="7" rx="1" fill="#161F38"/><rect x="10" y="2.5" width="3" height="9.5" rx="1" fill="#161F38"/><rect x="15" y="0" width="3" height="12" rx="1" fill="#161F38"/></svg>
+        <!-- wifi -->
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="none"><path d="M8.5 2C11.4 2 14 3.1 15.8 4.9L14.5 6.2C13 4.7 10.9 3.8 8.5 3.8S4 4.7 2.5 6.2L1.2 4.9C3 3.1 5.6 2 8.5 2Z" fill="#161F38"/><path d="M8.5 5.6C10.1 5.6 11.6 6.2 12.7 7.3L8.5 11.5L4.3 7.3C5.4 6.2 6.9 5.6 8.5 5.6Z" fill="#161F38"/></svg>
+        <!-- battery -->
+        <svg width="26" height="13" viewBox="0 0 26 13" fill="none"><rect x="1" y="1" width="21" height="11" rx="3" stroke="#161F38" stroke-opacity=".4" stroke-width="1"/><rect x="2.5" y="2.5" width="16" height="8" rx="1.5" fill="#161F38"/><rect x="23.5" y="4" width="1.6" height="5" rx="1" fill="#161F38" fill-opacity=".5"/></svg>
+      </div>
+    </div>
+
+    <!-- scroll content -->
+    <div class="screen">
+
+      <div class="anim d1">
+        <div class="eyebrow">Martes 21 de junio</div>
+        <div class="greeting">Buenas tardes, Alex</div>
+      </div>
+
+      <!-- north star + ascent rail -->
+      <div class="north anim d2">
+        <div class="north-text">
+          <div class="north-label">
+            <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1l1.7 3.9 4.3.4-3.2 2.8 1 4.2L7 10.9 3.2 13.1l1-4.2L1 6.1l4.3-.4L7 1z" fill="#828BA0"/></svg>
+            N1 estimado
+          </div>
+          <div class="north-date">marzo 2028</div>
+          <div class="north-sub">A tu ritmo de <b>30 min/día</b>. Sube a 45 y llegas <b>8 meses antes</b>.</div>
+        </div>
+
+        <div class="ascent">
+          <div class="lvl goal">
+            <div class="dot"><svg class="check" width="8" height="8" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="2" fill="#27407F"/></svg></div>
+            <span class="name">N1</span>
+          </div>
+          <div class="lvl">
+            <div class="dot"></div>
+            <span class="name">N2</span>
+          </div>
+          <div class="lvl now">
+            <div class="dot"></div>
+            <span class="name">N3</span>
+            <span class="tag">AQUÍ</span>
+          </div>
+          <div class="lvl done">
+            <div class="dot"><svg class="check" width="9" height="9" viewBox="0 0 12 12" fill="none"><path d="M2.5 6.2l2.2 2.3 4.8-5" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <span class="name">N4</span>
+          </div>
+          <div class="lvl done">
+            <div class="dot"><svg class="check" width="9" height="9" viewBox="0 0 12 12" fill="none"><path d="M2.5 6.2l2.2 2.3 4.8-5" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <span class="name">N5</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- hero session card -->
+      <div class="session anim d3">
+        <div class="session-top">
+          <div>
+            <div class="session-eyebrow">Sesión de hoy</div>
+            <div class="session-h"><span class="min">30 min</span><span class="sep">·</span><span class="items">42 ítems</span></div>
+          </div>
+          <!-- progress ring (fresh = empty) -->
+          <svg class="ring" width="46" height="46" viewBox="0 0 46 46" fill="none">
+            <circle cx="23" cy="23" r="19" stroke="#EEF0F5" stroke-width="5"/>
+            <circle cx="23" cy="23" r="19" stroke="#C98A2E" stroke-width="5" stroke-linecap="round" stroke-dasharray="119.4" stroke-dashoffset="119.4" transform="rotate(-90 23 23)"/>
+            <text x="23" y="27" text-anchor="middle" font-family="Inter" font-size="12" font-weight="700" fill="#161F38">0%</text>
+          </svg>
+        </div>
+
+        <div class="chips">
+          <span class="chip review"><span class="cdot"></span>18 repasos</span>
+          <span class="chip new"><span class="cdot"></span>12 nuevos</span>
+          <span class="chip read"><span class="cdot"></span>1 lectura</span>
+        </div>
+
+        <div class="guide">
+          Empiezas por tus <b>18 repasos</b>. Es lo que más te acerca al N1 hoy.
+        </div>
+
+        <button class="start" id="startBtn">
+          <svg width="15" height="16" viewBox="0 0 15 16" fill="none"><path d="M2 1.8v12.4c0 .7.8 1.1 1.4.7l9.6-6.2c.5-.4.5-1.1 0-1.5L3.4 1.1C2.8.7 2 1.1 2 1.8z" fill="#fff"/></svg>
+          Empezar
+        </button>
+      </div>
+
+      <!-- footer -->
+      <div class="footer anim d4">
+        <div class="streak">
+          <div class="flame">
+            <svg width="16" height="18" viewBox="0 0 16 18" fill="none"><path d="M8 0s1.5 2.4 1.5 4.3c0 1.2-.8 2-1.7 2-1 0-1.6-.7-1.6-1.6 0-.6.2-1 .2-1S2 6 2 10.4C2 14.6 5 18 8 18s6-3 6-7C14 6 8 0 8 0z" fill="#C98A2E"/></svg>
+          </div>
+          <div>
+            <div class="streak-num">24 días seguidos</div>
+            <div class="streak-lbl">Tu mejor racha: 31</div>
+          </div>
+        </div>
+        <div class="seeprogress">Ver progreso
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="#27407F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- tab bar -->
+    <div class="tabbar">
+      <div class="tab active">
+        <svg width="23" height="23" viewBox="0 0 24 24" fill="none"><path d="M4 11l8-6 8 6v8a1 1 0 01-1 1h-4v-5h-6v5H5a1 1 0 01-1-1v-8z" fill="#27407F"/></svg>
+        Hoy
+      </div>
+      <div class="tab">
+        <svg width="23" height="23" viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="16" height="16" rx="3" stroke="#AEB5C6" stroke-width="1.8"/><path d="M8 9h8M8 13h5" stroke="#AEB5C6" stroke-width="1.8" stroke-linecap="round"/></svg>
+        Estudiar
+      </div>
+      <div class="tab">
+        <svg width="23" height="23" viewBox="0 0 24 24" fill="none"><path d="M5 5h14a1 1 0 011 1v9a1 1 0 01-1 1H9l-4 3v-3H5a1 1 0 01-1-1V6a1 1 0 011-1z" stroke="#AEB5C6" stroke-width="1.8" stroke-linejoin="round"/></svg>
+        Tutor
+      </div>
+      <div class="tab">
+        <svg width="23" height="23" viewBox="0 0 24 24" fill="none"><path d="M5 19V9M12 19V5M19 19v-7" stroke="#AEB5C6" stroke-width="1.9" stroke-linecap="round"/></svg>
+        Progreso
+      </div>
+    </div>
+
+    <div class="home-indicator"></div>
+  </div>
+
+  <p class="caption">Pantalla <b>“Sesión de hoy”</b> · un solo botón, la fecha de N1 siempre presente y la escalera de niveles como firma. Toca <b>Empezar</b> para ver la microinteracción.</p>
+</div>
+
+<script>
+  // Minimal interaction: pressing Empezar fills the ring + advances state visually.
+  (function(){
+    var btn = document.getElementById('startBtn');
+    if(!btn) return;
+    btn.addEventListener('click', function(){
+      var ring = document.querySelector('.ring circle:last-of-type');
+      var label = document.querySelector('.ring text');
+      if(ring){ ring.setAttribute('stroke-dashoffset','83'); ring.style.transition='stroke-dashoffset .8s ease'; }
+      if(label){ label.textContent='30%'; }
+      btn.innerHTML = '<svg width="15" height="16" viewBox="0 0 15 16" fill="none"><path d="M2 1.8v12.4c0 .7.8 1.1 1.4.7l9.6-6.2c.5-.4.5-1.1 0-1.5L3.4 1.1C2.8.7 2 1.1 2 1.8z" fill="#fff"/></svg> Continuar · 18 restantes';
+    });
+  })();
+</script>
+</body>
+</html>
