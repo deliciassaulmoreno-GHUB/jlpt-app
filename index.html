@@ -8,9 +8,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="N1 Path">
 <meta name="theme-color" content="#27407F">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon.png">
 <style>
   :root{
     --paper:#F5F6F9; --card:#FFFFFF; --ink:#161F38; --ink-2:#3A4359;
@@ -354,6 +353,13 @@ document.getElementById("resetBtn").addEventListener("click", function(){
   document.querySelector(".greeting").textContent=g; })();
 
 renderHome();
+
+/* ====== Modo sin conexión (service worker) ====== */
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function(){
+    navigator.serviceWorker.register("sw.js").catch(function(){});
+  });
+}
 </script>
 </body>
 </html>

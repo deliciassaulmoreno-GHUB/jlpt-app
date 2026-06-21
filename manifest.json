@@ -1,0 +1,20 @@
+{
+  "name": "Japanese N1 Path",
+  "short_name": "N1 Path",
+  "description": "Tu ruta diaria hacia el JLPT N1.",
+  "lang": "es",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F5F6F9",
+  "theme_color": "#27407F",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
