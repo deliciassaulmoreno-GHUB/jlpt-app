@@ -319,9 +319,13 @@ function promptFor(item){
 function backHTML(item){
   var d=item.d;
   if(item.type==="kanji"){
-    return '<div class="readings">'+readingChip("Kun",d.kun,d.say)+readingChip("On",d.on,d.say)+'</div>'+
+    var chips='';
+    if(d.kun) chips+=readingChip("Kun",d.kun,d.say);
+    if(d.on) chips+=readingChip("On",d.on,d.say);
+    return '<div class="readings">'+chips+'</div>'+
            '<div class="meaning">'+d.mean+'</div>'+
-           '<div class="mnemonic"><b>Pista:</b> '+d.tip+'</div>'+exampleHTML(d);
+           (d.tip? '<div class="mnemonic"><b>Pista:</b> '+d.tip+'</div>' : '')+
+           exampleHTML(d);
   }
   if(item.type==="vocab"){
     return '<div class="readings">'+readingChip("Lectura",d.r,d.say)+'</div>'+
