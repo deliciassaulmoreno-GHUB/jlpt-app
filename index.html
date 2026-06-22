@@ -28,56 +28,67 @@
   .view{flex:1; display:none; flex-direction:column; min-height:0;}
   .view.active{display:flex;}
 
-  #home{padding:8px 22px 0; overflow-y:auto;}
+  /* ===== MENU ===== */
+  #menu{padding:10px 22px 0; overflow-y:auto;}
   .eyebrow{font-size:11px; font-weight:600; letter-spacing:1.4px; color:var(--faint); text-transform:uppercase;}
   .greeting{font-family:var(--jp); font-weight:700; font-size:27px; margin-top:5px;}
-  .north{margin-top:22px; display:flex; gap:18px;}
-  .north-text{flex:1; padding-top:4px;}
-  .north-label{font-size:12px; font-weight:600; color:var(--muted);}
-  .north-date{font-family:var(--jp); font-weight:700; font-size:30px; margin-top:3px; color:var(--indigo);}
-  .north-sub{font-size:12.5px; color:var(--muted); margin-top:7px; line-height:1.45;}
-  .north-sub b{color:var(--ink-2); font-weight:600;}
-  .ascent{width:72px; position:relative; display:flex; flex-direction:column; gap:10px; padding:2px 0;}
-  .ascent::before{content:""; position:absolute; left:8px; top:9px; bottom:9px; width:2px;
-    background:linear-gradient(to bottom,var(--indigo) 0%,var(--indigo) 52%,var(--line) 52%,var(--line) 100%); border-radius:2px;}
-  .lvl{position:relative; display:flex; align-items:center; gap:9px; height:26px;}
-  .lvl .dot{width:18px; height:18px; border-radius:50%; background:var(--card); border:2px solid var(--line);
-    display:flex; align-items:center; justify-content:center; z-index:1; font-size:10px; color:#fff;}
-  .lvl .name{font-size:12px; font-weight:600; color:var(--faint);}
-  .lvl.done .dot{background:var(--indigo); border-color:var(--indigo);}
-  .lvl.done .name{color:var(--ink-2);}
-  .lvl.goal .dot{border:2px solid var(--indigo);}
-  .lvl.goal .name{color:var(--indigo); font-weight:700;}
-  .lvl.now .dot{width:22px; height:22px; background:var(--indigo-bright); border:2px solid #fff; box-shadow:0 0 0 4px rgba(59,95,196,.18);}
-  .lvl.now .name{color:var(--ink); font-weight:700;}
-  .lvl.now .tag{font-size:9.5px; font-weight:700; color:var(--indigo-bright); background:rgba(59,95,196,.1); padding:1px 6px; border-radius:20px;}
+  .greeting-sub{font-size:13px; color:var(--muted); margin-top:4px;}
 
-  .session{margin-top:24px; background:var(--card); border-radius:26px; padding:24px 22px 22px; box-shadow:var(--shadow);}
-  .session-eyebrow{font-size:11px; font-weight:700; letter-spacing:1.4px; color:var(--amber); text-transform:uppercase;}
-  .session-h{font-family:var(--jp); font-weight:700; font-size:25px; margin-top:7px;}
-  .session-h .sep{color:var(--faint); font-weight:400; margin:0 4px;}
-  .session-h .items{color:var(--ink-2);}
-  .chips{display:flex; gap:8px; margin-top:18px; flex-wrap:wrap;}
-  .chip{display:inline-flex; align-items:center; gap:7px; font-size:12.5px; font-weight:600; color:var(--ink-2);
-    background:var(--line-2); padding:8px 12px 8px 10px; border-radius:12px;}
-  .chip .cdot{width:7px; height:7px; border-radius:50%;}
-  .chip.review .cdot{background:var(--indigo-bright);} .chip.new .cdot{background:var(--amber);}
-  .breakdown{margin-top:12px; font-size:11.5px; color:var(--faint); letter-spacing:.2px;}
-  .guide{margin-top:14px; padding-top:15px; border-top:1px solid var(--line-2); font-size:13px; line-height:1.5; color:var(--ink-2);}
-  .guide b{color:var(--ink); font-weight:600;}
-  .btn{width:100%; height:56px; border:none; border-radius:17px; background:var(--indigo); color:#fff;
-    font-family:var(--ui); font-size:16.5px; font-weight:600; cursor:pointer; margin-top:18px;
-    transition:transform .12s ease, background .15s ease; box-shadow:0 8px 20px -8px rgba(39,64,127,.6);
-    display:flex; align-items:center; justify-content:center; gap:10px;}
-  .btn:active{transform:scale(.985);}
-  .btn:focus-visible{outline:3px solid var(--indigo-bright); outline-offset:3px;}
-  .btn[disabled]{background:var(--line); color:var(--muted); box-shadow:none; cursor:default;}
-  .home-foot{margin-top:18px; margin-bottom:18px; display:flex; align-items:center; justify-content:space-between;}
+  .rec-card{margin-top:20px; background:linear-gradient(135deg,#27407F,#3B5FC4); border-radius:24px; padding:22px 20px;
+    color:#fff; cursor:pointer; box-shadow:0 12px 30px -12px rgba(39,64,127,.7); transition:transform .12s ease;}
+  .rec-card:active{transform:scale(.99);}
+  .rec-top{display:flex; align-items:center; gap:13px;}
+  .rec-ic{width:46px; height:46px; border-radius:14px; background:rgba(255,255,255,.16); display:flex; align-items:center; justify-content:center; font-size:24px; flex-shrink:0;}
+  .rec-title{font-family:var(--jp); font-size:19px; font-weight:700;}
+  .rec-desc{font-size:12.5px; opacity:.85; margin-top:2px;}
+  .rec-foot{margin-top:16px; padding-top:14px; border-top:1px solid rgba(255,255,255,.18); display:flex; align-items:center; justify-content:space-between;}
+  .rec-summary{font-size:13px; font-weight:600;}
+  .rec-go{font-size:13px; font-weight:700; background:#fff; color:var(--indigo); padding:7px 15px; border-radius:20px;}
+
+  .section-label{margin-top:24px; font-size:11px; font-weight:700; letter-spacing:1.3px; color:var(--faint); text-transform:uppercase;}
+  .grid{margin-top:13px; display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+  .tile{background:var(--card); border-radius:20px; padding:17px 16px; box-shadow:var(--shadow); cursor:pointer;
+    border:1.5px solid transparent; transition:transform .12s ease, border-color .15s ease; position:relative; min-height:112px;
+    display:flex; flex-direction:column; justify-content:space-between;}
+  .tile:active{transform:scale(.97);}
+  .tile.locked{cursor:default; opacity:.62;}
+  .tile-ic{width:42px; height:42px; border-radius:13px; background:rgba(39,64,127,.08); color:var(--indigo);
+    display:flex; align-items:center; justify-content:center; font-family:var(--jp); font-size:22px; font-weight:700;}
+  .tile-ic.g2{background:rgba(201,138,46,.12); color:var(--amber);}
+  .tile-ic.g3{background:rgba(46,125,91,.12); color:var(--green);}
+  .tile-name{font-size:15px; font-weight:700; margin-top:12px;}
+  .tile-cnt{font-size:11.5px; color:var(--muted); margin-top:3px;}
+  .tile-cnt b{color:var(--indigo-bright); font-weight:700;}
+  .badge-soon{position:absolute; top:13px; right:13px; font-size:9px; font-weight:700; letter-spacing:.5px;
+    background:var(--line-2); color:var(--muted); padding:3px 7px; border-radius:20px; text-transform:uppercase;}
+  .menu-note{margin-top:14px; min-height:18px; font-size:12.5px; color:var(--amber); font-weight:600; text-align:center;}
+
+  .menu-foot{margin-top:10px; margin-bottom:20px; display:flex; align-items:center; justify-content:space-between;}
   .reset{font-size:12px; color:var(--faint); background:none; border:none; cursor:pointer; text-decoration:underline;}
   .streak{display:flex; align-items:center; gap:9px;}
   .flame{width:34px; height:34px; border-radius:11px; background:rgba(201,138,46,.12); display:flex; align-items:center; justify-content:center;}
   .streak-num{font-size:14px; font-weight:700;} .streak-lbl{font-size:11.5px; color:var(--muted);}
 
+  /* ===== LEVELS ===== */
+  #levels{padding:10px 22px 0; overflow-y:auto;}
+  .back-row{display:flex; align-items:center; gap:12px; margin-bottom:6px;}
+  .back-btn{width:34px; height:34px; border-radius:50%; background:var(--line-2); border:none; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; font-size:16px; color:var(--ink-2); flex-shrink:0;}
+  .level-title{font-family:var(--jp); font-weight:700; font-size:21px; margin:14px 0 4px;}
+  .level-help{font-size:12.5px; color:var(--muted); margin-bottom:16px;}
+  .level-btn{width:100%; background:var(--card); border:1.5px solid var(--line); border-radius:18px; padding:16px 18px;
+    cursor:pointer; display:flex; align-items:center; justify-content:space-between; margin-bottom:11px; transition:transform .1s ease, border-color .15s ease;}
+  .level-btn:active{transform:scale(.99);}
+  .level-l{display:flex; align-items:center; gap:13px;}
+  .level-tag{font-family:var(--jp); font-weight:700; font-size:16px; color:#fff; background:var(--indigo);
+    width:46px; height:38px; border-radius:11px; display:flex; align-items:center; justify-content:center;}
+  .level-tag.all{background:var(--amber); font-size:13px;}
+  .level-meta .lt{font-size:14.5px; font-weight:700;}
+  .level-meta .ls{font-size:11.5px; color:var(--muted); margin-top:2px;}
+  .level-meta .ls b{color:var(--indigo-bright);}
+  .level-arrow{color:var(--faint); font-size:20px;}
+
+  /* ===== STUDY ===== */
   #study{padding:6px 22px 0;}
   .study-row{display:flex; align-items:center; gap:14px;}
   .close{width:32px; height:32px; border-radius:50%; background:var(--line-2); border:none; cursor:pointer;
@@ -114,6 +125,11 @@
   .example .tr{display:block; font-family:var(--ui); font-size:12.5px; color:var(--muted); margin-top:3px;}
 
   .actions{padding:14px 0 14px; flex-shrink:0;}
+  .btn{width:100%; height:56px; border:none; border-radius:17px; background:var(--indigo); color:#fff;
+    font-family:var(--ui); font-size:16.5px; font-weight:600; cursor:pointer;
+    transition:transform .12s ease; box-shadow:0 8px 20px -8px rgba(39,64,127,.6);
+    display:flex; align-items:center; justify-content:center; gap:10px;}
+  .btn:active{transform:scale(.985);}
   .ratings{display:none; grid-template-columns:repeat(4,1fr); gap:8px;}
   .ratings.show{display:grid;}
   .rate{border:none; border-radius:15px; cursor:pointer; padding:11px 4px 10px; background:var(--card); box-shadow:var(--shadow);
@@ -131,42 +147,67 @@
   .done .big{font-family:var(--jp); font-size:56px; color:var(--indigo);}
   .done h2{font-size:22px; font-weight:700;}
   .done p{font-size:13.5px; color:var(--muted); line-height:1.5; max-width:260px;}
+  .done .btn{max-width:220px; margin-top:8px;}
 
-  @media (prefers-reduced-motion: reduce){.back,.btn,.rate,.progress > span{transition:none;}}
+  .empty{flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; gap:10px; padding:0 30px;}
+  .empty .big{font-size:42px;}
+  .empty h2{font-size:19px; font-weight:700;}
+  .empty p{font-size:13.5px; color:var(--muted); line-height:1.5;}
+
+  @media (prefers-reduced-motion: reduce){.back,.btn,.rate,.progress > span,.tile,.rec-card{transition:none;}}
 </style>
 </head>
 <body>
 <div class="topbar"></div>
 
-<section class="view active" id="home">
-  <div class="eyebrow">Hoy</div>
+<!-- ===== MENU (landing) ===== -->
+<section class="view active" id="menu">
+  <div class="eyebrow">Japanese N1 Path</div>
   <div class="greeting">Buenas tardes</div>
-  <div class="north">
-    <div class="north-text">
-      <div class="north-label">★ N1 estimado</div>
-      <div class="north-date">marzo 2028</div>
-      <div class="north-sub">A tu ritmo de <b>30 min/día</b>. Sube a 45 y llegas <b>8 meses antes</b>.</div>
+  <div class="greeting-sub">¿Qué quieres estudiar hoy?</div>
+
+  <div class="rec-card" id="recCard">
+    <div class="rec-top">
+      <div class="rec-ic">▶</div>
+      <div>
+        <div class="rec-title">Práctica recomendada</div>
+        <div class="rec-desc">Tu plan hacia el N1, en el menor tiempo</div>
+      </div>
     </div>
-    <div class="ascent">
-      <div class="lvl goal"><div class="dot"></div><span class="name">N1</span></div>
-      <div class="lvl"><div class="dot"></div><span class="name">N2</span></div>
-      <div class="lvl now"><div class="dot"></div><span class="name">N3</span><span class="tag">AQUÍ</span></div>
-      <div class="lvl done"><div class="dot">✓</div><span class="name">N4</span></div>
-      <div class="lvl done"><div class="dot">✓</div><span class="name">N5</span></div>
+    <div class="rec-foot">
+      <span class="rec-summary" id="recSummary">—</span>
+      <span class="rec-go">Empezar</span>
     </div>
   </div>
-  <div class="session">
-    <div class="session-eyebrow">Sesión de hoy</div>
-    <div class="session-h"><span id="homeTime">5 min</span><span class="sep">·</span><span class="items" id="homeItems">0 ítems</span></div>
-    <div class="chips">
-      <span class="chip review"><span class="cdot"></span><span id="chipReview">0 repasos</span></span>
-      <span class="chip new"><span class="cdot"></span><span id="chipNew">0 nuevos</span></span>
+
+  <div class="section-label">O elige qué estudiar</div>
+  <div class="grid">
+    <div class="tile" data-type="kanji">
+      <div class="tile-ic">字</div>
+      <div><div class="tile-name">Kanji</div><div class="tile-cnt" id="cnt-kanji">—</div></div>
     </div>
-    <div class="breakdown" id="breakdown"></div>
-    <div class="guide" id="homeGuide">Empiezas por tus repasos. Es lo que más te acerca al N1 hoy.</div>
-    <button class="btn" id="startBtn">▶ Empezar</button>
+    <div class="tile" data-type="vocab">
+      <div class="tile-ic g2">語</div>
+      <div><div class="tile-name">Vocabulario</div><div class="tile-cnt" id="cnt-vocab">—</div></div>
+    </div>
+    <div class="tile" data-type="grammar">
+      <div class="tile-ic g3">文</div>
+      <div><div class="tile-name">Gramática</div><div class="tile-cnt" id="cnt-grammar">—</div></div>
+    </div>
+    <div class="tile locked" data-soon="Conversación">
+      <span class="badge-soon">Pronto</span>
+      <div class="tile-ic">会</div>
+      <div><div class="tile-name">Conversación</div><div class="tile-cnt">Próximamente</div></div>
+    </div>
+    <div class="tile locked" data-soon="Exámenes">
+      <span class="badge-soon">Pronto</span>
+      <div class="tile-ic">試</div>
+      <div><div class="tile-name">Exámenes</div><div class="tile-cnt">Simulacros JLPT</div></div>
+    </div>
   </div>
-  <div class="home-foot">
+  <div class="menu-note" id="menuNote"></div>
+
+  <div class="menu-foot">
     <div class="streak">
       <div class="flame">🔥</div>
       <div><div class="streak-num" id="streakNum">Empieza hoy</div><div class="streak-lbl">Sigue cada día</div></div>
@@ -175,6 +216,18 @@
   </div>
 </section>
 
+<!-- ===== LEVEL PICKER ===== -->
+<section class="view" id="levels">
+  <div class="back-row">
+    <button class="back-btn" id="levelBack" aria-label="Volver">←</button>
+    <span class="eyebrow">Elige nivel</span>
+  </div>
+  <div class="level-title" id="levelTitle">Kanji</div>
+  <div class="level-help">Elige el nivel que quieres practicar. Verás primero tus repasos pendientes y luego ítems nuevos.</div>
+  <div id="levelList"></div>
+</section>
+
+<!-- ===== STUDY ===== -->
 <section class="view" id="study">
   <div class="study-row">
     <button class="close" id="closeBtn" aria-label="Cerrar">✕</button>
@@ -183,7 +236,7 @@
   </div>
   <div class="tagline" id="studyTag">Kanji</div>
   <div class="stage" id="stage">
-    <div class="kanji-box"><span class="kanji-glyph" id="glyph">木</span></div>
+    <div class="kanji-box"><span class="kanji-glyph" id="glyph">字</span></div>
     <div class="prompt" id="prompt">¿Qué significa?<span class="small">Piénsalo, luego revela</span></div>
     <div class="back" id="back"></div>
   </div>
@@ -198,16 +251,26 @@
   </div>
 </section>
 
+<!-- ===== DONE ===== -->
 <section class="view" id="doneView">
   <div class="done">
     <div class="big">完</div>
     <h2>¡Sesión completada!</h2>
-    <p>Has estudiado tus ítems de hoy y tu progreso está guardado en el teléfono. Vuelve más tarde o mañana para los próximos repasos.</p>
-    <button class="btn" id="doneBack" style="max-width:220px;">Volver al inicio</button>
+    <p>Tu progreso está guardado en el teléfono. Vuelve más tarde para los próximos repasos.</p>
+    <button class="btn" id="doneBack">Volver al menú</button>
   </div>
 </section>
 
-<!-- El contenido (kanji, vocab, gramática) se carga desde este archivo -->
+<!-- ===== EMPTY (nothing to study in this filter) ===== -->
+<section class="view" id="emptyView">
+  <div class="empty">
+    <div class="big">🌱</div>
+    <h2 id="emptyTitle">Nada pendiente aquí</h2>
+    <p id="emptyMsg">No tienes repasos ni ítems nuevos en esta selección ahora mismo.</p>
+    <button class="btn" id="emptyBack" style="max-width:220px;">Volver al menú</button>
+  </div>
+</section>
+
 <script src="content.js"></script>
 <script>
 /* Construir la lista de estudio a partir de window.CONTENT */
@@ -217,8 +280,10 @@ var ITEMS = [];
 (C.vocab||[]).forEach(function(v){ ITEMS.push({id:"v:"+v.w, type:"vocab", d:v}); });
 (C.grammar||[]).forEach(function(g){ ITEMS.push({id:"g:"+g.pat, type:"grammar", d:g}); });
 
-var NEW_LIMIT = 9;
+var NEW_LIMIT = 9;        // ítems nuevos por sesión en práctica recomendada
+var FOCUS_NEW_LIMIT = 12; // ítems nuevos por sesión cuando eliges tipo/nivel
 var TYPE_LABEL = {kanji:"Kanji", vocab:"Vocabulario", grammar:"Gramática"};
+var LEVEL_ORDER = ["N5","N4","N3","N2","N1"];
 
 var mem = {};
 function load(){ try{ var s=localStorage.getItem("jlpt-progress"); return s?JSON.parse(s):{}; }catch(e){ return mem.p||{}; } }
@@ -241,7 +306,10 @@ function fmt(d){ var m=d*1440;
 
 var progress=load(), queue=[], done=0, total=0, current=null;
 
-function buildQueue(){
+function isDue(id, now){ var st=progress[id]; return st && new Date(st.due)<=now; }
+
+/* ---- Práctica recomendada: repasos + nuevos intercalando tipos, en orden de nivel ---- */
+function buildRecommended(){
   var now=new Date(), reviews=[], newByType={kanji:[],vocab:[],grammar:[]};
   for(var i=0;i<ITEMS.length;i++){
     var st=progress[ITEMS[i].id];
@@ -249,7 +317,7 @@ function buildQueue(){
     else if(new Date(st.due)<=now) reviews.push(i);
   }
   var news=[], types=["grammar","vocab","kanji"], idx={grammar:0,vocab:0,kanji:0}, guard=0;
-  while(news.length<NEW_LIMIT && guard<500){
+  while(news.length<NEW_LIMIT && guard<800){
     guard++; var added=false;
     for(var t=0;t<types.length;t++){
       var ty=types[t];
@@ -260,40 +328,116 @@ function buildQueue(){
   return {queue:reviews.concat(news), reviews:reviews.length, news:news.length};
 }
 
-function renderHome(){
-  if(ITEMS.length===0){
-    document.getElementById("homeGuide").innerHTML="<b>No se cargó el contenido.</b> Asegúrate de haber subido también el archivo content.js a tu repositorio.";
-    var bb=document.getElementById("startBtn"); bb.disabled=true; bb.textContent="Falta content.js";
-    return;
+/* ---- Sesión enfocada: un tipo y un nivel (o todos) ---- */
+function buildFocused(type, level){
+  var now=new Date(), reviews=[], news=[];
+  for(var i=0;i<ITEMS.length;i++){
+    var it=ITEMS[i];
+    if(it.type!==type) continue;
+    if(level!=="all" && it.d.lvl!==level) continue;
+    var st=progress[it.id];
+    if(!st) news.push(i);
+    else if(new Date(st.due)<=now) reviews.push(i);
   }
-  var q=buildQueue(), tot=q.queue.length;
-  document.getElementById("chipReview").textContent=q.reviews+" repasos";
-  document.getElementById("chipNew").textContent=q.news+" nuevos";
-  document.getElementById("homeItems").textContent=tot+" ítems";
-  document.getElementById("homeTime").textContent=Math.max(1,Math.round(tot*0.4))+" min";
-  var byType={kanji:0,vocab:0,grammar:0};
-  q.queue.forEach(function(i){ byType[ITEMS[i].type]++; });
-  document.getElementById("breakdown").textContent=byType.kanji+" kanji · "+byType.vocab+" vocab · "+byType.grammar+" gramática";
-  var b=document.getElementById("startBtn");
-  if(tot===0){
-    document.getElementById("homeGuide").innerHTML="<b>Todo al día.</b> No tienes nada pendiente ahora mismo. Vuelve más tarde para los repasos.";
-    b.disabled=true; b.textContent="Nada pendiente";
-  } else {
-    document.getElementById("homeGuide").innerHTML="Empiezas por tus <b>"+q.reviews+" repasos</b>. Es lo que más te acerca al N1 hoy.";
-    b.disabled=false; b.textContent="▶ Empezar";
-  }
-  var seen=Object.keys(progress).length;
-  document.getElementById("streakNum").textContent= seen>0 ? (seen+" ítems vistos") : "Empieza hoy";
+  news=news.slice(0, FOCUS_NEW_LIMIT);
+  return {queue:reviews.concat(news), reviews:reviews.length, news:news.length};
 }
 
-function show(v){ ["home","study","doneView"].forEach(function(x){ document.getElementById(x).classList.toggle("active", x===v); }); }
+function availableLevels(type){
+  var seen={};
+  ITEMS.forEach(function(it){ if(it.type===type && it.d.lvl) seen[it.d.lvl]=true; });
+  return LEVEL_ORDER.filter(function(l){ return seen[l]; });
+}
+function countFor(type, level){
+  var now=new Date(), total=0, due=0;
+  ITEMS.forEach(function(it){
+    if(it.type!==type) return;
+    if(level && level!=="all" && it.d.lvl!==level) return;
+    total++; if(isDue(it.id, now)) due++;
+  });
+  return {total:total, due:due};
+}
 
-function startStudy(){
-  var q=buildQueue(); if(q.queue.length===0) return;
+function show(v){
+  ["menu","levels","study","doneView","emptyView"].forEach(function(x){
+    document.getElementById(x).classList.toggle("active", x===v);
+  });
+}
+
+/* ===== MENU ===== */
+function renderMenu(){
+  if(ITEMS.length===0){
+    document.getElementById("recSummary").textContent="Falta content.js";
+    return;
+  }
+  ["kanji","vocab","grammar"].forEach(function(t){
+    var c=countFor(t,"all");
+    document.getElementById("cnt-"+t).innerHTML = c.total+" ítems"+(c.due>0? " · <b>"+c.due+" repasos</b>" : "");
+  });
+  var rq=buildRecommended();
+  document.getElementById("recSummary").textContent = rq.queue.length>0
+    ? (rq.reviews+" repasos · "+rq.news+" nuevos")
+    : "Todo al día por ahora";
+  var seen=Object.keys(progress).length;
+  document.getElementById("streakNum").textContent = seen>0 ? (seen+" ítems vistos") : "Empieza hoy";
+  document.getElementById("menuNote").textContent="";
+}
+
+/* ===== LEVEL PICKER ===== */
+var currentType=null;
+function showLevels(type){
+  currentType=type;
+  document.getElementById("levelTitle").textContent=TYPE_LABEL[type];
+  var levels=availableLevels(type), html="";
+  levels.forEach(function(l){
+    var c=countFor(type,l);
+    html+=levelBtnHTML(l, l, c);
+  });
+  if(levels.length>1){
+    var ca=countFor(type,"all");
+    html+=levelBtnHTML("all","Todos los niveles",ca,true);
+  }
+  document.getElementById("levelList").innerHTML=html;
+  document.querySelectorAll("#levelList .level-btn").forEach(function(b){
+    b.addEventListener("click", function(){ startFocused(currentType, b.getAttribute("data-level")); });
+  });
+  show("levels");
+}
+function levelBtnHTML(level, label, c, isAll){
+  var dueTxt = c.due>0 ? '<b>'+c.due+' repasos</b> · ' : '';
+  return '<button class="level-btn" data-level="'+level+'">'+
+    '<div class="level-l"><div class="level-tag'+(isAll?' all':'')+'">'+(isAll?'Todo':label)+'</div>'+
+    '<div class="level-meta"><div class="lt">'+(isAll?'Todos los niveles':('Nivel '+label))+'</div>'+
+    '<div class="ls">'+dueTxt+c.total+' ítems</div></div></div>'+
+    '<span class="level-arrow">›</span></button>';
+}
+
+/* ===== START SESSIONS ===== */
+function startRecommended(){
+  var q=buildRecommended();
+  if(q.queue.length===0){ showEmpty("Todo al día","No tienes repasos ni ítems nuevos ahora mismo. Vuelve más tarde."); return; }
+  beginSession(q);
+}
+function startFocused(type, level){
+  var q=buildFocused(type, level);
+  if(q.queue.length===0){
+    var lbl = level==="all" ? TYPE_LABEL[type] : (TYPE_LABEL[type]+" "+level);
+    showEmpty("Nada pendiente", "No tienes repasos ni ítems nuevos de "+lbl+" ahora mismo.");
+    return;
+  }
+  beginSession(q);
+}
+function beginSession(q){
   queue=q.queue.slice(); total=queue.length; done=0;
   show("study"); nextCard();
 }
+function showEmpty(title,msg){
+  document.getElementById("emptyTitle").textContent=title;
+  document.getElementById("emptyMsg").textContent=msg;
+  show("emptyView");
+}
 
+/* ===== CARD RENDERING ===== */
 function sizeFor(text){
   var n=text.length;
   if(n<=1) return 118; if(n<=2) return 78; if(n<=3) return 60;
@@ -337,7 +481,7 @@ function backHTML(item){
 }
 
 function nextCard(){
-  if(queue.length===0){ show("doneView"); renderHome(); return; }
+  if(queue.length===0){ show("doneView"); renderMenu(); return; }
   current=queue.shift(); var item=ITEMS[current];
   var tag=TYPE_LABEL[item.type]; if(item.d.lvl) tag+=" · "+item.d.lvl;
   document.getElementById("studyTag").textContent=tag;
@@ -351,7 +495,6 @@ function nextCard(){
   document.getElementById("progCount").textContent=done+" / "+total;
   document.getElementById("progBar").style.width=(total?(done/total*100):0)+"%";
 }
-
 function reveal(){
   var item=ITEMS[current], now=new Date(), st=progress[item.id]||null;
   document.getElementById("iv1").textContent=fmt(schedule(st,1,now).iv);
@@ -365,28 +508,37 @@ function reveal(){
     el.addEventListener("click", function(){ speak(el.getAttribute("data-say")); });
   });
 }
-
 function rate(r){
   var item=ITEMS[current];
   progress[item.id]=schedule(progress[item.id]||null, r, new Date());
   save(progress); done+=1; nextCard();
 }
-
 function speak(t){ try{ var u=new SpeechSynthesisUtterance(t); u.lang="ja-JP"; u.rate=.9; speechSynthesis.cancel(); speechSynthesis.speak(u); }catch(e){} }
 
-document.getElementById("startBtn").addEventListener("click", startStudy);
+/* ===== EVENTS ===== */
+document.getElementById("recCard").addEventListener("click", startRecommended);
+document.querySelectorAll(".tile[data-type]").forEach(function(t){
+  t.addEventListener("click", function(){ showLevels(t.getAttribute("data-type")); });
+});
+document.querySelectorAll(".tile[data-soon]").forEach(function(t){
+  t.addEventListener("click", function(){
+    document.getElementById("menuNote").textContent = t.getAttribute("data-soon")+" llegará en una próxima actualización.";
+  });
+});
+document.getElementById("levelBack").addEventListener("click", function(){ show("menu"); renderMenu(); });
+document.getElementById("closeBtn").addEventListener("click", function(){ show("menu"); renderMenu(); });
+document.getElementById("doneBack").addEventListener("click", function(){ show("menu"); renderMenu(); });
+document.getElementById("emptyBack").addEventListener("click", function(){ show("menu"); renderMenu(); });
 document.getElementById("revealBtn").addEventListener("click", reveal);
-document.getElementById("closeBtn").addEventListener("click", function(){ show("home"); renderHome(); });
-document.getElementById("doneBack").addEventListener("click", function(){ show("home"); renderHome(); });
 document.querySelectorAll(".rate").forEach(function(b){ b.addEventListener("click", function(){ rate(parseInt(b.getAttribute("data-r"),10)); }); });
 document.getElementById("resetBtn").addEventListener("click", function(){
-  if(confirm("¿Borrar todo tu progreso y empezar de cero?")){ progress={}; save(progress); renderHome(); }
+  if(confirm("¿Borrar todo tu progreso y empezar de cero?")){ progress={}; save(progress); renderMenu(); }
 });
 
 (function(){ var h=new Date().getHours(); var g=h<12?"Buenos días":(h<20?"Buenas tardes":"Buenas noches");
   document.querySelector(".greeting").textContent=g; })();
 
-renderHome();
+renderMenu();
 
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", function(){ navigator.serviceWorker.register("sw.js").catch(function(){}); });
