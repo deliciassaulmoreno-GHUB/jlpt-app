@@ -31,10 +31,22 @@
   /* ===== MENU ===== */
   #menu{padding:10px 22px 0; overflow-y:auto;}
   .eyebrow{font-size:11px; font-weight:600; letter-spacing:1.4px; color:var(--faint); text-transform:uppercase;}
-  .greeting{font-family:var(--jp); font-weight:700; font-size:27px; margin-top:5px;}
+  .greeting-row{margin-top:5px; cursor:pointer; display:inline-flex; align-items:baseline; gap:8px;}
+  .greeting{font-family:var(--jp); font-weight:700; font-size:27px;}
+  .edit-ic{font-size:13px; color:var(--faint);}
   .greeting-sub{font-size:13px; color:var(--muted); margin-top:4px;}
 
-  .rec-card{margin-top:20px; background:linear-gradient(135deg,#27407F,#3B5FC4); border-radius:24px; padding:22px 20px;
+  .level-banner{margin-top:18px; background:var(--card); border-radius:20px; padding:16px 18px; box-shadow:var(--shadow);
+    display:flex; align-items:center; gap:16px;}
+  .lb-level{font-family:var(--jp); font-weight:700; font-size:30px; color:var(--indigo); line-height:1;}
+  .lb-eyebrow{font-size:10.5px; font-weight:700; letter-spacing:1px; color:var(--faint); text-transform:uppercase; margin-bottom:4px;}
+  .lb-right{flex:1;}
+  .lb-prog-txt{font-size:12.5px; color:var(--ink-2); font-weight:600; margin-bottom:7px;}
+  .lb-prog-txt b{color:var(--indigo-bright);}
+  .lb-bar{height:8px; background:var(--line); border-radius:5px; overflow:hidden;}
+  .lb-bar > span{display:block; height:100%; background:linear-gradient(90deg,var(--indigo),var(--indigo-bright)); border-radius:5px; width:0%; transition:width .4s ease;}
+
+  .rec-card{margin-top:14px; background:linear-gradient(135deg,#27407F,#3B5FC4); border-radius:24px; padding:22px 20px;
     color:#fff; cursor:pointer; box-shadow:0 12px 30px -12px rgba(39,64,127,.7); transition:transform .12s ease;}
   .rec-card:active{transform:scale(.99);}
   .rec-top{display:flex; align-items:center; gap:13px;}
@@ -48,7 +60,7 @@
   .section-label{margin-top:24px; font-size:11px; font-weight:700; letter-spacing:1.3px; color:var(--faint); text-transform:uppercase;}
   .grid{margin-top:13px; display:grid; grid-template-columns:1fr 1fr; gap:12px;}
   .tile{background:var(--card); border-radius:20px; padding:17px 16px; box-shadow:var(--shadow); cursor:pointer;
-    border:1.5px solid transparent; transition:transform .12s ease, border-color .15s ease; position:relative; min-height:112px;
+    transition:transform .12s ease; position:relative; min-height:118px;
     display:flex; flex-direction:column; justify-content:space-between;}
   .tile:active{transform:scale(.97);}
   .tile.locked{cursor:default; opacity:.62;}
@@ -56,14 +68,21 @@
     display:flex; align-items:center; justify-content:center; font-family:var(--jp); font-size:22px; font-weight:700;}
   .tile-ic.g2{background:rgba(201,138,46,.12); color:var(--amber);}
   .tile-ic.g3{background:rgba(46,125,91,.12); color:var(--green);}
+  .tile-ic.g4{background:rgba(59,95,196,.12); color:var(--indigo-bright);}
   .tile-name{font-size:15px; font-weight:700; margin-top:12px;}
-  .tile-cnt{font-size:11.5px; color:var(--muted); margin-top:3px;}
-  .tile-cnt b{color:var(--indigo-bright); font-weight:700;}
+  .tile-cnt{font-size:11.5px; color:var(--muted); margin-top:3px; line-height:1.45;}
+  .tile-cnt b{color:var(--ink-2); font-weight:700;}
+  .tile-cnt .rep{color:var(--indigo-bright); font-weight:700;}
   .badge-soon{position:absolute; top:13px; right:13px; font-size:9px; font-weight:700; letter-spacing:.5px;
     background:var(--line-2); color:var(--muted); padding:3px 7px; border-radius:20px; text-transform:uppercase;}
   .menu-note{margin-top:14px; min-height:18px; font-size:12.5px; color:var(--amber); font-weight:600; text-align:center;}
 
-  .menu-foot{margin-top:10px; margin-bottom:20px; display:flex; align-items:center; justify-content:space-between;}
+  .stats-link{margin-top:16px; width:100%; background:var(--card); border:1.5px solid var(--line); border-radius:16px;
+    padding:14px 16px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:9px;
+    font-size:14px; font-weight:700; color:var(--ink-2); transition:transform .1s ease;}
+  .stats-link:active{transform:scale(.99);}
+
+  .menu-foot{margin-top:14px; margin-bottom:20px; display:flex; align-items:center; justify-content:space-between;}
   .reset{font-size:12px; color:var(--faint); background:none; border:none; cursor:pointer; text-decoration:underline;}
   .streak{display:flex; align-items:center; gap:9px;}
   .flame{width:34px; height:34px; border-radius:11px; background:rgba(201,138,46,.12); display:flex; align-items:center; justify-content:center;}
@@ -77,7 +96,7 @@
   .level-title{font-family:var(--jp); font-weight:700; font-size:21px; margin:14px 0 4px;}
   .level-help{font-size:12.5px; color:var(--muted); margin-bottom:16px;}
   .level-btn{width:100%; background:var(--card); border:1.5px solid var(--line); border-radius:18px; padding:16px 18px;
-    cursor:pointer; display:flex; align-items:center; justify-content:space-between; margin-bottom:11px; transition:transform .1s ease, border-color .15s ease;}
+    cursor:pointer; display:flex; align-items:center; justify-content:space-between; margin-bottom:11px; transition:transform .1s ease;}
   .level-btn:active{transform:scale(.99);}
   .level-l{display:flex; align-items:center; gap:13px;}
   .level-tag{font-family:var(--jp); font-weight:700; font-size:16px; color:#fff; background:var(--indigo);
@@ -85,8 +104,25 @@
   .level-tag.all{background:var(--amber); font-size:13px;}
   .level-meta .lt{font-size:14.5px; font-weight:700;}
   .level-meta .ls{font-size:11.5px; color:var(--muted); margin-top:2px;}
-  .level-meta .ls b{color:var(--indigo-bright);}
+  .level-meta .ls b{color:var(--ink-2);} .level-meta .ls .rep{color:var(--indigo-bright); font-weight:700;}
   .level-arrow{color:var(--faint); font-size:20px;}
+
+  /* ===== STATS ===== */
+  #stats{padding:10px 22px 0; overflow-y:auto;}
+  .stats-title{font-family:var(--jp); font-weight:700; font-size:21px; margin:14px 0 16px;}
+  .stat-cards{display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;}
+  .stat-card{background:var(--card); border-radius:16px; padding:14px 12px; box-shadow:var(--shadow); text-align:center;}
+  .stat-num{font-family:var(--jp); font-weight:700; font-size:22px; color:var(--indigo);}
+  .stat-lbl{font-size:10.5px; color:var(--muted); margin-top:3px; line-height:1.3;}
+  .stats-section{margin-top:22px; font-size:11px; font-weight:700; letter-spacing:1.2px; color:var(--faint); text-transform:uppercase;}
+  .st-row{margin-top:14px;}
+  .st-row-top{display:flex; align-items:baseline; justify-content:space-between;}
+  .st-lvl{font-family:var(--jp); font-weight:700; font-size:16px;}
+  .st-frac{font-size:13px; font-weight:700; color:var(--ink-2);}
+  .st-bar{height:8px; background:var(--line); border-radius:5px; overflow:hidden; margin:7px 0 6px;}
+  .st-bar > span{display:block; height:100%; background:linear-gradient(90deg,var(--indigo),var(--indigo-bright)); border-radius:5px;}
+  .st-types{font-size:11.5px; color:var(--muted);}
+  .stats-foot{margin:20px 0; font-size:12px; color:var(--faint); text-align:center; line-height:1.5;}
 
   /* ===== STUDY ===== */
   #study{padding:6px 22px 0;}
@@ -143,18 +179,14 @@
   .rate.good .bar{background:var(--indigo-bright);}
   .rate.easy .bar{background:var(--green);} .rate.easy .rt{color:var(--green);}
 
-  .done{flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; gap:8px; padding:0 22px;}
+  .done,.empty{flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; gap:8px; padding:0 22px;}
   .done .big{font-family:var(--jp); font-size:56px; color:var(--indigo);}
-  .done h2{font-size:22px; font-weight:700;}
-  .done p{font-size:13.5px; color:var(--muted); line-height:1.5; max-width:260px;}
-  .done .btn{max-width:220px; margin-top:8px;}
-
-  .empty{flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; gap:10px; padding:0 30px;}
   .empty .big{font-size:42px;}
-  .empty h2{font-size:19px; font-weight:700;}
-  .empty p{font-size:13.5px; color:var(--muted); line-height:1.5;}
+  .done h2,.empty h2{font-size:21px; font-weight:700;}
+  .done p,.empty p{font-size:13.5px; color:var(--muted); line-height:1.5; max-width:270px;}
+  .done .btn,.empty .btn{max-width:220px; margin-top:8px;}
 
-  @media (prefers-reduced-motion: reduce){.back,.btn,.rate,.progress > span,.tile,.rec-card{transition:none;}}
+  @media (prefers-reduced-motion: reduce){*{transition:none !important;}}
 </style>
 </head>
 <body>
@@ -163,8 +195,18 @@
 <!-- ===== MENU (landing) ===== -->
 <section class="view active" id="menu">
   <div class="eyebrow">Japanese N1 Path</div>
-  <div class="greeting">Buenas tardes</div>
+  <div class="greeting-row" id="greetingRow">
+    <span class="greeting" id="greeting">Hola</span><span class="edit-ic">✎</span>
+  </div>
   <div class="greeting-sub">¿Qué quieres estudiar hoy?</div>
+
+  <div class="level-banner">
+    <div><div class="lb-eyebrow">Tu nivel</div><div class="lb-level" id="lbLevel">N5</div></div>
+    <div class="lb-right">
+      <div class="lb-prog-txt" id="lbProgTxt">—</div>
+      <div class="lb-bar"><span id="lbBar"></span></div>
+    </div>
+  </div>
 
   <div class="rec-card" id="recCard">
     <div class="rec-top">
@@ -194,12 +236,17 @@
       <div class="tile-ic g3">文</div>
       <div><div class="tile-name">Gramática</div><div class="tile-cnt" id="cnt-grammar">—</div></div>
     </div>
-    <div class="tile locked" data-soon="Conversación">
+    <div class="tile locked" data-soon="La lectura">
+      <span class="badge-soon">Pronto</span>
+      <div class="tile-ic g4">読</div>
+      <div><div class="tile-name">Lectura</div><div class="tile-cnt">Textos por niveles</div></div>
+    </div>
+    <div class="tile locked" data-soon="La conversación">
       <span class="badge-soon">Pronto</span>
       <div class="tile-ic">会</div>
       <div><div class="tile-name">Conversación</div><div class="tile-cnt">Próximamente</div></div>
     </div>
-    <div class="tile locked" data-soon="Exámenes">
+    <div class="tile locked" data-soon="Los exámenes">
       <span class="badge-soon">Pronto</span>
       <div class="tile-ic">試</div>
       <div><div class="tile-name">Exámenes</div><div class="tile-cnt">Simulacros JLPT</div></div>
@@ -207,10 +254,12 @@
   </div>
   <div class="menu-note" id="menuNote"></div>
 
+  <button class="stats-link" id="statsLink">📊 Ver mis estadísticas</button>
+
   <div class="menu-foot">
     <div class="streak">
       <div class="flame">🔥</div>
-      <div><div class="streak-num" id="streakNum">Empieza hoy</div><div class="streak-lbl">Sigue cada día</div></div>
+      <div><div class="streak-num" id="streakNum">—</div><div class="streak-lbl">Racha de estudio</div></div>
     </div>
     <button class="reset" id="resetBtn">Reiniciar progreso</button>
   </div>
@@ -225,6 +274,23 @@
   <div class="level-title" id="levelTitle">Kanji</div>
   <div class="level-help">Elige el nivel que quieres practicar. Verás primero tus repasos pendientes y luego ítems nuevos.</div>
   <div id="levelList"></div>
+</section>
+
+<!-- ===== STATS ===== -->
+<section class="view" id="stats">
+  <div class="back-row">
+    <button class="back-btn" id="statsBack" aria-label="Volver">←</button>
+    <span class="eyebrow">Estadísticas</span>
+  </div>
+  <div class="stats-title">Tu progreso</div>
+  <div class="stat-cards">
+    <div class="stat-card"><div class="stat-num" id="stTotal">0</div><div class="stat-lbl">Ítems aprendidos</div></div>
+    <div class="stat-card"><div class="stat-num" id="stDue">0</div><div class="stat-lbl">Para repasar hoy</div></div>
+    <div class="stat-card"><div class="stat-num" id="stStreak">0</div><div class="stat-lbl">Días seguidos</div></div>
+  </div>
+  <div class="stats-section">Progreso por nivel</div>
+  <div id="stLevels"></div>
+  <div class="stats-foot">Se cuenta como aprendido cualquier ítem que ya hayas estudiado al menos una vez. Todo se guarda solo en tu teléfono.</div>
 </section>
 
 <!-- ===== STUDY ===== -->
@@ -261,33 +327,54 @@
   </div>
 </section>
 
-<!-- ===== EMPTY (nothing to study in this filter) ===== -->
+<!-- ===== EMPTY ===== -->
 <section class="view" id="emptyView">
   <div class="empty">
     <div class="big">🌱</div>
     <h2 id="emptyTitle">Nada pendiente aquí</h2>
     <p id="emptyMsg">No tienes repasos ni ítems nuevos en esta selección ahora mismo.</p>
-    <button class="btn" id="emptyBack" style="max-width:220px;">Volver al menú</button>
+    <button class="btn" id="emptyBack">Volver al menú</button>
   </div>
 </section>
 
 <script src="content.js"></script>
 <script>
-/* Construir la lista de estudio a partir de window.CONTENT */
 var C = window.CONTENT || {kanji:[],vocab:[],grammar:[]};
 var ITEMS = [];
 (C.kanji||[]).forEach(function(k){ ITEMS.push({id:"k:"+k.c, type:"kanji", d:k}); });
 (C.vocab||[]).forEach(function(v){ ITEMS.push({id:"v:"+v.w, type:"vocab", d:v}); });
 (C.grammar||[]).forEach(function(g){ ITEMS.push({id:"g:"+g.pat, type:"grammar", d:g}); });
 
-var NEW_LIMIT = 9;        // ítems nuevos por sesión en práctica recomendada
-var FOCUS_NEW_LIMIT = 12; // ítems nuevos por sesión cuando eliges tipo/nivel
+var NEW_LIMIT = 9;
+var FOCUS_NEW_LIMIT = 12;
 var TYPE_LABEL = {kanji:"Kanji", vocab:"Vocabulario", grammar:"Gramática"};
+var TYPE_SHORT = {kanji:"Kanji", vocab:"Vocab", grammar:"Gram"};
 var LEVEL_ORDER = ["N5","N4","N3","N2","N1"];
 
 var mem = {};
 function load(){ try{ var s=localStorage.getItem("jlpt-progress"); return s?JSON.parse(s):{}; }catch(e){ return mem.p||{}; } }
 function save(p){ try{ localStorage.setItem("jlpt-progress", JSON.stringify(p)); }catch(e){ mem.p=p; } }
+function getName(){ try{ return localStorage.getItem("jlpt-name")||""; }catch(e){ return mem.n||""; } }
+function setName(n){ try{ localStorage.setItem("jlpt-name", n); }catch(e){ mem.n=n; } }
+
+/* racha de días */
+function todayStr(d){ d=d||new Date(); return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate(); }
+function logToday(){
+  try{
+    var days=JSON.parse(localStorage.getItem("jlpt-days")||"[]");
+    var t=todayStr();
+    if(days.indexOf(t)===-1){ days.push(t); localStorage.setItem("jlpt-days", JSON.stringify(days)); }
+  }catch(e){}
+}
+function computeStreak(){
+  var days; try{ days=JSON.parse(localStorage.getItem("jlpt-days")||"[]"); }catch(e){ days=[]; }
+  var set={}; days.forEach(function(x){ set[x]=true; });
+  var d=new Date();
+  if(!set[todayStr(d)]){ d.setDate(d.getDate()-1); if(!set[todayStr(d)]) return 0; }
+  var streak=0;
+  while(set[todayStr(d)]){ streak++; d.setDate(d.getDate()-1); }
+  return streak;
+}
 
 function schedule(card, rating, now){
   var ease=card?card.ease:2.5, reps=card?card.reps:0, iv=card?card.iv:0, newIv;
@@ -307,8 +394,48 @@ function fmt(d){ var m=d*1440;
 var progress=load(), queue=[], done=0, total=0, current=null;
 
 function isDue(id, now){ var st=progress[id]; return st && new Date(st.due)<=now; }
+function isLearned(id){ return !!progress[id]; }
 
-/* ---- Práctica recomendada: repasos + nuevos intercalando tipos, en orden de nivel ---- */
+/* ---- estadísticas/conteos ---- */
+function levelTotals(level){
+  var total=0, learned=0;
+  ITEMS.forEach(function(it){ if(it.d.lvl===level){ total++; if(isLearned(it.id)) learned++; } });
+  return {total:total, learned:learned};
+}
+function typeLevelStats(type, level){
+  var total=0, learned=0;
+  ITEMS.forEach(function(it){ if(it.type===type && it.d.lvl===level){ total++; if(isLearned(it.id)) learned++; } });
+  return {total:total, learned:learned};
+}
+function dueForType(type){
+  var now=new Date(), due=0;
+  ITEMS.forEach(function(it){ if(it.type===type && isDue(it.id, now)) due++; });
+  return due;
+}
+function countFor(type, level){
+  var now=new Date(), total=0, due=0;
+  ITEMS.forEach(function(it){
+    if(it.type!==type) return;
+    if(level && level!=="all" && it.d.lvl!==level) return;
+    total++; if(isDue(it.id, now)) due++;
+  });
+  return {total:total, due:due};
+}
+function currentLevel(){
+  for(var i=0;i<LEVEL_ORDER.length;i++){
+    var t=levelTotals(LEVEL_ORDER[i]);
+    if(t.total>0 && t.learned<t.total) return LEVEL_ORDER[i];
+  }
+  var ex=LEVEL_ORDER.filter(function(l){ return levelTotals(l).total>0; });
+  return ex.length? ex[ex.length-1] : "N5";
+}
+function availableLevels(type){
+  var seen={};
+  ITEMS.forEach(function(it){ if(it.type===type && it.d.lvl) seen[it.d.lvl]=true; });
+  return LEVEL_ORDER.filter(function(l){ return seen[l]; });
+}
+
+/* ---- colas ---- */
 function buildRecommended(){
   var now=new Date(), reviews=[], newByType={kanji:[],vocab:[],grammar:[]};
   for(var i=0;i<ITEMS.length;i++){
@@ -327,8 +454,6 @@ function buildRecommended(){
   }
   return {queue:reviews.concat(news), reviews:reviews.length, news:news.length};
 }
-
-/* ---- Sesión enfocada: un tipo y un nivel (o todos) ---- */
 function buildFocused(type, level){
   var now=new Date(), reviews=[], news=[];
   for(var i=0;i<ITEMS.length;i++){
@@ -343,43 +468,47 @@ function buildFocused(type, level){
   return {queue:reviews.concat(news), reviews:reviews.length, news:news.length};
 }
 
-function availableLevels(type){
-  var seen={};
-  ITEMS.forEach(function(it){ if(it.type===type && it.d.lvl) seen[it.d.lvl]=true; });
-  return LEVEL_ORDER.filter(function(l){ return seen[l]; });
-}
-function countFor(type, level){
-  var now=new Date(), total=0, due=0;
-  ITEMS.forEach(function(it){
-    if(it.type!==type) return;
-    if(level && level!=="all" && it.d.lvl!==level) return;
-    total++; if(isDue(it.id, now)) due++;
-  });
-  return {total:total, due:due};
-}
-
 function show(v){
-  ["menu","levels","study","doneView","emptyView"].forEach(function(x){
+  ["menu","levels","stats","study","doneView","emptyView"].forEach(function(x){
     document.getElementById(x).classList.toggle("active", x===v);
   });
 }
 
-/* ===== MENU ===== */
+/* ===== RENDER MENU ===== */
+function renderGreeting(){
+  var h=new Date().getHours();
+  var base=h<12?"Buenos días":(h<20?"Buenas tardes":"Buenas noches");
+  var n=getName();
+  document.getElementById("greeting").textContent = n ? (base+", "+n) : base;
+}
 function renderMenu(){
+  renderGreeting();
   if(ITEMS.length===0){
     document.getElementById("recSummary").textContent="Falta content.js";
+    document.getElementById("lbProgTxt").textContent="No se cargó el contenido";
     return;
   }
+  var lvl=currentLevel();
+  var lt=levelTotals(lvl);
+  var pct=lt.total? Math.round(lt.learned/lt.total*100):0;
+  document.getElementById("lbLevel").textContent=lvl;
+  document.getElementById("lbProgTxt").innerHTML="Has aprendido <b>"+lt.learned+" de "+lt.total+"</b> de "+lvl;
+  document.getElementById("lbBar").style.width=pct+"%";
+
   ["kanji","vocab","grammar"].forEach(function(t){
-    var c=countFor(t,"all");
-    document.getElementById("cnt-"+t).innerHTML = c.total+" ítems"+(c.due>0? " · <b>"+c.due+" repasos</b>" : "");
+    var s=typeLevelStats(t, lvl), due=dueForType(t);
+    var html="<b>"+s.learned+"</b> / "+s.total+" de "+lvl;
+    if(due>0) html+="<br><span class='rep'>"+due+" para repasar</span>";
+    document.getElementById("cnt-"+t).innerHTML=html;
   });
+
   var rq=buildRecommended();
   document.getElementById("recSummary").textContent = rq.queue.length>0
     ? (rq.reviews+" repasos · "+rq.news+" nuevos")
     : "Todo al día por ahora";
-  var seen=Object.keys(progress).length;
-  document.getElementById("streakNum").textContent = seen>0 ? (seen+" ítems vistos") : "Empieza hoy";
+
+  var s=computeStreak();
+  document.getElementById("streakNum").textContent = s>0 ? (s+(s===1?" día":" días")) : "Empieza hoy";
   document.getElementById("menuNote").textContent="";
 }
 
@@ -389,14 +518,8 @@ function showLevels(type){
   currentType=type;
   document.getElementById("levelTitle").textContent=TYPE_LABEL[type];
   var levels=availableLevels(type), html="";
-  levels.forEach(function(l){
-    var c=countFor(type,l);
-    html+=levelBtnHTML(l, l, c);
-  });
-  if(levels.length>1){
-    var ca=countFor(type,"all");
-    html+=levelBtnHTML("all","Todos los niveles",ca,true);
-  }
+  levels.forEach(function(l){ html+=levelBtnHTML(l, l, countFor(type,l)); });
+  if(levels.length>1){ html+=levelBtnHTML("all","Todos los niveles",countFor(type,"all"),true); }
   document.getElementById("levelList").innerHTML=html;
   document.querySelectorAll("#levelList .level-btn").forEach(function(b){
     b.addEventListener("click", function(){ startFocused(currentType, b.getAttribute("data-level")); });
@@ -404,15 +527,38 @@ function showLevels(type){
   show("levels");
 }
 function levelBtnHTML(level, label, c, isAll){
-  var dueTxt = c.due>0 ? '<b>'+c.due+' repasos</b> · ' : '';
+  var dueTxt = c.due>0 ? "<span class='rep'>"+c.due+" repasos</span> · " : "";
   return '<button class="level-btn" data-level="'+level+'">'+
-    '<div class="level-l"><div class="level-tag'+(isAll?' all':'')+'">'+(isAll?'Todo':label)+'</div>'+
-    '<div class="level-meta"><div class="lt">'+(isAll?'Todos los niveles':('Nivel '+label))+'</div>'+
+    '<div class="level-l"><div class="level-tag'+(isAll?" all":"")+'">'+(isAll?"Todo":label)+'</div>'+
+    '<div class="level-meta"><div class="lt">'+(isAll?"Todos los niveles":("Nivel "+label))+'</div>'+
     '<div class="ls">'+dueTxt+c.total+' ítems</div></div></div>'+
     '<span class="level-arrow">›</span></button>';
 }
 
-/* ===== START SESSIONS ===== */
+/* ===== STATS ===== */
+function renderStats(){
+  var learned=ITEMS.filter(function(it){ return isLearned(it.id); }).length;
+  document.getElementById("stTotal").textContent=learned;
+  var now=new Date(), due=ITEMS.filter(function(it){ return isDue(it.id, now); }).length;
+  document.getElementById("stDue").textContent=due;
+  document.getElementById("stStreak").textContent=computeStreak();
+  var ex=LEVEL_ORDER.filter(function(l){ return levelTotals(l).total>0; });
+  var html="";
+  ex.forEach(function(l){
+    var lt=levelTotals(l), pct=lt.total? Math.round(lt.learned/lt.total*100):0;
+    var parts=["kanji","vocab","grammar"].map(function(t){
+      var s=typeLevelStats(t,l); return s.total? (TYPE_SHORT[t]+" "+s.learned+"/"+s.total):null;
+    }).filter(Boolean);
+    html+='<div class="st-row"><div class="st-row-top"><span class="st-lvl">'+l+'</span>'+
+      '<span class="st-frac">'+lt.learned+' / '+lt.total+'</span></div>'+
+      '<div class="st-bar"><span style="width:'+pct+'%"></span></div>'+
+      '<div class="st-types">'+parts.join(" · ")+'</div></div>';
+  });
+  document.getElementById("stLevels").innerHTML=html;
+  show("stats");
+}
+
+/* ===== SESSIONS ===== */
 function startRecommended(){
   var q=buildRecommended();
   if(q.queue.length===0){ showEmpty("Todo al día","No tienes repasos ni ítems nuevos ahora mismo. Vuelve más tarde."); return; }
@@ -427,10 +573,7 @@ function startFocused(type, level){
   }
   beginSession(q);
 }
-function beginSession(q){
-  queue=q.queue.slice(); total=queue.length; done=0;
-  show("study"); nextCard();
-}
+function beginSession(q){ queue=q.queue.slice(); total=queue.length; done=0; show("study"); nextCard(); }
 function showEmpty(title,msg){
   document.getElementById("emptyTitle").textContent=title;
   document.getElementById("emptyMsg").textContent=msg;
@@ -479,7 +622,6 @@ function backHTML(item){
          '<div class="gexp">'+d.exp+'</div>'+exampleHTML(d)+
          (d.err? '<div class="gerr"><b>Error común:</b> '+d.err+'</div>' : '');
 }
-
 function nextCard(){
   if(queue.length===0){ show("doneView"); renderMenu(); return; }
   current=queue.shift(); var item=ITEMS[current];
@@ -511,11 +653,15 @@ function reveal(){
 function rate(r){
   var item=ITEMS[current];
   progress[item.id]=schedule(progress[item.id]||null, r, new Date());
-  save(progress); done+=1; nextCard();
+  save(progress); logToday(); done+=1; nextCard();
 }
 function speak(t){ try{ var u=new SpeechSynthesisUtterance(t); u.lang="ja-JP"; u.rate=.9; speechSynthesis.cancel(); speechSynthesis.speak(u); }catch(e){} }
 
 /* ===== EVENTS ===== */
+document.getElementById("greetingRow").addEventListener("click", function(){
+  var n=prompt("¿Cómo te llamas? (se guarda solo en tu teléfono)", getName());
+  if(n!==null){ setName(n.trim()); renderGreeting(); }
+});
 document.getElementById("recCard").addEventListener("click", startRecommended);
 document.querySelectorAll(".tile[data-type]").forEach(function(t){
   t.addEventListener("click", function(){ showLevels(t.getAttribute("data-type")); });
@@ -525,6 +671,8 @@ document.querySelectorAll(".tile[data-soon]").forEach(function(t){
     document.getElementById("menuNote").textContent = t.getAttribute("data-soon")+" llegará en una próxima actualización.";
   });
 });
+document.getElementById("statsLink").addEventListener("click", renderStats);
+document.getElementById("statsBack").addEventListener("click", function(){ show("menu"); renderMenu(); });
 document.getElementById("levelBack").addEventListener("click", function(){ show("menu"); renderMenu(); });
 document.getElementById("closeBtn").addEventListener("click", function(){ show("menu"); renderMenu(); });
 document.getElementById("doneBack").addEventListener("click", function(){ show("menu"); renderMenu(); });
@@ -532,11 +680,8 @@ document.getElementById("emptyBack").addEventListener("click", function(){ show(
 document.getElementById("revealBtn").addEventListener("click", reveal);
 document.querySelectorAll(".rate").forEach(function(b){ b.addEventListener("click", function(){ rate(parseInt(b.getAttribute("data-r"),10)); }); });
 document.getElementById("resetBtn").addEventListener("click", function(){
-  if(confirm("¿Borrar todo tu progreso y empezar de cero?")){ progress={}; save(progress); renderMenu(); }
+  if(confirm("¿Borrar todo tu progreso y empezar de cero? (No borra tu nombre)")){ progress={}; save(progress); renderMenu(); }
 });
-
-(function(){ var h=new Date().getHours(); var g=h<12?"Buenos días":(h<20?"Buenas tardes":"Buenas noches");
-  document.querySelector(".greeting").textContent=g; })();
 
 renderMenu();
 
