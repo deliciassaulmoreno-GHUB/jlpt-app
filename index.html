@@ -690,6 +690,16 @@ function sizeFor(text){
   if(n<=1) return 118; if(n<=2) return 78; if(n<=3) return 60;
   if(n<=4) return 48; if(n<=6) return 38; if(n<=8) return 30; return 25;
 }
+/* Convierte una lectura de display (con okurigana entre paréntesis y varias
+   variantes separadas por ・) en texto pronunciable. Une las variantes con 、
+   para que el TTS haga una pausa natural entre ellas. */
+function sayable(s){
+  if(!s) return "";
+  return s.split("・")
+          .map(function(x){ return x.replace(/[()（）]/g,"").trim(); })
+          .filter(Boolean)
+          .join("、");
+}
 function readingChip(label,val,say){
   return '<div class="reading" data-say="'+(say||val)+'"><div><div class="rlabel">'+label+'</div><div class="rval">'+val+'</div></div><div class="spk">🔊</div></div>';
 }
@@ -711,15 +721,15 @@ function backHTML(item){
   var d=item.d;
   if(item.type==="kanji"){
     var chips='';
-    if(d.kun) chips+=readingChip("Kun",d.kun,d.say);
-    if(d.on) chips+=readingChip("On",d.on,d.say);
+    if(d.kun) chips+=readingChip("Kun",d.kun,sayable(d.kun));
+    if(d.on) chips+=readingChip("On",d.on,sayable(d.on));
     return '<div class="readings">'+chips+'</div>'+
            '<div class="meaning">'+d.mean+'</div>'+
            (d.tip? '<div class="mnemonic"><b>Pista:</b> '+d.tip+'</div>' : '')+
            exampleHTML(d);
   }
   if(item.type==="vocab"){
-    return '<div class="readings">'+readingChip("Lectura",d.r,d.say)+'</div>'+
+    return '<div class="readings">'+readingChip("Lectura",d.r,d.r)+'</div>'+
            '<div class="meaning">'+d.mean+'</div>'+exampleHTML(d);
   }
   return '<div class="meaning">'+d.mean+'</div>'+
@@ -759,7 +769,44 @@ function rate(r){
   progress[item.id]=schedule(progress[item.id]||null, r, new Date());
   save(progress); logToday(); done+=1; nextCard();
 }
-function speak(t){ try{ var u=new SpeechSynthesisUtterance(t); u.lang="ja-JP"; u.rate=.9; speechSynthesis.cancel(); speechSynthesis.speak(u); }catch(e){} }
+/* ===== AUDIO / TTS ===== */
+var JA_VOICE=null;
+function pickJapaneseVoice(){
+  var sy=window.speechSynthesis; if(!sy) return null;
+  var voices=sy.getVoices()||[];
+  var ja=voices.filter(function(v){ return /^ja(\b|[-_])/i.test(v.lang||""); });
+  if(!ja.length) return null;
+  function score(v){
+    var n=(v.name||"").toLowerCase(), s=0;
+    if(/premium|enhanced|neural|siri/.test(n)) s+=100;  // voces de alta calidad
+    if(/o-?ren|hattori/.test(n))               s+=40;   // voces iOS modernas
+    if(/kyoko/.test(n))                        s+=20;   // voz JP por defecto en iOS
+    if(v.localService)                         s+=5;    // offline, sin latencia
+    if(/compact/.test(n))                      s-=80;   // la "enlatada": evitar
+    return s;
+  }
+  ja.sort(function(a,b){ return score(b)-score(a); });
+  return ja[0];
+}
+function refreshVoice(){ JA_VOICE=pickJapaneseVoice(); }
+if('speechSynthesis' in window){
+  refreshVoice();
+  // En Safari iOS la lista llega tarde; reintentar al evento y de forma diferida.
+  window.speechSynthesis.onvoiceschanged=refreshVoice;
+  setTimeout(refreshVoice,300); setTimeout(refreshVoice,1200);
+}
+function speak(t){
+  if(!t || !('speechSynthesis' in window)) return;
+  try{
+    if(!JA_VOICE) refreshVoice();
+    var u=new SpeechSynthesisUtterance(t);
+    u.lang="ja-JP";
+    if(JA_VOICE) u.voice=JA_VOICE;
+    u.rate=0.95; u.pitch=1.0;
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(u);
+  }catch(e){}
+}
 
 /* ===== QUIZ / EJERCICIOS ===== */
 var qCurrent=null, qAnswered=false;
