@@ -131,6 +131,9 @@
     display:flex; align-items:center; justify-content:center; flex-shrink:0;}
   .qstem-box .kanji-glyph{font-size:64px;}
   .qprompt{margin-top:16px; text-align:center; font-size:15px; font-weight:700; color:var(--ink-2);}
+  .qsub{margin-top:10px; text-align:center; font-size:13px; color:var(--muted); font-style:italic; max-width:90%;}
+  .mode-ic{width:46px; height:38px; border-radius:11px; background:var(--line-2); color:var(--indigo);
+    display:flex; align-items:center; justify-content:center; font-size:17px; font-weight:700;}
   .qchoices{width:100%; margin-top:16px; display:grid; gap:10px;}
   .qopt{width:100%; text-align:left; background:var(--card); border:1.5px solid var(--line); border-radius:15px;
     padding:15px 16px; font-size:15px; font-weight:600; color:var(--ink); cursor:pointer; transition:transform .1s ease, border-color .15s ease;}
@@ -302,6 +305,17 @@
   <div id="levelList"></div>
 </section>
 
+<!-- ===== MODE PICKER (tipo de ejercicio) ===== -->
+<section class="view" id="modes">
+  <div class="back-row">
+    <button class="back-btn" id="modeBack" aria-label="Volver">←</button>
+    <span class="eyebrow">Tipo de ejercicio</span>
+  </div>
+  <div class="level-title" id="modeTitle">Vocabulario</div>
+  <div class="level-help">Elige qué área quieres practicar, al estilo del examen JLPT. "Examen mixto" combina todas.</div>
+  <div id="modeList"></div>
+</section>
+
 <!-- ===== STATS ===== -->
 <section class="view" id="stats">
   <div class="back-row">
@@ -353,6 +367,7 @@
   <div class="tagline" id="qTag">Kanji</div>
   <div class="qstage">
     <div class="qstem-box"><span class="kanji-glyph" id="qStem">字</span></div>
+    <div class="qsub" id="qSub" style="display:none;"></div>
     <div class="qprompt" id="qPrompt">¿Qué significa?</div>
     <div class="qchoices" id="qChoices"></div>
     <div class="qtypewrap" id="qTypeWrap">
@@ -518,7 +533,7 @@ function buildFocused(type, level){
 }
 
 function show(v){
-  ["menu","levels","stats","study","quiz","doneView","emptyView"].forEach(function(x){
+  ["menu","levels","modes","stats","study","quiz","doneView","emptyView"].forEach(function(x){
     document.getElementById(x).classList.toggle("active", x===v);
   });
 }
@@ -563,17 +578,56 @@ function renderMenu(){
 
 /* ===== LEVEL PICKER ===== */
 var currentType=null;
+var selType=null, selLevel=null, selMode="mix";
 function showLevels(type){
-  currentType=type;
+  currentType=type; selType=type;
   document.getElementById("levelTitle").textContent=TYPE_LABEL[type];
   var levels=availableLevels(type), html="";
   levels.forEach(function(l){ html+=levelBtnHTML(l, l, countFor(type,l)); });
   if(levels.length>1){ html+=levelBtnHTML("all","Todos los niveles",countFor(type,"all"),true); }
   document.getElementById("levelList").innerHTML=html;
   document.querySelectorAll("#levelList .level-btn").forEach(function(b){
-    b.addEventListener("click", function(){ startFocused(currentType, b.getAttribute("data-level")); });
+    b.addEventListener("click", function(){ onLevelChosen(currentType, b.getAttribute("data-level")); });
   });
   show("levels");
+}
+function onLevelChosen(type, level){
+  selLevel=level;
+  if(type==="kanji"){ selMode="mix"; startFocused(type, level); }
+  else showModes(type, level);
+}
+
+/* Tipos de ejercicio (áreas estilo JLPT) */
+var MODES = {
+  vocab: [
+    {id:"mix",   name:"Examen mixto",     desc:"Mezcla de todos los tipos"},
+    {id:"read",  name:"Lectura (漢字読み)", desc:"Elige cómo se lee la palabra"},
+    {id:"write", name:"Escritura (表記)",   desc:"De la lectura al kanji correcto"},
+    {id:"fill",  name:"Hueco (文脈)",       desc:"Completa la frase con la palabra"},
+    {id:"mean",  name:"Significado",        desc:"Elige qué significa"},
+    {id:"type",  name:"Escribir lectura",   desc:"Teclea la lectura en hiragana"}
+  ],
+  grammar: [
+    {id:"mix",  name:"Examen mixto",        desc:"Mezcla de todos los tipos"},
+    {id:"form", name:"Forma (文法形式)",     desc:"Elige la estructura para la frase"},
+    {id:"ctx",  name:"En contexto",          desc:"¿Qué estructura aparece aquí?"},
+    {id:"mean", name:"Significado / uso",    desc:"Elige qué significa o cómo se usa"}
+  ]
+};
+function showModes(type, level){
+  document.getElementById("modeTitle").textContent=TYPE_LABEL[type]+" · "+(level==="all"?"Todos":level);
+  var html="";
+  MODES[type].forEach(function(m){
+    html+='<button class="level-btn" data-mode="'+m.id+'">'+
+      '<div class="level-l"><div class="mode-ic">'+(m.id==="mix"?"★":"✎")+'</div>'+
+      '<div class="level-meta"><div class="lt">'+m.name+'</div><div class="ls">'+m.desc+'</div></div></div>'+
+      '<span class="level-arrow">›</span></button>';
+  });
+  document.getElementById("modeList").innerHTML=html;
+  document.querySelectorAll("#modeList .level-btn").forEach(function(b){
+    b.addEventListener("click", function(){ selMode=b.getAttribute("data-mode"); startFocused(selType, selLevel); });
+  });
+  show("modes");
 }
 function levelBtnHTML(level, label, c, isAll){
   var dueTxt = c.due>0 ? "<span class='rep'>"+c.due+" repasos</span> · " : "";
@@ -712,27 +766,61 @@ var qCurrent=null, qAnswered=false;
 function norm(s){ return (s||"").toString().trim().replace(/\s+/g,"").replace(/。/g,""); }
 function hasKanji(s){ return /[\u4e00-\u9faf\u3005]/.test(s||""); }
 function shuffle(a){ a=a.slice(); for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
-function distractors(type, correctMean, n){
-  var seen={}, uniq=[];
+function distractField(type, field, correct, n, filterFn){
+  var seen={}, u=[];
   ITEMS.forEach(function(it){
-    if(it.type===type && it.d.mean && it.d.mean!==correctMean && !seen[it.d.mean]){
-      seen[it.d.mean]=1; uniq.push(it.d.mean);
-    }
+    if(it.type!==type) return;
+    if(filterFn && !filterFn(it)) return;
+    var v=it.d[field];
+    if(v && v!==correct && !seen[v]){ seen[v]=1; u.push(v); }
   });
-  return shuffle(uniq).slice(0,n);
+  return shuffle(u).slice(0,n);
+}
+function opt4(correct, distract){ return shuffle([correct].concat(distract)); }
+
+function buildKanjiQ(item){
+  var d=item.d;
+  if(Math.random()<0.5)
+    return {mode:"choice", stem:d.c, prompt:"¿Qué significa este kanji?", answer:d.mean, options:opt4(d.mean, distractField("kanji","mean",d.mean,3)), item:item};
+  return {mode:"choice", stem:d.c, prompt:"¿Cuál es la lectura principal?", answer:d.say, options:opt4(d.say, distractField("kanji","say",d.say,3)), item:item};
+}
+function vocabSubs(item){
+  var d=item.d, hasK=hasKanji(d.w), fillOK=d.ej && d.ej.indexOf(d.w)>=0;
+  var subs=["mean"];
+  if(hasK){ subs.push("read","write","type"); }
+  if(fillOK){ subs.push("fill"); }
+  return subs;
+}
+function buildVocabQ(item, sub){
+  var d=item.d;
+  if(sub==="read")
+    return {mode:"choice", stem:d.w, prompt:"¿Cuál es la lectura?", answer:d.r, options:opt4(d.r, distractField("vocab","r",d.r,3)), item:item};
+  if(sub==="write")
+    return {mode:"choice", stem:d.r, prompt:"¿Con qué kanji se escribe?", answer:d.w, options:opt4(d.w, distractField("vocab","w",d.w,3,function(it){return hasKanji(it.d.w);})), item:item};
+  if(sub==="type")
+    return {mode:"type", stem:d.w, prompt:"Escribe la lectura en hiragana", answer:d.r, item:item};
+  if(sub==="fill")
+    return {mode:"choice", sentence:d.ej.replace(d.w,"（　　）"), sub:d.ejt, prompt:"Elige la palabra para el hueco:", answer:d.w, options:opt4(d.w, distractField("vocab","w",d.w,3)), item:item};
+  return {mode:"choice", stem:d.w, prompt:"¿Qué significa?", answer:d.mean, options:opt4(d.mean, distractField("vocab","mean",d.mean,3)), item:item};
+}
+function buildGrammarQ(item, sub){
+  var d=item.d;
+  if(sub==="ctx")
+    return {mode:"choice", sentence:d.ej, sub:d.ejt, prompt:"¿Qué estructura gramatical se usa aquí?", answer:d.pat, options:opt4(d.pat, distractField("grammar","pat",d.pat,3)), item:item};
+  if(sub==="form")
+    return {mode:"choice", sentence:d.ejt, prompt:"¿Con qué estructura se diría en japonés?", answer:d.pat, options:opt4(d.pat, distractField("grammar","pat",d.pat,3)), item:item};
+  return {mode:"choice", stem:d.pat, prompt:"¿Qué significa o cómo se usa?", answer:d.mean, options:opt4(d.mean, distractField("grammar","mean",d.mean,3)), item:item};
 }
 function makeQuestion(item){
-  var d=item.d;
-  if(item.type==="kanji"){
-    return {mode:"choice", stem:d.c, prompt:"¿Qué significa este kanji?", answer:d.mean, options:shuffle([d.mean].concat(distractors("kanji",d.mean,3))), item:item};
+  if(item.type==="kanji") return buildKanjiQ(item);
+  if(item.type==="vocab"){
+    var apps=vocabSubs(item), sub=selMode;
+    if(sub==="mix" || apps.indexOf(sub)<0) sub=apps[Math.floor(Math.random()*apps.length)];
+    return buildVocabQ(item, sub);
   }
-  if(item.type==="grammar"){
-    return {mode:"choice", stem:d.pat, prompt:"¿Qué significa o cómo se usa?", answer:d.mean, options:shuffle([d.mean].concat(distractors("grammar",d.mean,3))), item:item};
-  }
-  if(hasKanji(d.w)){
-    return {mode:"type", stem:d.w, prompt:"Escribe la lectura en hiragana", answer:d.r, item:item};
-  }
-  return {mode:"choice", stem:d.w, prompt:"¿Qué significa?", answer:d.mean, options:shuffle([d.mean].concat(distractors("vocab",d.mean,3))), item:item};
+  var gsubs=["mean","ctx","form"], gs=selMode;
+  if(gs==="mix" || gsubs.indexOf(gs)<0) gs=gsubs[Math.floor(Math.random()*gsubs.length)];
+  return buildGrammarQ(item, gs);
 }
 function nextQuestion(){
   if(queue.length===0){ show("doneView"); renderMenu(); return; }
@@ -742,8 +830,17 @@ function nextQuestion(){
   document.getElementById("qTag").textContent=tag;
   document.getElementById("qCount").textContent=done+" / "+total;
   document.getElementById("qBar").style.width=(total?(done/total*100):0)+"%";
-  var stem=document.getElementById("qStem");
-  stem.textContent=qCurrent.stem; stem.style.fontSize=Math.min(64,sizeFor(qCurrent.stem))+"px";
+  var stem=document.getElementById("qStem"), sub=document.getElementById("qSub");
+  if(qCurrent.sentence){
+    stem.textContent=qCurrent.sentence;
+    stem.style.fontFamily = /[\u3040-\u30ff\u4e00-\u9faf]/.test(qCurrent.sentence) ? "var(--jp)" : "var(--ui)";
+    stem.style.fontSize="21px"; stem.style.lineHeight="1.5"; stem.style.whiteSpace="normal";
+  } else {
+    stem.textContent=qCurrent.stem; stem.style.fontFamily="var(--jp)";
+    stem.style.fontSize=Math.min(64,sizeFor(qCurrent.stem))+"px"; stem.style.lineHeight="1.1";
+  }
+  if(qCurrent.sub){ sub.textContent=qCurrent.sub; sub.style.display="block"; }
+  else { sub.textContent=""; sub.style.display="none"; }
   document.getElementById("qPrompt").textContent=qCurrent.prompt;
   var fb=document.getElementById("qFeedback"); fb.className="qfeedback"; fb.innerHTML="";
   document.getElementById("qNext").style.display="none";
@@ -810,6 +907,7 @@ document.querySelectorAll(".tile[data-soon]").forEach(function(t){
 document.getElementById("statsLink").addEventListener("click", renderStats);
 document.getElementById("statsBack").addEventListener("click", function(){ show("menu"); renderMenu(); });
 document.getElementById("levelBack").addEventListener("click", function(){ show("menu"); renderMenu(); });
+document.getElementById("modeBack").addEventListener("click", function(){ showLevels(selType); });
 document.getElementById("closeBtn").addEventListener("click", function(){ show("menu"); renderMenu(); });
 document.getElementById("doneBack").addEventListener("click", function(){ show("menu"); renderMenu(); });
 document.getElementById("emptyBack").addEventListener("click", function(){ show("menu"); renderMenu(); });
