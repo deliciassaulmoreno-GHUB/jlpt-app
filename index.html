@@ -124,6 +124,32 @@
   .st-types{font-size:11.5px; color:var(--muted);}
   .stats-foot{margin:20px 0; font-size:12px; color:var(--faint); text-align:center; line-height:1.5;}
 
+  /* ===== QUIZ ===== */
+  #quiz{padding:6px 22px 0;}
+  .qstage{flex:1; overflow-y:auto; display:flex; flex-direction:column; align-items:center; padding:4px 0 0; min-height:0;}
+  .qstem-box{margin-top:12px; min-width:150px; min-height:120px; padding:14px 22px; background:var(--card); border-radius:24px; box-shadow:var(--shadow);
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;}
+  .qstem-box .kanji-glyph{font-size:64px;}
+  .qprompt{margin-top:16px; text-align:center; font-size:15px; font-weight:700; color:var(--ink-2);}
+  .qchoices{width:100%; margin-top:16px; display:grid; gap:10px;}
+  .qopt{width:100%; text-align:left; background:var(--card); border:1.5px solid var(--line); border-radius:15px;
+    padding:15px 16px; font-size:15px; font-weight:600; color:var(--ink); cursor:pointer; transition:transform .1s ease, border-color .15s ease;}
+  .qopt:active{transform:scale(.99);}
+  .qopt:disabled{cursor:default;}
+  .qopt.ok{border-color:var(--green); background:rgba(46,125,91,.10); color:var(--green);}
+  .qopt.no{border-color:#C0504D; background:rgba(176,65,62,.08); color:#B0413E;}
+  .qtypewrap{width:100%; margin-top:18px;}
+  .qinput{width:100%; height:56px; border:1.5px solid var(--line); border-radius:15px; background:var(--card);
+    font-family:var(--jp); font-size:22px; text-align:center; color:var(--ink); padding:0 14px; outline:none;}
+  .qinput:focus{border-color:var(--indigo-bright);}
+  .qinput:disabled{background:var(--line-2);}
+  .qtypewrap .btn{margin-top:12px;}
+  .qfeedback{width:100%; margin-top:16px;}
+  .qfeedback.good > .fb-head{color:var(--green);}
+  .qfeedback.bad > .fb-head{color:#B0413E;}
+  .fb-head{font-size:16px; font-weight:700; margin-bottom:10px; text-align:center;}
+  .qactions{padding:14px 0 14px; flex-shrink:0;}
+
   /* ===== STUDY ===== */
   #study{padding:6px 22px 0;}
   .study-row{display:flex; align-items:center; gap:14px;}
@@ -317,6 +343,29 @@
   </div>
 </section>
 
+<!-- ===== QUIZ (ejercicios) ===== -->
+<section class="view" id="quiz">
+  <div class="study-row">
+    <button class="close" id="qClose" aria-label="Cerrar">✕</button>
+    <div class="progress"><span id="qBar"></span></div>
+    <span class="count" id="qCount">0 / 0</span>
+  </div>
+  <div class="tagline" id="qTag">Kanji</div>
+  <div class="qstage">
+    <div class="qstem-box"><span class="kanji-glyph" id="qStem">字</span></div>
+    <div class="qprompt" id="qPrompt">¿Qué significa?</div>
+    <div class="qchoices" id="qChoices"></div>
+    <div class="qtypewrap" id="qTypeWrap">
+      <input class="qinput" id="qInput" type="text" lang="ja" inputmode="text"
+             autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false"
+             placeholder="lectura en hiragana…">
+      <button class="btn" id="qSubmit">Comprobar</button>
+    </div>
+    <div class="qfeedback" id="qFeedback"></div>
+  </div>
+  <div class="qactions"><button class="btn" id="qNext" style="display:none;">Siguiente</button></div>
+</section>
+
 <!-- ===== DONE ===== -->
 <section class="view" id="doneView">
   <div class="done">
@@ -469,7 +518,7 @@ function buildFocused(type, level){
 }
 
 function show(v){
-  ["menu","levels","stats","study","doneView","emptyView"].forEach(function(x){
+  ["menu","levels","stats","study","quiz","doneView","emptyView"].forEach(function(x){
     document.getElementById(x).classList.toggle("active", x===v);
   });
 }
@@ -571,9 +620,10 @@ function startFocused(type, level){
     showEmpty("Nada pendiente", "No tienes repasos ni ítems nuevos de "+lbl+" ahora mismo.");
     return;
   }
-  beginSession(q);
+  beginQuiz(q);
 }
 function beginSession(q){ queue=q.queue.slice(); total=queue.length; done=0; show("study"); nextCard(); }
+function beginQuiz(q){ queue=q.queue.slice(); total=queue.length; done=0; show("quiz"); nextQuestion(); }
 function showEmpty(title,msg){
   document.getElementById("emptyTitle").textContent=title;
   document.getElementById("emptyMsg").textContent=msg;
@@ -657,6 +707,89 @@ function rate(r){
 }
 function speak(t){ try{ var u=new SpeechSynthesisUtterance(t); u.lang="ja-JP"; u.rate=.9; speechSynthesis.cancel(); speechSynthesis.speak(u); }catch(e){} }
 
+/* ===== QUIZ / EJERCICIOS ===== */
+var qCurrent=null, qAnswered=false;
+function norm(s){ return (s||"").toString().trim().replace(/\s+/g,"").replace(/。/g,""); }
+function hasKanji(s){ return /[\u4e00-\u9faf\u3005]/.test(s||""); }
+function shuffle(a){ a=a.slice(); for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
+function distractors(type, correctMean, n){
+  var pool=[];
+  ITEMS.forEach(function(it){ if(it.type===type && it.d.mean && it.d.mean!==correctMean) pool.push(it.d.mean); });
+  pool=Array.prototype.slice.call(new Set(pool));
+  return shuffle(pool).slice(0,n);
+}
+function makeQuestion(item){
+  var d=item.d;
+  if(item.type==="kanji"){
+    return {mode:"choice", stem:d.c, prompt:"¿Qué significa este kanji?", answer:d.mean, options:shuffle([d.mean].concat(distractors("kanji",d.mean,3))), item:item};
+  }
+  if(item.type==="grammar"){
+    return {mode:"choice", stem:d.pat, prompt:"¿Qué significa o cómo se usa?", answer:d.mean, options:shuffle([d.mean].concat(distractors("grammar",d.mean,3))), item:item};
+  }
+  if(hasKanji(d.w)){
+    return {mode:"type", stem:d.w, prompt:"Escribe la lectura en hiragana", answer:d.r, item:item};
+  }
+  return {mode:"choice", stem:d.w, prompt:"¿Qué significa?", answer:d.mean, options:shuffle([d.mean].concat(distractors("vocab",d.mean,3))), item:item};
+}
+function nextQuestion(){
+  if(queue.length===0){ show("doneView"); renderMenu(); return; }
+  current=queue.shift(); var item=ITEMS[current];
+  qCurrent=makeQuestion(item); qAnswered=false;
+  var tag=TYPE_LABEL[item.type]; if(item.d.lvl) tag+=" · "+item.d.lvl;
+  document.getElementById("qTag").textContent=tag;
+  document.getElementById("qCount").textContent=done+" / "+total;
+  document.getElementById("qBar").style.width=(total?(done/total*100):0)+"%";
+  var stem=document.getElementById("qStem");
+  stem.textContent=qCurrent.stem; stem.style.fontSize=Math.min(64,sizeFor(qCurrent.stem))+"px";
+  document.getElementById("qPrompt").textContent=qCurrent.prompt;
+  var fb=document.getElementById("qFeedback"); fb.className="qfeedback"; fb.innerHTML="";
+  document.getElementById("qNext").style.display="none";
+  if(qCurrent.mode==="choice"){
+    document.getElementById("qTypeWrap").style.display="none";
+    var box=document.getElementById("qChoices"); box.style.display="grid";
+    var html=""; qCurrent.options.forEach(function(opt){ html+='<button class="qopt">'+opt+'</button>'; });
+    box.innerHTML=html;
+    box.querySelectorAll(".qopt").forEach(function(b){ b.addEventListener("click", function(){ if(!qAnswered) checkChoice(b); }); });
+  } else {
+    document.getElementById("qChoices").style.display="none";
+    document.getElementById("qTypeWrap").style.display="block";
+    var inp=document.getElementById("qInput"); inp.value=""; inp.disabled=false;
+    document.getElementById("qSubmit").style.display="block";
+    setTimeout(function(){ try{ inp.focus(); }catch(e){} }, 120);
+  }
+}
+function checkChoice(btn){
+  qAnswered=true;
+  var correct = (btn.textContent===qCurrent.answer);
+  document.getElementById("qChoices").querySelectorAll(".qopt").forEach(function(b){
+    b.disabled=true;
+    if(b.textContent===qCurrent.answer) b.classList.add("ok");
+    else if(b===btn) b.classList.add("no");
+  });
+  finishAnswer(correct);
+}
+function checkType(){
+  if(qAnswered) return;
+  qAnswered=true;
+  var correct = (norm(document.getElementById("qInput").value)===norm(qCurrent.answer));
+  document.getElementById("qInput").disabled=true;
+  document.getElementById("qSubmit").style.display="none";
+  finishAnswer(correct);
+}
+function finishAnswer(correct){
+  var item=qCurrent.item;
+  var fb=document.getElementById("qFeedback");
+  fb.className="qfeedback "+(correct?"good":"bad");
+  var head = correct ? "¡Correcto!" : ("Casi. Respuesta: "+qCurrent.answer);
+  fb.innerHTML='<div class="fb-head">'+head+'</div>'+backHTML(item);
+  fb.querySelectorAll(".reading").forEach(function(el){
+    el.addEventListener("click", function(){ speak(el.getAttribute("data-say")); });
+  });
+  progress[item.id]=schedule(progress[item.id]||null, correct?3:1, new Date());
+  save(progress); logToday(); done+=1;
+  document.getElementById("qNext").style.display="block";
+}
+
 /* ===== EVENTS ===== */
 document.getElementById("greetingRow").addEventListener("click", function(){
   var n=prompt("¿Cómo te llamas? (se guarda solo en tu teléfono)", getName());
@@ -678,6 +811,10 @@ document.getElementById("closeBtn").addEventListener("click", function(){ show("
 document.getElementById("doneBack").addEventListener("click", function(){ show("menu"); renderMenu(); });
 document.getElementById("emptyBack").addEventListener("click", function(){ show("menu"); renderMenu(); });
 document.getElementById("revealBtn").addEventListener("click", reveal);
+document.getElementById("qClose").addEventListener("click", function(){ show("menu"); renderMenu(); });
+document.getElementById("qSubmit").addEventListener("click", checkType);
+document.getElementById("qNext").addEventListener("click", nextQuestion);
+document.getElementById("qInput").addEventListener("keydown", function(e){ if(e.key==="Enter"){ e.preventDefault(); checkType(); } });
 document.querySelectorAll(".rate").forEach(function(b){ b.addEventListener("click", function(){ rate(parseInt(b.getAttribute("data-r"),10)); }); });
 document.getElementById("resetBtn").addEventListener("click", function(){
   if(confirm("¿Borrar todo tu progreso y empezar de cero? (No borra tu nombre)")){ progress={}; save(progress); renderMenu(); }
