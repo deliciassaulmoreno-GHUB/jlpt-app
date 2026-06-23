@@ -713,10 +713,13 @@ function norm(s){ return (s||"").toString().trim().replace(/\s+/g,"").replace(/ã
 function hasKanji(s){ return /[\u4e00-\u9faf\u3005]/.test(s||""); }
 function shuffle(a){ a=a.slice(); for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
 function distractors(type, correctMean, n){
-  var pool=[];
-  ITEMS.forEach(function(it){ if(it.type===type && it.d.mean && it.d.mean!==correctMean) pool.push(it.d.mean); });
-  pool=Array.prototype.slice.call(new Set(pool));
-  return shuffle(pool).slice(0,n);
+  var seen={}, uniq=[];
+  ITEMS.forEach(function(it){
+    if(it.type===type && it.d.mean && it.d.mean!==correctMean && !seen[it.d.mean]){
+      seen[it.d.mean]=1; uniq.push(it.d.mean);
+    }
+  });
+  return shuffle(uniq).slice(0,n);
 }
 function makeQuestion(item){
   var d=item.d;
