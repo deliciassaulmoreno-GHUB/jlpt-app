@@ -255,7 +255,7 @@ kanji: [
  {c:"野",kun:"の",on:"ヤ",say:"や",mean:"Campo · llanura",ej:"野菜",ejr:"やさい",ejt:"verdura",lvl:"N4"},
  {c:"菜",kun:"な",on:"サイ",say:"さい",mean:"Verdura · hortaliza",ej:"野菜",ejr:"やさい",ejt:"verdura",lvl:"N4"},
  {c:"銀",on:"ギン",say:"ぎん",mean:"Plata",ej:"銀行",ejr:"ぎんこう",ejt:"banco",lvl:"N4"},
- {c:"開",kun:"あ(く)・ひら(く)",on:"カイ",say:"あける",mean:"Abrir",ej:"開ける",ejr:"あける",ejt:"abrir",lvl:"N4"},
+ {c:"開",kun:"あ(く)・あ(ける)・ひら(く)",on:"カイ",say:"あける",mean:"Abrir",ej:"開ける",ejr:"あける",ejt:"abrir",lvl:"N4"},
  {c:"集",kun:"あつ(める)",on:"シュウ",say:"あつめる",mean:"Reunir · coleccionar",ej:"集める",ejr:"あつめる",ejt:"reunir",lvl:"N4"},
  {c:"青",kun:"あお",on:"セイ",say:"あお",mean:"Azul",ej:"青",ejr:"あお",ejt:"azul",lvl:"N4"},
  {c:"赤",kun:"あか",on:"セキ",say:"あか",mean:"Rojo",ej:"赤",ejr:"あか",ejt:"rojo",lvl:"N4"},
