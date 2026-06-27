@@ -10,7 +10,7 @@
    - Vive en una caché aparte que NO se borra al subir de versión, para no tener
      que volver a descargar los audios tras cada actualización de contenido. */
 
-var CACHE = "n1path-v6";                 /* ← subido: recoge index.html nuevo y descarta cachés viejas */
+var CACHE = "n1path-v7";                 /* ← subido: recoge index.html nuevo y descarta cachés viejas */
 var AUDIO_CACHE = "n1path-audio-v2";     /* ← subido a v2: descarta audios/errores cacheados antes */
 var SHELL = ["./", "./index.html", "./content.js", "./reading.js", "./manifest.json", "./icon.png"];
 
@@ -39,6 +39,8 @@ self.addEventListener("fetch", function(e){
      aunque el Worker esté en otro dominio. Persistente entre versiones. --- */
   var isAudio = /\.mp3($|\?)/i.test(url.pathname) || /\/tts(\?|$)/i.test(url.pathname);
   if(isAudio){
+    /* Peticiones por rango (iOS streaming): directas al Worker, no las interceptamos */
+    if(req.headers.get("range")){ return; }
     e.respondWith(
       caches.match(req).then(function(cached){
         if(cached) return cached;

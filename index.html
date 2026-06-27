@@ -1192,20 +1192,21 @@ function toggleReadAloud(){
   if(!rdCurrent) return;
   if(rdPlaying){ stopRead(); return; }
   rdPlaying=true; setPlayIcon(true); rdIdx=0;
-  /* 1º intenta un MP3 pregrabado del pasaje completo; si no existe pasa a lectura por párrafos */
-  playPassageFile(rdCurrent.audio || ("audio/"+rdCurrent.id+".mp3"));
+  if(rdCurrent.audio){ playPassageFile(rdCurrent.audio); }   /* solo si hay un MP3 explícito */
+  else { readSeq(); }                                         /* Worker (voz natural) o sistema, por párrafos */
 }
-/* Reproduce el MP3 del pasaje completo (si lo subiste). Si falla → readSeq() */
+/* Reproduce un MP3 del pasaje completo (solo si lo indicaste en 'audio'). Si falla → readSeq() */
 function playPassageFile(src){
   var a=getRdAudio(); if(!a){ readSeq(); return; }
   clearParaHL();
+  var done=false; function toParas(){ if(done||!rdPlaying) return; done=true; readSeq(); }
   a.onended=function(){ stopRead(); };
-  a.onerror=function(){ if(rdPlaying) readSeq(); };
+  a.onerror=toParas;
   try{
     a.src=src; a.currentTime=0;
     var pr=a.play();
-    if(pr && pr.catch){ pr.catch(function(){ if(rdPlaying) readSeq(); }); }
-  }catch(e){ if(rdPlaying) readSeq(); }
+    if(pr && pr.catch){ pr.catch(toParas); }
+  }catch(e){ toParas(); }
 }
 /* Lectura párrafo a párrafo: voz natural del Worker si hay endpoint; si no, voz del sistema */
 function readSeq(){
