@@ -10,8 +10,8 @@
    - Vive en una caché aparte que NO se borra al subir de versión, para no tener
      que volver a descargar los audios tras cada actualización de contenido. */
 
-var CACHE = "n1path-v5";                 /* ← subido: fuerza recoger index.html / content.js / reading.js nuevos */
-var AUDIO_CACHE = "n1path-audio-v1";     /* caché persistente para MP3 locales y audio del Worker TTS */
+var CACHE = "n1path-v6";                 /* ← subido: recoge index.html nuevo y descarta cachés viejas */
+var AUDIO_CACHE = "n1path-audio-v2";     /* ← subido a v2: descarta audios/errores cacheados antes */
 var SHELL = ["./", "./index.html", "./content.js", "./reading.js", "./manifest.json", "./icon.png"];
 
 self.addEventListener("install", function(e){
@@ -43,7 +43,8 @@ self.addEventListener("fetch", function(e){
       caches.match(req).then(function(cached){
         if(cached) return cached;
         return fetch(req).then(function(res){
-          if(res && (res.ok || res.type === "opaque")){
+          /* cachear SOLO audio válido y legible (200). Nunca opacas ni errores (502, etc.) */
+          if(res && res.status === 200 && res.type !== "opaque"){
             var copy = res.clone();
             caches.open(AUDIO_CACHE).then(function(c){ c.put(req, copy); });
           }

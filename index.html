@@ -869,7 +869,7 @@ function rate(r){
 var TTS_ENDPOINT = "https://jlpt-tts.deliciassaulmoreno.workers.dev";   /* Cloudflare Worker (voz natural) */
 function ttsUrl(text){ return TTS_ENDPOINT.replace(/\/+$/,"") + "/tts?text=" + encodeURIComponent(text); }
 var wordAudioEl=null;
-function wordAudio(){ if(!wordAudioEl){ wordAudioEl=new Audio(); wordAudioEl.preload="none"; } return wordAudioEl; }
+function wordAudio(){ if(!wordAudioEl){ wordAudioEl=new Audio(); wordAudioEl.preload="none"; wordAudioEl.crossOrigin="anonymous"; } return wordAudioEl; }
 
 var JA_VOICE=null;
 function pickJapaneseVoice(){
@@ -1182,7 +1182,7 @@ function paraHighlight(idx){
 }
 function clearParaHL(){ document.querySelectorAll("#readerStage .rd-para.reading").forEach(function(n){ n.classList.remove("reading"); }); }
 var rdAudioEl=null;
-function getRdAudio(){ if(!rdAudioEl){ rdAudioEl=document.getElementById("rdAudio"); } return rdAudioEl; }
+function getRdAudio(){ if(!rdAudioEl){ rdAudioEl=document.getElementById("rdAudio"); if(rdAudioEl) rdAudioEl.crossOrigin="anonymous"; } return rdAudioEl; }
 function stopRead(){
   rdPlaying=false; setPlayIcon(false); clearParaHL();
   try{ window.speechSynthesis.cancel(); }catch(e){}
