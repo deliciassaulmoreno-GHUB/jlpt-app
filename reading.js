@@ -1,10 +1,16 @@
 /* ============================================================
    MÓDULO DE LECTURA — textos graduados por nivel
    window.READING = [ pasajes ]
-   Cada pasaje: { id, lvl, title, mins, paras[], gloss[], q[] }
+   Cada pasaje: { id, lvl, title, mins, paras[], gloss[], q[], audio? }
      paras: { jp (japonés), fu (lectura en hiragana), es (traducción) }
      gloss: { w (palabra), r (lectura), m (significado) }
      q:     { q (pregunta), o [opciones], a (índice de la correcta) }
+     audio (OPCIONAL): ruta a un MP3 pregrabado con voz natural,
+            p. ej. audio:"audio/r-n3-1.mp3". Si está presente, el botón ▶
+            reproduce ese archivo (bajo demanda, no se descarga al abrir);
+            si falta o falla, recurre automáticamente a la voz MEJORADA del
+            dispositivo (TTS). Usa audio mono ~32-48 kbps para que pese poco
+            y NO lo añadas a la precarga del service worker.
    ============================================================ */
 window.READING = [
 

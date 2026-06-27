@@ -487,6 +487,7 @@
       <button class="df-spk" id="dfSpk" aria-label="Escuchar">🔊</button>
     </div>
   </div>
+  <audio id="rdAudio" preload="none"></audio>
 </section>
 
 <script src="content.js"></script>
@@ -1159,7 +1160,22 @@ function paraHighlight(idx){
   if(nodes[idx]){ try{ nodes[idx].scrollIntoView({block:"nearest",behavior:"smooth"}); }catch(e){} }
 }
 function clearParaHL(){ document.querySelectorAll("#readerStage .rd-para.reading").forEach(function(n){ n.classList.remove("reading"); }); }
-function stopRead(){ rdPlaying=false; setPlayIcon(false); clearParaHL(); try{ window.speechSynthesis.cancel(); }catch(e){} }
+var rdAudioEl=null, rdUsingAudio=false;
+function getRdAudio(){
+  if(!rdAudioEl){
+    rdAudioEl=document.getElementById("rdAudio");
+    if(rdAudioEl){
+      rdAudioEl.addEventListener("ended", function(){ stopRead(); });
+      rdAudioEl.addEventListener("error", function(){ if(rdPlaying && rdUsingAudio) fallbackTTS(); });
+    }
+  }
+  return rdAudioEl;
+}
+function stopRead(){
+  rdPlaying=false; rdUsingAudio=false; setPlayIcon(false); clearParaHL();
+  try{ window.speechSynthesis.cancel(); }catch(e){}
+  try{ if(rdAudioEl){ rdAudioEl.pause(); } }catch(e){}
+}
 function readSeq(){
   if(!rdPlaying || !rdCurrent || rdIdx>=rdCurrent.paras.length){ stopRead(); return; }
   var idx=rdIdx;
@@ -1171,12 +1187,35 @@ function readSeq(){
   u.onerror=function(){ if(!rdPlaying) return; rdIdx++; readSeq(); };
   try{ window.speechSynthesis.speak(u); }catch(e){ stopRead(); }
 }
-function toggleReadAloud(){
-  if(!('speechSynthesis' in window) || !rdCurrent) return;
-  if(rdPlaying){ stopRead(); return; }
-  rdIdx=0; rdPlaying=true; setPlayIcon(true);
+function startTTS(){
+  if(!('speechSynthesis' in window)){ stopRead(); return; }
+  rdIdx=0;
   try{ window.speechSynthesis.cancel(); }catch(e){}
   readSeq();
+}
+function fallbackTTS(){
+  /* el mp3 no existe o no se pudo reproducir → voz mejorada del dispositivo */
+  rdUsingAudio=false;
+  try{ if(rdAudioEl){ rdAudioEl.pause(); } }catch(e){}
+  if(!rdPlaying) return;
+  startTTS();
+}
+function playAudioFile(src){
+  var a=getRdAudio();
+  if(!a){ fallbackTTS(); return; }
+  rdUsingAudio=true;
+  try{
+    a.src=src; a.currentTime=0;
+    var pr=a.play();
+    if(pr && pr.catch){ pr.catch(function(){ if(rdPlaying && rdUsingAudio) fallbackTTS(); }); }
+  }catch(e){ fallbackTTS(); }
+}
+function toggleReadAloud(){
+  if(!rdCurrent) return;
+  if(rdPlaying){ stopRead(); return; }
+  rdPlaying=true; setPlayIcon(true);
+  if(rdCurrent.audio){ playAudioFile(rdCurrent.audio); }   /* MP3 natural pregrabado, bajo demanda */
+  else { rdUsingAudio=false; startTTS(); }                  /* respaldo: voz mejorada del sistema */
 }
 
 /* ===== EVENTS ===== */
