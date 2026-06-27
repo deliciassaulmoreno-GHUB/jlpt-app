@@ -863,6 +863,14 @@ function rate(r){
   save(progress); logToday(); done+=1; nextCard();
 }
 /* ===== AUDIO / TTS ===== */
+/* ===== CONFIG: proxy serverless de TTS (voz natural en TODO) ===== */
+/* Pega la URL de tu Cloudflare Worker para activar voz natural en vocabulario,
+   kanji y lectura. Vacío = usa solo la voz del sistema (comportamiento por defecto). */
+var TTS_ENDPOINT = "https://jlpt-tts.deliciassaulmoreno.workers.dev";   /* Cloudflare Worker (voz natural) */
+function ttsUrl(text){ return TTS_ENDPOINT.replace(/\/+$/,"") + "/tts?text=" + encodeURIComponent(text); }
+var wordAudioEl=null;
+function wordAudio(){ if(!wordAudioEl){ wordAudioEl=new Audio(); wordAudioEl.preload="none"; } return wordAudioEl; }
+
 var JA_VOICE=null;
 function pickJapaneseVoice(){
   var sy=window.speechSynthesis; if(!sy) return null;
@@ -888,7 +896,7 @@ if('speechSynthesis' in window){
   window.speechSynthesis.onvoiceschanged=refreshVoice;
   setTimeout(refreshVoice,300); setTimeout(refreshVoice,1200);
 }
-function speak(t){
+function systemSpeak(t){
   if(!t || !('speechSynthesis' in window)) return;
   try{
     if(!JA_VOICE) refreshVoice();
@@ -899,6 +907,19 @@ function speak(t){
     window.speechSynthesis.cancel();
     window.speechSynthesis.speak(u);
   }catch(e){}
+}
+function speak(t){
+  if(!t) return;
+  if(!TTS_ENDPOINT){ systemSpeak(t); return; }   /* sin Worker → voz del sistema */
+  var fell=false; function fb(){ if(fell) return; fell=true; systemSpeak(t); }
+  try{
+    try{ if('speechSynthesis' in window) window.speechSynthesis.cancel(); }catch(e){}
+    var a=wordAudio();
+    a.onerror=fb;
+    a.src=ttsUrl(t);
+    var pr=a.play();
+    if(pr && pr.catch) pr.catch(fb);
+  }catch(e){ fb(); }
 }
 
 /* ===== QUIZ / EJERCICIOS ===== */
@@ -1160,62 +1181,62 @@ function paraHighlight(idx){
   if(nodes[idx]){ try{ nodes[idx].scrollIntoView({block:"nearest",behavior:"smooth"}); }catch(e){} }
 }
 function clearParaHL(){ document.querySelectorAll("#readerStage .rd-para.reading").forEach(function(n){ n.classList.remove("reading"); }); }
-var rdAudioEl=null, rdUsingAudio=false;
-function getRdAudio(){
-  if(!rdAudioEl){
-    rdAudioEl=document.getElementById("rdAudio");
-    if(rdAudioEl){
-      rdAudioEl.addEventListener("ended", function(){ stopRead(); });
-      rdAudioEl.addEventListener("error", function(){ if(rdPlaying && rdUsingAudio) fallbackTTS(); });
-    }
-  }
-  return rdAudioEl;
-}
+var rdAudioEl=null;
+function getRdAudio(){ if(!rdAudioEl){ rdAudioEl=document.getElementById("rdAudio"); } return rdAudioEl; }
 function stopRead(){
-  rdPlaying=false; rdUsingAudio=false; setPlayIcon(false); clearParaHL();
+  rdPlaying=false; setPlayIcon(false); clearParaHL();
   try{ window.speechSynthesis.cancel(); }catch(e){}
-  try{ if(rdAudioEl){ rdAudioEl.pause(); } }catch(e){}
-}
-function readSeq(){
-  if(!rdPlaying || !rdCurrent || rdIdx>=rdCurrent.paras.length){ stopRead(); return; }
-  var idx=rdIdx;
-  paraHighlight(idx);
-  if(!JA_VOICE) refreshVoice();
-  var u=new SpeechSynthesisUtterance(rdCurrent.paras[idx].jp);
-  u.lang="ja-JP"; if(JA_VOICE) u.voice=JA_VOICE; u.rate=0.92; u.pitch=1.0;
-  u.onend=function(){ if(!rdPlaying) return; rdIdx++; readSeq(); };
-  u.onerror=function(){ if(!rdPlaying) return; rdIdx++; readSeq(); };
-  try{ window.speechSynthesis.speak(u); }catch(e){ stopRead(); }
-}
-function startTTS(){
-  if(!('speechSynthesis' in window)){ stopRead(); return; }
-  rdIdx=0;
-  try{ window.speechSynthesis.cancel(); }catch(e){}
-  readSeq();
-}
-function fallbackTTS(){
-  /* el mp3 no existe o no se pudo reproducir → voz mejorada del dispositivo */
-  rdUsingAudio=false;
-  try{ if(rdAudioEl){ rdAudioEl.pause(); } }catch(e){}
-  if(!rdPlaying) return;
-  startTTS();
-}
-function playAudioFile(src){
-  var a=getRdAudio();
-  if(!a){ fallbackTTS(); return; }
-  rdUsingAudio=true;
-  try{
-    a.src=src; a.currentTime=0;
-    var pr=a.play();
-    if(pr && pr.catch){ pr.catch(function(){ if(rdPlaying && rdUsingAudio) fallbackTTS(); }); }
-  }catch(e){ fallbackTTS(); }
+  try{ if(rdAudioEl){ rdAudioEl.onended=null; rdAudioEl.onerror=null; rdAudioEl.pause(); } }catch(e){}
 }
 function toggleReadAloud(){
   if(!rdCurrent) return;
   if(rdPlaying){ stopRead(); return; }
-  rdPlaying=true; setPlayIcon(true);
-  if(rdCurrent.audio){ playAudioFile(rdCurrent.audio); }   /* MP3 natural pregrabado, bajo demanda */
-  else { rdUsingAudio=false; startTTS(); }                  /* respaldo: voz mejorada del sistema */
+  rdPlaying=true; setPlayIcon(true); rdIdx=0;
+  /* 1º intenta un MP3 pregrabado del pasaje completo; si no existe pasa a lectura por párrafos */
+  playPassageFile(rdCurrent.audio || ("audio/"+rdCurrent.id+".mp3"));
+}
+/* Reproduce el MP3 del pasaje completo (si lo subiste). Si falla → readSeq() */
+function playPassageFile(src){
+  var a=getRdAudio(); if(!a){ readSeq(); return; }
+  clearParaHL();
+  a.onended=function(){ stopRead(); };
+  a.onerror=function(){ if(rdPlaying) readSeq(); };
+  try{
+    a.src=src; a.currentTime=0;
+    var pr=a.play();
+    if(pr && pr.catch){ pr.catch(function(){ if(rdPlaying) readSeq(); }); }
+  }catch(e){ if(rdPlaying) readSeq(); }
+}
+/* Lectura párrafo a párrafo: voz natural del Worker si hay endpoint; si no, voz del sistema */
+function readSeq(){
+  if(!rdPlaying || !rdCurrent || rdIdx>=rdCurrent.paras.length){ stopRead(); return; }
+  var idx=rdIdx, text=rdCurrent.paras[idx].jp;
+  paraHighlight(idx);
+  if(TTS_ENDPOINT){
+    var a=getRdAudio(), moved=false;
+    var advance=function(){ if(moved||!rdPlaying) return; moved=true; rdIdx++; readSeq(); };
+    var toSys=function(){ if(moved||!rdPlaying) return; moved=true; speakParaSystem(text, function(){ rdIdx++; readSeq(); }); };
+    if(!a){ speakParaSystem(text, function(){ rdIdx++; readSeq(); }); return; }
+    a.onended=advance;
+    a.onerror=toSys;     /* si el Worker falla en este párrafo, voz del sistema y sigue */
+    try{
+      a.src=ttsUrl(text); a.currentTime=0;
+      var pr=a.play();
+      if(pr && pr.catch) pr.catch(toSys);
+    }catch(e){ toSys(); }
+  } else {
+    speakParaSystem(text, function(){ rdIdx++; readSeq(); });
+  }
+}
+/* Una frase con la voz del sistema, con callback al terminar */
+function speakParaSystem(text, onend){
+  if(!('speechSynthesis' in window)){ stopRead(); return; }
+  if(!JA_VOICE) refreshVoice();
+  var u=new SpeechSynthesisUtterance(text);
+  u.lang="ja-JP"; if(JA_VOICE) u.voice=JA_VOICE; u.rate=0.92; u.pitch=1.0;
+  u.onend=function(){ if(rdPlaying && onend) onend(); };
+  u.onerror=function(){ if(rdPlaying && onend) onend(); };
+  try{ window.speechSynthesis.cancel(); window.speechSynthesis.speak(u); }catch(e){ stopRead(); }
 }
 
 /* ===== EVENTS ===== */
