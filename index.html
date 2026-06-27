@@ -217,6 +217,41 @@
   .done .btn,.empty .btn{max-width:220px; margin-top:8px;}
 
   @media (prefers-reduced-motion: reduce){*{transition:none !important;}}
+  /* ===== LECTURA ===== */
+  #readLevels,#readList{padding:10px 22px 0; overflow-y:auto;}
+  #reader{padding:6px 22px 0;}
+  .rd-toolbar{display:flex; gap:8px; margin:8px 0 4px;}
+  .rd-tog{flex:1; border:1.5px solid var(--line); background:var(--card); color:var(--muted); border-radius:13px;
+    padding:9px 6px; font-family:var(--ui); font-size:13px; font-weight:600; cursor:pointer; transition:all .12s ease;}
+  .rd-tog.on{border-color:var(--indigo); background:rgba(39,64,127,.08); color:var(--indigo);}
+  .rd-stage{flex:1; overflow-y:auto; min-height:0; padding-bottom:24px;}
+  .rd-title{font-family:var(--jp); font-weight:700; font-size:22px; margin:10px 0 2px;}
+  .rd-meta{font-size:12px; color:var(--muted); margin-bottom:12px;}
+  .rd-para{margin:0 0 16px;}
+  .rd-jp{font-family:var(--jp); font-size:19px; line-height:1.95; color:var(--ink);}
+  .rd-jp .rw{color:var(--indigo-bright); border-bottom:1.5px dotted var(--indigo-bright); cursor:pointer;}
+  .rd-fu{font-family:var(--jp); font-size:13.5px; line-height:1.7; color:var(--muted); margin-top:5px; display:none;}
+  .rd-es{font-size:13.5px; line-height:1.6; color:var(--ink-2); margin-top:6px; padding-left:10px; border-left:2.5px solid var(--line); display:none;}
+  #reader.show-fu .rd-fu{display:block;} #reader.show-es .rd-es{display:block;}
+  .rd-sec{font-size:12px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--faint); margin:18px 0 8px;}
+  .rd-gloss{display:flex; flex-direction:column; gap:7px;}
+  .rd-gw{display:flex; align-items:center; justify-content:space-between; gap:10px; background:var(--card);
+    border:1px solid var(--line); border-radius:13px; padding:10px 13px; cursor:pointer;}
+  .rd-gw .gw-l{font-family:var(--jp); font-weight:700; font-size:16px; color:var(--ink);}
+  .rd-gw .gw-r{font-family:var(--jp); font-size:12.5px; color:var(--muted);}
+  .rd-gw .gw-m{font-size:12.5px; color:var(--ink-2); text-align:right; flex:1;}
+  .rd-q{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:14px 15px; margin-bottom:12px;}
+  .rd-q .qq{font-family:var(--jp); font-size:15.5px; font-weight:600; margin-bottom:10px; color:var(--ink);}
+  .rd-define{position:fixed; left:0; right:0; bottom:0; background:var(--card); border-top:1.5px solid var(--line);
+    box-shadow:0 -8px 24px -12px rgba(0,0,0,.25); padding:14px 22px calc(16px + env(safe-area-inset-bottom,0));
+    transform:translateY(110%); transition:transform .22s ease; z-index:40;}
+  .rd-define.show{transform:translateY(0);}
+  .rd-define .df-row{display:flex; align-items:center; gap:12px;}
+  .rd-define .df-w{font-family:var(--jp); font-size:24px; font-weight:700; color:var(--ink);}
+  .rd-define .df-r{font-family:var(--jp); font-size:14px; color:var(--indigo-bright);}
+  .rd-define .df-m{font-size:14px; color:var(--ink-2); margin-top:3px;}
+  .rd-define .df-spk{margin-left:auto; font-size:22px; cursor:pointer; background:none; border:none;}
+  .rd-define .df-x{position:absolute; top:8px; right:14px; font-size:20px; color:var(--faint); background:none; border:none; cursor:pointer;}
 </style>
 </head>
 <body>
@@ -266,8 +301,7 @@
       <div class="tile-ic g3">文</div>
       <div><div class="tile-name">Gramática</div><div class="tile-cnt" id="cnt-grammar">—</div></div>
     </div>
-    <div class="tile locked" data-soon="La lectura">
-      <span class="badge-soon">Pronto</span>
+    <div class="tile" id="tileRead">
       <div class="tile-ic g4">読</div>
       <div><div class="tile-name">Lectura</div><div class="tile-cnt">Textos por niveles</div></div>
     </div>
@@ -403,7 +437,54 @@
   </div>
 </section>
 
+<!-- ===== LECTURA · niveles ===== -->
+<section class="view" id="readLevels">
+  <div class="back-row">
+    <button class="back-btn" id="readLvlBack" aria-label="Volver">←</button>
+    <span class="eyebrow">Lectura</span>
+  </div>
+  <div class="level-title">Lectura</div>
+  <div class="level-help">Textos graduados por nivel. Toca una palabra subrayada para ver su lectura y significado, y activa la furigana o la traducción cuando lo necesites.</div>
+  <div id="readLevelList"></div>
+</section>
+
+<!-- ===== LECTURA · lista de textos ===== -->
+<section class="view" id="readList">
+  <div class="back-row">
+    <button class="back-btn" id="readListBack" aria-label="Volver">←</button>
+    <span class="eyebrow">Lectura</span>
+  </div>
+  <div class="level-title" id="readListTitle">Textos</div>
+  <div class="level-help">Elige un texto para leer.</div>
+  <div id="readListItems"></div>
+</section>
+
+<!-- ===== LECTURA · lector ===== -->
+<section class="view" id="reader">
+  <div class="study-row">
+    <button class="close" id="readerClose" aria-label="Cerrar">✕</button>
+    <div class="tagline" id="readerTag" style="margin:0;">Lectura</div>
+  </div>
+  <div class="rd-toolbar">
+    <button class="rd-tog" id="togFu">あ Furigana</button>
+    <button class="rd-tog" id="togEs">ES Traducción</button>
+  </div>
+  <div class="rd-stage" id="readerStage"></div>
+  <div class="rd-define" id="rdDefine">
+    <button class="df-x" id="rdDefineClose" aria-label="Cerrar">✕</button>
+    <div class="df-row">
+      <div>
+        <div class="df-w" id="dfW"></div>
+        <div class="df-r" id="dfR"></div>
+        <div class="df-m" id="dfM"></div>
+      </div>
+      <button class="df-spk" id="dfSpk" aria-label="Escuchar">🔊</button>
+    </div>
+  </div>
+</section>
+
 <script src="content.js"></script>
+<script src="reading.js"></script>
 <script>
 var C = window.CONTENT || {kanji:[],vocab:[],grammar:[]};
 var ITEMS = [];
@@ -535,7 +616,7 @@ function buildFocused(type, level){
 }
 
 function show(v){
-  ["menu","levels","modes","stats","study","quiz","doneView","emptyView"].forEach(function(x){
+  ["menu","levels","modes","stats","study","quiz","doneView","emptyView","readLevels","readList","reader"].forEach(function(x){
     document.getElementById(x).classList.toggle("active", x===v);
   });
 }
@@ -943,12 +1024,139 @@ function finishAnswer(correct){
   document.getElementById("qNext").style.display="block";
 }
 
+/* ===== LECTURA ===== */
+var READING = window.READING || [];
+var READ_LEVELS = ["N5","N4","N3","N2","N1"];
+var readListLevel = "N3";
+var lastDefineWord = "";
+
+function readLevelsAvailable(){
+  var seen={}; READING.forEach(function(p){ seen[p.lvl]=(seen[p.lvl]||0)+1; });
+  return READ_LEVELS.filter(function(l){ return seen[l]; }).map(function(l){ return {lvl:l, n:seen[l]}; });
+}
+function openReadingLevels(){
+  var lv=readLevelsAvailable(), html="";
+  if(lv.length===0){ html='<div class="level-help">Aún no hay textos disponibles. Falta el archivo reading.js.</div>'; }
+  lv.forEach(function(x){
+    html+='<button class="level-btn" data-rlvl="'+x.lvl+'">'+
+      '<div class="level-l"><div class="level-tag">'+x.lvl+'</div>'+
+      '<div class="level-meta"><div class="lt">Nivel '+x.lvl+'</div>'+
+      '<div class="ls">'+x.n+' '+(x.n===1?'texto':'textos')+'</div></div></div>'+
+      '<span class="level-arrow">›</span></button>';
+  });
+  document.getElementById("readLevelList").innerHTML=html;
+  document.querySelectorAll("#readLevelList .level-btn").forEach(function(b){
+    b.addEventListener("click", function(){ showReadingList(b.getAttribute("data-rlvl")); });
+  });
+  show("readLevels");
+}
+function showReadingList(level){
+  readListLevel=level;
+  var ps=READING.filter(function(p){ return p.lvl===level; }), html="";
+  document.getElementById("readListTitle").textContent="Lectura · "+level;
+  ps.forEach(function(p){
+    html+='<button class="level-btn" data-rid="'+p.id+'">'+
+      '<div class="level-l"><div class="level-tag all">読</div>'+
+      '<div class="level-meta"><div class="lt">'+p.title+'</div>'+
+      '<div class="ls">'+p.paras.length+' párrafos · ~'+p.mins+' min</div></div></div>'+
+      '<span class="level-arrow">›</span></button>';
+  });
+  document.getElementById("readListItems").innerHTML=html;
+  document.querySelectorAll("#readListItems .level-btn").forEach(function(b){
+    b.addEventListener("click", function(){ openPassage(b.getAttribute("data-rid")); });
+  });
+  show("readList");
+}
+function escAttr(s){ return (s||"").replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;"); }
+function hlGloss(jp, gloss){
+  (gloss||[]).forEach(function(g){
+    var idx=jp.indexOf(g.w);
+    if(idx<0) return;
+    var span='<span class="rw" data-r="'+escAttr(g.r)+'" data-m="'+escAttr(g.m)+'" data-w="'+escAttr(g.w)+'">'+g.w+'</span>';
+    jp=jp.slice(0,idx)+span+jp.slice(idx+g.w.length);
+  });
+  return jp;
+}
+function openPassage(id){
+  var p=null; for(var i=0;i<READING.length;i++){ if(READING[i].id===id){ p=READING[i]; break; } }
+  if(!p) return;
+  document.getElementById("readerTag").textContent="Lectura · "+p.lvl;
+  var h='<div class="rd-title">'+p.title+'</div><div class="rd-meta">'+p.lvl+' · ~'+p.mins+' min de lectura</div>';
+  p.paras.forEach(function(pa){
+    h+='<div class="rd-para"><div class="rd-jp">'+hlGloss(pa.jp, p.gloss)+'</div>'+
+       '<div class="rd-fu">'+pa.fu+'</div><div class="rd-es">'+pa.es+'</div></div>';
+  });
+  if(p.gloss && p.gloss.length){
+    h+='<div class="rd-sec">Vocabulario en contexto</div><div class="rd-gloss">';
+    p.gloss.forEach(function(g){
+      h+='<div class="rd-gw" data-r="'+escAttr(g.r)+'" data-m="'+escAttr(g.m)+'" data-w="'+escAttr(g.w)+'">'+
+         '<div class="gw-l">'+g.w+'</div><div class="gw-r">'+g.r+'</div><div class="gw-m">'+g.m+'</div></div>';
+    });
+    h+='</div>';
+  }
+  if(p.q && p.q.length){
+    h+='<div class="rd-sec">Comprensión</div>';
+    p.q.forEach(function(qq){
+      h+='<div class="rd-q" data-a="'+qq.a+'"><div class="qq">'+qq.q+'</div>';
+      qq.o.forEach(function(opt, oi){ h+='<button class="qopt" data-oi="'+oi+'">'+opt+'</button>'; });
+      h+='</div>';
+    });
+  }
+  var stage=document.getElementById("readerStage");
+  stage.innerHTML=h; stage.scrollTop=0;
+  var R=document.getElementById("reader");
+  R.classList.remove("show-fu","show-es");
+  document.getElementById("togFu").classList.remove("on");
+  document.getElementById("togEs").classList.remove("on");
+  hideDefine();
+  stage.querySelectorAll(".rw").forEach(function(el){
+    el.addEventListener("click", function(){ showDefine(el.getAttribute("data-w"), el.getAttribute("data-r"), el.getAttribute("data-m")); });
+  });
+  stage.querySelectorAll(".rd-gw").forEach(function(el){
+    el.addEventListener("click", function(){ showDefine(el.getAttribute("data-w"), el.getAttribute("data-r"), el.getAttribute("data-m")); });
+  });
+  stage.querySelectorAll(".rd-q").forEach(function(qbox){
+    var ans=parseInt(qbox.getAttribute("data-a"),10), answered=false, opts=qbox.querySelectorAll(".qopt");
+    opts.forEach(function(b){
+      b.addEventListener("click", function(){
+        if(answered) return; answered=true;
+        opts.forEach(function(x){ x.disabled=true; });
+        if(parseInt(b.getAttribute("data-oi"),10)===ans){ b.classList.add("ok"); }
+        else { b.classList.add("no"); if(opts[ans]) opts[ans].classList.add("ok"); }
+      });
+    });
+  });
+  show("reader");
+}
+function showDefine(w,r,m){
+  document.getElementById("dfW").textContent=w||"";
+  document.getElementById("dfR").textContent=r||"";
+  document.getElementById("dfM").textContent=m||"";
+  document.getElementById("rdDefine").classList.add("show");
+  lastDefineWord=r||w||"";
+}
+function hideDefine(){ document.getElementById("rdDefine").classList.remove("show"); }
+
 /* ===== EVENTS ===== */
 document.getElementById("greetingRow").addEventListener("click", function(){
   var n=prompt("¿Cómo te llamas? (se guarda solo en tu teléfono)", getName());
   if(n!==null){ setName(n.trim()); renderGreeting(); }
 });
 document.getElementById("recCard").addEventListener("click", startRecommended);
+document.getElementById("tileRead").addEventListener("click", openReadingLevels);
+document.getElementById("readLvlBack").addEventListener("click", function(){ show("menu"); renderMenu(); });
+document.getElementById("readListBack").addEventListener("click", openReadingLevels);
+document.getElementById("readerClose").addEventListener("click", function(){ showReadingList(readListLevel); });
+document.getElementById("togFu").addEventListener("click", function(){
+  document.getElementById("reader").classList.toggle("show-fu");
+  this.classList.toggle("on");
+});
+document.getElementById("togEs").addEventListener("click", function(){
+  document.getElementById("reader").classList.toggle("show-es");
+  this.classList.toggle("on");
+});
+document.getElementById("rdDefineClose").addEventListener("click", hideDefine);
+document.getElementById("dfSpk").addEventListener("click", function(){ speak(lastDefineWord); });
 document.querySelectorAll(".tile[data-type]").forEach(function(t){
   t.addEventListener("click", function(){ showLevels(t.getAttribute("data-type")); });
 });
