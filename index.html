@@ -224,6 +224,11 @@
   .rd-tog{flex:1; border:1.5px solid var(--line); background:var(--card); color:var(--muted); border-radius:13px;
     padding:9px 6px; font-family:var(--ui); font-size:13px; font-weight:600; cursor:pointer; transition:all .12s ease;}
   .rd-tog.on{border-color:var(--indigo); background:rgba(39,64,127,.08); color:var(--indigo);}
+  .rd-play{margin-left:auto; width:40px; height:40px; border-radius:50%; border:none; cursor:pointer;
+    background:var(--indigo); color:#fff; font-size:16px; display:flex; align-items:center; justify-content:center;
+    box-shadow:0 6px 16px -8px rgba(39,64,127,.7); flex:0 0 auto;}
+  .rd-play.playing{background:var(--indigo-bright);}
+  .rd-para.reading{background:rgba(59,95,196,.08); border-radius:12px; box-shadow:0 0 0 8px rgba(59,95,196,.08);}
   .rd-stage{flex:1; overflow-y:auto; min-height:0; padding-bottom:24px;}
   .rd-title{font-family:var(--jp); font-weight:700; font-size:22px; margin:10px 0 2px;}
   .rd-meta{font-size:12px; color:var(--muted); margin-bottom:12px;}
@@ -464,6 +469,7 @@
   <div class="study-row">
     <button class="close" id="readerClose" aria-label="Cerrar">✕</button>
     <div class="tagline" id="readerTag" style="margin:0;">Lectura</div>
+    <button class="rd-play" id="rdPlay" aria-label="Escuchar el texto">▶</button>
   </div>
   <div class="rd-toolbar">
     <button class="rd-tog" id="togFu">あ Furigana</button>
@@ -1029,6 +1035,7 @@ var READING = window.READING || [];
 var READ_LEVELS = ["N5","N4","N3","N2","N1"];
 var readListLevel = "N3";
 var lastDefineWord = "";
+var rdCurrent = null, rdPlaying = false, rdIdx = 0;
 
 function readLevelsAvailable(){
   var seen={}; READING.forEach(function(p){ seen[p.lvl]=(seen[p.lvl]||0)+1; });
@@ -1080,6 +1087,7 @@ function hlGloss(jp, gloss){
 function openPassage(id){
   var p=null; for(var i=0;i<READING.length;i++){ if(READING[i].id===id){ p=READING[i]; break; } }
   if(!p) return;
+  stopRead(); rdCurrent=p;
   document.getElementById("readerTag").textContent="Lectura · "+p.lvl;
   var h='<div class="rd-title">'+p.title+'</div><div class="rd-meta">'+p.lvl+' · ~'+p.mins+' min de lectura</div>';
   p.paras.forEach(function(pa){
@@ -1129,6 +1137,7 @@ function openPassage(id){
   show("reader");
 }
 function showDefine(w,r,m){
+  stopRead();
   document.getElementById("dfW").textContent=w||"";
   document.getElementById("dfR").textContent=r||"";
   document.getElementById("dfM").textContent=m||"";
@@ -1136,6 +1145,39 @@ function showDefine(w,r,m){
   lastDefineWord=r||w||"";
 }
 function hideDefine(){ document.getElementById("rdDefine").classList.remove("show"); }
+
+/* ---- Lectura en voz alta del texto, párrafo a párrafo ---- */
+function setPlayIcon(playing){
+  var b=document.getElementById("rdPlay");
+  b.textContent = playing ? "◼" : "▶";
+  b.classList.toggle("playing", playing);
+  b.setAttribute("aria-label", playing ? "Detener lectura" : "Escuchar el texto");
+}
+function paraHighlight(idx){
+  var nodes=document.querySelectorAll("#readerStage .rd-para");
+  nodes.forEach(function(n,i){ n.classList.toggle("reading", i===idx); });
+  if(nodes[idx]){ try{ nodes[idx].scrollIntoView({block:"nearest",behavior:"smooth"}); }catch(e){} }
+}
+function clearParaHL(){ document.querySelectorAll("#readerStage .rd-para.reading").forEach(function(n){ n.classList.remove("reading"); }); }
+function stopRead(){ rdPlaying=false; setPlayIcon(false); clearParaHL(); try{ window.speechSynthesis.cancel(); }catch(e){} }
+function readSeq(){
+  if(!rdPlaying || !rdCurrent || rdIdx>=rdCurrent.paras.length){ stopRead(); return; }
+  var idx=rdIdx;
+  paraHighlight(idx);
+  if(!JA_VOICE) refreshVoice();
+  var u=new SpeechSynthesisUtterance(rdCurrent.paras[idx].jp);
+  u.lang="ja-JP"; if(JA_VOICE) u.voice=JA_VOICE; u.rate=0.92; u.pitch=1.0;
+  u.onend=function(){ if(!rdPlaying) return; rdIdx++; readSeq(); };
+  u.onerror=function(){ if(!rdPlaying) return; rdIdx++; readSeq(); };
+  try{ window.speechSynthesis.speak(u); }catch(e){ stopRead(); }
+}
+function toggleReadAloud(){
+  if(!('speechSynthesis' in window) || !rdCurrent) return;
+  if(rdPlaying){ stopRead(); return; }
+  rdIdx=0; rdPlaying=true; setPlayIcon(true);
+  try{ window.speechSynthesis.cancel(); }catch(e){}
+  readSeq();
+}
 
 /* ===== EVENTS ===== */
 document.getElementById("greetingRow").addEventListener("click", function(){
@@ -1146,7 +1188,8 @@ document.getElementById("recCard").addEventListener("click", startRecommended);
 document.getElementById("tileRead").addEventListener("click", openReadingLevels);
 document.getElementById("readLvlBack").addEventListener("click", function(){ show("menu"); renderMenu(); });
 document.getElementById("readListBack").addEventListener("click", openReadingLevels);
-document.getElementById("readerClose").addEventListener("click", function(){ showReadingList(readListLevel); });
+document.getElementById("readerClose").addEventListener("click", function(){ stopRead(); showReadingList(readListLevel); });
+document.getElementById("rdPlay").addEventListener("click", toggleReadAloud);
 document.getElementById("togFu").addEventListener("click", function(){
   document.getElementById("reader").classList.toggle("show-fu");
   this.classList.toggle("on");
