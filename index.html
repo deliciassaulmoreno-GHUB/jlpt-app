@@ -195,6 +195,7 @@
     transition:transform .12s ease; box-shadow:0 8px 20px -8px rgba(39,64,127,.6);
     display:flex; align-items:center; justify-content:center; gap:10px;}
   .btn:active{transform:scale(.985);}
+  .btn.ghost{background:transparent; color:var(--indigo); box-shadow:none; border:1.5px solid var(--line);}
   .ratings{display:none; grid-template-columns:repeat(4,1fr); gap:8px;}
   .ratings.show{display:grid;}
   .rate{border:none; border-radius:15px; cursor:pointer; padding:11px 4px 10px; background:var(--card); box-shadow:var(--shadow);
@@ -387,7 +388,8 @@
     <div class="big">完</div>
     <h2>¡Sesión completada!</h2>
     <p>Tu progreso está guardado en el teléfono. Vuelve más tarde para los próximos repasos.</p>
-    <button class="btn" id="doneBack">Volver al menú</button>
+    <button class="btn" id="doneAgain">Repasar otra vez</button>
+    <button class="btn ghost" id="doneBack">Volver al menú</button>
   </div>
 </section>
 
@@ -455,7 +457,7 @@ function fmt(d){ var m=d*1440;
   if(d<365) return Math.round(d/30)+" mes";
   return (d/365).toFixed(1)+" a"; }
 
-var progress=load(), queue=[], done=0, total=0, current=null;
+var progress=load(), queue=[], done=0, total=0, current=null, lastSession=null;
 
 function isDue(id, now){ var st=progress[id]; return st && new Date(st.due)<=now; }
 function isLearned(id){ return !!progress[id]; }
@@ -519,17 +521,17 @@ function buildRecommended(){
   return {queue:reviews.concat(news), reviews:reviews.length, news:news.length};
 }
 function buildFocused(type, level){
-  var now=new Date(), reviews=[], news=[];
+  /* Repaso libre: TODO el contenido del submenú/nivel, en orden aleatorio,
+     sin límite de tarjetas y reentrable las veces que se quiera. */
+  var all=[];
   for(var i=0;i<ITEMS.length;i++){
     var it=ITEMS[i];
     if(it.type!==type) continue;
     if(level!=="all" && it.d.lvl!==level) continue;
-    var st=progress[it.id];
-    if(!st) news.push(i);
-    else if(new Date(st.due)<=now) reviews.push(i);
+    all.push(i);
   }
-  news=news.slice(0, FOCUS_NEW_LIMIT);
-  return {queue:reviews.concat(news), reviews:reviews.length, news:news.length};
+  all=shuffle(all);
+  return {queue:all, reviews:0, news:all.length};
 }
 
 function show(v){
@@ -663,11 +665,13 @@ function renderStats(){
 
 /* ===== SESSIONS ===== */
 function startRecommended(){
+  lastSession={focused:false};
   var q=buildRecommended();
   if(q.queue.length===0){ showEmpty("Todo al día","No tienes repasos ni ítems nuevos ahora mismo. Vuelve más tarde."); return; }
   beginSession(q);
 }
 function startFocused(type, level){
+  lastSession={focused:true, type:type, level:level, mode:selMode};
   var q=buildFocused(type, level);
   if(q.queue.length===0){
     var lbl = level==="all" ? TYPE_LABEL[type] : (TYPE_LABEL[type]+" "+level);
@@ -738,6 +742,7 @@ function backHTML(item){
 }
 function nextCard(){
   if(queue.length===0){ show("doneView"); renderMenu(); return; }
+  var stage=document.querySelector("#study .stage"); if(stage) stage.scrollTop=0;
   current=queue.shift(); var item=ITEMS[current];
   var tag=TYPE_LABEL[item.type]; if(item.d.lvl) tag+=" · "+item.d.lvl;
   document.getElementById("studyTag").textContent=tag;
@@ -871,6 +876,7 @@ function makeQuestion(item){
 }
 function nextQuestion(){
   if(queue.length===0){ show("doneView"); renderMenu(); return; }
+  var qstage=document.querySelector("#quiz .qstage"); if(qstage) qstage.scrollTop=0;
   current=queue.shift(); var item=ITEMS[current];
   qCurrent=makeQuestion(item); qAnswered=false;
   var tag=TYPE_LABEL[item.type]; if(item.d.lvl) tag+=" · "+item.d.lvl;
@@ -957,6 +963,10 @@ document.getElementById("levelBack").addEventListener("click", function(){ show(
 document.getElementById("modeBack").addEventListener("click", function(){ showLevels(selType); });
 document.getElementById("closeBtn").addEventListener("click", function(){ show("menu"); renderMenu(); });
 document.getElementById("doneBack").addEventListener("click", function(){ show("menu"); renderMenu(); });
+document.getElementById("doneAgain").addEventListener("click", function(){
+  if(lastSession && lastSession.focused){ selMode=lastSession.mode; startFocused(lastSession.type, lastSession.level); }
+  else { startRecommended(); }
+});
 document.getElementById("emptyBack").addEventListener("click", function(){ show("menu"); renderMenu(); });
 document.getElementById("revealBtn").addEventListener("click", reveal);
 document.getElementById("qClose").addEventListener("click", function(){ show("menu"); renderMenu(); });
