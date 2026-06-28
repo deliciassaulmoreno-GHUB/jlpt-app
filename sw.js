@@ -10,8 +10,9 @@
    - Vive en una caché aparte que NO se borra al subir de versión, para no tener
      que volver a descargar los audios tras cada actualización de contenido. */
 
-var CACHE = "n1path-v7";                 /* ← subido: recoge index.html nuevo y descarta cachés viejas */
-var AUDIO_CACHE = "n1path-audio-v2";     /* ← subido a v2: descarta audios/errores cacheados antes */
+var CACHE = "n1path-v8";                 /* ← subido: recoge index.html nuevo y descarta cachés viejas */
+var AUDIO_CACHE = "n1path-audio-v2";     /* ← persistente: MP3 locales y audio del Worker TTS */
+var CDN_CACHE = "n1path-cdn-v1";         /* ← persistente: librería y datos de trazos (jsDelivr) */
 var SHELL = ["./", "./index.html", "./content.js", "./reading.js", "./manifest.json", "./icon.png"];
 
 self.addEventListener("install", function(e){
@@ -23,7 +24,7 @@ self.addEventListener("activate", function(e){
   e.waitUntil(
     caches.keys().then(function(keys){
       return Promise.all(keys.map(function(k){
-        if(k !== CACHE && k !== AUDIO_CACHE) return caches.delete(k);  /* conserva la caché de audio */
+        if(k !== CACHE && k !== AUDIO_CACHE && k !== CDN_CACHE) return caches.delete(k);  /* conserva audio y CDN */
       }));
     }).then(function(){ return self.clients.claim(); })
   );
@@ -57,7 +58,22 @@ self.addEventListener("fetch", function(e){
     return;
   }
 
-  if(url.origin !== location.origin) return; // otros recursos externos: que los gestione el navegador
+  if(url.origin !== location.origin){
+    /* Librería y datos de trazos desde jsDelivr: primero la caché (offline tras 1ª carga) */
+    if(url.host === "cdn.jsdelivr.net"){
+      e.respondWith(
+        caches.match(req).then(function(cached){
+          if(cached) return cached;
+          return fetch(req).then(function(res){
+            if(res && res.status === 200){ var copy=res.clone(); caches.open(CDN_CACHE).then(function(c){ c.put(req, copy); }); }
+            return res;
+          });
+        })
+      );
+      return;
+    }
+    return; // otros recursos externos: que los gestione el navegador
+  }
 
   /* --- Resto: primero la red --- */
   e.respondWith(

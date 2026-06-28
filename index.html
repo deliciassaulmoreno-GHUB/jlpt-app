@@ -257,6 +257,35 @@
   .rd-define .df-m{font-size:14px; color:var(--ink-2); margin-top:3px;}
   .rd-define .df-spk{margin-left:auto; font-size:22px; cursor:pointer; background:none; border:none;}
   .rd-define .df-x{position:absolute; top:8px; right:14px; font-size:20px; color:var(--faint); background:none; border:none; cursor:pointer;}
+  /* ===== ESCRITURA DE KANJI ===== */
+  #writer{padding:6px 22px 0; display:flex; flex-direction:column;}
+  .wprog{margin-left:auto; font-size:13px; font-weight:700; color:var(--muted);}
+  .w-stage{flex:1; overflow-y:auto; min-height:0; display:flex; flex-direction:column; align-items:center; padding-top:6px;}
+  .hw-box{position:relative; width:280px; height:280px; max-width:80vw; max-height:80vw; margin:8px auto 4px;
+    border:1.5px solid var(--line); border-radius:20px; background:var(--card); overflow:hidden;}
+  #hwTarget{position:absolute; inset:0; display:flex; align-items:center; justify-content:center;}
+  #hwTarget svg{touch-action:none;}
+  .hw-grid{position:absolute; inset:0; pointer-events:none;
+    background:
+      linear-gradient(var(--line) 1px, transparent 1px) 0 50%/100% 50% no-repeat,
+      linear-gradient(90deg, var(--line) 1px, transparent 1px) 50% 0/50% 100% no-repeat;
+    opacity:.5;}
+  .hw-grid::after{content:""; position:absolute; inset:0;
+    background:
+      linear-gradient(45deg, transparent calc(50% - 0.5px), var(--line) 50%, transparent calc(50% + 0.5px)),
+      linear-gradient(-45deg, transparent calc(50% - 0.5px), var(--line) 50%, transparent calc(50% + 0.5px));
+    opacity:.35;}
+  .hw-err{font-size:13px; color:var(--muted); text-align:center; padding:0 20px;}
+  .w-info{text-align:center; margin:8px 0 2px;}
+  .w-reading{font-family:var(--jp); font-size:15px; color:var(--indigo-bright); font-weight:600;}
+  .w-meaning{font-size:14px; color:var(--ink-2); margin-top:2px;}
+  .w-tools{display:flex; gap:8px; margin:12px 0 6px; flex-wrap:wrap; justify-content:center;}
+  .w-btn{border:1.5px solid var(--indigo); background:var(--indigo); color:#fff; border-radius:13px;
+    padding:10px 14px; font-family:var(--ui); font-size:13px; font-weight:600; cursor:pointer;}
+  .w-btn.ghost2{background:transparent; color:var(--indigo); }
+  .w-hint{font-size:12.5px; color:var(--muted); text-align:center; margin-top:4px; min-height:18px;}
+  .w-foot{padding:10px 0 16px;}
+  .w-foot .btn{max-width:100%;}
 </style>
 </head>
 <body>
@@ -490,6 +519,29 @@
   <audio id="rdAudio" preload="none"></audio>
 </section>
 
+<!-- ===== ESCRITURA DE KANJI (trazos) ===== -->
+<section class="view" id="writer">
+  <div class="study-row">
+    <button class="close" id="wClose" aria-label="Cerrar">✕</button>
+    <div class="tagline" id="wTag" style="margin:0;">Escritura</div>
+    <div class="wprog" id="wProgress"></div>
+  </div>
+  <div class="w-stage">
+    <div class="hw-box"><div id="hwTarget"></div><div class="hw-grid"></div></div>
+    <div class="w-info">
+      <div class="w-reading" id="wReading"></div>
+      <div class="w-meaning" id="wMeaning"></div>
+    </div>
+    <div class="w-tools">
+      <button class="w-btn" id="wAnim">✎ Ver orden</button>
+      <button class="w-btn" id="wQuiz">✍ Practicar</button>
+      <button class="w-btn ghost2" id="wReset">↺ Reiniciar</button>
+    </div>
+    <div class="w-hint" id="wHint">Toca "Ver orden" para ver el trazo, o "Practicar" para escribirlo tú.</div>
+  </div>
+  <div class="w-foot"><button class="btn" id="wNext">Siguiente →</button></div>
+</section>
+
 <script src="content.js"></script>
 <script src="reading.js"></script>
 <script>
@@ -623,7 +675,7 @@ function buildFocused(type, level){
 }
 
 function show(v){
-  ["menu","levels","modes","stats","study","quiz","doneView","emptyView","readLevels","readList","reader"].forEach(function(x){
+  ["menu","levels","modes","stats","study","quiz","doneView","emptyView","readLevels","readList","reader","writer"].forEach(function(x){
     document.getElementById(x).classList.toggle("active", x===v);
   });
 }
@@ -683,12 +735,15 @@ function showLevels(type){
 }
 function onLevelChosen(type, level){
   selLevel=level;
-  if(type==="kanji"){ selMode="mix"; startFocused(type, level); }
-  else showModes(type, level);
+  showModes(type, level);
 }
 
 /* Tipos de ejercicio (áreas estilo JLPT) */
 var MODES = {
+  kanji: [
+    {id:"mix",     name:"Repaso (quiz)",       desc:"Lecturas y significado"},
+    {id:"strokes", name:"Escritura (trazos)",  desc:"Dibuja el kanji trazo a trazo"}
+  ],
   vocab: [
     {id:"mix",   name:"Examen mixto",     desc:"Mezcla de todos los tipos"},
     {id:"read",  name:"Lectura (漢字読み)", desc:"Elige cómo se lee la palabra"},
@@ -715,7 +770,11 @@ function showModes(type, level){
   });
   document.getElementById("modeList").innerHTML=html;
   document.querySelectorAll("#modeList .level-btn").forEach(function(b){
-    b.addEventListener("click", function(){ selMode=b.getAttribute("data-mode"); startFocused(selType, selLevel); });
+    b.addEventListener("click", function(){
+      selMode=b.getAttribute("data-mode");
+      if(selMode==="strokes"){ startWriting(selType, selLevel); }
+      else { startFocused(selType, selLevel); }
+    });
   });
   show("modes");
 }
@@ -1240,6 +1299,85 @@ function speakParaSystem(text, onend){
   try{ window.speechSynthesis.cancel(); window.speechSynthesis.speak(u); }catch(e){ stopRead(); }
 }
 
+/* ===== ESCRITURA DE KANJI (Hanzi Writer, datos japoneses bajo demanda) ===== */
+var HW_SIZE=276;
+var hwLoaded=false, hwLoading=false, hwCbs=[];
+function loadHanziWriter(cb){
+  if(hwLoaded && window.HanziWriter){ cb(true); return; }
+  hwCbs.push(cb);
+  if(hwLoading) return;
+  hwLoading=true;
+  var s=document.createElement("script");
+  s.src="https://cdn.jsdelivr.net/npm/hanzi-writer@3/dist/hanzi-writer.min.js";
+  s.onload=function(){ hwLoaded=true; hwLoading=false; var c=hwCbs; hwCbs=[]; c.forEach(function(f){ f(true); }); };
+  s.onerror=function(){ hwLoading=false; var c=hwCbs; hwCbs=[]; c.forEach(function(f){ f(false); }); };
+  document.head.appendChild(s);
+}
+function hwDataLoader(char, onLoad, onError){
+  fetch("https://cdn.jsdelivr.net/npm/hanzi-writer-data-jp@0/"+encodeURIComponent(char)+".json")
+    .then(function(r){ if(!r.ok) throw new Error("no data"); return r.json(); })
+    .then(onLoad).catch(onError);
+}
+var wq=[], wIdx=0, hwInstance=null;
+function buildWriteList(level){
+  var arr=[];
+  for(var i=0;i<ITEMS.length;i++){
+    var it=ITEMS[i];
+    if(it.type!=="kanji") continue;
+    if(level!=="all" && it.d.lvl!==level) continue;
+    arr.push(i);
+  }
+  return shuffle(arr);
+}
+function startWriting(type, level){
+  lastSession={focused:false, writing:true, type:type, level:level};
+  wq=buildWriteList(level); wIdx=0;
+  if(wq.length===0){ showEmpty("Nada que escribir","No hay kanji en esta selección."); return; }
+  show("writer"); showWriteCard();
+}
+function setHint(t){ var h=document.getElementById("wHint"); if(h) h.textContent=t||""; }
+function showWriteCard(){
+  if(wIdx>=wq.length){ show("doneView"); renderMenu(); return; }
+  var k=ITEMS[wq[wIdx]].d;
+  document.getElementById("wTag").textContent="Escritura · "+(k.lvl||"");
+  document.getElementById("wProgress").textContent=(wIdx+1)+" / "+wq.length;
+  var rd=[]; if(k.kun) rd.push("kun "+k.kun); if(k.on) rd.push("on "+k.on);
+  document.getElementById("wReading").textContent=rd.join("   ");
+  document.getElementById("wMeaning").textContent=k.mean||"";
+  setHint("Cargando trazos…");
+  var target=document.getElementById("hwTarget");
+  target.innerHTML=""; hwInstance=null;
+  loadHanziWriter(function(ok){
+    if(!ok){ target.innerHTML='<div class="hw-err">No se pudo cargar el módulo de trazos. Necesita conexión la primera vez.</div>'; setHint(""); return; }
+    try{
+      hwInstance=HanziWriter.create(target, k.c, {
+        width:HW_SIZE, height:HW_SIZE, padding:6,
+        showCharacter:false, showOutline:true,
+        strokeColor:"#27407f", radicalColor:"#3b5fc4",
+        outlineColor:"#d9deea", drawingColor:"#111827", drawingWidth:24,
+        charDataLoader:hwDataLoader,
+        onLoadCharDataError:function(){ target.innerHTML='<div class="hw-err">No hay datos de trazos para «'+k.c+'».</div>'; setHint(""); }
+      });
+      setHint('Toca "Ver orden" para ver el trazo, o "Practicar" para escribirlo.');
+    }catch(e){ target.innerHTML='<div class="hw-err">No se pudo iniciar el lienzo.</div>'; setHint(""); }
+  });
+}
+function wAnimate(){ if(hwInstance){ try{ hwInstance.animateCharacter(); setHint("Observa el orden de los trazos."); }catch(e){} } }
+function wStartQuiz(){
+  if(!hwInstance) return;
+  try{
+    setHint("Dibuja el kanji trazo a trazo.");
+    hwInstance.quiz({
+      showHintAfterMisses:2,
+      onMistake:function(s){ setHint("Casi… repite ese trazo. Restantes: "+s.strokesRemaining); },
+      onCorrectStroke:function(s){ setHint("¡Bien! Restantes: "+s.strokesRemaining); },
+      onComplete:function(s){ setHint("¡Completado! Fallos: "+s.totalMistakes); }
+    });
+  }catch(e){}
+}
+function wResetCard(){ showWriteCard(); }
+function wNextCard(){ wIdx++; showWriteCard(); }
+
 /* ===== EVENTS ===== */
 document.getElementById("greetingRow").addEventListener("click", function(){
   var n=prompt("¿Cómo te llamas? (se guarda solo en tu teléfono)", getName());
@@ -1282,6 +1420,11 @@ document.getElementById("doneAgain").addEventListener("click", function(){
 document.getElementById("emptyBack").addEventListener("click", function(){ show("menu"); renderMenu(); });
 document.getElementById("revealBtn").addEventListener("click", reveal);
 document.getElementById("qClose").addEventListener("click", function(){ show("menu"); renderMenu(); });
+document.getElementById("wClose").addEventListener("click", function(){ show("menu"); renderMenu(); });
+document.getElementById("wAnim").addEventListener("click", wAnimate);
+document.getElementById("wQuiz").addEventListener("click", wStartQuiz);
+document.getElementById("wReset").addEventListener("click", wResetCard);
+document.getElementById("wNext").addEventListener("click", wNextCard);
 
 /* ===== Gesto: deslizar de izquierda a derecha para volver atrás ===== */
 function activeViewId(){
@@ -1305,6 +1448,7 @@ function goBack(){
     case "stats":
     case "study":
     case "quiz":
+    case "writer":
     case "doneView":
     case "emptyView":  show("menu"); renderMenu(); break;
     default: break; /* menu: nivel superior, no hace nada */
@@ -1318,6 +1462,7 @@ function goBack(){
   }, {passive:true});
   document.addEventListener("touchend", function(e){
     if(!ok) return; ok=false;
+    if(activeViewId()==="writer") return;   /* en escritura, deslizar es dibujar: no navegar */
     var c=e.changedTouches[0]; if(!c) return;
     var dx=c.clientX-x0, dy=c.clientY-y0, dt=Date.now()-t0;
     /* deslizamiento hacia la derecha, claramente horizontal y rápido */
