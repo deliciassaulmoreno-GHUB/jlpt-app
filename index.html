@@ -286,6 +286,23 @@
   .w-hint{font-size:12.5px; color:var(--muted); text-align:center; margin-top:4px; min-height:18px;}
   .w-foot{padding:10px 0 16px;}
   .w-foot .btn{max-width:100%;}
+  /* ===== CAMINO HACIA EL N1 ===== */
+  .n1-bar{position:relative; display:flex; height:34px; border-radius:11px; overflow:hidden;
+    border:1px solid var(--line); background:var(--card);}
+  .n1-seg{position:relative; border-right:1px solid var(--line); z-index:1;}
+  .n1-seg:last-child{border-right:none;}
+  .n1-fill{position:absolute; top:0; left:0; bottom:0; z-index:2;
+    background:linear-gradient(90deg, var(--indigo), var(--indigo-bright)); opacity:.88;}
+  .n1-marker{position:absolute; top:-3px; bottom:-3px; width:2px; background:var(--ink); z-index:3;}
+  .n1-segs{display:flex; margin-top:4px;}
+  .n1-segs > div{text-align:center; font-size:11px; font-weight:700; color:var(--muted);}
+  .n1-pct{display:flex; justify-content:space-between; font-size:12.5px; color:var(--muted); margin-top:9px;}
+  .n1-pct b{color:var(--ink);}
+  .n1-rem{display:flex; gap:8px; margin-top:9px; flex-wrap:wrap;}
+  .n1-chip{background:rgba(39,64,127,.06); border-radius:10px; padding:6px 10px; font-size:12px; color:var(--ink-2);}
+  .n1-est{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:12px 14px;
+    margin-top:11px; font-size:13px; color:var(--ink-2); line-height:1.55;}
+  .n1-est b{color:var(--ink);}
 </style>
 </head>
 <body>
@@ -399,6 +416,8 @@
   </div>
   <div class="stats-section">Progreso por nivel</div>
   <div id="stLevels"></div>
+  <div class="stats-section">Camino hacia el N1</div>
+  <div id="n1Path"></div>
   <div class="stats-foot">Se cuenta como aprendido cualquier ítem que ya hayas estudiado al menos una vez. Todo se guarda solo en tu teléfono.</div>
 </section>
 
@@ -788,6 +807,64 @@ function levelBtnHTML(level, label, c, isAll){
 }
 
 /* ===== STATS ===== */
+/* Volúmenes objetivo del camino N5→N1 (estimación estándar, §3.3 del diseño).
+   Por nivel y NUEVOS (no acumulados): kanji ~2.000, vocab ~10.000, gramática ~870 en total. */
+var PATH = [
+  {lvl:"N5", kanji:100,  vocab:800,  grammar:80},
+  {lvl:"N4", kanji:200,  vocab:700,  grammar:140},
+  {lvl:"N3", kanji:350,  vocab:2200, grammar:200},
+  {lvl:"N2", kanji:350,  vocab:2300, grammar:200},
+  {lvl:"N1", kanji:1000, vocab:4000, grammar:250}
+];
+function pathTotals(){
+  var k=0,v=0,g=0; PATH.forEach(function(p){ k+=p.kanji; v+=p.vocab; g+=p.grammar; });
+  return {kanji:k, vocab:v, grammar:g, total:k+v+g};
+}
+function learnedByType(){
+  var r={kanji:0,vocab:0,grammar:0};
+  ITEMS.forEach(function(it){ if(isLearned(it.id) && r[it.type]!=null) r[it.type]++; });
+  return r;
+}
+function studyDaysArr(){ try{ return JSON.parse(localStorage.getItem("jlpt-days")||"[]"); }catch(e){ return []; } }
+function nfmt(n){ try{ return n.toLocaleString("es"); }catch(e){ return ""+n; } }
+function fmtDur(d){
+  if(d<60) return Math.round(d)+" días";
+  if(d<365) return Math.round(d/30)+" meses";
+  var y=d/365; return (y<10? y.toFixed(1):""+Math.round(y))+" años";
+}
+function renderN1Path(){
+  var PT=pathTotals(), lt=learnedByType();
+  var learnedAll=lt.kanji+lt.vocab+lt.grammar;
+  var pct=Math.min(100, PT.total? learnedAll/PT.total*100 : 0);
+  var remaining=Math.max(0, PT.total-learnedAll);
+  var segs=PATH.map(function(p){ return {lvl:p.lvl, t:p.kanji+p.vocab+p.grammar}; });
+  var bar=segs.map(function(s){ return '<div class="n1-seg" style="flex:'+s.t+'"></div>'; }).join("");
+  var labs=segs.map(function(s){ return '<div style="flex:'+s.t+'">'+s.lvl+'</div>'; }).join("");
+  var pctTxt=pct<1 ? pct.toFixed(1) : ""+Math.round(pct);
+  var h='<div class="n1-bar">'+bar+
+    '<div class="n1-fill" style="width:'+pct.toFixed(2)+'%"></div>'+
+    '<div class="n1-marker" style="left:'+pct.toFixed(2)+'%"></div></div>'+
+    '<div class="n1-segs">'+labs+'</div>'+
+    '<div class="n1-pct"><span><b>'+nfmt(learnedAll)+'</b> de ~'+nfmt(PT.total)+' ítems</span>'+
+    '<span><b>'+pctTxt+'%</b> hacia el N1</span></div>'+
+    '<div class="n1-rem">'+
+      '<div class="n1-chip">Kanji: faltan <b>'+nfmt(Math.max(0,PT.kanji-lt.kanji))+'</b></div>'+
+      '<div class="n1-chip">Vocab: faltan <b>'+nfmt(Math.max(0,PT.vocab-lt.vocab))+'</b></div>'+
+      '<div class="n1-chip">Gramática: faltan <b>'+nfmt(Math.max(0,PT.grammar-lt.grammar))+'</b></div>'+
+    '</div>';
+  var active=studyDaysArr().length;
+  if(active>=4 && learnedAll>0){
+    h+='<div class="n1-est">A un ritmo sostenible de <b>10–30 ítems nuevos al día</b>, cubrir lo que falta llevaría aprox. <b>'+
+      fmtDur(remaining/30)+'–'+fmtDur(remaining/10)+'</b>.<br>'+
+      'Tu media hasta ahora: <b>'+(learnedAll/active).toFixed(1)+'</b> ítems por día estudiado ('+active+' días).<br>'+
+      '<span style="color:var(--muted)">Estimación orientativa: el N1 suele requerir ~1.700–2.200 h de estudio acumulado. Se afina cuanto más constante seas.</span></div>';
+  } else {
+    h+='<div class="n1-est">Estudia unos días más y aquí verás una estimación del tiempo que te falta para el N1.<br>'+
+      '<span style="color:var(--muted)">Como referencia, el N1 suele requerir ~1.700–2.200 h de estudio acumulado.</span></div>';
+  }
+  document.getElementById("n1Path").innerHTML=h;
+}
+
 function renderStats(){
   var learned=ITEMS.filter(function(it){ return isLearned(it.id); }).length;
   document.getElementById("stTotal").textContent=learned;
@@ -807,6 +884,7 @@ function renderStats(){
       '<div class="st-types">'+parts.join(" · ")+'</div></div>';
   });
   document.getElementById("stLevels").innerHTML=html;
+  renderN1Path();
   show("stats");
 }
 
