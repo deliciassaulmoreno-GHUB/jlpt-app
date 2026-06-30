@@ -1060,7 +1060,28 @@ kanji: [
  {c:"棄",kun:"す(てる)",on:"キ",say:"き",mean:"Abandonar · desechar",ej:"放棄",ejr:"ほうき",ejt:"renuncia · abandono",lvl:"N1"},
  {c:"邸",kun:"やしき",on:"テイ",say:"てい",mean:"Residencia · mansión",ej:"邸宅",ejr:"ていたく",ejt:"mansión · residencia",lvl:"N1"},
  {c:"縮",kun:"ちぢ(む)",on:"シュク",say:"しゅく",mean:"Encoger · contraer · reducir",ej:"縮小",ejr:"しゅくしょう",ejt:"reducción",lvl:"N1"},
- {c:"還",kun:"かえ(る)",on:"カン",say:"かん",mean:"Devolver · regresar",ej:"返還",ejr:"へんかん",ejt:"devolución · restitución",lvl:"N1"}
+ {c:"還",kun:"かえ(る)",on:"カン",say:"かん",mean:"Devolver · regresar",ej:"返還",ejr:"へんかん",ejt:"devolución · restitución",lvl:"N1"},
+/* ===== N1 — Tanda 3a (pág.2 #181-200, fuente: jlptsensei) ===== */
+ {c:"属",kun:"",on:"ゾク・ショク",say:"ぞく",mean:"Pertenecer · género (clasif.)",ej:"所属",ejr:"しょぞく",ejt:"pertenencia · afiliación",lvl:"N1"},
+ {c:"慮",kun:"",on:"リョ",say:"りょ",mean:"Prudencia · considerar",ej:"考慮",ejr:"こうりょ",ejt:"consideración · deliberación",lvl:"N1"},
+ {c:"枠",kun:"わく",on:"",say:"わく",mean:"Marco · recuadro · límite",ej:"枠組み",ejr:"わくぐみ",ejt:"marco · estructura",lvl:"N1"},
+ {c:"恵",kun:"めぐ(む)",on:"ケイ・エ",say:"けい",mean:"Favor · bendición · gracia",ej:"知恵",ejr:"ちえ",ejt:"sabiduría · ingenio",lvl:"N1"},
+ {c:"露",kun:"つゆ",on:"ロ・ロウ",say:"ろ",mean:"Rocío · exponer · Rusia",ej:"露出",ejr:"ろしゅつ",ejt:"exposición (al descubierto)",lvl:"N1"},
+ {c:"沖",kun:"おき",on:"チュウ",say:"おき",mean:"Alta mar · mar abierto",ej:"沖縄",ejr:"おきなわ",ejt:"Okinawa (topónimo)",lvl:"N1"},
+ {c:"緩",kun:"ゆる(い)",on:"カン",say:"かん",mean:"Aflojar · relajar · suave",ej:"緩和",ejr:"かんわ",ejt:"relajación · alivio (de medidas)",lvl:"N1"},
+ {c:"節",kun:"ふし",on:"セツ・セチ",say:"せつ",mean:"Nudo · estación · estrofa · moderación",ej:"季節",ejr:"きせつ",ejt:"estación (del año)",lvl:"N1"},
+ {c:"需",kun:"",on:"ジュ",say:"じゅ",mean:"Demanda · necesidad",ej:"需要",ejr:"じゅよう",ejt:"demanda",lvl:"N1"},
+ {c:"射",kun:"い(る)・さ(す)",on:"シャ",say:"しゃ",mean:"Disparar · tiro con arco",ej:"注射",ejr:"ちゅうしゃ",ejt:"inyección",lvl:"N1"},
+ {c:"購",kun:"",on:"コウ",say:"こう",mean:"Comprar · adquirir",ej:"購入",ejr:"こうにゅう",ejt:"compra · adquisición",lvl:"N1"},
+ {c:"揮",kun:"ふる(う)",on:"キ",say:"き",mean:"Blandir · ejercer (mando)",ej:"指揮",ejr:"しき",ejt:"dirección (mando · orquesta)",lvl:"N1"},
+ {c:"充",kun:"あ(てる)・み(たす)",on:"ジュウ",say:"じゅう",mean:"Llenar · asignar",ej:"充電",ejr:"じゅうでん",ejt:"carga (de batería)",lvl:"N1"},
+ {c:"貢",kun:"みつ(ぐ)",on:"コウ・ク",say:"こう",mean:"Tributo · contribuir",ej:"貢献",ejr:"こうけん",ejt:"contribución · aportación",lvl:"N1"},
+ {c:"鹿",kun:"しか・か",on:"ロク",say:"しか",mean:"Ciervo",ej:"鹿児島",ejr:"かごしま",ejt:"Kagoshima (topónimo)",lvl:"N1"},
+ {c:"却",kun:"かえ(って)・しりぞ(く)",on:"キャク",say:"きゃく",mean:"Al contrario · rechazar · retirar",ej:"却下",ejr:"きゃっか",ejt:"rechazo · desestimación",lvl:"N1"},
+ {c:"端",kun:"はし・は・はた",on:"タン",say:"たん",mean:"Borde · extremo · origen",ej:"極端",ejr:"きょくたん",ejt:"extremo · radical",lvl:"N1"},
+ {c:"賃",kun:"",on:"チン",say:"ちん",mean:"Tarifa · alquiler · salario",ej:"家賃",ejr:"やちん",ejt:"alquiler (de vivienda)",lvl:"N1"},
+ {c:"獲",kun:"え(る)",on:"カク",say:"かく",mean:"Capturar · obtener",ej:"獲得",ejr:"かくとく",ejt:"obtención · adquisición",lvl:"N1"},
+ {c:"郡",kun:"こおり",on:"グン",say:"ぐん",mean:"Distrito · condado (rural)",ej:"郡部",ejr:"ぐんぶ",ejt:"zona rural (distritos)",lvl:"N1"}
 ],
 
 /* ---------------- VOCABULARIO (N5) ---------------- */
