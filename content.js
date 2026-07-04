@@ -2387,7 +2387,11 @@ kanji: [
  {c:"宏",kun:"ひろ(い)",on:"コウ",say:"こう",mean:"Ancho · amplio · vasto",ej:"宏大",ejr:"こうだい",ejt:"vasto · inmenso (variante de 広大)",lvl:"N1"},
  {c:"唆",kun:"そそ(る)・そそのか(す)",on:"サ",say:"さ",mean:"Instigar · incitar · tentar",ej:"示唆",ejr:"しさ",ejt:"sugerencia · insinuación",lvl:"N1"},
  {c:"阻",kun:"はば(む)",on:"ソ",say:"そ",mean:"Impedir · obstruir · disuadir",ej:"阻止",ejr:"そし",ejt:"obstrucción · impedimento",lvl:"N1"},
- {c:"泰",kun:"",on:"タイ",say:"たい",mean:"Pacífico · tranquilo; Tailandia",ej:"安泰",ejr:"あんたい",ejt:"seguridad · paz (estabilidad)",lvl:"N1"}
+ {c:"泰",kun:"",on:"タイ",say:"たい",mean:"Pacífico · tranquilo; Tailandia",ej:"安泰",ejr:"あんたい",ejt:"seguridad · paz (estabilidad)",lvl:"N1"},
+/* ===== N1 — Cola pág.11 (#1098-1100) ===== */
+ {c:"牟",kun:"",on:"ボウ・ム",say:"む",mean:"Pupila; mugido (de vaca)",ej:"釈迦牟尼",ejr:"しゃかむに",ejt:"Shakyamuni (Buda histórico)",lvl:"N1"},
+ {c:"桟",kun:"かけはし",on:"サン・セン",say:"さん",mean:"Travesaño · listón; pasarela; pestillo",ej:"桟橋",ejr:"さんばし",ejt:"muelle · embarcadero",lvl:"N1"},
+ {c:"榊",kun:"さかき",on:"",say:"さかき",mean:"Sakaki (árbol sagrado sintoísta, kokuji)",ej:"榊",ejr:"さかき",ejt:"sakaki (árbol sagrado sintoísta)",lvl:"N1"}
 ],
 
 /* ---------------- VOCABULARIO (N5) ---------------- */
