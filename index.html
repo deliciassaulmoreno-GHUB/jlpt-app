@@ -183,6 +183,8 @@
   .mnemonic{margin-top:12px; background:rgba(201,138,46,.09); border-radius:14px; padding:13px 15px; font-size:13px; line-height:1.5; color:var(--ink-2); text-align:left;}
   .mnemonic b{color:var(--amber);}
   .gexp{margin-top:13px; background:var(--card); border-radius:14px; padding:14px 16px; font-size:13.5px; line-height:1.55; color:var(--ink-2); text-align:left; box-shadow:var(--shadow);}
+  .gform{margin-top:11px; background:rgba(39,64,127,.06); border-radius:14px; padding:12px 15px; font-size:12.5px; line-height:1.55; color:var(--ink-2); text-align:left;}
+  .gform b{color:var(--indigo);}
   .gerr{margin-top:11px; background:rgba(176,65,62,.08); border-radius:14px; padding:12px 14px; font-size:12.5px; line-height:1.5; color:var(--ink-2); text-align:left;}
   .gerr b{color:#B0413E;}
   .example{margin-top:12px; text-align:center; font-family:var(--jp); font-size:16px; color:var(--ink-2);}
@@ -195,7 +197,6 @@
     transition:transform .12s ease; box-shadow:0 8px 20px -8px rgba(39,64,127,.6);
     display:flex; align-items:center; justify-content:center; gap:10px;}
   .btn:active{transform:scale(.985);}
-  .btn.ghost{background:transparent; color:var(--indigo); box-shadow:none; border:1.5px solid var(--line);}
   .ratings{display:none; grid-template-columns:repeat(4,1fr); gap:8px;}
   .ratings.show{display:grid;}
   .rate{border:none; border-radius:15px; cursor:pointer; padding:11px 4px 10px; background:var(--card); box-shadow:var(--shadow);
@@ -217,92 +218,6 @@
   .done .btn,.empty .btn{max-width:220px; margin-top:8px;}
 
   @media (prefers-reduced-motion: reduce){*{transition:none !important;}}
-  /* ===== LECTURA ===== */
-  #readLevels,#readList{padding:10px 22px 0; overflow-y:auto;}
-  #reader{padding:6px 22px 0;}
-  .rd-toolbar{display:flex; gap:8px; margin:8px 0 4px;}
-  .rd-tog{flex:1; border:1.5px solid var(--line); background:var(--card); color:var(--muted); border-radius:13px;
-    padding:9px 6px; font-family:var(--ui); font-size:13px; font-weight:600; cursor:pointer; transition:all .12s ease;}
-  .rd-tog.on{border-color:var(--indigo); background:rgba(39,64,127,.08); color:var(--indigo);}
-  .rd-play{margin-left:auto; width:40px; height:40px; border-radius:50%; border:none; cursor:pointer;
-    background:var(--indigo); color:#fff; font-size:16px; display:flex; align-items:center; justify-content:center;
-    box-shadow:0 6px 16px -8px rgba(39,64,127,.7); flex:0 0 auto;}
-  .rd-play.playing{background:var(--indigo-bright);}
-  .rd-para.reading{background:rgba(59,95,196,.08); border-radius:12px; box-shadow:0 0 0 8px rgba(59,95,196,.08);}
-  .rd-stage{flex:1; overflow-y:auto; min-height:0; padding-bottom:24px;}
-  .rd-title{font-family:var(--jp); font-weight:700; font-size:22px; margin:10px 0 2px;}
-  .rd-meta{font-size:12px; color:var(--muted); margin-bottom:12px;}
-  .rd-para{margin:0 0 16px;}
-  .rd-jp{font-family:var(--jp); font-size:19px; line-height:1.95; color:var(--ink);}
-  .rd-jp .rw{color:var(--indigo-bright); border-bottom:1.5px dotted var(--indigo-bright); cursor:pointer;}
-  .rd-fu{font-family:var(--jp); font-size:13.5px; line-height:1.7; color:var(--muted); margin-top:5px; display:none;}
-  .rd-es{font-size:13.5px; line-height:1.6; color:var(--ink-2); margin-top:6px; padding-left:10px; border-left:2.5px solid var(--line); display:none;}
-  #reader.show-fu .rd-fu{display:block;} #reader.show-es .rd-es{display:block;}
-  .rd-sec{font-size:12px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--faint); margin:18px 0 8px;}
-  .rd-gloss{display:flex; flex-direction:column; gap:7px;}
-  .rd-gw{display:flex; align-items:center; justify-content:space-between; gap:10px; background:var(--card);
-    border:1px solid var(--line); border-radius:13px; padding:10px 13px; cursor:pointer;}
-  .rd-gw .gw-l{font-family:var(--jp); font-weight:700; font-size:16px; color:var(--ink);}
-  .rd-gw .gw-r{font-family:var(--jp); font-size:12.5px; color:var(--muted);}
-  .rd-gw .gw-m{font-size:12.5px; color:var(--ink-2); text-align:right; flex:1;}
-  .rd-q{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:14px 15px; margin-bottom:12px;}
-  .rd-q .qq{font-family:var(--jp); font-size:15.5px; font-weight:600; margin-bottom:10px; color:var(--ink);}
-  .rd-define{position:fixed; left:0; right:0; bottom:0; background:var(--card); border-top:1.5px solid var(--line);
-    box-shadow:0 -8px 24px -12px rgba(0,0,0,.25); padding:14px 22px calc(16px + env(safe-area-inset-bottom,0));
-    transform:translateY(110%); transition:transform .22s ease; z-index:40;}
-  .rd-define.show{transform:translateY(0);}
-  .rd-define .df-row{display:flex; align-items:center; gap:12px;}
-  .rd-define .df-w{font-family:var(--jp); font-size:24px; font-weight:700; color:var(--ink);}
-  .rd-define .df-r{font-family:var(--jp); font-size:14px; color:var(--indigo-bright);}
-  .rd-define .df-m{font-size:14px; color:var(--ink-2); margin-top:3px;}
-  .rd-define .df-spk{margin-left:auto; font-size:22px; cursor:pointer; background:none; border:none;}
-  .rd-define .df-x{position:absolute; top:8px; right:14px; font-size:20px; color:var(--faint); background:none; border:none; cursor:pointer;}
-  /* ===== ESCRITURA DE KANJI ===== */
-  #writer{padding:6px 22px 0;}
-  .wprog{margin-left:auto; font-size:13px; font-weight:700; color:var(--muted);}
-  .w-stage{flex:1; overflow-y:auto; min-height:0; display:flex; flex-direction:column; align-items:center; padding-top:6px;}
-  .hw-box{position:relative; width:280px; height:280px; max-width:80vw; max-height:80vw; margin:8px auto 4px;
-    border:1.5px solid var(--line); border-radius:20px; background:var(--card); overflow:hidden;}
-  #hwTarget{position:absolute; inset:0; display:flex; align-items:center; justify-content:center;}
-  #hwTarget svg{touch-action:none;}
-  .hw-grid{position:absolute; inset:0; pointer-events:none;
-    background:
-      linear-gradient(var(--line) 1px, transparent 1px) 0 50%/100% 50% no-repeat,
-      linear-gradient(90deg, var(--line) 1px, transparent 1px) 50% 0/50% 100% no-repeat;
-    opacity:.5;}
-  .hw-grid::after{content:""; position:absolute; inset:0;
-    background:
-      linear-gradient(45deg, transparent calc(50% - 0.5px), var(--line) 50%, transparent calc(50% + 0.5px)),
-      linear-gradient(-45deg, transparent calc(50% - 0.5px), var(--line) 50%, transparent calc(50% + 0.5px));
-    opacity:.35;}
-  .hw-err{font-size:13px; color:var(--muted); text-align:center; padding:0 20px;}
-  .w-info{text-align:center; margin:8px 0 2px;}
-  .w-reading{font-family:var(--jp); font-size:15px; color:var(--indigo-bright); font-weight:600;}
-  .w-meaning{font-size:14px; color:var(--ink-2); margin-top:2px;}
-  .w-tools{display:flex; gap:8px; margin:12px 0 6px; flex-wrap:wrap; justify-content:center;}
-  .w-btn{border:1.5px solid var(--indigo); background:var(--indigo); color:#fff; border-radius:13px;
-    padding:10px 14px; font-family:var(--ui); font-size:13px; font-weight:600; cursor:pointer;}
-  .w-btn.ghost2{background:transparent; color:var(--indigo); }
-  .w-hint{font-size:12.5px; color:var(--muted); text-align:center; margin-top:4px; min-height:18px;}
-  .w-foot{padding:10px 0 16px;}
-  .w-foot .btn{max-width:100%;}
-  /* ===== CAMINO HACIA EL N1 ===== */
-  .n1-bar{position:relative; display:flex; height:34px; border-radius:11px; overflow:hidden;
-    border:1px solid var(--line); background:var(--card);}
-  .n1-seg{position:relative; border-right:1px solid var(--line); z-index:1;}
-  .n1-seg:last-child{border-right:none;}
-  .n1-fill{position:absolute; top:0; left:0; bottom:0; z-index:2;
-    background:linear-gradient(90deg, var(--indigo), var(--indigo-bright)); opacity:.88;}
-  .n1-marker{position:absolute; top:-3px; bottom:-3px; width:2px; background:var(--ink); z-index:3;}
-  .n1-segs{display:flex; margin-top:4px;}
-  .n1-segs > div{text-align:center; font-size:11px; font-weight:700; color:var(--muted);}
-  .n1-pct{display:flex; justify-content:space-between; font-size:12.5px; color:var(--muted); margin-top:9px;}
-  .n1-pct b{color:var(--ink);}
-  .n1-rem{display:flex; gap:8px; margin-top:9px; flex-wrap:wrap;}
-  .n1-chip{background:rgba(39,64,127,.06); border-radius:10px; padding:6px 10px; font-size:12px; color:var(--ink-2);}
-  .n1-est{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:12px 14px;
-    margin-top:11px; font-size:13px; color:var(--ink-2); line-height:1.55;}
-  .n1-est b{color:var(--ink);}
 </style>
 </head>
 <body>
@@ -352,7 +267,8 @@
       <div class="tile-ic g3">文</div>
       <div><div class="tile-name">Gramática</div><div class="tile-cnt" id="cnt-grammar">—</div></div>
     </div>
-    <div class="tile" id="tileRead">
+    <div class="tile locked" data-soon="La lectura">
+      <span class="badge-soon">Pronto</span>
       <div class="tile-ic g4">読</div>
       <div><div class="tile-name">Lectura</div><div class="tile-cnt">Textos por niveles</div></div>
     </div>
@@ -416,8 +332,6 @@
   </div>
   <div class="stats-section">Progreso por nivel</div>
   <div id="stLevels"></div>
-  <div class="stats-section">Camino hacia el N1</div>
-  <div id="n1Path"></div>
   <div class="stats-foot">Se cuenta como aprendido cualquier ítem que ya hayas estudiado al menos una vez. Todo se guarda solo en tu teléfono.</div>
 </section>
 
@@ -475,8 +389,7 @@
     <div class="big">完</div>
     <h2>¡Sesión completada!</h2>
     <p>Tu progreso está guardado en el teléfono. Vuelve más tarde para los próximos repasos.</p>
-    <button class="btn" id="doneAgain">Repasar otra vez</button>
-    <button class="btn ghost" id="doneBack">Volver al menú</button>
+    <button class="btn" id="doneBack">Volver al menú</button>
   </div>
 </section>
 
@@ -490,79 +403,7 @@
   </div>
 </section>
 
-<!-- ===== LECTURA · niveles ===== -->
-<section class="view" id="readLevels">
-  <div class="back-row">
-    <button class="back-btn" id="readLvlBack" aria-label="Volver">←</button>
-    <span class="eyebrow">Lectura</span>
-  </div>
-  <div class="level-title">Lectura</div>
-  <div class="level-help">Textos graduados por nivel. Toca una palabra subrayada para ver su lectura y significado, y activa la furigana o la traducción cuando lo necesites.</div>
-  <div id="readLevelList"></div>
-</section>
-
-<!-- ===== LECTURA · lista de textos ===== -->
-<section class="view" id="readList">
-  <div class="back-row">
-    <button class="back-btn" id="readListBack" aria-label="Volver">←</button>
-    <span class="eyebrow">Lectura</span>
-  </div>
-  <div class="level-title" id="readListTitle">Textos</div>
-  <div class="level-help">Elige un texto para leer.</div>
-  <div id="readListItems"></div>
-</section>
-
-<!-- ===== LECTURA · lector ===== -->
-<section class="view" id="reader">
-  <div class="study-row">
-    <button class="close" id="readerClose" aria-label="Cerrar">✕</button>
-    <div class="tagline" id="readerTag" style="margin:0;">Lectura</div>
-    <button class="rd-play" id="rdPlay" aria-label="Escuchar el texto">▶</button>
-  </div>
-  <div class="rd-toolbar">
-    <button class="rd-tog" id="togFu">あ Furigana</button>
-    <button class="rd-tog" id="togEs">ES Traducción</button>
-  </div>
-  <div class="rd-stage" id="readerStage"></div>
-  <div class="rd-define" id="rdDefine">
-    <button class="df-x" id="rdDefineClose" aria-label="Cerrar">✕</button>
-    <div class="df-row">
-      <div>
-        <div class="df-w" id="dfW"></div>
-        <div class="df-r" id="dfR"></div>
-        <div class="df-m" id="dfM"></div>
-      </div>
-      <button class="df-spk" id="dfSpk" aria-label="Escuchar">🔊</button>
-    </div>
-  </div>
-  <audio id="rdAudio" preload="none"></audio>
-</section>
-
-<!-- ===== ESCRITURA DE KANJI (trazos) ===== -->
-<section class="view" id="writer">
-  <div class="study-row">
-    <button class="close" id="wClose" aria-label="Cerrar">✕</button>
-    <div class="tagline" id="wTag" style="margin:0;">Escritura</div>
-    <div class="wprog" id="wProgress"></div>
-  </div>
-  <div class="w-stage">
-    <div class="hw-box"><div id="hwTarget"></div><div class="hw-grid"></div></div>
-    <div class="w-info">
-      <div class="w-reading" id="wReading"></div>
-      <div class="w-meaning" id="wMeaning"></div>
-    </div>
-    <div class="w-tools">
-      <button class="w-btn" id="wAnim">✎ Ver orden</button>
-      <button class="w-btn" id="wQuiz">✍ Practicar</button>
-      <button class="w-btn ghost2" id="wReset">↺ Reiniciar</button>
-    </div>
-    <div class="w-hint" id="wHint">Toca "Ver orden" para ver el trazo, o "Practicar" para escribirlo tú.</div>
-  </div>
-  <div class="w-foot"><button class="btn" id="wNext">Siguiente →</button></div>
-</section>
-
 <script src="content.js"></script>
-<script src="reading.js"></script>
 <script>
 var C = window.CONTENT || {kanji:[],vocab:[],grammar:[]};
 var ITEMS = [];
@@ -616,7 +457,7 @@ function fmt(d){ var m=d*1440;
   if(d<365) return Math.round(d/30)+" mes";
   return (d/365).toFixed(1)+" a"; }
 
-var progress=load(), queue=[], done=0, total=0, current=null, lastSession=null;
+var progress=load(), queue=[], done=0, total=0, current=null;
 
 function isDue(id, now){ var st=progress[id]; return st && new Date(st.due)<=now; }
 function isLearned(id){ return !!progress[id]; }
@@ -680,21 +521,21 @@ function buildRecommended(){
   return {queue:reviews.concat(news), reviews:reviews.length, news:news.length};
 }
 function buildFocused(type, level){
-  /* Repaso libre: TODO el contenido del submenú/nivel, en orden aleatorio,
-     sin límite de tarjetas y reentrable las veces que se quiera. */
-  var all=[];
+  var now=new Date(), reviews=[], news=[];
   for(var i=0;i<ITEMS.length;i++){
     var it=ITEMS[i];
     if(it.type!==type) continue;
     if(level!=="all" && it.d.lvl!==level) continue;
-    all.push(i);
+    var st=progress[it.id];
+    if(!st) news.push(i);
+    else if(new Date(st.due)<=now) reviews.push(i);
   }
-  all=shuffle(all);
-  return {queue:all, reviews:0, news:all.length};
+  news=news.slice(0, FOCUS_NEW_LIMIT);
+  return {queue:reviews.concat(news), reviews:reviews.length, news:news.length};
 }
 
 function show(v){
-  ["menu","levels","modes","stats","study","quiz","doneView","emptyView","readLevels","readList","reader","writer"].forEach(function(x){
+  ["menu","levels","modes","stats","study","quiz","doneView","emptyView"].forEach(function(x){
     document.getElementById(x).classList.toggle("active", x===v);
   });
 }
@@ -754,15 +595,12 @@ function showLevels(type){
 }
 function onLevelChosen(type, level){
   selLevel=level;
-  showModes(type, level);
+  if(type==="kanji"){ selMode="mix"; startFocused(type, level); }
+  else showModes(type, level);
 }
 
 /* Tipos de ejercicio (áreas estilo JLPT) */
 var MODES = {
-  kanji: [
-    {id:"mix",     name:"Repaso (quiz)",       desc:"Lecturas y significado"},
-    {id:"strokes", name:"Escritura (trazos)",  desc:"Dibuja el kanji trazo a trazo"}
-  ],
   vocab: [
     {id:"mix",   name:"Examen mixto",     desc:"Mezcla de todos los tipos"},
     {id:"read",  name:"Lectura (漢字読み)", desc:"Elige cómo se lee la palabra"},
@@ -789,11 +627,7 @@ function showModes(type, level){
   });
   document.getElementById("modeList").innerHTML=html;
   document.querySelectorAll("#modeList .level-btn").forEach(function(b){
-    b.addEventListener("click", function(){
-      selMode=b.getAttribute("data-mode");
-      if(selMode==="strokes"){ startWriting(selType, selLevel); }
-      else { startFocused(selType, selLevel); }
-    });
+    b.addEventListener("click", function(){ selMode=b.getAttribute("data-mode"); startFocused(selType, selLevel); });
   });
   show("modes");
 }
@@ -807,64 +641,6 @@ function levelBtnHTML(level, label, c, isAll){
 }
 
 /* ===== STATS ===== */
-/* Volúmenes objetivo del camino N5→N1 (estimación estándar, §3.3 del diseño).
-   Por nivel y NUEVOS (no acumulados): kanji ~2.000, vocab ~10.000, gramática ~870 en total. */
-var PATH = [
-  {lvl:"N5", kanji:100,  vocab:800,  grammar:80},
-  {lvl:"N4", kanji:200,  vocab:700,  grammar:140},
-  {lvl:"N3", kanji:350,  vocab:2200, grammar:200},
-  {lvl:"N2", kanji:350,  vocab:2300, grammar:200},
-  {lvl:"N1", kanji:1000, vocab:4000, grammar:250}
-];
-function pathTotals(){
-  var k=0,v=0,g=0; PATH.forEach(function(p){ k+=p.kanji; v+=p.vocab; g+=p.grammar; });
-  return {kanji:k, vocab:v, grammar:g, total:k+v+g};
-}
-function learnedByType(){
-  var r={kanji:0,vocab:0,grammar:0};
-  ITEMS.forEach(function(it){ if(isLearned(it.id) && r[it.type]!=null) r[it.type]++; });
-  return r;
-}
-function studyDaysArr(){ try{ return JSON.parse(localStorage.getItem("jlpt-days")||"[]"); }catch(e){ return []; } }
-function nfmt(n){ try{ return n.toLocaleString("es"); }catch(e){ return ""+n; } }
-function fmtDur(d){
-  if(d<60) return Math.round(d)+" días";
-  if(d<365) return Math.round(d/30)+" meses";
-  var y=d/365; return (y<10? y.toFixed(1):""+Math.round(y))+" años";
-}
-function renderN1Path(){
-  var PT=pathTotals(), lt=learnedByType();
-  var learnedAll=lt.kanji+lt.vocab+lt.grammar;
-  var pct=Math.min(100, PT.total? learnedAll/PT.total*100 : 0);
-  var remaining=Math.max(0, PT.total-learnedAll);
-  var segs=PATH.map(function(p){ return {lvl:p.lvl, t:p.kanji+p.vocab+p.grammar}; });
-  var bar=segs.map(function(s){ return '<div class="n1-seg" style="flex:'+s.t+'"></div>'; }).join("");
-  var labs=segs.map(function(s){ return '<div style="flex:'+s.t+'">'+s.lvl+'</div>'; }).join("");
-  var pctTxt=pct<1 ? pct.toFixed(1) : ""+Math.round(pct);
-  var h='<div class="n1-bar">'+bar+
-    '<div class="n1-fill" style="width:'+pct.toFixed(2)+'%"></div>'+
-    '<div class="n1-marker" style="left:'+pct.toFixed(2)+'%"></div></div>'+
-    '<div class="n1-segs">'+labs+'</div>'+
-    '<div class="n1-pct"><span><b>'+nfmt(learnedAll)+'</b> de ~'+nfmt(PT.total)+' ítems</span>'+
-    '<span><b>'+pctTxt+'%</b> hacia el N1</span></div>'+
-    '<div class="n1-rem">'+
-      '<div class="n1-chip">Kanji: faltan <b>'+nfmt(Math.max(0,PT.kanji-lt.kanji))+'</b></div>'+
-      '<div class="n1-chip">Vocab: faltan <b>'+nfmt(Math.max(0,PT.vocab-lt.vocab))+'</b></div>'+
-      '<div class="n1-chip">Gramática: faltan <b>'+nfmt(Math.max(0,PT.grammar-lt.grammar))+'</b></div>'+
-    '</div>';
-  var active=studyDaysArr().length;
-  if(active>=4 && learnedAll>0){
-    h+='<div class="n1-est">A un ritmo sostenible de <b>10–30 ítems nuevos al día</b>, cubrir lo que falta llevaría aprox. <b>'+
-      fmtDur(remaining/30)+'–'+fmtDur(remaining/10)+'</b>.<br>'+
-      'Tu media hasta ahora: <b>'+(learnedAll/active).toFixed(1)+'</b> ítems por día estudiado ('+active+' días).<br>'+
-      '<span style="color:var(--muted)">Estimación orientativa: el N1 suele requerir ~1.700–2.200 h de estudio acumulado. Se afina cuanto más constante seas.</span></div>';
-  } else {
-    h+='<div class="n1-est">Estudia unos días más y aquí verás una estimación del tiempo que te falta para el N1.<br>'+
-      '<span style="color:var(--muted)">Como referencia, el N1 suele requerir ~1.700–2.200 h de estudio acumulado.</span></div>';
-  }
-  document.getElementById("n1Path").innerHTML=h;
-}
-
 function renderStats(){
   var learned=ITEMS.filter(function(it){ return isLearned(it.id); }).length;
   document.getElementById("stTotal").textContent=learned;
@@ -884,19 +660,16 @@ function renderStats(){
       '<div class="st-types">'+parts.join(" · ")+'</div></div>';
   });
   document.getElementById("stLevels").innerHTML=html;
-  renderN1Path();
   show("stats");
 }
 
 /* ===== SESSIONS ===== */
 function startRecommended(){
-  lastSession={focused:false};
   var q=buildRecommended();
   if(q.queue.length===0){ showEmpty("Todo al día","No tienes repasos ni ítems nuevos ahora mismo. Vuelve más tarde."); return; }
   beginSession(q);
 }
 function startFocused(type, level){
-  lastSession={focused:true, type:type, level:level, mode:selMode};
   var q=buildFocused(type, level);
   if(q.queue.length===0){
     var lbl = level==="all" ? TYPE_LABEL[type] : (TYPE_LABEL[type]+" "+level);
@@ -919,16 +692,6 @@ function sizeFor(text){
   if(n<=1) return 118; if(n<=2) return 78; if(n<=3) return 60;
   if(n<=4) return 48; if(n<=6) return 38; if(n<=8) return 30; return 25;
 }
-/* Convierte una lectura de display (con okurigana entre paréntesis y varias
-   variantes separadas por ・) en texto pronunciable. Une las variantes con 、
-   para que el TTS haga una pausa natural entre ellas. */
-function sayable(s){
-  if(!s) return "";
-  return s.split("・")
-          .map(function(x){ return x.replace(/[()（）]/g,"").trim(); })
-          .filter(Boolean)
-          .join("、");
-}
 function readingChip(label,val,say){
   return '<div class="reading" data-say="'+(say||val)+'"><div><div class="rlabel">'+label+'</div><div class="rval">'+val+'</div></div><div class="spk">🔊</div></div>';
 }
@@ -950,24 +713,25 @@ function backHTML(item){
   var d=item.d;
   if(item.type==="kanji"){
     var chips='';
-    if(d.kun) chips+=readingChip("Kun",d.kun,sayable(d.kun));
-    if(d.on) chips+=readingChip("On",d.on,sayable(d.on));
+    if(d.kun) chips+=readingChip("Kun",d.kun,d.say);
+    if(d.on) chips+=readingChip("On",d.on,d.say);
     return '<div class="readings">'+chips+'</div>'+
            '<div class="meaning">'+d.mean+'</div>'+
            (d.tip? '<div class="mnemonic"><b>Pista:</b> '+d.tip+'</div>' : '')+
            exampleHTML(d);
   }
   if(item.type==="vocab"){
-    return '<div class="readings">'+readingChip("Lectura",d.r,d.r)+'</div>'+
+    return '<div class="readings">'+readingChip("Lectura",d.r,d.say)+'</div>'+
            '<div class="meaning">'+d.mean+'</div>'+exampleHTML(d);
   }
   return '<div class="meaning">'+d.mean+'</div>'+
-         '<div class="gexp">'+d.exp+'</div>'+exampleHTML(d)+
+         '<div class="gexp">'+d.exp+'</div>'+
+         (d.form? '<div class="gform"><b>Construcción:</b> '+d.form+'</div>' : '')+
+         exampleHTML(d)+
          (d.err? '<div class="gerr"><b>Error común:</b> '+d.err+'</div>' : '');
 }
 function nextCard(){
   if(queue.length===0){ show("doneView"); renderMenu(); return; }
-  var stage=document.querySelector("#study .stage"); if(stage) stage.scrollTop=0;
   current=queue.shift(); var item=ITEMS[current];
   var tag=TYPE_LABEL[item.type]; if(item.d.lvl) tag+=" · "+item.d.lvl;
   document.getElementById("studyTag").textContent=tag;
@@ -999,65 +763,7 @@ function rate(r){
   progress[item.id]=schedule(progress[item.id]||null, r, new Date());
   save(progress); logToday(); done+=1; nextCard();
 }
-/* ===== AUDIO / TTS ===== */
-/* ===== CONFIG: proxy serverless de TTS (voz natural en TODO) ===== */
-/* Pega la URL de tu Cloudflare Worker para activar voz natural en vocabulario,
-   kanji y lectura. Vacío = usa solo la voz del sistema (comportamiento por defecto). */
-var TTS_ENDPOINT = "https://jlpt-tts.deliciassaulmoreno.workers.dev";   /* Cloudflare Worker (voz natural) */
-function ttsUrl(text){ return TTS_ENDPOINT.replace(/\/+$/,"") + "/tts?text=" + encodeURIComponent(text); }
-var wordAudioEl=null;
-function wordAudio(){ if(!wordAudioEl){ wordAudioEl=new Audio(); wordAudioEl.preload="none"; wordAudioEl.crossOrigin="anonymous"; } return wordAudioEl; }
-
-var JA_VOICE=null;
-function pickJapaneseVoice(){
-  var sy=window.speechSynthesis; if(!sy) return null;
-  var voices=sy.getVoices()||[];
-  var ja=voices.filter(function(v){ return /^ja(\b|[-_])/i.test(v.lang||""); });
-  if(!ja.length) return null;
-  function score(v){
-    var n=(v.name||"").toLowerCase(), s=0;
-    if(/premium|enhanced|neural|siri/.test(n)) s+=100;  // voces de alta calidad
-    if(/o-?ren|hattori/.test(n))               s+=40;   // voces iOS modernas
-    if(/kyoko/.test(n))                        s+=20;   // voz JP por defecto en iOS
-    if(v.localService)                         s+=5;    // offline, sin latencia
-    if(/compact/.test(n))                      s-=80;   // la "enlatada": evitar
-    return s;
-  }
-  ja.sort(function(a,b){ return score(b)-score(a); });
-  return ja[0];
-}
-function refreshVoice(){ JA_VOICE=pickJapaneseVoice(); }
-if('speechSynthesis' in window){
-  refreshVoice();
-  // En Safari iOS la lista llega tarde; reintentar al evento y de forma diferida.
-  window.speechSynthesis.onvoiceschanged=refreshVoice;
-  setTimeout(refreshVoice,300); setTimeout(refreshVoice,1200);
-}
-function systemSpeak(t){
-  if(!t || !('speechSynthesis' in window)) return;
-  try{
-    if(!JA_VOICE) refreshVoice();
-    var u=new SpeechSynthesisUtterance(t);
-    u.lang="ja-JP";
-    if(JA_VOICE) u.voice=JA_VOICE;
-    u.rate=0.95; u.pitch=1.0;
-    window.speechSynthesis.cancel();
-    window.speechSynthesis.speak(u);
-  }catch(e){}
-}
-function speak(t){
-  if(!t) return;
-  if(!TTS_ENDPOINT){ systemSpeak(t); return; }   /* sin Worker → voz del sistema */
-  var fell=false; function fb(){ if(fell) return; fell=true; systemSpeak(t); }
-  try{
-    try{ if('speechSynthesis' in window) window.speechSynthesis.cancel(); }catch(e){}
-    var a=wordAudio();
-    a.onerror=fb;
-    a.src=ttsUrl(t);
-    var pr=a.play();
-    if(pr && pr.catch) pr.catch(fb);
-  }catch(e){ fb(); }
-}
+function speak(t){ try{ var u=new SpeechSynthesisUtterance(t); u.lang="ja-JP"; u.rate=.9; speechSynthesis.cancel(); speechSynthesis.speak(u); }catch(e){} }
 
 /* ===== QUIZ / EJERCICIOS ===== */
 var qCurrent=null, qAnswered=false;
@@ -1122,7 +828,6 @@ function makeQuestion(item){
 }
 function nextQuestion(){
   if(queue.length===0){ show("doneView"); renderMenu(); return; }
-  var qstage=document.querySelector("#quiz .qstage"); if(qstage) qstage.scrollTop=0;
   current=queue.shift(); var item=ITEMS[current];
   qCurrent=makeQuestion(item); qAnswered=false;
   var tag=TYPE_LABEL[item.type]; if(item.d.lvl) tag+=" · "+item.d.lvl;
@@ -1189,294 +894,12 @@ function finishAnswer(correct){
   document.getElementById("qNext").style.display="block";
 }
 
-/* ===== LECTURA ===== */
-var READING = window.READING || [];
-var READ_LEVELS = ["N5","N4","N3","N2","N1"];
-var readListLevel = "N3";
-var lastDefineWord = "";
-var rdCurrent = null, rdPlaying = false, rdIdx = 0;
-
-function readLevelsAvailable(){
-  var seen={}; READING.forEach(function(p){ seen[p.lvl]=(seen[p.lvl]||0)+1; });
-  return READ_LEVELS.filter(function(l){ return seen[l]; }).map(function(l){ return {lvl:l, n:seen[l]}; });
-}
-function openReadingLevels(){
-  var lv=readLevelsAvailable(), html="";
-  if(lv.length===0){ html='<div class="level-help">Aún no hay textos disponibles. Falta el archivo reading.js.</div>'; }
-  lv.forEach(function(x){
-    html+='<button class="level-btn" data-rlvl="'+x.lvl+'">'+
-      '<div class="level-l"><div class="level-tag">'+x.lvl+'</div>'+
-      '<div class="level-meta"><div class="lt">Nivel '+x.lvl+'</div>'+
-      '<div class="ls">'+x.n+' '+(x.n===1?'texto':'textos')+'</div></div></div>'+
-      '<span class="level-arrow">›</span></button>';
-  });
-  document.getElementById("readLevelList").innerHTML=html;
-  document.querySelectorAll("#readLevelList .level-btn").forEach(function(b){
-    b.addEventListener("click", function(){ showReadingList(b.getAttribute("data-rlvl")); });
-  });
-  show("readLevels");
-}
-function showReadingList(level){
-  readListLevel=level;
-  var ps=READING.filter(function(p){ return p.lvl===level; }), html="";
-  document.getElementById("readListTitle").textContent="Lectura · "+level;
-  ps.forEach(function(p){
-    html+='<button class="level-btn" data-rid="'+p.id+'">'+
-      '<div class="level-l"><div class="level-tag all">読</div>'+
-      '<div class="level-meta"><div class="lt">'+p.title+'</div>'+
-      '<div class="ls">'+p.paras.length+' párrafos · ~'+p.mins+' min</div></div></div>'+
-      '<span class="level-arrow">›</span></button>';
-  });
-  document.getElementById("readListItems").innerHTML=html;
-  document.querySelectorAll("#readListItems .level-btn").forEach(function(b){
-    b.addEventListener("click", function(){ openPassage(b.getAttribute("data-rid")); });
-  });
-  show("readList");
-}
-function escAttr(s){ return (s||"").replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;"); }
-function hlGloss(jp, gloss){
-  (gloss||[]).forEach(function(g){
-    var idx=jp.indexOf(g.w);
-    if(idx<0) return;
-    var span='<span class="rw" data-r="'+escAttr(g.r)+'" data-m="'+escAttr(g.m)+'" data-w="'+escAttr(g.w)+'">'+g.w+'</span>';
-    jp=jp.slice(0,idx)+span+jp.slice(idx+g.w.length);
-  });
-  return jp;
-}
-function openPassage(id){
-  var p=null; for(var i=0;i<READING.length;i++){ if(READING[i].id===id){ p=READING[i]; break; } }
-  if(!p) return;
-  stopRead(); rdCurrent=p;
-  document.getElementById("readerTag").textContent="Lectura · "+p.lvl;
-  var h='<div class="rd-title">'+p.title+'</div><div class="rd-meta">'+p.lvl+' · ~'+p.mins+' min de lectura</div>';
-  p.paras.forEach(function(pa){
-    h+='<div class="rd-para"><div class="rd-jp">'+hlGloss(pa.jp, p.gloss)+'</div>'+
-       '<div class="rd-fu">'+pa.fu+'</div><div class="rd-es">'+pa.es+'</div></div>';
-  });
-  if(p.gloss && p.gloss.length){
-    h+='<div class="rd-sec">Vocabulario en contexto</div><div class="rd-gloss">';
-    p.gloss.forEach(function(g){
-      h+='<div class="rd-gw" data-r="'+escAttr(g.r)+'" data-m="'+escAttr(g.m)+'" data-w="'+escAttr(g.w)+'">'+
-         '<div class="gw-l">'+g.w+'</div><div class="gw-r">'+g.r+'</div><div class="gw-m">'+g.m+'</div></div>';
-    });
-    h+='</div>';
-  }
-  if(p.q && p.q.length){
-    h+='<div class="rd-sec">Comprensión</div>';
-    p.q.forEach(function(qq){
-      h+='<div class="rd-q" data-a="'+qq.a+'"><div class="qq">'+qq.q+'</div>';
-      qq.o.forEach(function(opt, oi){ h+='<button class="qopt" data-oi="'+oi+'">'+opt+'</button>'; });
-      h+='</div>';
-    });
-  }
-  var stage=document.getElementById("readerStage");
-  stage.innerHTML=h; stage.scrollTop=0;
-  var R=document.getElementById("reader");
-  R.classList.remove("show-fu","show-es");
-  document.getElementById("togFu").classList.remove("on");
-  document.getElementById("togEs").classList.remove("on");
-  hideDefine();
-  stage.querySelectorAll(".rw").forEach(function(el){
-    el.addEventListener("click", function(){ showDefine(el.getAttribute("data-w"), el.getAttribute("data-r"), el.getAttribute("data-m")); });
-  });
-  stage.querySelectorAll(".rd-gw").forEach(function(el){
-    el.addEventListener("click", function(){ showDefine(el.getAttribute("data-w"), el.getAttribute("data-r"), el.getAttribute("data-m")); });
-  });
-  stage.querySelectorAll(".rd-q").forEach(function(qbox){
-    var ans=parseInt(qbox.getAttribute("data-a"),10), answered=false, opts=qbox.querySelectorAll(".qopt");
-    opts.forEach(function(b){
-      b.addEventListener("click", function(){
-        if(answered) return; answered=true;
-        opts.forEach(function(x){ x.disabled=true; });
-        if(parseInt(b.getAttribute("data-oi"),10)===ans){ b.classList.add("ok"); }
-        else { b.classList.add("no"); if(opts[ans]) opts[ans].classList.add("ok"); }
-      });
-    });
-  });
-  show("reader");
-}
-function showDefine(w,r,m){
-  stopRead();
-  document.getElementById("dfW").textContent=w||"";
-  document.getElementById("dfR").textContent=r||"";
-  document.getElementById("dfM").textContent=m||"";
-  document.getElementById("rdDefine").classList.add("show");
-  lastDefineWord=r||w||"";
-}
-function hideDefine(){ document.getElementById("rdDefine").classList.remove("show"); }
-
-/* ---- Lectura en voz alta del texto, párrafo a párrafo ---- */
-function setPlayIcon(playing){
-  var b=document.getElementById("rdPlay");
-  b.textContent = playing ? "◼" : "▶";
-  b.classList.toggle("playing", playing);
-  b.setAttribute("aria-label", playing ? "Detener lectura" : "Escuchar el texto");
-}
-function paraHighlight(idx){
-  var nodes=document.querySelectorAll("#readerStage .rd-para");
-  nodes.forEach(function(n,i){ n.classList.toggle("reading", i===idx); });
-  if(nodes[idx]){ try{ nodes[idx].scrollIntoView({block:"nearest",behavior:"smooth"}); }catch(e){} }
-}
-function clearParaHL(){ document.querySelectorAll("#readerStage .rd-para.reading").forEach(function(n){ n.classList.remove("reading"); }); }
-var rdAudioEl=null;
-function getRdAudio(){ if(!rdAudioEl){ rdAudioEl=document.getElementById("rdAudio"); if(rdAudioEl) rdAudioEl.crossOrigin="anonymous"; } return rdAudioEl; }
-function stopRead(){
-  rdPlaying=false; setPlayIcon(false); clearParaHL();
-  try{ window.speechSynthesis.cancel(); }catch(e){}
-  try{ if(rdAudioEl){ rdAudioEl.onended=null; rdAudioEl.onerror=null; rdAudioEl.pause(); } }catch(e){}
-}
-function toggleReadAloud(){
-  if(!rdCurrent) return;
-  if(rdPlaying){ stopRead(); return; }
-  rdPlaying=true; setPlayIcon(true); rdIdx=0;
-  if(rdCurrent.audio){ playPassageFile(rdCurrent.audio); }   /* solo si hay un MP3 explícito */
-  else { readSeq(); }                                         /* Worker (voz natural) o sistema, por párrafos */
-}
-/* Reproduce un MP3 del pasaje completo (solo si lo indicaste en 'audio'). Si falla → readSeq() */
-function playPassageFile(src){
-  var a=getRdAudio(); if(!a){ readSeq(); return; }
-  clearParaHL();
-  var done=false; function toParas(){ if(done||!rdPlaying) return; done=true; readSeq(); }
-  a.onended=function(){ stopRead(); };
-  a.onerror=toParas;
-  try{
-    a.src=src; a.currentTime=0;
-    var pr=a.play();
-    if(pr && pr.catch){ pr.catch(toParas); }
-  }catch(e){ toParas(); }
-}
-/* Lectura párrafo a párrafo: voz natural del Worker si hay endpoint; si no, voz del sistema */
-function readSeq(){
-  if(!rdPlaying || !rdCurrent || rdIdx>=rdCurrent.paras.length){ stopRead(); return; }
-  var idx=rdIdx, text=rdCurrent.paras[idx].jp;
-  paraHighlight(idx);
-  if(TTS_ENDPOINT){
-    var a=getRdAudio(), moved=false;
-    var advance=function(){ if(moved||!rdPlaying) return; moved=true; rdIdx++; readSeq(); };
-    var toSys=function(){ if(moved||!rdPlaying) return; moved=true; speakParaSystem(text, function(){ rdIdx++; readSeq(); }); };
-    if(!a){ speakParaSystem(text, function(){ rdIdx++; readSeq(); }); return; }
-    a.onended=advance;
-    a.onerror=toSys;     /* si el Worker falla en este párrafo, voz del sistema y sigue */
-    try{
-      a.src=ttsUrl(text); a.currentTime=0;
-      var pr=a.play();
-      if(pr && pr.catch) pr.catch(toSys);
-    }catch(e){ toSys(); }
-  } else {
-    speakParaSystem(text, function(){ rdIdx++; readSeq(); });
-  }
-}
-/* Una frase con la voz del sistema, con callback al terminar */
-function speakParaSystem(text, onend){
-  if(!('speechSynthesis' in window)){ stopRead(); return; }
-  if(!JA_VOICE) refreshVoice();
-  var u=new SpeechSynthesisUtterance(text);
-  u.lang="ja-JP"; if(JA_VOICE) u.voice=JA_VOICE; u.rate=0.92; u.pitch=1.0;
-  u.onend=function(){ if(rdPlaying && onend) onend(); };
-  u.onerror=function(){ if(rdPlaying && onend) onend(); };
-  try{ window.speechSynthesis.cancel(); window.speechSynthesis.speak(u); }catch(e){ stopRead(); }
-}
-
-/* ===== ESCRITURA DE KANJI (Hanzi Writer, datos japoneses bajo demanda) ===== */
-var HW_SIZE=276;
-var hwLoaded=false, hwLoading=false, hwCbs=[];
-function loadHanziWriter(cb){
-  if(hwLoaded && window.HanziWriter){ cb(true); return; }
-  hwCbs.push(cb);
-  if(hwLoading) return;
-  hwLoading=true;
-  var s=document.createElement("script");
-  s.src="https://cdn.jsdelivr.net/npm/hanzi-writer@3/dist/hanzi-writer.min.js";
-  s.onload=function(){ hwLoaded=true; hwLoading=false; var c=hwCbs; hwCbs=[]; c.forEach(function(f){ f(true); }); };
-  s.onerror=function(){ hwLoading=false; var c=hwCbs; hwCbs=[]; c.forEach(function(f){ f(false); }); };
-  document.head.appendChild(s);
-}
-function hwDataLoader(char, onLoad, onError){
-  fetch("https://cdn.jsdelivr.net/npm/hanzi-writer-data-jp@0/"+encodeURIComponent(char)+".json")
-    .then(function(r){ if(!r.ok) throw new Error("no data"); return r.json(); })
-    .then(onLoad).catch(onError);
-}
-var wq=[], wIdx=0, hwInstance=null;
-function buildWriteList(level){
-  var arr=[];
-  for(var i=0;i<ITEMS.length;i++){
-    var it=ITEMS[i];
-    if(it.type!=="kanji") continue;
-    if(level!=="all" && it.d.lvl!==level) continue;
-    arr.push(i);
-  }
-  return shuffle(arr);
-}
-function startWriting(type, level){
-  lastSession={focused:false, writing:true, type:type, level:level};
-  wq=buildWriteList(level); wIdx=0;
-  if(wq.length===0){ showEmpty("Nada que escribir","No hay kanji en esta selección."); return; }
-  show("writer"); showWriteCard();
-}
-function setHint(t){ var h=document.getElementById("wHint"); if(h) h.textContent=t||""; }
-function showWriteCard(){
-  if(wIdx>=wq.length){ show("doneView"); renderMenu(); return; }
-  var k=ITEMS[wq[wIdx]].d;
-  document.getElementById("wTag").textContent="Escritura · "+(k.lvl||"");
-  document.getElementById("wProgress").textContent=(wIdx+1)+" / "+wq.length;
-  var rd=[]; if(k.kun) rd.push("kun "+k.kun); if(k.on) rd.push("on "+k.on);
-  document.getElementById("wReading").textContent=rd.join("   ");
-  document.getElementById("wMeaning").textContent=k.mean||"";
-  setHint("Cargando trazos…");
-  var target=document.getElementById("hwTarget");
-  target.innerHTML=""; hwInstance=null;
-  loadHanziWriter(function(ok){
-    if(!ok){ target.innerHTML='<div class="hw-err">No se pudo cargar el módulo de trazos. Necesita conexión la primera vez.</div>'; setHint(""); return; }
-    try{
-      hwInstance=HanziWriter.create(target, k.c, {
-        width:HW_SIZE, height:HW_SIZE, padding:6,
-        showCharacter:false, showOutline:true,
-        strokeColor:"#27407f", radicalColor:"#3b5fc4",
-        outlineColor:"#d9deea", drawingColor:"#111827", drawingWidth:24,
-        charDataLoader:hwDataLoader,
-        onLoadCharDataError:function(){ target.innerHTML='<div class="hw-err">No hay datos de trazos para «'+k.c+'».</div>'; setHint(""); }
-      });
-      setHint('Toca "Ver orden" para ver el trazo, o "Practicar" para escribirlo.');
-    }catch(e){ target.innerHTML='<div class="hw-err">No se pudo iniciar el lienzo.</div>'; setHint(""); }
-  });
-}
-function wAnimate(){ if(hwInstance){ try{ hwInstance.animateCharacter(); setHint("Observa el orden de los trazos."); }catch(e){} } }
-function wStartQuiz(){
-  if(!hwInstance) return;
-  try{
-    setHint("Dibuja el kanji trazo a trazo.");
-    hwInstance.quiz({
-      showHintAfterMisses:2,
-      onMistake:function(s){ setHint("Casi… repite ese trazo. Restantes: "+s.strokesRemaining); },
-      onCorrectStroke:function(s){ setHint("¡Bien! Restantes: "+s.strokesRemaining); },
-      onComplete:function(s){ setHint("¡Completado! Fallos: "+s.totalMistakes); }
-    });
-  }catch(e){}
-}
-function wResetCard(){ showWriteCard(); }
-function wNextCard(){ wIdx++; showWriteCard(); }
-
 /* ===== EVENTS ===== */
 document.getElementById("greetingRow").addEventListener("click", function(){
   var n=prompt("¿Cómo te llamas? (se guarda solo en tu teléfono)", getName());
   if(n!==null){ setName(n.trim()); renderGreeting(); }
 });
 document.getElementById("recCard").addEventListener("click", startRecommended);
-document.getElementById("tileRead").addEventListener("click", openReadingLevels);
-document.getElementById("readLvlBack").addEventListener("click", function(){ show("menu"); renderMenu(); });
-document.getElementById("readListBack").addEventListener("click", openReadingLevels);
-document.getElementById("readerClose").addEventListener("click", function(){ stopRead(); showReadingList(readListLevel); });
-document.getElementById("rdPlay").addEventListener("click", toggleReadAloud);
-document.getElementById("togFu").addEventListener("click", function(){
-  document.getElementById("reader").classList.toggle("show-fu");
-  this.classList.toggle("on");
-});
-document.getElementById("togEs").addEventListener("click", function(){
-  document.getElementById("reader").classList.toggle("show-es");
-  this.classList.toggle("on");
-});
-document.getElementById("rdDefineClose").addEventListener("click", hideDefine);
-document.getElementById("dfSpk").addEventListener("click", function(){ speak(lastDefineWord); });
 document.querySelectorAll(".tile[data-type]").forEach(function(t){
   t.addEventListener("click", function(){ showLevels(t.getAttribute("data-type")); });
 });
@@ -1491,62 +914,9 @@ document.getElementById("levelBack").addEventListener("click", function(){ show(
 document.getElementById("modeBack").addEventListener("click", function(){ showLevels(selType); });
 document.getElementById("closeBtn").addEventListener("click", function(){ show("menu"); renderMenu(); });
 document.getElementById("doneBack").addEventListener("click", function(){ show("menu"); renderMenu(); });
-document.getElementById("doneAgain").addEventListener("click", function(){
-  if(lastSession && lastSession.focused){ selMode=lastSession.mode; startFocused(lastSession.type, lastSession.level); }
-  else { startRecommended(); }
-});
 document.getElementById("emptyBack").addEventListener("click", function(){ show("menu"); renderMenu(); });
 document.getElementById("revealBtn").addEventListener("click", reveal);
 document.getElementById("qClose").addEventListener("click", function(){ show("menu"); renderMenu(); });
-document.getElementById("wClose").addEventListener("click", function(){ show("menu"); renderMenu(); });
-document.getElementById("wAnim").addEventListener("click", wAnimate);
-document.getElementById("wQuiz").addEventListener("click", wStartQuiz);
-document.getElementById("wReset").addEventListener("click", wResetCard);
-document.getElementById("wNext").addEventListener("click", wNextCard);
-
-/* ===== Gesto: deslizar de izquierda a derecha para volver atrás ===== */
-function activeViewId(){
-  var ids=["reader","readList","readLevels","modes","levels","stats","study","quiz","doneView","emptyView","menu"];
-  for(var i=0;i<ids.length;i++){
-    var el=document.getElementById(ids[i]);
-    if(el && el.classList.contains("active")) return ids[i];
-  }
-  return "menu";
-}
-function goBack(){
-  /* si la barra de definición del lector está abierta, ciérrala primero */
-  var def=document.getElementById("rdDefine");
-  if(def && def.classList.contains("show")){ hideDefine(); return; }
-  switch(activeViewId()){
-    case "reader":     stopRead(); showReadingList(readListLevel); break;
-    case "readList":   openReadingLevels(); break;
-    case "modes":      showLevels(selType); break;
-    case "readLevels":
-    case "levels":
-    case "stats":
-    case "study":
-    case "quiz":
-    case "writer":
-    case "doneView":
-    case "emptyView":  show("menu"); renderMenu(); break;
-    default: break; /* menu: nivel superior, no hace nada */
-  }
-}
-(function(){
-  var x0=0, y0=0, t0=0, ok=false;
-  document.addEventListener("touchstart", function(e){
-    if(e.touches.length!==1){ ok=false; return; }
-    x0=e.touches[0].clientX; y0=e.touches[0].clientY; t0=Date.now(); ok=true;
-  }, {passive:true});
-  document.addEventListener("touchend", function(e){
-    if(!ok) return; ok=false;
-    if(activeViewId()==="writer") return;   /* en escritura, deslizar es dibujar: no navegar */
-    var c=e.changedTouches[0]; if(!c) return;
-    var dx=c.clientX-x0, dy=c.clientY-y0, dt=Date.now()-t0;
-    /* deslizamiento hacia la derecha, claramente horizontal y rápido */
-    if(dx>70 && Math.abs(dx) > Math.abs(dy)*2 && dt<700){ goBack(); }
-  }, {passive:true});
-})();
 document.getElementById("qSubmit").addEventListener("click", checkType);
 document.getElementById("qNext").addEventListener("click", nextQuestion);
 document.getElementById("qInput").addEventListener("keydown", function(e){ if(e.key==="Enter"){ e.preventDefault(); checkType(); } });
