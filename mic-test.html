@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Test de micrófono · Japanese N1 Path</title>
+<style>
+  :root{ --bg:#0f1220; --card:#1a1f35; --ink:#eef1ff; --ink2:#a8b0d0; --ok:#3ecf8e; --bad:#ff6b6b; --accent:#27407f; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--bg); color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,system-ui,sans-serif; padding:20px; line-height:1.5; }
+  h1{ font-size:19px; margin:0 0 4px; }
+  .sub{ color:var(--ink2); font-size:13px; margin:0 0 18px; }
+  .card{ background:var(--card); border-radius:16px; padding:16px 18px; margin-bottom:14px; }
+  .row{ display:flex; justify-content:space-between; gap:10px; font-size:13.5px; padding:5px 0; border-bottom:1px solid rgba(255,255,255,.06); }
+  .row:last-child{ border-bottom:0; }
+  .row .k{ color:var(--ink2); }
+  .row .v{ font-weight:600; text-align:right; }
+  .ok{ color:var(--ok); } .bad{ color:var(--bad); }
+  button{ width:100%; border:0; border-radius:14px; padding:16px; font-size:16px; font-weight:700; color:#fff; background:var(--accent); margin-top:6px; }
+  button:disabled{ opacity:.5; }
+  #status{ margin-top:12px; font-size:14px; min-height:22px; }
+  audio{ width:100%; margin-top:12px; }
+  code{ background:rgba(255,255,255,.08); padding:1px 5px; border-radius:5px; font-size:12px; }
+  .hint{ color:var(--ink2); font-size:12.5px; margin-top:16px; }
+</style>
+</head>
+<body>
+  <h1>Test de micrófono</h1>
+  <p class="sub">Para saber si la conversación por voz funcionará en tu PWA de iPhone.</p>
+
+  <div class="card" id="env"></div>
+
+  <div class="card">
+    <button id="btn">🎙️ Grabar 3 segundos</button>
+    <div id="status">Pulsa el botón y habla (di algo en japonés).</div>
+    <audio id="player" controls hidden></audio>
+  </div>
+
+  <p class="hint">Importante: para que el test sea válido, ábrelo <b>añadido a la pantalla de inicio</b> (modo PWA), no solo en una pestaña de Safari. El comportamiento del micrófono cambia entre los dos.</p>
+
+<script>
+(function(){
+  var env = document.getElementById('env');
+  var btn = document.getElementById('btn');
+  var statusEl = document.getElementById('status');
+  var player = document.getElementById('player');
+
+  function row(k, ok, txt){
+    return '<div class="row"><span class="k">'+k+'</span><span class="v '+(ok?'ok':'bad')+'">'+(txt||(ok?'✓':'✗'))+'</span></div>';
+  }
+
+  var standalone = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || (navigator.standalone === true);
+  var secure = window.isSecureContext === true;
+  var hasGUM = !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
+  var hasMR = (typeof MediaRecorder !== 'undefined');
+
+  var mimes = ['audio/webm','audio/webm;codecs=opus','audio/mp4','audio/aac','audio/ogg'];
+  var supported = hasMR ? mimes.filter(function(m){ try{ return MediaRecorder.isTypeSupported(m); }catch(e){ return false; } }) : [];
+
+  env.innerHTML =
+    row('Modo PWA (standalone)', standalone, standalone ? 'sí' : 'NO — ábrelo desde el icono') +
+    row('Contexto seguro (HTTPS)', secure) +
+    row('getUserMedia disponible', hasGUM) +
+    row('MediaRecorder disponible', hasMR) +
+    row('Formatos de grabación', supported.length>0, supported.length ? supported.join(', ') : 'ninguno');
+
+  if(!hasGUM || !hasMR){
+    btn.disabled = true;
+    statusEl.innerHTML = '<span class="bad">Este navegador no expone las APIs necesarias. El micro no funcionará por esta vía aquí.</span>';
+    return;
+  }
+
+  var mimeType = supported[0] || '';
+
+  btn.addEventListener('click', function(){
+    btn.disabled = true;
+    player.hidden = true;
+    statusEl.textContent = 'Pidiendo permiso de micrófono…';
+
+    navigator.mediaDevices.getUserMedia({ audio:true }).then(function(stream){
+      statusEl.textContent = '🔴 Grabando… habla ahora (3 s).';
+      var opts = mimeType ? { mimeType:mimeType } : undefined;
+      var rec;
+      try { rec = new MediaRecorder(stream, opts); }
+      catch(e){ rec = new MediaRecorder(stream); }
+      var chunks = [];
+      rec.ondataavailable = function(e){ if(e.data && e.data.size) chunks.push(e.data); };
+      rec.onstop = function(){
+        stream.getTracks().forEach(function(t){ t.stop(); });
+        var blob = new Blob(chunks, { type: rec.mimeType || mimeType || 'audio/mp4' });
+        if(blob.size < 200){
+          statusEl.innerHTML = '<span class="bad">Se grabó pero el audio está vacío ('+blob.size+' bytes). El micro no capta.</span>';
+        } else {
+          player.src = URL.createObjectURL(blob);
+          player.hidden = false;
+          statusEl.innerHTML = '<span class="ok">✓ Micrófono OK.</span> Grabados '+(blob.size/1024).toFixed(1)+' KB ('+ (rec.mimeType||mimeType) +'). Escúchalo abajo.';
+        }
+        btn.disabled = false;
+      };
+      rec.start();
+      setTimeout(function(){ if(rec.state !== 'inactive') rec.stop(); }, 3000);
+    }).catch(function(err){
+      btn.disabled = false;
+      statusEl.innerHTML = '<span class="bad">Falló: '+err.name+'</span> — '+ (err.message||'') +
+        '<br><span class="hint">'+explain(err.name)+'</span>';
+    });
+  });
+
+  function explain(name){
+    switch(name){
+      case 'NotAllowedError': return 'Permiso denegado. Revisa Ajustes → Safari → Micrófono, o los permisos del sitio.';
+      case 'NotFoundError': return 'No se encontró micrófono.';
+      case 'NotReadableError': return 'El micro está ocupado por otra app.';
+      case 'SecurityError': return 'Bloqueado por seguridad (¿HTTPS? ¿modo PWA?).';
+      case 'TypeError': return 'Llamada no permitida en este contexto (típico de PWA standalone de iOS antigua).';
+      default: return 'Error no habitual; anótalo y me lo dices.';
+    }
+  }
+})();
+</script>
+</body>
+</html>
