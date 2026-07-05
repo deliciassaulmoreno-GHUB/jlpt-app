@@ -629,6 +629,186 @@ window.READING = [
      {q:"<ruby>筆者<rt>ひっしゃ</rt></ruby>は いつ <ruby>本<rt>ほん</rt></ruby>を <ruby>読<rt>よ</rt></ruby>みますか。", o:["<ruby>朝<rt>あさ</rt></ruby> <ruby>起<rt>お</rt></ruby>きてすぐ","<ruby>寝<rt>ね</rt></ruby>る<ruby>前<rt>まえ</rt></ruby>","<ruby>会社<rt>かいしゃ</rt></ruby>で"], a:1},
      {q:"<ruby>読書<rt>どくしょ</rt></ruby>の よい <ruby>点<rt>てん</rt></ruby>は <ruby>何<rt>なに</rt></ruby>ですか。", o:["いろいろな <ruby>人生<rt>じんせい</rt></ruby>を <ruby>経験<rt>けいけん</rt></ruby>できる","お<ruby>金<rt>かね</rt></ruby>が もうかる","<ruby>体<rt>からだ</rt></ruby>が <ruby>強<rt>つよ</rt></ruby>くなる"], a:0}
    ]
+ },
+ { id:"r-n5-11", lvl:"N5", title:"朝ごはん", mins:1,
+   paras:[
+     {jp:"わたしは まいあさ 七時に 朝ごはんを 食べます。", fu:"わたしは まいあさ しちじに あさごはんを たべます。", es:"Todas las mañanas desayuno a las siete."},
+     {jp:"ごはんと みそしると たまごを 食べます。ときどき パンも 食べます。", fu:"ごはんと みそしると たまごを たべます。ときどき ぱんも たべます。", es:"Como arroz, sopa de miso y huevo. A veces también como pan."},
+     {jp:"朝ごはんの あとで、コーヒーを 飲みます。それから 学校へ 行きます。", fu:"あさごはんの あとで、こーひーを のみます。それから がっこうへ いきます。", es:"Después del desayuno bebo café. Luego voy a la escuela."}
+   ],
+   gloss:[
+     {w:"朝ごはん", r:"あさごはん", m:"desayuno"},
+     {w:"みそしる", r:"みそしる", m:"sopa de miso"},
+     {w:"たまご", r:"たまご", m:"huevo"},
+     {w:"ときどき", r:"ときどき", m:"a veces"},
+     {w:"コーヒー", r:"コーヒー", m:"café"}
+   ],
+   q:[
+     {q:"この<ruby>人<rt>ひと</rt></ruby>は <ruby>何時<rt>なんじ</rt></ruby>に <ruby>朝<rt>あさ</rt></ruby>ごはんを <ruby>食<rt>た</rt></ruby>べますか。", o:["<ruby>六時<rt>ろくじ</rt></ruby>","<ruby>七時<rt>しちじ</rt></ruby>","<ruby>八時<rt>はちじ</rt></ruby>"], a:1},
+     {q:"<ruby>朝<rt>あさ</rt></ruby>ごはんの あとで <ruby>何<rt>なに</rt></ruby>を <ruby>飲<rt>の</rt></ruby>みますか。", o:["<ruby>水<rt>みず</rt></ruby>","お<ruby>茶<rt>ちゃ</rt></ruby>","コーヒー"], a:2}
+   ]
+ },
+ { id:"r-n5-12", lvl:"N5", title:"電車の中で", mins:1,
+   paras:[
+     {jp:"わたしは まいにち 電車で 会社へ 行きます。", fu:"わたしは まいにち でんしゃで かいしゃへ いきます。", es:"Todos los días voy a la empresa en tren."},
+     {jp:"電車の 中は とても こんでいます。すわれない ことも あります。", fu:"でんしゃの なかは とても こんでいます。すわれない ことも あります。", es:"Dentro del tren va muy lleno. A veces no puedo sentarme."},
+     {jp:"わたしは 電車の 中で 本を 読みます。ときどき ねむく なります。", fu:"わたしは でんしゃの なかで ほんを よみます。ときどき ねむく なります。", es:"En el tren leo un libro. A veces me entra sueño."}
+   ],
+   gloss:[
+     {w:"電車", r:"でんしゃ", m:"tren"},
+     {w:"会社", r:"かいしゃ", m:"empresa"},
+     {w:"こんでいます", r:"こんでいます", m:"está lleno · concurrido (混む)"},
+     {w:"すわれない", r:"すわれない", m:"no poder sentarse (座る)"},
+     {w:"ねむく", r:"ねむく", m:"con sueño (眠い)"}
+   ],
+   q:[
+     {q:"この<ruby>人<rt>ひと</rt></ruby>は <ruby>何<rt>なに</rt></ruby>で <ruby>会社<rt>かいしゃ</rt></ruby>へ <ruby>行<rt>い</rt></ruby>きますか。", o:["<ruby>車<rt>くるま</rt></ruby>","<ruby>電車<rt>でんしゃ</rt></ruby>","バス"], a:1},
+     {q:"<ruby>電車<rt>でんしゃ</rt></ruby>の <ruby>中<rt>なか</rt></ruby>で <ruby>何<rt>なに</rt></ruby>を しますか。", o:["<ruby>本<rt>ほん</rt></ruby>を <ruby>読<rt>よ</rt></ruby>む","<ruby>音楽<rt>おんがく</rt></ruby>を きく","<ruby>電話<rt>でんわ</rt></ruby>を する"], a:0}
+   ]
+ },
+ { id:"r-n5-13", lvl:"N5", title:"わたしのへや", mins:1,
+   paras:[
+     {jp:"わたしの へやは あまり 大きく ありません。でも きれいです。", fu:"わたしの へやは あまり おおきく ありません。でも きれいです。", es:"Mi habitación no es muy grande. Pero está limpia."},
+     {jp:"へやには ベッドと つくえと 本だなが あります。", fu:"へやには べっどと つくえと ほんだなが あります。", es:"En la habitación hay una cama, un escritorio y una estantería."},
+     {jp:"まどから 空が 見えます。わたしは この へやが 大好きです。", fu:"まどから そらが みえます。わたしは この へやが だいすきです。", es:"Desde la ventana se ve el cielo. Me encanta esta habitación."}
+   ],
+   gloss:[
+     {w:"へや", r:"へや", m:"habitación"},
+     {w:"つくえ", r:"つくえ", m:"escritorio"},
+     {w:"本だな", r:"ほんだな", m:"estantería"},
+     {w:"まど", r:"まど", m:"ventana"},
+     {w:"空", r:"そら", m:"cielo"}
+   ],
+   q:[
+     {q:"この へやには <ruby>何<rt>なに</rt></ruby>が ありますか。", o:["ベッドと つくえ","<ruby>車<rt>くるま</rt></ruby>","ねこ"], a:0},
+     {q:"まどから <ruby>何<rt>なに</rt></ruby>が <ruby>見<rt>み</rt></ruby>えますか。", o:["<ruby>海<rt>うみ</rt></ruby>","<ruby>山<rt>やま</rt></ruby>","<ruby>空<rt>そら</rt></ruby>"], a:2}
+   ]
+ },
+ { id:"r-n5-14", lvl:"N5", title:"友だちに会う", mins:1,
+   paras:[
+     {jp:"土よう日に 友だちと 会いました。", fu:"どようびに ともだちと あいました。", es:"El sábado me vi con un amigo."},
+     {jp:"いっしょに えいがを 見て、レストランで ひるごはんを 食べました。", fu:"いっしょに えいがを みて、れすとらんで ひるごはんを たべました。", es:"Juntos vimos una película y comimos en un restaurante."},
+     {jp:"とても たのしかったです。また 来週 会います。", fu:"とても たのしかったです。また らいしゅう あいます。", es:"Fue muy divertido. Nos vemos otra vez la semana que viene."}
+   ],
+   gloss:[
+     {w:"友だち", r:"ともだち", m:"amigo"},
+     {w:"えいが", r:"えいが", m:"película"},
+     {w:"レストラン", r:"レストラン", m:"restaurante"},
+     {w:"ひるごはん", r:"ひるごはん", m:"almuerzo"},
+     {w:"来週", r:"らいしゅう", m:"la semana que viene"}
+   ],
+   q:[
+     {q:"この<ruby>人<rt>ひと</rt></ruby>は いつ <ruby>友<rt>とも</rt></ruby>だちと <ruby>会<rt>あ</rt></ruby>いましたか。", o:["<ruby>金<rt>きん</rt></ruby>よう<ruby>日<rt>び</rt></ruby>","<ruby>土<rt>ど</rt></ruby>よう<ruby>日<rt>び</rt></ruby>","<ruby>日<rt>にち</rt></ruby>よう<ruby>日<rt>び</rt></ruby>"], a:1},
+     {q:"<ruby>友<rt>とも</rt></ruby>だちと <ruby>何<rt>なに</rt></ruby>を しましたか。", o:["えいがを <ruby>見<rt>み</rt></ruby>た","<ruby>勉強<rt>べんきょう</rt></ruby>した","はたらいた"], a:0}
+   ]
+ },
+ { id:"r-n5-15", lvl:"N5", title:"夏休み", mins:1,
+   paras:[
+     {jp:"なつやすみに 家ぞくと うみへ 行きました。", fu:"なつやすみに かぞくと うみへ いきました。", es:"En las vacaciones de verano fui al mar con mi familia."},
+     {jp:"うみで およいだり、すなで あそんだり しました。", fu:"うみで およいだり、すなで あそんだり しました。", es:"Nadamos en el mar y jugamos en la arena."},
+     {jp:"夜は 花火を 見ました。とても きれいでした。", fu:"よるは はなびを みました。とても きれいでした。", es:"Por la noche vimos fuegos artificiales. Eran muy bonitos."}
+   ],
+   gloss:[
+     {w:"なつやすみ", r:"なつやすみ", m:"vacaciones de verano"},
+     {w:"家ぞく", r:"かぞく", m:"familia"},
+     {w:"うみ", r:"うみ", m:"mar"},
+     {w:"すな", r:"すな", m:"arena"},
+     {w:"花火", r:"はなび", m:"fuegos artificiales"}
+   ],
+   q:[
+     {q:"<ruby>夏休<rt>なつやす</rt></ruby>みに どこへ <ruby>行<rt>い</rt></ruby>きましたか。", o:["<ruby>山<rt>やま</rt></ruby>","うみ","こうえん"], a:1},
+     {q:"<ruby>夜<rt>よる</rt></ruby>は <ruby>何<rt>なに</rt></ruby>を <ruby>見<rt>み</rt></ruby>ましたか。", o:["<ruby>花火<rt>はなび</rt></ruby>","<ruby>星<rt>ほし</rt></ruby>","<ruby>月<rt>つき</rt></ruby>"], a:0}
+   ]
+ },
+ { id:"r-n5-16", lvl:"N5", title:"郵便局で", mins:1,
+   paras:[
+     {jp:"きのう ゆうびんきょくへ 行きました。", fu:"きのう ゆうびんきょくへ いきました。", es:"Ayer fui a la oficina de correos."},
+     {jp:"国の 家ぞくに 手紙と プレゼントを 送りました。", fu:"くにの かぞくに てがみと ぷれぜんとを おくりました。", es:"Envié una carta y un regalo a mi familia en mi país."},
+     {jp:"きってを 買って、はがきも 出しました。", fu:"きってを かって、はがきも だしました。", es:"Compré sellos y también eché una postal."}
+   ],
+   gloss:[
+     {w:"ゆうびんきょく", r:"ゆうびんきょく", m:"oficina de correos"},
+     {w:"手紙", r:"てがみ", m:"carta"},
+     {w:"送りました", r:"おくりました", m:"envié (送る)"},
+     {w:"きって", r:"きって", m:"sello"},
+     {w:"はがき", r:"はがき", m:"postal"}
+   ],
+   q:[
+     {q:"この<ruby>人<rt>ひと</rt></ruby>は どこへ <ruby>行<rt>い</rt></ruby>きましたか。", o:["ぎんこう","ゆうびんきょく","びょういん"], a:1},
+     {q:"<ruby>家<rt>か</rt></ruby>ぞくに <ruby>何<rt>なに</rt></ruby>を <ruby>送<rt>おく</rt></ruby>りましたか。", o:["<ruby>手紙<rt>てがみ</rt></ruby>と プレゼント","おかね","<ruby>本<rt>ほん</rt></ruby>"], a:0}
+   ]
+ },
+ { id:"r-n5-17", lvl:"N5", title:"電話", mins:1,
+   paras:[
+     {jp:"日よう日の 夜、母に 電話を かけました。", fu:"にちようびの よる、ははに でんわを かけました。", es:"El domingo por la noche llamé por teléfono a mi madre."},
+     {jp:"母は 元気でした。いろいろな 話を しました。", fu:"ははは げんきでした。いろいろな はなしを しました。", es:"Mi madre estaba bien. Hablamos de muchas cosas."},
+     {jp:"らいげつ 国へ 帰ります。母に 会うのが たのしみです。", fu:"らいげつ くにへ かえります。ははに あうのが たのしみです。", es:"El mes que viene vuelvo a mi país. Tengo ganas de ver a mi madre."}
+   ],
+   gloss:[
+     {w:"電話", r:"でんわ", m:"teléfono · llamada"},
+     {w:"母", r:"はは", m:"madre"},
+     {w:"元気", r:"げんき", m:"con energía · bien de salud"},
+     {w:"らいげつ", r:"らいげつ", m:"el mes que viene"},
+     {w:"たのしみ", r:"たのしみ", m:"ilusión · algo que se espera con ganas"}
+   ],
+   q:[
+     {q:"この<ruby>人<rt>ひと</rt></ruby>は だれに <ruby>電話<rt>でんわ</rt></ruby>を かけましたか。", o:["<ruby>父<rt>ちち</rt></ruby>","<ruby>母<rt>はは</rt></ruby>","<ruby>友<rt>とも</rt></ruby>だち"], a:1},
+     {q:"らいげつ <ruby>何<rt>なに</rt></ruby>を しますか。", o:["<ruby>国<rt>くに</rt></ruby>へ <ruby>帰<rt>かえ</rt></ruby>る","<ruby>引<rt>ひ</rt></ruby>っこす","<ruby>旅行<rt>りょこう</rt></ruby>する"], a:0}
+   ]
+ },
+ { id:"r-n5-18", lvl:"N5", title:"わたしの一週間", mins:1,
+   paras:[
+     {jp:"わたしは 月よう日から 金よう日まで はたらきます。", fu:"わたしは げつようびから きんようびまで はたらきます。", es:"Trabajo de lunes a viernes."},
+     {jp:"土よう日は そうじや せんたくを します。", fu:"どようびは そうじや せんたくを します。", es:"Los sábados hago la limpieza y la colada."},
+     {jp:"日よう日は うちで ゆっくり やすみます。", fu:"にちようびは うちで ゆっくり やすみます。", es:"Los domingos descanso tranquilamente en casa."}
+   ],
+   gloss:[
+     {w:"はたらきます", r:"はたらきます", m:"trabajar (働く)"},
+     {w:"そうじ", r:"そうじ", m:"limpieza"},
+     {w:"せんたく", r:"せんたく", m:"colada · lavar la ropa"},
+     {w:"ゆっくり", r:"ゆっくり", m:"tranquilamente · sin prisa"},
+     {w:"やすみます", r:"やすみます", m:"descansar (休む)"}
+   ],
+   q:[
+     {q:"この<ruby>人<rt>ひと</rt></ruby>は いつ はたらきますか。", o:["<ruby>月<rt>げつ</rt></ruby>よう<ruby>日<rt>び</rt></ruby>から <ruby>金<rt>きん</rt></ruby>よう<ruby>日<rt>び</rt></ruby>","<ruby>毎日<rt>まいにち</rt></ruby>","<ruby>週末<rt>しゅうまつ</rt></ruby>だけ"], a:0},
+     {q:"<ruby>日<rt>にち</rt></ruby>よう<ruby>日<rt>び</rt></ruby>は <ruby>何<rt>なに</rt></ruby>を しますか。", o:["はたらく","そうじする","うちで やすむ"], a:2}
+   ]
+ },
+ { id:"r-n5-19", lvl:"N5", title:"好きな季節", mins:1,
+   paras:[
+     {jp:"わたしの 好きな きせつは 春です。", fu:"わたしの すきな きせつは はるです。", es:"Mi estación favorita es la primavera."},
+     {jp:"春は あたたかくて、花が たくさん さきます。", fu:"はるは あたたかくて、はなが たくさん さきます。", es:"En primavera hace calorcito y florecen muchas flores."},
+     {jp:"わたしは 友だちと 花見に 行くのが 好きです。", fu:"わたしは ともだちと はなみに いくのが すきです。", es:"Me gusta ir a ver los cerezos con mis amigos."}
+   ],
+   gloss:[
+     {w:"きせつ", r:"きせつ", m:"estación (del año)"},
+     {w:"春", r:"はる", m:"primavera"},
+     {w:"あたたかくて", r:"あたたかくて", m:"cálido · templado (暖かい)"},
+     {w:"さきます", r:"さきます", m:"florecer (咲く)"},
+     {w:"花見", r:"はなみ", m:"contemplación de los cerezos en flor"}
+   ],
+   q:[
+     {q:"この<ruby>人<rt>ひと</rt></ruby>の <ruby>好<rt>す</rt></ruby>きな きせつは <ruby>何<rt>なに</rt></ruby>ですか。", o:["<ruby>春<rt>はる</rt></ruby>","<ruby>夏<rt>なつ</rt></ruby>","<ruby>冬<rt>ふゆ</rt></ruby>"], a:0},
+     {q:"<ruby>春<rt>はる</rt></ruby>に <ruby>友<rt>とも</rt></ruby>だちと <ruby>何<rt>なに</rt></ruby>を しますか。", o:["<ruby>海<rt>うみ</rt></ruby>で およぐ","<ruby>花見<rt>はなみ</rt></ruby>に <ruby>行<rt>い</rt></ruby>く","スキーを する"], a:1}
+   ]
+ },
+ { id:"r-n5-20", lvl:"N5", title:"カフェで", mins:1,
+   paras:[
+     {jp:"わたしは しゅうまつ、よく カフェへ 行きます。", fu:"わたしは しゅうまつ、よく かふぇへ いきます。", es:"Los fines de semana suelo ir a una cafetería."},
+     {jp:"あたたかい コーヒーを のみます。そして 本を 読みます。", fu:"あたたかい こーひーを のみます。そして ほんを よみます。", es:"Bebo un café caliente. Y leo un libro."},
+     {jp:"しずかで、とても いい 時間です。", fu:"しずかで、とても いい じかんです。", es:"Es tranquilo, un rato muy agradable."}
+   ],
+   gloss:[
+     {w:"しゅうまつ", r:"しゅうまつ", m:"fin de semana"},
+     {w:"カフェ", r:"カフェ", m:"cafetería"},
+     {w:"あたたかい", r:"あたたかい", m:"caliente · templado"},
+     {w:"しずか", r:"しずか", m:"tranquilo · silencioso"},
+     {w:"時間", r:"じかん", m:"tiempo · rato"}
+   ],
+   q:[
+     {q:"この<ruby>人<rt>ひと</rt></ruby>は しゅうまつ どこへ <ruby>行<rt>い</rt></ruby>きますか。", o:["カフェ","<ruby>会社<rt>かいしゃ</rt></ruby>","<ruby>学校<rt>がっこう</rt></ruby>"], a:0},
+     {q:"カフェで <ruby>何<rt>なに</rt></ruby>を のみますか。", o:["おちゃ","コーヒー","ジュース"], a:1}
+   ]
  }
 
 ];
