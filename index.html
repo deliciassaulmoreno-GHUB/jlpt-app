@@ -65,6 +65,14 @@
   .tile:active{transform:scale(.97);}
   .tile.locked{cursor:default; opacity:.62;}
   .tile.wide{grid-column:1 / -1;}
+  .mic-panel{background:var(--card); border-radius:16px; padding:4px 14px; box-shadow:var(--shadow); margin:10px 0 14px;}
+  .mic-panel .mic-row{display:flex; justify-content:space-between; gap:10px; font-size:13px; padding:9px 0; border-bottom:1px solid var(--line);}
+  .mic-panel .mic-row:last-child{border-bottom:0;}
+  .mic-panel .mk{color:var(--muted);} .mic-panel .mv{font-weight:700; text-align:right;}
+  .mic-ok{color:var(--green);} .mic-bad{color:#B0413E;}
+  .mic-btn{display:block; width:100%; border:none; border-radius:14px; padding:15px; font-size:15px; font-weight:700; color:#fff; background:var(--indigo); cursor:pointer;}
+  .mic-btn:disabled{opacity:.5;}
+  .mic-status{font-size:13.5px; line-height:1.55; margin-top:12px; color:var(--ink-2);}
   .tile-ic{width:42px; height:42px; border-radius:13px; background:rgba(39,64,127,.08); color:var(--indigo);
     display:flex; align-items:center; justify-content:center; font-family:var(--jp); font-size:22px; font-weight:700;}
   .tile-ic.g2{background:rgba(201,138,46,.12); color:var(--amber);}
@@ -369,10 +377,9 @@
       <div class="tile-ic g2">聴</div>
       <div><div class="tile-name">Listening</div><div class="tile-cnt">Audios por niveles</div></div>
     </div>
-    <div class="tile locked" data-soon="La conversación">
-      <span class="badge-soon">Pronto</span>
-      <div class="tile-ic">会</div>
-      <div><div class="tile-name">Conversación</div><div class="tile-cnt">Próximamente</div></div>
+    <div class="tile" id="tileConv">
+      <div class="tile-ic g3">会</div>
+      <div><div class="tile-name">Conversación</div><div class="tile-cnt">Prueba de micrófono</div></div>
     </div>
     <div class="tile locked wide" data-soon="Los exámenes">
       <span class="badge-soon">Pronto</span>
@@ -551,6 +558,20 @@
   <audio id="rdAudio" preload="none"></audio>
 </section>
 
+<!-- ===== CONVERSACIÓN · (por ahora) test de micrófono en modo PWA ===== -->
+<section class="view" id="conv">
+  <div class="back-row">
+    <button class="back-btn" id="convBack" aria-label="Volver">←</button>
+    <span class="eyebrow">Conversación</span>
+  </div>
+  <div class="level-title">Test de micrófono</div>
+  <div class="level-help">Antes de la conversación por voz, comprobemos que el micrófono funciona dentro de la app instalada (modo PWA). Pulsa grabar, habla y escúchate.</div>
+  <div class="mic-panel" id="micEnv"></div>
+  <button class="mic-btn" id="micBtn">🎙️ Grabar 3 segundos</button>
+  <div class="mic-status" id="micStatus">Pulsa el botón y di algo en japonés.</div>
+  <audio id="micPlayer" controls hidden style="width:100%; margin-top:12px;"></audio>
+</section>
+
 <!-- ===== ESCRITURA DE KANJI (trazos) ===== -->
 <section class="view" id="writer">
   <div class="study-row">
@@ -708,7 +729,7 @@ function buildFocused(type, level){
 }
 
 function show(v){
-  ["menu","levels","modes","stats","study","quiz","doneView","emptyView","readLevels","readList","reader","writer"].forEach(function(x){
+  ["menu","levels","modes","stats","study","quiz","doneView","emptyView","readLevels","readList","reader","writer","conv"].forEach(function(x){
     document.getElementById(x).classList.toggle("active", x===v);
   });
 }
@@ -1418,6 +1439,49 @@ function openListen(id){
   });
   show("reader");
 }
+/* ===== CONVERSACIÓN · test de micrófono en modo PWA ===== */
+var micSupported=[];
+function micRow(k, ok, txt){ return '<div class="mic-row"><span class="mk">'+k+'</span><span class="mv '+(ok?'mic-ok':'mic-bad')+'">'+(txt||(ok?'✓':'✗'))+'</span></div>'; }
+function openConv(){
+  var standalone=(window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || (navigator.standalone===true);
+  var secure=window.isSecureContext===true;
+  var hasGUM=!!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
+  var hasMR=(typeof MediaRecorder!=="undefined");
+  var mimes=['audio/webm','audio/webm;codecs=opus','audio/mp4','audio/aac','audio/ogg'];
+  micSupported=hasMR?mimes.filter(function(m){ try{ return MediaRecorder.isTypeSupported(m); }catch(e){ return false; } }):[];
+  document.getElementById("micEnv").innerHTML=
+    micRow("Modo PWA (standalone)", standalone, standalone?"sí ✓":"no — ábrelo desde el icono")+
+    micRow("Contexto seguro (HTTPS)", secure)+
+    micRow("getUserMedia", hasGUM)+
+    micRow("MediaRecorder", hasMR)+
+    micRow("Formatos", micSupported.length>0, micSupported.length?micSupported.join(", "):"ninguno");
+  var btn=document.getElementById("micBtn"), st=document.getElementById("micStatus"), pl=document.getElementById("micPlayer");
+  pl.hidden=true;
+  if(!hasGUM||!hasMR){ btn.disabled=true; st.innerHTML='<span class="mic-bad">Este navegador no expone las APIs necesarias.</span>'; }
+  else { btn.disabled=false; st.textContent="Pulsa el botón y di algo en japonés."; }
+  show("conv");
+}
+function runMicTest(){
+  var btn=document.getElementById("micBtn"), st=document.getElementById("micStatus"), pl=document.getElementById("micPlayer");
+  btn.disabled=true; pl.hidden=true; st.textContent="Pidiendo permiso de micrófono…";
+  navigator.mediaDevices.getUserMedia({audio:true}).then(function(stream){
+    st.textContent="🔴 Grabando… habla ahora (3 s).";
+    var mt=micSupported[0]||"", rec;
+    try{ rec=new MediaRecorder(stream, mt?{mimeType:mt}:undefined); }catch(e){ rec=new MediaRecorder(stream); }
+    var chunks=[];
+    rec.ondataavailable=function(e){ if(e.data&&e.data.size) chunks.push(e.data); };
+    rec.onstop=function(){
+      stream.getTracks().forEach(function(t){ t.stop(); });
+      var blob=new Blob(chunks, {type: rec.mimeType||mt||"audio/mp4"});
+      btn.disabled=false;
+      if(blob.size<200){ st.innerHTML='<span class="mic-bad">Se grabó pero el audio está vacío ('+blob.size+' bytes). El micro no capta.</span>'; }
+      else { pl.src=URL.createObjectURL(blob); pl.hidden=false; st.innerHTML='<span class="mic-ok">✓ Micrófono OK.</span> '+(blob.size/1024).toFixed(1)+' KB ('+(rec.mimeType||mt)+'). Escúchate abajo.'; }
+    };
+    rec.start(); setTimeout(function(){ if(rec.state!=="inactive") rec.stop(); }, 3000);
+  }).catch(function(err){
+    btn.disabled=false; st.innerHTML='<span class="mic-bad">Falló: '+err.name+'</span> — '+(err.message||"");
+  });
+}
 function showDefine(w,r,m){
   stopRead();
   document.getElementById("dfW").textContent=w||"";
@@ -1587,6 +1651,9 @@ document.getElementById("greetingRow").addEventListener("click", function(){
 document.getElementById("recCard").addEventListener("click", startRecommended);
 document.getElementById("tileRead").addEventListener("click", openReadingLevels);
 document.getElementById("tileListen").addEventListener("click", openListeningLevels);
+document.getElementById("tileConv").addEventListener("click", openConv);
+document.getElementById("convBack").addEventListener("click", function(){ show("menu"); renderMenu(); });
+document.getElementById("micBtn").addEventListener("click", runMicTest);
 document.getElementById("readLvlBack").addEventListener("click", function(){ show("menu"); renderMenu(); });
 document.getElementById("readListBack").addEventListener("click", function(){ readerMode==="listen" ? openListeningLevels() : openReadingLevels(); });
 document.getElementById("readerClose").addEventListener("click", function(){ stopRead(); readerMode==="listen" ? showListeningList(readListLevel) : showReadingList(readListLevel); });
