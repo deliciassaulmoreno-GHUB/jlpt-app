@@ -809,6 +809,196 @@ window.READING = [
      {q:"この<ruby>人<rt>ひと</rt></ruby>は しゅうまつ どこへ <ruby>行<rt>い</rt></ruby>きますか。", o:["カフェ","<ruby>会社<rt>かいしゃ</rt></ruby>","<ruby>学校<rt>がっこう</rt></ruby>"], a:0},
      {q:"カフェで <ruby>何<rt>なに</rt></ruby>を のみますか。", o:["おちゃ","コーヒー","ジュース"], a:1}
    ]
+ },
+ { id:"r-n4-11", lvl:"N4", title:"富士山に登る", mins:2,
+   paras:[
+     {jp:"去年の 夏、私は 友だちと 富士山に 登りました。", fu:"きょねんの なつ、わたしは ともだちと ふじさんに のぼりました。", es:"El verano pasado subí al monte Fuji con un amigo."},
+     {jp:"富士山は 日本で いちばん 高い 山です。登るのは 大変でしたが、けしきは とても きれいでした。", fu:"ふじさんは にほんで いちばん たかい やまです。のぼるのは たいへんでしたが、けしきは とても きれいでした。", es:"El Fuji es la montaña más alta de Japón. Subir fue duro, pero el paisaje era precioso."},
+     {jp:"頂上で 朝日を 見ました。みんな 感動して、写真を たくさん とりました。", fu:"ちょうじょうで あさひを みました。みんな かんどうして、しゃしんを たくさん とりました。", es:"En la cima vimos el amanecer. Todos nos emocionamos y sacamos muchas fotos."},
+     {jp:"足は 痛かったですが、また 登りたいと 思います。", fu:"あしは いたかったですが、また のぼりたいと おもいます。", es:"Me dolían los pies, pero quiero volver a subir."}
+   ],
+   gloss:[
+     {w:"登りました", r:"のぼりました", m:"subí · escalé (登る)"},
+     {w:"けしき", r:"けしき", m:"paisaje"},
+     {w:"頂上", r:"ちょうじょう", m:"cima · cumbre"},
+     {w:"朝日", r:"あさひ", m:"sol naciente · amanecer"},
+     {w:"感動して", r:"かんどうして", m:"emocionarse (感動する)"}
+   ],
+   q:[
+     {q:"<ruby>富士山<rt>ふじさん</rt></ruby>は どんな <ruby>山<rt>やま</rt></ruby>ですか。", o:["<ruby>日本<rt>にほん</rt></ruby>で いちばん <ruby>高<rt>たか</rt></ruby>い","<ruby>日本<rt>にほん</rt></ruby>で いちばん <ruby>低<rt>ひく</rt></ruby>い","<ruby>海<rt>うみ</rt></ruby>の <ruby>近<rt>ちか</rt></ruby>く"], a:0},
+     {q:"<ruby>頂上<rt>ちょうじょう</rt></ruby>で <ruby>何<rt>なに</rt></ruby>を <ruby>見<rt>み</rt></ruby>ましたか。", o:["<ruby>朝日<rt>あさひ</rt></ruby>","<ruby>雪<rt>ゆき</rt></ruby>","<ruby>海<rt>うみ</rt></ruby>"], a:0}
+   ]
+ },
+ { id:"r-n4-12", lvl:"N4", title:"日本のコンビニ", mins:2,
+   paras:[
+     {jp:"日本には コンビニが たくさん あります。町の どこでも 見つけられます。", fu:"にほんには こんびにが たくさん あります。まちの どこでも みつけられます。", es:"En Japón hay muchos konbini. Puedes encontrarlos en cualquier parte de la ciudad."},
+     {jp:"コンビニでは 買い物だけでなく、お金を おろしたり、料金を 払ったり できます。", fu:"こんびにでは かいものだけでなく、おかねを おろしたり、りょうきんを はらったり できます。", es:"En el konbini no solo puedes comprar, sino también sacar dinero o pagar recibos."},
+     {jp:"24時間 あいているので、夜中でも 便利です。", fu:"にじゅうよじかん あいているので、よなかでも べんりです。", es:"Como están abiertos 24 horas, resultan cómodos incluso de madrugada."},
+     {jp:"私は よく コンビニで おべんとうを 買って、家で 食べます。", fu:"わたしは よく こんびにで おべんとうを かって、いえで たべます。", es:"Yo suelo comprar un bento en el konbini y comerlo en casa."}
+   ],
+   gloss:[
+     {w:"コンビニ", r:"コンビニ", m:"tienda de conveniencia (konbini)"},
+     {w:"見つけられます", r:"みつけられます", m:"poder encontrar (見つける)"},
+     {w:"料金", r:"りょうきん", m:"tarifa · importe (de un recibo)"},
+     {w:"夜中", r:"よなか", m:"medianoche · madrugada"},
+     {w:"おべんとう", r:"おべんとう", m:"bento (comida para llevar)"}
+   ],
+   q:[
+     {q:"コンビニで できない ことは <ruby>何<rt>なに</rt></ruby>ですか。", o:["お<ruby>金<rt>かね</rt></ruby>を おろす","<ruby>料金<rt>りょうきん</rt></ruby>を <ruby>払<rt>はら</rt></ruby>う","<ruby>車<rt>くるま</rt></ruby>を <ruby>買<rt>か</rt></ruby>う"], a:2},
+     {q:"コンビニは なぜ <ruby>便利<rt>べんり</rt></ruby>ですか。", o:["<ruby>安<rt>やす</rt></ruby>いから","24<ruby>時間<rt>じかん</rt></ruby> あいているから","<ruby>広<rt>ひろ</rt></ruby>いから"], a:1}
+   ]
+ },
+ { id:"r-n4-13", lvl:"N4", title:"漢字の勉強", mins:2,
+   paras:[
+     {jp:"日本語の 勉強の 中で、漢字は いちばん むずかしいと 思います。", fu:"にほんごの べんきょうの なかで、かんじは いちばん むずかしいと おもいます。", es:"De todo el estudio del japonés, creo que el kanji es lo más difícil."},
+     {jp:"漢字は 数が 多くて、読み方も いくつも あります。", fu:"かんじは かずが おおくて、よみかたも いくつも あります。", es:"Los kanji son muchos y además tienen varias lecturas."},
+     {jp:"私は 毎日 新しい 漢字を 五つ おぼえるように しています。", fu:"わたしは まいにち あたらしい かんじを いつつ おぼえるように しています。", es:"Intento aprender cinco kanji nuevos cada día."},
+     {jp:"なんども 書いて 練習すると、少しずつ おぼえられます。", fu:"なんども かいて れんしゅうすると、すこしずつ おぼえられます。", es:"Si practico escribiéndolos muchas veces, poco a poco los memorizo."}
+   ],
+   gloss:[
+     {w:"漢字", r:"かんじ", m:"kanji (caracteres)"},
+     {w:"読み方", r:"よみかた", m:"forma de leer · lectura"},
+     {w:"おぼえる", r:"おぼえる", m:"memorizar · aprender"},
+     {w:"練習する", r:"れんしゅうする", m:"practicar"},
+     {w:"少しずつ", r:"すこしずつ", m:"poco a poco"}
+   ],
+   q:[
+     {q:"この<ruby>人<rt>ひと</rt></ruby>は <ruby>毎日<rt>まいにち</rt></ruby> いくつ <ruby>漢字<rt>かんじ</rt></ruby>を おぼえますか。", o:["<ruby>三<rt>みっ</rt></ruby>つ","<ruby>五<rt>いつ</rt></ruby>つ","<ruby>十<rt>とお</rt></ruby>"], a:1},
+     {q:"<ruby>漢字<rt>かんじ</rt></ruby>を おぼえる ために <ruby>何<rt>なに</rt></ruby>を しますか。", o:["なんども <ruby>書<rt>か</rt></ruby>く","<ruby>音楽<rt>おんがく</rt></ruby>を きく","はやく <ruby>読<rt>よ</rt></ruby>む"], a:0}
+   ]
+ },
+ { id:"r-n4-14", lvl:"N4", title:"運動を始める", mins:2,
+   paras:[
+     {jp:"最近、運動不足なので、毎朝 走ることに しました。", fu:"さいきん、うんどうぶそくなので、まいあさ はしることに しました。", es:"Últimamente me falta ejercicio, así que decidí correr cada mañana."},
+     {jp:"初めは 5分でも つらかったですが、少しずつ 長く 走れるように なりました。", fu:"はじめは ごふんでも つらかったですが、すこしずつ ながく はしれるように なりました。", es:"Al principio, aunque fueran 5 minutos, era duro, pero poco a poco pude correr más rato."},
+     {jp:"運動を すると、気持ちが よくて、よく ねむれます。", fu:"うんどうを すると、きもちが よくて、よく ねむれます。", es:"Cuando hago ejercicio, me siento bien y duermo mejor."},
+     {jp:"これからも 続けたいと 思います。", fu:"これからも つづけたいと おもいます。", es:"Quiero seguir haciéndolo de ahora en adelante."}
+   ],
+   gloss:[
+     {w:"運動不足", r:"うんどうぶそく", m:"falta de ejercicio"},
+     {w:"つらかった", r:"つらかった", m:"fue duro · penoso (つらい)"},
+     {w:"走れる", r:"はしれる", m:"poder correr (走る)"},
+     {w:"気持ち", r:"きもち", m:"sensación · ánimo"},
+     {w:"続けたい", r:"つづけたい", m:"querer continuar (続ける)"}
+   ],
+   q:[
+     {q:"この<ruby>人<rt>ひと</rt></ruby>は なぜ <ruby>走<rt>はし</rt></ruby>ることに しましたか。", o:["<ruby>運動不足<rt>うんどうぶそく</rt></ruby>だから","<ruby>友<rt>とも</rt></ruby>だちに さそわれたから","やせたいから"], a:0},
+     {q:"<ruby>運動<rt>うんどう</rt></ruby>を すると どう なりますか。", o:["よく ねむれる","おなかが すく","つかれて <ruby>寝<rt>ね</rt></ruby>られない"], a:0}
+   ]
+ },
+ { id:"r-n4-15", lvl:"N4", title:"犬を飼う", mins:2,
+   paras:[
+     {jp:"私の 家では 犬を 一ぴき 飼っています。名前は マロンです。", fu:"わたしの いえでは いぬを いっぴき かっています。なまえは まろんです。", es:"En mi casa tenemos un perro. Se llama Maron."},
+     {jp:"マロンは とても 元気で、毎日 さんぽに 行きたがります。", fu:"まろんは とても げんきで、まいにち さんぽに いきたがります。", es:"Maron es muy activo y cada día quiere ir a pasear."},
+     {jp:"朝と 夜、私が さんぽに 連れて行きます。", fu:"あさと よる、わたしが さんぽに つれていきます。", es:"Por la mañana y por la noche yo lo llevo a pasear."},
+     {jp:"世話は 大変ですが、マロンが いると 家が にぎやかで、楽しいです。", fu:"せわは たいへんですが、まろんが いると いえが にぎやかで、たのしいです。", es:"Cuidarlo cuesta, pero con Maron la casa está animada y es divertido."}
+   ],
+   gloss:[
+     {w:"飼っています", r:"かっています", m:"tener (un animal) (飼う)"},
+     {w:"行きたがります", r:"いきたがります", m:"(él) quiere ir (行きたがる)"},
+     {w:"連れて行きます", r:"つれていきます", m:"llevar (a alguien) (連れて行く)"},
+     {w:"世話", r:"せわ", m:"cuidado · atención"},
+     {w:"にぎやか", r:"にぎやか", m:"animado · bullicioso"}
+   ],
+   q:[
+     {q:"マロンは <ruby>何<rt>なに</rt></ruby>が すきですか。", o:["さんぽ","おふろ","<ruby>音楽<rt>おんがく</rt></ruby>"], a:0},
+     {q:"<ruby>犬<rt>いぬ</rt></ruby>が いると <ruby>家<rt>いえ</rt></ruby>は どう なりますか。", o:["しずかに なる","にぎやかに なる","くらく なる"], a:1}
+   ]
+ },
+ { id:"r-n4-16", lvl:"N4", title:"温泉旅行", mins:2,
+   paras:[
+     {jp:"先週、家族と 温泉に 行きました。山の 中の 古い 旅館に 泊まりました。", fu:"せんしゅう、かぞくと おんせんに いきました。やまの なかの ふるい りょかんに とまりました。", es:"La semana pasada fui a un onsen con mi familia. Nos alojamos en una posada antigua en la montaña."},
+     {jp:"温泉に 入ると、体が あたたまって、つかれが とれました。", fu:"おんせんに はいると、からだが あたたまって、つかれが とれました。", es:"Al entrar en el onsen, el cuerpo se calentó y se me quitó el cansancio."},
+     {jp:"夕ごはんは その 土地の りょうりで、とても おいしかったです。", fu:"ゆうごはんは その とちの りょうりで、とても おいしかったです。", es:"La cena era comida local y estaba muy rica."},
+     {jp:"久しぶりに ゆっくり できて、いい 旅行でした。", fu:"ひさしぶりに ゆっくり できて、いい りょこうでした。", es:"Pude relajarme después de mucho tiempo; fue un buen viaje."}
+   ],
+   gloss:[
+     {w:"温泉", r:"おんせん", m:"aguas termales · onsen"},
+     {w:"旅館", r:"りょかん", m:"posada tradicional japonesa"},
+     {w:"泊まりました", r:"とまりました", m:"me alojé (泊まる)"},
+     {w:"あたたまって", r:"あたたまって", m:"calentarse (温まる)"},
+     {w:"久しぶり", r:"ひさしぶり", m:"después de mucho tiempo"}
+   ],
+   q:[
+     {q:"この<ruby>人<rt>ひと</rt></ruby>は どこに <ruby>泊<rt>と</rt></ruby>まりましたか。", o:["ホテル","<ruby>旅館<rt>りょかん</rt></ruby>","<ruby>友<rt>とも</rt></ruby>だちの <ruby>家<rt>いえ</rt></ruby>"], a:1},
+     {q:"<ruby>温泉<rt>おんせん</rt></ruby>に <ruby>入<rt>はい</rt></ruby>ると どう なりましたか。", o:["つかれが とれた","おなかが すいた","ねむく なった"], a:0}
+   ]
+ },
+ { id:"r-n4-17", lvl:"N4", title:"お正月", mins:2,
+   paras:[
+     {jp:"日本では お正月が いちばん 大切な 行事です。", fu:"にほんでは おしょうがつが いちばん たいせつな ぎょうじです。", es:"En Japón, el Año Nuevo es la celebración más importante."},
+     {jp:"家族が 集まって、いっしょに おせちりょうりを 食べます。", fu:"かぞくが あつまって、いっしょに おせちりょうりを たべます。", es:"La familia se reúne y comen juntos la comida osechi."},
+     {jp:"子どもは 大人から お年玉を もらえるので、とても うれしそうです。", fu:"こどもは おとなから おとしだまを もらえるので、とても うれしそうです。", es:"Los niños reciben el otoshidama de los adultos, así que parecen muy contentos."},
+     {jp:"神社に 行って、今年も いい 年に なるように おいのりします。", fu:"じんじゃに いって、ことしも いい としに なるように おいのりします。", es:"Van al santuario y rezan para que este año también sea bueno."}
+   ],
+   gloss:[
+     {w:"お正月", r:"おしょうがつ", m:"Año Nuevo (japonés)"},
+     {w:"行事", r:"ぎょうじ", m:"evento · celebración"},
+     {w:"集まって", r:"あつまって", m:"reunirse (集まる)"},
+     {w:"お年玉", r:"おとしだま", m:"dinero de Año Nuevo para los niños"},
+     {w:"神社", r:"じんじゃ", m:"santuario sintoísta"}
+   ],
+   q:[
+     {q:"<ruby>子<rt>こ</rt></ruby>どもは なぜ うれしそうですか。", o:["お<ruby>年玉<rt>としだま</rt></ruby>を もらえるから","<ruby>学校<rt>がっこう</rt></ruby>が <ruby>休<rt>やす</rt></ruby>みだから","プレゼントが あるから"], a:0},
+     {q:"<ruby>家族<rt>かぞく</rt></ruby>は <ruby>正月<rt>しょうがつ</rt></ruby>に <ruby>何<rt>なに</rt></ruby>を <ruby>食<rt>た</rt></ruby>べますか。", o:["おせちりょうり","ラーメン","カレー"], a:0}
+   ]
+ },
+ { id:"r-n4-18", lvl:"N4", title:"スマートフォン", mins:2,
+   paras:[
+     {jp:"今、ほとんどの 人が スマートフォンを 持っています。", fu:"いま、ほとんどの ひとが すまーとふぉんを もっています。", es:"Hoy en día casi todo el mundo tiene un smartphone."},
+     {jp:"スマホが あれば、いつでも れんらくが できるし、地図も 見られます。", fu:"すまほが あれば、いつでも れんらくが できるし、ちずも みられます。", es:"Si tienes móvil, puedes comunicarte en cualquier momento y también ver mapas."},
+     {jp:"でも、長い 時間 使いすぎると、目が つかれて しまいます。", fu:"でも、ながい じかん つかいすぎると、めが つかれて しまいます。", es:"Pero si lo usas demasiado tiempo, se te cansan los ojos."},
+     {jp:"使う 時間を 決めて、上手に 使うことが 大切だと 思います。", fu:"つかう じかんを きめて、じょうずに つかうことが たいせつだと おもいます。", es:"Creo que es importante fijar un tiempo de uso y usarlo con moderación."}
+   ],
+   gloss:[
+     {w:"スマートフォン", r:"スマートフォン", m:"smartphone"},
+     {w:"れんらく", r:"れんらく", m:"contacto · comunicación"},
+     {w:"地図", r:"ちず", m:"mapa"},
+     {w:"使いすぎる", r:"つかいすぎる", m:"usar demasiado (使う + すぎる)"},
+     {w:"決めて", r:"きめて", m:"decidir · fijar (決める)"}
+   ],
+   q:[
+     {q:"スマホを <ruby>使<rt>つか</rt></ruby>いすぎると どう なりますか。", o:["<ruby>目<rt>め</rt></ruby>が つかれる","<ruby>元気<rt>げんき</rt></ruby>に なる","<ruby>頭<rt>あたま</rt></ruby>が よく なる"], a:0},
+     {q:"この<ruby>人<rt>ひと</rt></ruby>は <ruby>何<rt>なに</rt></ruby>が <ruby>大切<rt>たいせつ</rt></ruby>だと <ruby>言<rt>い</rt></ruby>っていますか。", o:["<ruby>使<rt>つか</rt></ruby>う <ruby>時間<rt>じかん</rt></ruby>を <ruby>決<rt>き</rt></ruby>める","<ruby>新<rt>あたら</rt></ruby>しい スマホを <ruby>買<rt>か</rt></ruby>う","スマホを <ruby>使<rt>つか</rt></ruby>わない"], a:0}
+   ]
+ },
+ { id:"r-n4-19", lvl:"N4", title:"将来の夢", mins:2,
+   paras:[
+     {jp:"私の 将来の 夢は 医者に なることです。", fu:"わたしの しょうらいの ゆめは いしゃに なることです。", es:"Mi sueño para el futuro es ser médico."},
+     {jp:"子どもの ころ、病気の 私を 助けて くれた 医者に あこがれました。", fu:"こどもの ころ、びょうきの わたしを たすけて くれた いしゃに あこがれました。", es:"De niño admiré al médico que me ayudó cuando estaba enfermo."},
+     {jp:"医者に なるためには、たくさん 勉強しなければ なりません。", fu:"いしゃに なるためには、たくさん べんきょうしなければ なりません。", es:"Para ser médico hay que estudiar mucho."},
+     {jp:"大変ですが、夢を かなえるために がんばります。", fu:"たいへんですが、ゆめを かなえるために がんばります。", es:"Es duro, pero me esforzaré para cumplir mi sueño."}
+   ],
+   gloss:[
+     {w:"将来", r:"しょうらい", m:"futuro"},
+     {w:"夢", r:"ゆめ", m:"sueño"},
+     {w:"あこがれました", r:"あこがれました", m:"admiré · sentí admiración (あこがれる)"},
+     {w:"助けて", r:"たすけて", m:"ayudar (助ける)"},
+     {w:"かなえる", r:"かなえる", m:"hacer realidad · cumplir (un sueño)"}
+   ],
+   q:[
+     {q:"この<ruby>人<rt>ひと</rt></ruby>の <ruby>夢<rt>ゆめ</rt></ruby>は <ruby>何<rt>なに</rt></ruby>ですか。", o:["<ruby>医者<rt>いしゃ</rt></ruby>に なること","<ruby>先生<rt>せんせい</rt></ruby>に なること","<ruby>歌手<rt>かしゅ</rt></ruby>に なること"], a:0},
+     {q:"なぜ その <ruby>夢<rt>ゆめ</rt></ruby>を もちましたか。", o:["<ruby>子<rt>こ</rt></ruby>どもの ころ <ruby>医者<rt>いしゃ</rt></ruby>に <ruby>助<rt>たす</rt></ruby>けられたから","お<ruby>金<rt>かね</rt></ruby>が ほしいから","<ruby>親<rt>おや</rt></ruby>に <ruby>言<rt>い</rt></ruby>われたから"], a:0}
+   ]
+ },
+ { id:"r-n4-20", lvl:"N4", title:"カラオケ", mins:2,
+   paras:[
+     {jp:"週末、私は 友だちと カラオケに 行きました。", fu:"しゅうまつ、わたしは ともだちと からおけに いきました。", es:"El fin de semana fui al karaoke con mis amigos."},
+     {jp:"みんなで 好きな 歌を 歌ったり、おどったり して 楽しみました。", fu:"みんなで すきな うたを うたったり、おどったり して たのしみました。", es:"Cantamos las canciones que nos gustan, bailamos y lo pasamos bien."},
+     {jp:"私は 日本の 歌を おぼえたかったので、何回も 練習しました。", fu:"わたしは にほんの うたを おぼえたかったので、なんかいも れんしゅうしました。", es:"Como quería aprender canciones japonesas, las practiqué muchas veces."},
+     {jp:"声が かれるまで 歌って、とても 楽しい 一日でした。", fu:"こえが かれるまで うたって、とても たのしい いちにちでした。", es:"Cantamos hasta quedarnos afónicos; fue un día muy divertido."}
+   ],
+   gloss:[
+     {w:"カラオケ", r:"カラオケ", m:"karaoke"},
+     {w:"歌ったり", r:"うたったり", m:"cantar, entre otras cosas (歌う)"},
+     {w:"おどったり", r:"おどったり", m:"bailar, entre otras cosas (踊る)"},
+     {w:"何回も", r:"なんかいも", m:"muchas veces"},
+     {w:"声", r:"こえ", m:"voz"}
+   ],
+   q:[
+     {q:"カラオケで <ruby>何<rt>なに</rt></ruby>を しましたか。", o:["<ruby>歌<rt>うた</rt></ruby>ったり おどったり した","<ruby>勉強<rt>べんきょう</rt></ruby>した","ねた"], a:0},
+     {q:"この<ruby>人<rt>ひと</rt></ruby>は なぜ <ruby>何回<rt>なんかい</rt></ruby>も <ruby>練習<rt>れんしゅう</rt></ruby>しましたか。", o:["<ruby>日本<rt>にほん</rt></ruby>の <ruby>歌<rt>うた</rt></ruby>を おぼえたかったから","<ruby>友<rt>とも</rt></ruby>だちに かちたかったから","ひまだったから"], a:0}
+   ]
  }
 
 ];
