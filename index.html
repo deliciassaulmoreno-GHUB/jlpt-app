@@ -64,6 +64,7 @@
     display:flex; flex-direction:column; justify-content:space-between;}
   .tile:active{transform:scale(.97);}
   .tile.locked{cursor:default; opacity:.62;}
+  .tile.wide{grid-column:1 / -1;}
   .tile-ic{width:42px; height:42px; border-radius:13px; background:rgba(39,64,127,.08); color:var(--indigo);
     display:flex; align-items:center; justify-content:center; font-family:var(--jp); font-size:22px; font-weight:700;}
   .tile-ic.g2{background:rgba(201,138,46,.12); color:var(--amber);}
@@ -240,6 +241,12 @@
   .rd-fu{font-family:var(--jp); font-size:13.5px; line-height:1.7; color:var(--muted); margin-top:5px; display:none;}
   .rd-es{font-size:13.5px; line-height:1.6; color:var(--ink-2); margin-top:6px; padding-left:10px; border-left:2.5px solid var(--line); display:none;}
   #reader.show-fu .rd-fu{display:block;} #reader.show-es .rd-es{display:block;}
+  .ls-hint{font-size:13px; color:var(--muted); line-height:1.55; margin:2px 0 16px;}
+  .ls-transcript{display:none;}
+  #reader.listen.reveal .ls-transcript{display:block;}
+  .ls-reveal{display:block; width:100%; margin:6px 0 4px; border:1.5px dashed var(--line); background:var(--card);
+    color:var(--indigo); border-radius:14px; padding:13px; font-size:14px; font-weight:700; cursor:pointer;}
+  #reader.listen.reveal .ls-reveal{display:none;}
   .rd-sec{font-size:12px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--faint); margin:18px 0 8px;}
   .rd-gloss{display:flex; flex-direction:column; gap:7px;}
   .rd-gw{display:flex; align-items:center; justify-content:space-between; gap:10px; background:var(--card);
@@ -358,12 +365,16 @@
       <div class="tile-ic g4">読</div>
       <div><div class="tile-name">Lectura</div><div class="tile-cnt">Textos por niveles</div></div>
     </div>
+    <div class="tile" id="tileListen">
+      <div class="tile-ic g2">聴</div>
+      <div><div class="tile-name">Listening</div><div class="tile-cnt">Audios por niveles</div></div>
+    </div>
     <div class="tile locked" data-soon="La conversación">
       <span class="badge-soon">Pronto</span>
       <div class="tile-ic">会</div>
       <div><div class="tile-name">Conversación</div><div class="tile-cnt">Próximamente</div></div>
     </div>
-    <div class="tile locked" data-soon="Los exámenes">
+    <div class="tile locked wide" data-soon="Los exámenes">
       <span class="badge-soon">Pronto</span>
       <div class="tile-ic">試</div>
       <div><div class="tile-name">Exámenes</div><div class="tile-cnt">Simulacros JLPT</div></div>
@@ -565,6 +576,7 @@
 
 <script src="content.js"></script>
 <script src="reading.js"></script>
+<script src="listening.js"></script>
 <script>
 var C = window.CONTENT || {kanji:[],vocab:[],grammar:[]};
 var ITEMS = [];
@@ -1199,12 +1211,17 @@ var READ_LEVELS = ["N5","N4","N3","N2","N1"];
 var readListLevel = "N3";
 var lastDefineWord = "";
 var rdCurrent = null, rdPlaying = false, rdIdx = 0;
+var readerMode = "read";
 
 function readLevelsAvailable(){
   var seen={}; READING.forEach(function(p){ seen[p.lvl]=(seen[p.lvl]||0)+1; });
   return READ_LEVELS.filter(function(l){ return seen[l]; }).map(function(l){ return {lvl:l, n:seen[l]}; });
 }
 function openReadingLevels(){
+  readerMode="read";
+  var sec=document.getElementById("readLevels");
+  var t=sec.querySelector(".level-title"); if(t) t.textContent="Lectura";
+  var eb=sec.querySelector(".eyebrow"); if(eb) eb.textContent="Lectura";
   var lv=readLevelsAvailable(), html="";
   if(lv.length===0){ html='<div class="level-help">Aún no hay textos disponibles. Falta el archivo reading.js.</div>'; }
   lv.forEach(function(x){
@@ -1250,7 +1267,7 @@ function hlGloss(jp, gloss){
 function openPassage(id){
   var p=null; for(var i=0;i<READING.length;i++){ if(READING[i].id===id){ p=READING[i]; break; } }
   if(!p) return;
-  stopRead(); rdCurrent=p;
+  stopRead(); rdCurrent=p; readerMode="read";
   document.getElementById("readerTag").textContent="Lectura · "+p.lvl;
   var h='<div class="rd-title">'+p.title+'</div><div class="rd-meta">'+p.lvl+' · ~'+p.mins+' min de lectura</div>';
   p.paras.forEach(function(pa){
@@ -1276,7 +1293,7 @@ function openPassage(id){
   var stage=document.getElementById("readerStage");
   stage.innerHTML=h; stage.scrollTop=0;
   var R=document.getElementById("reader");
-  R.classList.remove("show-fu","show-es");
+  R.classList.remove("show-fu","show-es","listen","reveal");
   document.getElementById("togFu").classList.remove("on");
   document.getElementById("togEs").classList.remove("on");
   hideDefine();
@@ -1286,6 +1303,108 @@ function openPassage(id){
   stage.querySelectorAll(".rd-gw").forEach(function(el){
     el.addEventListener("click", function(){ showDefine(el.getAttribute("data-w"), el.getAttribute("data-r"), el.getAttribute("data-m")); });
   });
+  stage.querySelectorAll(".rd-q").forEach(function(qbox){
+    var ans=parseInt(qbox.getAttribute("data-a"),10), answered=false, opts=qbox.querySelectorAll(".qopt");
+    opts.forEach(function(b){
+      b.addEventListener("click", function(){
+        if(answered) return; answered=true;
+        opts.forEach(function(x){ x.disabled=true; });
+        if(parseInt(b.getAttribute("data-oi"),10)===ans){ b.classList.add("ok"); }
+        else { b.classList.add("no"); if(opts[ans]) opts[ans].classList.add("ok"); }
+      });
+    });
+  });
+  show("reader");
+}
+/* ===== LISTENING (comprensión oral) — reutiliza el lector y el Worker TTS ===== */
+function listeningAvailable(){
+  var data=window.LISTENING||[], seen={};
+  data.forEach(function(p){ seen[p.lvl]=(seen[p.lvl]||0)+1; });
+  return READ_LEVELS.filter(function(l){ return seen[l]; }).map(function(l){ return {lvl:l, n:seen[l]}; });
+}
+function openListeningLevels(){
+  readerMode="listen";
+  var sec=document.getElementById("readLevels");
+  var t=sec.querySelector(".level-title"); if(t) t.textContent="Listening";
+  var eb=sec.querySelector(".eyebrow"); if(eb) eb.textContent="Listening";
+  var lv=listeningAvailable(), html="";
+  if(lv.length===0){ html='<div class="level-help">Aún no hay audios disponibles. Falta el archivo listening.js.</div>'; }
+  lv.forEach(function(x){
+    html+='<button class="level-btn" data-llvl="'+x.lvl+'">'+
+      '<div class="level-l"><div class="level-tag">'+x.lvl+'</div>'+
+      '<div class="level-meta"><div class="lt">Nivel '+x.lvl+'</div>'+
+      '<div class="ls">'+x.n+' '+(x.n===1?'audio':'audios')+'</div></div></div>'+
+      '<span class="level-arrow">›</span></button>';
+  });
+  document.getElementById("readLevelList").innerHTML=html;
+  document.querySelectorAll("#readLevelList .level-btn").forEach(function(b){
+    b.addEventListener("click", function(){ showListeningList(b.getAttribute("data-llvl")); });
+  });
+  show("readLevels");
+}
+function showListeningList(level){
+  readerMode="listen"; readListLevel=level;
+  var data=window.LISTENING||[], ps=data.filter(function(p){ return p.lvl===level; }), html="";
+  document.getElementById("readListTitle").textContent="Listening · "+level;
+  ps.forEach(function(p){
+    html+='<button class="level-btn" data-lid="'+p.id+'">'+
+      '<div class="level-l"><div class="level-tag all">聴</div>'+
+      '<div class="level-meta"><div class="lt">'+p.title+'</div>'+
+      '<div class="ls">audio · ~'+p.mins+' min</div></div></div>'+
+      '<span class="level-arrow">›</span></button>';
+  });
+  document.getElementById("readListItems").innerHTML=html;
+  document.querySelectorAll("#readListItems .level-btn").forEach(function(b){
+    b.addEventListener("click", function(){ openListen(b.getAttribute("data-lid")); });
+  });
+  show("readList");
+}
+function openListen(id){
+  var data=window.LISTENING||[], p=null;
+  for(var i=0;i<data.length;i++){ if(data[i].id===id){ p=data[i]; break; } }
+  if(!p) return;
+  stopRead(); rdCurrent=p; readerMode="listen";
+  document.getElementById("readerTag").textContent="Listening · "+p.lvl;
+  var h='<div class="rd-title">'+p.title+'</div><div class="rd-meta">'+p.lvl+' · audio · ~'+p.mins+' min</div>';
+  h+='<div class="ls-hint">Pulsa ▶ para escuchar y responde las preguntas. La transcripción está oculta: revélala cuando quieras comprobar.</div>';
+  if(p.q && p.q.length){
+    h+='<div class="rd-sec">Comprensión</div>';
+    p.q.forEach(function(qq){
+      h+='<div class="rd-q" data-a="'+qq.a+'"><div class="qq">'+qq.q+'</div>';
+      qq.o.forEach(function(opt, oi){ h+='<button class="qopt" data-oi="'+oi+'">'+opt+'</button>'; });
+      h+='</div>';
+    });
+  }
+  h+='<button class="ls-reveal" id="lsReveal">Ver transcripción y vocabulario</button>';
+  h+='<div class="ls-transcript">';
+  p.paras.forEach(function(pa){
+    h+='<div class="rd-para"><div class="rd-jp">'+hlGloss(pa.jp, p.gloss)+'</div>'+
+       '<div class="rd-fu">'+pa.fu+'</div><div class="rd-es">'+pa.es+'</div></div>';
+  });
+  if(p.gloss && p.gloss.length){
+    h+='<div class="rd-sec">Vocabulario</div><div class="rd-gloss">';
+    p.gloss.forEach(function(g){
+      h+='<div class="rd-gw" data-r="'+escAttr(g.r)+'" data-m="'+escAttr(g.m)+'" data-w="'+escAttr(g.w)+'">'+
+         '<div class="gw-l">'+g.w+'</div><div class="gw-r">'+g.r+'</div><div class="gw-m">'+g.m+'</div></div>';
+    });
+    h+='</div>';
+  }
+  h+='</div>';
+  var stage=document.getElementById("readerStage");
+  stage.innerHTML=h; stage.scrollTop=0;
+  var R=document.getElementById("reader");
+  R.classList.remove("show-fu","show-es","reveal"); R.classList.add("listen");
+  document.getElementById("togFu").classList.remove("on");
+  document.getElementById("togEs").classList.remove("on");
+  hideDefine();
+  stage.querySelectorAll(".rw").forEach(function(el){
+    el.addEventListener("click", function(){ showDefine(el.getAttribute("data-w"), el.getAttribute("data-r"), el.getAttribute("data-m")); });
+  });
+  stage.querySelectorAll(".rd-gw").forEach(function(el){
+    el.addEventListener("click", function(){ showDefine(el.getAttribute("data-w"), el.getAttribute("data-r"), el.getAttribute("data-m")); });
+  });
+  var rv=document.getElementById("lsReveal");
+  if(rv){ rv.addEventListener("click", function(){ R.classList.add("reveal"); }); }
   stage.querySelectorAll(".rd-q").forEach(function(qbox){
     var ans=parseInt(qbox.getAttribute("data-a"),10), answered=false, opts=qbox.querySelectorAll(".qopt");
     opts.forEach(function(b){
@@ -1467,9 +1586,10 @@ document.getElementById("greetingRow").addEventListener("click", function(){
 });
 document.getElementById("recCard").addEventListener("click", startRecommended);
 document.getElementById("tileRead").addEventListener("click", openReadingLevels);
+document.getElementById("tileListen").addEventListener("click", openListeningLevels);
 document.getElementById("readLvlBack").addEventListener("click", function(){ show("menu"); renderMenu(); });
-document.getElementById("readListBack").addEventListener("click", openReadingLevels);
-document.getElementById("readerClose").addEventListener("click", function(){ stopRead(); showReadingList(readListLevel); });
+document.getElementById("readListBack").addEventListener("click", function(){ readerMode==="listen" ? openListeningLevels() : openReadingLevels(); });
+document.getElementById("readerClose").addEventListener("click", function(){ stopRead(); readerMode==="listen" ? showListeningList(readListLevel) : showReadingList(readListLevel); });
 document.getElementById("rdPlay").addEventListener("click", toggleReadAloud);
 document.getElementById("togFu").addEventListener("click", function(){
   document.getElementById("reader").classList.toggle("show-fu");
