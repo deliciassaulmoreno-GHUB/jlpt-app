@@ -81,15 +81,26 @@ function curScenario(){ return SCENARIOS.find(s => s.id === $("scenario").value)
 
 function bubble(cls, html){ const d=document.createElement("div"); d.className="msg "+cls; d.innerHTML=html; $("chat").appendChild(d); window.scrollTo(0,document.body.scrollHeight); return d; }
 
+function asText(x){
+  if(x==null) return "";
+  if(typeof x==="string") return x;
+  if(Array.isArray(x)) return x.map(asText).join(" / ");
+  if(typeof x==="object"){ return x.jp || x.text || x.value || x.frase || JSON.stringify(x); }
+  return String(x);
+}
 function renderAI(data){
-  const sugs = (data.sugerencias||[]).map(s => '<span class="sug">'+s+'</span>').join("");
+  const sugList = Array.isArray(data.sugerencias) ? data.sugerencias : (data.sugerencias ? [data.sugerencias] : []);
+  const sugs = sugList.map(s => '<span class="sug">'+asText(s)+'</span>').join("");
   let corr = "";
-  if(data.correccion && data.correccion.jp){ corr = '<div class="corr">✎ '+data.correccion.jp+(data.correccion.nota?' — '+data.correccion.nota:'')+'</div>'; }
+  const c = data.correccion;
+  if(c && (typeof c==="object" ? c.jp : (typeof c==="string" && c.trim()))){
+    corr = '<div class="corr">✎ '+(typeof c==="object" ? asText(c.jp)+(c.nota?' — '+asText(c.nota):'') : c)+'</div>';
+  }
   const el = bubble("ai showfu",
-    '<div class="jp">'+(data.jp||'')+'</div>'+
-    '<div class="fu">'+(data.fu||'')+'</div>'+
+    '<div class="jp">'+asText(data.jp)+'</div>'+
+    '<div class="fu">'+asText(data.fu)+'</div>'+
     corr+
-    '<div class="es">'+(data.es||'')+'</div>'+
+    '<div class="es">'+asText(data.es)+'</div>'+
     (sugs?'<div class="sugs">'+sugs+'</div>':'')+
     (showRaw?'<pre class="raw" style="display:block">'+JSON.stringify(data,null,1)+'</pre>':''));
   el.querySelectorAll(".sug").forEach(s => s.addEventListener("click", ()=>{ $("msg").value=s.textContent; $("msg").focus(); }));
@@ -120,7 +131,7 @@ async function send(){
     $("status").textContent="";
     history.push({ role:"user", content:text });
     renderAI(j.data);
-    history.push({ role:"assistant", content: j.data.jp||"" });
+    history.push({ role:"assistant", content: asText(j.data.jp) });
   }catch(e){ $("status").innerHTML='<span class="bad">Fallo de red: '+e.message+'</span>'; }
 }
 
