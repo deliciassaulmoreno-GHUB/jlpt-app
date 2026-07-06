@@ -73,6 +73,16 @@
   .mic-btn{display:block; width:100%; border:none; border-radius:14px; padding:15px; font-size:15px; font-weight:700; color:#fff; background:var(--indigo); cursor:pointer;}
   .mic-btn:disabled{opacity:.5;}
   .mic-status{font-size:13.5px; line-height:1.55; margin-top:12px; color:var(--ink-2);}
+  .exam-head{font-size:15px; font-weight:800; margin:6px 0 14px; color:var(--ink);}
+  .exam-q{background:var(--card); border-radius:14px; padding:14px 15px; margin-bottom:12px; box-shadow:var(--shadow); text-align:left;}
+  .exam-passage{font-size:14px; line-height:1.75; background:rgba(39,64,127,.06); border-radius:11px; padding:11px 13px; margin-bottom:11px;}
+  .exam-audio{border:1.5px solid var(--indigo); background:transparent; color:var(--indigo); border-radius:20px; padding:7px 15px; font-size:13px; font-weight:700; margin-bottom:11px; cursor:pointer;}
+  .exam-qtext{font-size:14.5px; margin-bottom:11px; line-height:1.55; font-weight:600;}
+  .exam-qtext u{text-decoration:underline; text-underline-offset:3px;}
+  .qopt.sel{border-color:var(--indigo); background:rgba(39,64,127,.12);}
+  .exam-submit{display:block; width:100%; border:none; border-radius:14px; padding:15px; font-size:15px; font-weight:700; color:#fff; background:var(--indigo); margin-top:4px; cursor:pointer;}
+  .exam-submit:disabled{opacity:.5;}
+  .exam-score{font-size:17px; font-weight:800; text-align:center; margin:16px 0 8px; color:var(--ink);}
   .tile-ic{width:42px; height:42px; border-radius:13px; background:rgba(39,64,127,.08); color:var(--indigo);
     display:flex; align-items:center; justify-content:center; font-family:var(--jp); font-size:22px; font-weight:700;}
   .tile-ic.g2{background:rgba(201,138,46,.12); color:var(--amber);}
@@ -381,10 +391,9 @@
       <div class="tile-ic g3">会</div>
       <div><div class="tile-name">Conversación</div><div class="tile-cnt">Prueba de micrófono</div></div>
     </div>
-    <div class="tile locked wide" data-soon="Los exámenes">
-      <span class="badge-soon">Pronto</span>
-      <div class="tile-ic">試</div>
-      <div><div class="tile-name">Exámenes</div><div class="tile-cnt">Simulacros JLPT</div></div>
+    <div class="tile wide" id="tileExam">
+      <div class="tile-ic g1">試</div>
+      <div><div class="tile-name">Exámenes</div><div class="tile-cnt">Mini examen por áreas</div></div>
     </div>
   </div>
   <div class="menu-note" id="menuNote"></div>
@@ -572,6 +581,15 @@
   <audio id="micPlayer" controls hidden style="width:100%; margin-top:12px;"></audio>
 </section>
 
+<!-- ===== EXÁMENES · Mini examen por áreas del JLPT ===== -->
+<section class="view" id="exam">
+  <div class="back-row">
+    <button class="back-btn" id="examBack" aria-label="Volver">←</button>
+    <span class="eyebrow">Mini examen</span>
+  </div>
+  <div id="examStage"></div>
+</section>
+
 <!-- ===== ESCRITURA DE KANJI (trazos) ===== -->
 <section class="view" id="writer">
   <div class="study-row">
@@ -598,6 +616,7 @@
 <script src="content.js"></script>
 <script src="reading.js"></script>
 <script src="listening.js"></script>
+<script src="exams.js"></script>
 <script>
 var C = window.CONTENT || {kanji:[],vocab:[],grammar:[]};
 var ITEMS = [];
@@ -729,7 +748,7 @@ function buildFocused(type, level){
 }
 
 function show(v){
-  ["menu","levels","modes","stats","study","quiz","doneView","emptyView","readLevels","readList","reader","writer","conv"].forEach(function(x){
+  ["menu","levels","modes","stats","study","quiz","doneView","emptyView","readLevels","readList","reader","writer","conv","exam"].forEach(function(x){
     document.getElementById(x).classList.toggle("active", x===v);
   });
 }
@@ -1482,6 +1501,81 @@ function runMicTest(){
     btn.disabled=false; st.innerHTML='<span class="mic-bad">Falló: '+err.name+'</span> — '+(err.message||"");
   });
 }
+/* ===== EXÁMENES · Mini examen por áreas ===== */
+var examView = "levels", examLevel = null, currentExam = null, examAnswers = {};
+function examData(){ return window.EXAMS || []; }
+function openExamLevels(){
+  examView = "levels";
+  var lvls = {}; examData().forEach(function(e){ lvls[e.lvl] = 1; });
+  var order = ["N5","N4","N3","N2","N1"].filter(function(l){ return lvls[l]; });
+  var h = '<div class="exam-head">Elige el nivel</div>';
+  if(!order.length){ h += '<div class="level-help">Aún no hay exámenes disponibles. Falta el archivo exams.js.</div>'; }
+  order.forEach(function(l){
+    h += '<button class="level-btn" data-l="'+l+'"><div class="level-l"><div class="level-tag">'+l+'</div>'+
+      '<div class="level-meta"><div class="lt">Nivel '+l+'</div></div></div><span class="level-arrow">›</span></button>';
+  });
+  var st = document.getElementById("examStage"); st.innerHTML = h; st.scrollTop = 0;
+  st.querySelectorAll(".level-btn").forEach(function(b){ b.addEventListener("click", function(){ examAreas(b.getAttribute("data-l")); }); });
+  show("exam");
+}
+function examAreas(level){
+  examView = "areas"; examLevel = level;
+  var exs = examData().filter(function(e){ return e.lvl === level; });
+  var h = '<div class="exam-head">'+level+' · elige la parte</div>';
+  exs.forEach(function(e){
+    h += '<button class="level-btn" data-id="'+e.id+'"><div class="level-l"><div class="level-tag all">試</div>'+
+      '<div class="level-meta"><div class="lt">'+e.title+'</div><div class="ls">'+(e.desc||'')+' · '+e.questions.length+' preguntas</div></div></div>'+
+      '<span class="level-arrow">›</span></button>';
+  });
+  var st = document.getElementById("examStage"); st.innerHTML = h; st.scrollTop = 0;
+  st.querySelectorAll(".level-btn").forEach(function(b){
+    b.addEventListener("click", function(){ var ex = examData().filter(function(x){ return x.id === b.getAttribute("data-id"); })[0]; if(ex) runExam(ex); });
+  });
+  show("exam");
+}
+function runExam(exam){
+  examView = "exam"; currentExam = exam; examAnswers = {};
+  var h = '<div class="exam-head">'+exam.title+' · '+exam.lvl+'</div>';
+  exam.questions.forEach(function(q, i){
+    h += '<div class="exam-q" data-i="'+i+'" data-a="'+q.a+'">';
+    if(q.passage) h += '<div class="exam-passage">'+q.passage+'</div>';
+    if(q.audio) h += '<button class="exam-audio" data-audio="'+encodeURIComponent(q.audio)+'">▶ Escuchar</button>';
+    h += '<div class="exam-qtext">'+(i+1)+'. '+q.q+'</div>';
+    q.o.forEach(function(opt, oi){ h += '<button class="qopt" data-oi="'+oi+'">'+opt+'</button>'; });
+    h += '</div>';
+  });
+  h += '<button class="exam-submit" id="examSubmit">Corregir</button><div class="exam-score" id="examScore"></div>';
+  var st = document.getElementById("examStage"); st.innerHTML = h; st.scrollTop = 0;
+  st.querySelectorAll(".exam-q").forEach(function(qb){
+    var opts = qb.querySelectorAll(".qopt");
+    opts.forEach(function(b){ b.addEventListener("click", function(){
+      if(qb.classList.contains("done")) return;
+      opts.forEach(function(x){ x.classList.remove("sel"); }); b.classList.add("sel");
+      examAnswers[qb.getAttribute("data-i")] = parseInt(b.getAttribute("data-oi"), 10);
+    }); });
+  });
+  st.querySelectorAll(".exam-audio").forEach(function(b){ b.addEventListener("click", function(){ try{ speak(decodeURIComponent(b.getAttribute("data-audio"))); }catch(e){} }); });
+  document.getElementById("examSubmit").addEventListener("click", gradeExam);
+  show("exam");
+}
+function gradeExam(){
+  var correct = 0, total = currentExam.questions.length;
+  document.querySelectorAll("#examStage .exam-q").forEach(function(qb){
+    qb.classList.add("done");
+    var ans = parseInt(qb.getAttribute("data-a"), 10);
+    var sel = examAnswers[qb.getAttribute("data-i")];
+    var opts = qb.querySelectorAll(".qopt");
+    opts.forEach(function(x){ x.disabled = true; });
+    if(sel === ans){ correct++; opts[ans].classList.add("ok"); }
+    else { if(opts[ans]) opts[ans].classList.add("ok"); if(sel != null && opts[sel]) opts[sel].classList.add("no"); }
+  });
+  examView = "result";
+  var pct = Math.round(correct / total * 100);
+  var sc = document.getElementById("examScore");
+  sc.innerHTML = "Resultado: " + correct + " / " + total + " (" + pct + "%)";
+  document.getElementById("examSubmit").disabled = true;
+  sc.scrollIntoView({ behavior: "smooth", block: "center" });
+}
 function showDefine(w,r,m){
   stopRead();
   document.getElementById("dfW").textContent=w||"";
@@ -1652,6 +1746,12 @@ document.getElementById("recCard").addEventListener("click", startRecommended);
 document.getElementById("tileRead").addEventListener("click", openReadingLevels);
 document.getElementById("tileListen").addEventListener("click", openListeningLevels);
 document.getElementById("tileConv").addEventListener("click", openConv);
+document.getElementById("tileExam").addEventListener("click", openExamLevels);
+document.getElementById("examBack").addEventListener("click", function(){
+  if(examView==="exam" || examView==="result"){ examAreas(examLevel); }
+  else if(examView==="areas"){ openExamLevels(); }
+  else { show("menu"); renderMenu(); }
+});
 document.getElementById("convBack").addEventListener("click", function(){ show("menu"); renderMenu(); });
 document.getElementById("micBtn").addEventListener("click", runMicTest);
 document.getElementById("readLvlBack").addEventListener("click", function(){ show("menu"); renderMenu(); });
