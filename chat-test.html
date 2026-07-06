@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Prueba de conversación · Japanese N1 Path</title>
+<style>
+  :root{ --bg:#0f1220; --card:#1a1f35; --ink:#eef1ff; --ink2:#a8b0d0; --indigo:#8aa0ff; --ok:#3ecf8e; --bad:#ff6b6b; --line:rgba(255,255,255,.08); }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--bg); color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,system-ui,sans-serif; padding:16px; line-height:1.5; }
+  h1{ font-size:18px; margin:0 0 12px; }
+  .cfg{ background:var(--card); border-radius:14px; padding:12px 14px; margin-bottom:12px; }
+  .cfg label{ display:block; font-size:12px; color:var(--ink2); margin:8px 0 3px; }
+  input, select{ width:100%; padding:10px; border-radius:10px; border:1px solid var(--line); background:#11152a; color:var(--ink); font-size:14px; }
+  .chat{ display:flex; flex-direction:column; gap:10px; margin-bottom:12px; }
+  .msg{ border-radius:14px; padding:11px 13px; font-size:15px; max-width:92%; }
+  .ai{ background:var(--card); align-self:flex-start; }
+  .me{ background:#27407f; align-self:flex-end; }
+  .fu{ font-size:12.5px; color:var(--ink2); margin-top:5px; display:none; }
+  .msg.showfu .fu{ display:block; }
+  .es{ font-size:12.5px; color:var(--ink2); margin-top:6px; border-top:1px solid var(--line); padding-top:6px; }
+  .corr{ font-size:12.5px; color:#ffd27d; margin-top:6px; }
+  .sugs{ display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
+  .sug{ font-size:12.5px; background:#11152a; border:1px solid var(--line); color:var(--indigo); border-radius:20px; padding:5px 10px; cursor:pointer; }
+  .tools{ display:flex; gap:8px; margin-top:6px; }
+  .mini{ font-size:11px; color:var(--ink2); background:transparent; border:1px solid var(--line); border-radius:8px; padding:3px 8px; width:auto; cursor:pointer; }
+  .composer{ display:flex; gap:8px; position:sticky; bottom:0; padding:8px 0; background:var(--bg); }
+  .composer input{ flex:1; }
+  .send{ width:auto; padding:10px 16px; background:var(--indigo); color:#0f1220; font-weight:700; border:none; }
+  .status{ font-size:12px; color:var(--ink2); min-height:16px; margin:4px 0; }
+  .bad{ color:var(--bad); }
+  pre.raw{ font-size:11px; color:var(--ink2); white-space:pre-wrap; background:#11152a; border-radius:8px; padding:8px; margin-top:6px; display:none; }
+</style>
+</head>
+<body>
+  <h1>Prueba de conversación (texto)</h1>
+  <div class="cfg">
+    <label>URL del Worker (termina en <b>/chat</b>)</label>
+    <input id="url" placeholder="https://TU-WORKER.workers.dev/chat">
+    <label>Nivel</label>
+    <select id="level"><option>N5</option><option>N4</option><option>N3</option><option>N2</option><option>N1</option></select>
+    <label>Escenario</label>
+    <select id="scenario"></select>
+    <div class="tools"><button class="mini" id="reset">↻ Reiniciar conversación</button><button class="mini" id="rawtog">Ver JSON</button></div>
+  </div>
+
+  <div class="chat" id="chat"></div>
+  <div class="status" id="status"></div>
+
+  <div class="composer">
+    <input id="msg" placeholder="Escribe en japonés…" autocomplete="off">
+    <button class="send" id="send">Enviar</button>
+  </div>
+
+<script>
+const SCENARIOS = [
+  { id:"cafe", lvl:"N5", title:"En una cafetería",
+    ai_role:"un camarero amable de una cafetería en Japón", user_role:"un cliente",
+    situation:"El alumno entra en una cafetería y pide algo de beber", goal:"pedir una bebida y preguntar el precio",
+    opening:{ jp:"いらっしゃいませ！ ご注文は お決まりですか？", fu:"いらっしゃいませ！ ごちゅうもんは おきまりですか？", es:"¡Bienvenido! ¿Ya ha decidido su pedido?" } },
+  { id:"jiko", lvl:"N5", title:"Presentarse",
+    ai_role:"un compañero de clase japonés simpático", user_role:"un estudiante nuevo",
+    situation:"Primer día de clase; os presentáis", goal:"decir tu nombre, tu país y una afición",
+    opening:{ jp:"はじめまして！ お名前は 何ですか？", fu:"はじめまして！ おなまえは なんですか？", es:"¡Encantado! ¿Cómo te llamas?" } },
+  { id:"michi", lvl:"N4", title:"Preguntar el camino",
+    ai_role:"un transeúnte japonés servicial", user_role:"un turista un poco perdido",
+    situation:"El alumno para a alguien por la calle para llegar a la estación", goal:"preguntar cómo llegar a la estación y entender la respuesta",
+    opening:{ jp:"はい、どうしましたか？", fu:"はい、どうしましたか？", es:"Sí, ¿qué ocurre?" } }
+];
+
+const $ = id => document.getElementById(id);
+let history = [];   // {role, content(jp)}
+let showRaw = false;
+
+function fillScenarios(){
+  const lvl = $("level").value;
+  const list = SCENARIOS.filter(s => s.lvl === lvl);
+  $("scenario").innerHTML = (list.length?list:SCENARIOS).map(s => '<option value="'+s.id+'">'+s.title+' ('+s.lvl+')</option>').join("");
+}
+function curScenario(){ return SCENARIOS.find(s => s.id === $("scenario").value) || SCENARIOS[0]; }
+
+function bubble(cls, html){ const d=document.createElement("div"); d.className="msg "+cls; d.innerHTML=html; $("chat").appendChild(d); window.scrollTo(0,document.body.scrollHeight); return d; }
+
+function renderAI(data){
+  const sugs = (data.sugerencias||[]).map(s => '<span class="sug">'+s+'</span>').join("");
+  let corr = "";
+  if(data.correccion && data.correccion.jp){ corr = '<div class="corr">✎ '+data.correccion.jp+(data.correccion.nota?' — '+data.correccion.nota:'')+'</div>'; }
+  const el = bubble("ai showfu",
+    '<div class="jp">'+(data.jp||'')+'</div>'+
+    '<div class="fu">'+(data.fu||'')+'</div>'+
+    corr+
+    '<div class="es">'+(data.es||'')+'</div>'+
+    (sugs?'<div class="sugs">'+sugs+'</div>':'')+
+    (showRaw?'<pre class="raw" style="display:block">'+JSON.stringify(data,null,1)+'</pre>':''));
+  el.querySelectorAll(".sug").forEach(s => s.addEventListener("click", ()=>{ $("msg").value=s.textContent; $("msg").focus(); }));
+  if(data.fin){ $("status").textContent="🎉 Objetivo cumplido (fin=true)."; }
+}
+
+function startConversation(){
+  history = []; $("chat").innerHTML=""; $("status").textContent="";
+  const sc = curScenario();
+  const op = sc.opening;
+  renderAI(op);
+  history.push({ role:"assistant", content: op.jp });
+}
+
+async function send(){
+  const text = $("msg").value.trim(); if(!text) return;
+  let url = $("url").value.trim();
+  if(!url){ $("status").innerHTML='<span class="bad">Pon la URL del Worker (…/chat).</span>'; return; }
+  if(!/\/chat$/.test(url)){ url = url.replace(/\/$/,"") + "/chat"; }
+  bubble("me", text); $("msg").value="";
+  $("status").textContent="Pensando…";
+  const sc = curScenario();
+  try{
+    const r = await fetch(url, { method:"POST", headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({ level:$("level").value, scenario:sc, history:history, message:text }) });
+    const j = await r.json();
+    if(!j.ok){ $("status").innerHTML='<span class="bad">'+(j.error||'error')+'</span>'; if(j.raw){ bubble("ai",'<pre class="raw" style="display:block">'+j.raw+'</pre>'); } return; }
+    $("status").textContent="";
+    history.push({ role:"user", content:text });
+    renderAI(j.data);
+    history.push({ role:"assistant", content: j.data.jp||"" });
+  }catch(e){ $("status").innerHTML='<span class="bad">Fallo de red: '+e.message+'</span>'; }
+}
+
+$("level").addEventListener("change", ()=>{ fillScenarios(); startConversation(); });
+$("scenario").addEventListener("change", startConversation);
+$("reset").addEventListener("click", startConversation);
+$("rawtog").addEventListener("click", ()=>{ showRaw=!showRaw; });
+$("send").addEventListener("click", send);
+$("msg").addEventListener("keydown", e=>{ if(e.key==="Enter") send(); });
+
+fillScenarios(); startConversation();
+</script>
+</body>
+</html>
