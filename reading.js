@@ -999,6 +999,206 @@ window.READING = [
      {q:"カラオケで <ruby>何<rt>なに</rt></ruby>を しましたか。", o:["<ruby>歌<rt>うた</rt></ruby>ったり おどったり した","<ruby>勉強<rt>べんきょう</rt></ruby>した","ねた"], a:0},
      {q:"この<ruby>人<rt>ひと</rt></ruby>は なぜ <ruby>何回<rt>なんかい</rt></ruby>も <ruby>練習<rt>れんしゅう</rt></ruby>しましたか。", o:["<ruby>日本<rt>にほん</rt></ruby>の <ruby>歌<rt>うた</rt></ruby>を おぼえたかったから","<ruby>友<rt>とも</rt></ruby>だちに かちたかったから","ひまだったから"], a:0}
    ]
+ },
+ { id:"r-n3-11", lvl:"N3", title:"ストレスとのつきあい方", mins:3,
+   paras:[
+     {jp:"現代の 社会では、多くの 人が ストレスを 感じながら 生活しています。", fu:"げんだいの しゃかいでは、おおくの ひとが すとれすを かんじながら せいかつしています。", es:"En la sociedad actual, mucha gente vive sintiendo estrés."},
+     {jp:"仕事や 人間関係が 原因で、心が つかれて しまう ことも 少なく ありません。", fu:"しごとや にんげんかんけいが げんいんで、こころが つかれて しまう ことも すくなく ありません。", es:"No es raro que el trabajo o las relaciones personales acaben agotando la mente."},
+     {jp:"ストレスを ためないためには、運動したり、趣味を 楽しんだり する ことが 大切です。", fu:"すとれすを ためないためには、うんどうしたり、しゅみを たのしんだり する ことが たいせつです。", es:"Para no acumular estrés, es importante hacer ejercicio o disfrutar de las aficiones."},
+     {jp:"自分に 合った 方法を 見つけて、上手に つきあって いきたいものです。", fu:"じぶんに あった ほうほうを みつけて、じょうずに つきあって いきたいものです。", es:"Conviene encontrar un método que te vaya bien y aprender a llevarlo con soltura."}
+   ],
+   gloss:[
+     {w:"現代", r:"げんだい", m:"época actual · modernidad"},
+     {w:"ストレス", r:"ストレス", m:"estrés"},
+     {w:"人間関係", r:"にんげんかんけい", m:"relaciones humanas"},
+     {w:"原因", r:"げんいん", m:"causa"},
+     {w:"ためない", r:"ためない", m:"no acumular (ためる)"},
+     {w:"方法", r:"ほうほう", m:"método · forma"}
+   ],
+   q:[
+     {q:"<ruby>多<rt>おお</rt></ruby>くの <ruby>人<rt>ひと</rt></ruby>が ストレスを <ruby>感<rt>かん</rt></ruby>じる <ruby>原因<rt>げんいん</rt></ruby>は <ruby>何<rt>なに</rt></ruby>ですか。", o:["<ruby>仕事<rt>しごと</rt></ruby>や <ruby>人間関係<rt>にんげんかんけい</rt></ruby>","<ruby>天気<rt>てんき</rt></ruby>","<ruby>食<rt>た</rt></ruby>べ<ruby>物<rt>もの</rt></ruby>"], a:0},
+     {q:"<ruby>筆者<rt>ひっしゃ</rt></ruby>は ストレスに どう <ruby>対応<rt>たいおう</rt></ruby>すれば よいと <ruby>言<rt>い</rt></ruby>っていますか。", o:["<ruby>自分<rt>じぶん</rt></ruby>に <ruby>合<rt>あ</rt></ruby>った <ruby>方法<rt>ほうほう</rt></ruby>を <ruby>見<rt>み</rt></ruby>つける","<ruby>薬<rt>くすり</rt></ruby>を <ruby>飲<rt>の</rt></ruby>む","<ruby>何<rt>なに</rt></ruby>も しない"], a:0}
+   ]
+ },
+ { id:"r-n3-12", lvl:"N3", title:"スマートフォンと子ども", mins:3,
+   paras:[
+     {jp:"最近、スマートフォンを 使う 子どもが 増えて きました。", fu:"さいきん、すまーとふぉんを つかう こどもが ふえて きました。", es:"Últimamente ha aumentado el número de niños que usan smartphone."},
+     {jp:"スマホは 便利ですが、使いすぎると 勉強に 集中できなく なる 心配が あります。", fu:"すまほは べんりですが、つかいすぎると べんきょうに しゅうちゅうできなく なる しんぱいが あります。", es:"El móvil es cómodo, pero si se usa en exceso, hay riesgo de no poder concentrarse en el estudio."},
+     {jp:"また、夜おそくまで 画面を 見ていると、目や 体にも よくありません。", fu:"また、よるおそくまで がめんを みていると、めや からだにも よくありません。", es:"Además, mirar la pantalla hasta tarde tampoco es bueno para los ojos ni para el cuerpo."},
+     {jp:"家庭で 使う 時間の ルールを 決める ことが 必要だと 言われています。", fu:"かていで つかう じかんの るーるを きめる ことが ひつようだと いわれています。", es:"Se dice que es necesario fijar en casa reglas sobre el tiempo de uso."}
+   ],
+   gloss:[
+     {w:"増えて", r:"ふえて", m:"aumentar (増える)"},
+     {w:"使いすぎる", r:"つかいすぎる", m:"usar demasiado"},
+     {w:"集中できなく", r:"しゅうちゅうできなく", m:"no poder concentrarse (集中する)"},
+     {w:"画面", r:"がめん", m:"pantalla"},
+     {w:"家庭", r:"かてい", m:"hogar · familia"},
+     {w:"必要", r:"ひつよう", m:"necesario"}
+   ],
+   q:[
+     {q:"スマホを <ruby>使<rt>つか</rt></ruby>いすぎると どんな <ruby>心配<rt>しんぱい</rt></ruby>が ありますか。", o:["<ruby>勉強<rt>べんきょう</rt></ruby>に <ruby>集中<rt>しゅうちゅう</rt></ruby>できなく なる","お<ruby>金<rt>かね</rt></ruby>が なくなる","<ruby>友<rt>とも</rt></ruby>だちが へる"], a:0},
+     {q:"<ruby>筆者<rt>ひっしゃ</rt></ruby>は <ruby>何<rt>なに</rt></ruby>が <ruby>必要<rt>ひつよう</rt></ruby>だと <ruby>言<rt>い</rt></ruby>っていますか。", o:["<ruby>使<rt>つか</rt></ruby>う <ruby>時間<rt>じかん</rt></ruby>の ルール","<ruby>新<rt>あたら</rt></ruby>しいスマホ","スマホを <ruby>捨<rt>す</rt></ruby>てる こと"], a:0}
+   ]
+ },
+ { id:"r-n3-13", lvl:"N3", title:"食生活の変化", mins:3,
+   paras:[
+     {jp:"昔に くらべて、日本人の 食生活は 大きく 変わりました。", fu:"むかしに くらべて、にほんじんの しょくせいかつは おおきく かわりました。", es:"Comparado con antes, la alimentación de los japoneses ha cambiado mucho."},
+     {jp:"以前は 魚や 野菜が 中心でしたが、今では 肉や パンを 食べる 人が 増えています。", fu:"いぜんは さかなや やさいが ちゅうしんでしたが、いまでは にくや ぱんを たべる ひとが ふえています。", es:"Antes se basaba en pescado y verdura, pero ahora aumenta la gente que come carne y pan."},
+     {jp:"便利な 食べ物が 増えた 一方で、栄養の かたよりが 問題に なっています。", fu:"べんりな たべものが ふえた いっぽうで、えいようの かたよりが もんだいに なっています。", es:"Por un lado han aumentado las comidas prácticas, pero el desequilibrio nutricional se ha vuelto un problema."},
+     {jp:"健康の ためには、バランスの よい 食事を 心がける ことが 大切です。", fu:"けんこうの ためには、ばらんすの よい しょくじを こころがける ことが たいせつです。", es:"Para la salud es importante procurar una dieta equilibrada."}
+   ],
+   gloss:[
+     {w:"食生活", r:"しょくせいかつ", m:"hábitos alimentarios"},
+     {w:"以前", r:"いぜん", m:"antes · anteriormente"},
+     {w:"中心", r:"ちゅうしん", m:"centro · base"},
+     {w:"栄養", r:"えいよう", m:"nutrición"},
+     {w:"かたより", r:"かたより", m:"desequilibrio · sesgo"},
+     {w:"心がける", r:"こころがける", m:"procurar · tener presente"}
+   ],
+   q:[
+     {q:"<ruby>昔<rt>むかし</rt></ruby>の <ruby>日本人<rt>にほんじん</rt></ruby>は <ruby>何<rt>なに</rt></ruby>を <ruby>中心<rt>ちゅうしん</rt></ruby>に <ruby>食<rt>た</rt></ruby>べていましたか。", o:["<ruby>魚<rt>さかな</rt></ruby>や <ruby>野菜<rt>やさい</rt></ruby>","<ruby>肉<rt>にく</rt></ruby>や パン","<ruby>果物<rt>くだもの</rt></ruby>"], a:0},
+     {q:"<ruby>今<rt>いま</rt></ruby>、<ruby>何<rt>なに</rt></ruby>が <ruby>問題<rt>もんだい</rt></ruby>に なっていますか。", o:["<ruby>栄養<rt>えいよう</rt></ruby>の かたより","<ruby>食<rt>た</rt></ruby>べ<ruby>物<rt>もの</rt></ruby>が <ruby>足<rt>た</rt></ruby>りない こと","<ruby>値段<rt>ねだん</rt></ruby>が <ruby>安<rt>やす</rt></ruby>い こと"], a:0}
+   ]
+ },
+ { id:"r-n3-14", lvl:"N3", title:"ボランティア活動", mins:3,
+   paras:[
+     {jp:"私は 先月から、地域の ボランティア活動に 参加しています。", fu:"わたしは せんげつから、ちいきの ぼらんてぃあかつどうに さんかしています。", es:"Desde el mes pasado participo en actividades de voluntariado de mi zona."},
+     {jp:"毎週 土曜日に、公園や 川の まわりの ごみを 拾っています。", fu:"まいしゅう どようびに、こうえんや かわの まわりの ごみを ひろっています。", es:"Cada sábado recojo la basura alrededor del parque y del río."},
+     {jp:"はじめは 大変でしたが、町が きれいに なると、うれしい 気持ちに なります。", fu:"はじめは たいへんでしたが、まちが きれいに なると、うれしい きもちに なります。", es:"Al principio costaba, pero cuando la ciudad queda limpia me siento contento."},
+     {jp:"この 活動を 通して、たくさんの 人と 知り合う ことも できました。", fu:"この かつどうを とおして、たくさんの ひとと しりあう ことも できました。", es:"A través de esta actividad también pude conocer a mucha gente."}
+   ],
+   gloss:[
+     {w:"地域", r:"ちいき", m:"zona · región"},
+     {w:"参加して", r:"さんかして", m:"participar (参加する)"},
+     {w:"拾って", r:"ひろって", m:"recoger (拾う)"},
+     {w:"まわり", r:"まわり", m:"alrededor"},
+     {w:"活動", r:"かつどう", m:"actividad"},
+     {w:"知り合う", r:"しりあう", m:"conocerse · trabar amistad"}
+   ],
+   q:[
+     {q:"この<ruby>人<rt>ひと</rt></ruby>は ボランティアで <ruby>何<rt>なに</rt></ruby>を していますか。", o:["ごみを <ruby>拾<rt>ひろ</rt></ruby>う","<ruby>木<rt>き</rt></ruby>を <ruby>植<rt>う</rt></ruby>える","<ruby>子<rt>こ</rt></ruby>どもに <ruby>教<rt>おし</rt></ruby>える"], a:0},
+     {q:"<ruby>活動<rt>かつどう</rt></ruby>を <ruby>通<rt>とお</rt></ruby>して <ruby>何<rt>なに</rt></ruby>が できましたか。", o:["<ruby>多<rt>おお</rt></ruby>くの <ruby>人<rt>ひと</rt></ruby>と <ruby>知<rt>し</rt></ruby>り<ruby>合<rt>あ</rt></ruby>う","お<ruby>金<rt>かね</rt></ruby>を もうける","<ruby>有名<rt>ゆうめい</rt></ruby>に なる"], a:0}
+   ]
+ },
+ { id:"r-n3-15", lvl:"N3", title:"睡眠の大切さ", mins:3,
+   paras:[
+     {jp:"よい 睡眠は 健康な 生活の ために とても 重要です。", fu:"よい すいみんは けんこうな せいかつの ために とても じゅうようです。", es:"Un buen sueño es muy importante para una vida sana."},
+     {jp:"睡眠が 足りないと、集中力が 下がり、体の 調子も 悪く なります。", fu:"すいみんが たりないと、しゅうちゅうりょくが さがり、からだの ちょうしも わるく なります。", es:"Si no se duerme lo suficiente, baja la concentración y el cuerpo se resiente."},
+     {jp:"寝る前に スマホを 見る 習慣は、ねむりの 質を 下げると 言われています。", fu:"ねるまえに すまほを みる しゅうかんは、ねむりの しつを さげると いわれています。", es:"Se dice que el hábito de mirar el móvil antes de dormir reduce la calidad del sueño."},
+     {jp:"早く 寝て、じゅうぶんな 睡眠を とる ことを 心がけましょう。", fu:"はやく ねて、じゅうぶんな すいみんを とる ことを こころがけましょう。", es:"Procuremos acostarnos pronto y dormir lo suficiente."}
+   ],
+   gloss:[
+     {w:"睡眠", r:"すいみん", m:"sueño (acción de dormir)"},
+     {w:"重要", r:"じゅうよう", m:"importante"},
+     {w:"集中力", r:"しゅうちゅうりょく", m:"capacidad de concentración"},
+     {w:"調子", r:"ちょうし", m:"estado · forma (física)"},
+     {w:"質", r:"しつ", m:"calidad"},
+     {w:"じゅうぶんな", r:"じゅうぶんな", m:"suficiente"}
+   ],
+   q:[
+     {q:"<ruby>睡眠<rt>すいみん</rt></ruby>が <ruby>足<rt>た</rt></ruby>りないと どう なりますか。", o:["<ruby>集中力<rt>しゅうちゅうりょく</rt></ruby>が <ruby>下<rt>さ</rt></ruby>がる","<ruby>元気<rt>げんき</rt></ruby>に なる","<ruby>頭<rt>あたま</rt></ruby>が よく なる"], a:0},
+     {q:"<ruby>寝<rt>ね</rt></ruby>る<ruby>前<rt>まえ</rt></ruby>の <ruby>何<rt>なに</rt></ruby>が ねむりの <ruby>質<rt>しつ</rt></ruby>を <ruby>下<rt>さ</rt></ruby>げますか。", o:["スマホを <ruby>見<rt>み</rt></ruby>る こと","<ruby>本<rt>ほん</rt></ruby>を <ruby>読<rt>よ</rt></ruby>む こと","おふろに <ruby>入<rt>はい</rt></ruby>る こと"], a:0}
+   ]
+ },
+ { id:"r-n3-16", lvl:"N3", title:"日本のアニメ文化", mins:3,
+   paras:[
+     {jp:"日本の アニメは 今、世界中で 人気が あります。", fu:"にほんの あにめは いま、せかいじゅうで にんきが あります。", es:"El anime japonés hoy es popular en todo el mundo."},
+     {jp:"アニメを きっかけに、日本語や 日本の 文化に 興味を もつ 外国人も 多いです。", fu:"あにめを きっかけに、にほんごや にほんの ぶんかに きょうみを もつ がいこくじんも おおいです。", es:"Muchos extranjeros se interesan por el japonés y su cultura a raíz del anime."},
+     {jp:"アニメには、友情や 努力など、心に のこる テーマが たくさん あります。", fu:"あにめには、ゆうじょうや どりょくなど、こころに のこる てーまが たくさん あります。", es:"El anime tiene muchos temas que dejan huella, como la amistad o el esfuerzo."},
+     {jp:"アニメは 日本を 代表する 文化の 一つに なったと 言えるでしょう。", fu:"あにめは にほんを だいひょうする ぶんかの ひとつに なったと いえるでしょう。", es:"Se puede decir que el anime se ha convertido en una de las culturas representativas de Japón."}
+   ],
+   gloss:[
+     {w:"世界中", r:"せかいじゅう", m:"en todo el mundo"},
+     {w:"きっかけ", r:"きっかけ", m:"motivo · ocasión que da pie a algo"},
+     {w:"興味", r:"きょうみ", m:"interés"},
+     {w:"友情", r:"ゆうじょう", m:"amistad"},
+     {w:"のこる", r:"のこる", m:"quedar · permanecer"},
+     {w:"代表する", r:"だいひょうする", m:"representar"}
+   ],
+   q:[
+     {q:"<ruby>外国人<rt>がいこくじん</rt></ruby>は <ruby>何<rt>なに</rt></ruby>を きっかけに <ruby>日本<rt>にほん</rt></ruby>に <ruby>興味<rt>きょうみ</rt></ruby>を もちますか。", o:["アニメ","<ruby>食<rt>た</rt></ruby>べ<ruby>物<rt>もの</rt></ruby>","スポーツ"], a:0},
+     {q:"アニメには どんな テーマが <ruby>多<rt>おお</rt></ruby>いですか。", o:["<ruby>友情<rt>ゆうじょう</rt></ruby>や <ruby>努力<rt>どりょく</rt></ruby>","お<ruby>金<rt>かね</rt></ruby>","<ruby>戦争<rt>せんそう</rt></ruby>"], a:0}
+   ]
+ },
+ { id:"r-n3-17", lvl:"N3", title:"節約する生活", mins:3,
+   paras:[
+     {jp:"物の 値段が 上がって いるので、節約を 意識する 人が 増えています。", fu:"ものの ねだんが あがって いるので、せつやくを いしきする ひとが ふえています。", es:"Como los precios suben, aumenta la gente que es consciente del ahorro."},
+     {jp:"例えば、電気を こまめに 消したり、いらない 物を 買わないように したり します。", fu:"たとえば、でんきを こまめに けしたり、いらない ものを かわないように したり します。", es:"Por ejemplo, apagan la luz con frecuencia o procuran no comprar cosas innecesarias."},
+     {jp:"外食を へらして、自分で 料理を すれば、お金だけでなく 健康にも いいです。", fu:"がいしょくを へらして、じぶんで りょうりを すれば、おかねだけでなく けんこうにも いいです。", es:"Si reduces las comidas fuera y cocinas tú, es bueno no solo para el bolsillo sino para la salud."},
+     {jp:"むりを しないで、少しずつ 続けられる 工夫が 大切です。", fu:"むりを しないで、すこしずつ つづけられる くふうが たいせつです。", es:"Es importante buscar apaños que puedas mantener poco a poco, sin forzarte."}
+   ],
+   gloss:[
+     {w:"値段", r:"ねだん", m:"precio"},
+     {w:"節約", r:"せつやく", m:"ahorro"},
+     {w:"意識する", r:"いしきする", m:"ser consciente de"},
+     {w:"こまめに", r:"こまめに", m:"con frecuencia · diligentemente"},
+     {w:"外食", r:"がいしょく", m:"comer fuera de casa"},
+     {w:"工夫", r:"くふう", m:"ingenio · apaño"}
+   ],
+   q:[
+     {q:"なぜ <ruby>節約<rt>せつやく</rt></ruby>する <ruby>人<rt>ひと</rt></ruby>が <ruby>増<rt>ふ</rt></ruby>えていますか。", o:["<ruby>物<rt>もの</rt></ruby>の <ruby>値段<rt>ねだん</rt></ruby>が <ruby>上<rt>あ</rt></ruby>がっているから","きゅうりょうが <ruby>上<rt>あ</rt></ruby>がったから","ひまだから"], a:0},
+     {q:"<ruby>外食<rt>がいしょく</rt></ruby>を へらすと <ruby>何<rt>なに</rt></ruby>に いいと <ruby>言<rt>い</rt></ruby>っていますか。", o:["お<ruby>金<rt>かね</rt></ruby>と <ruby>健康<rt>けんこう</rt></ruby>","<ruby>時間<rt>じかん</rt></ruby>","<ruby>友<rt>とも</rt></ruby>だち"], a:0}
+   ]
+ },
+ { id:"r-n3-18", lvl:"N3", title:"高齢化社会", mins:3,
+   paras:[
+     {jp:"日本では 高齢化が 進み、お年よりの 数が 増え続けています。", fu:"にほんでは こうれいかが すすみ、おとしよりの かずが ふえつづけています。", es:"En Japón avanza el envejecimiento y el número de ancianos sigue creciendo."},
+     {jp:"その 一方で、生まれる 子どもの 数は 減っています。", fu:"その いっぽうで、うまれる こどもの かずは へっています。", es:"Por otro lado, el número de niños que nacen está disminuyendo."},
+     {jp:"そのため、はたらく 人が 少なく なり、社会を ささえる ことが むずかしく なると 心配されています。", fu:"そのため、はたらく ひとが すくなく なり、しゃかいを ささえる ことが むずかしく なると しんぱいされています。", es:"Por eso se teme que, al haber menos trabajadores, resulte difícil sostener la sociedad."},
+     {jp:"お年よりが 安心して 暮らせる しくみを 作る ことが 求められています。", fu:"おとしよりが あんしんして くらせる しくみを つくる ことが もとめられています。", es:"Se reclama crear un sistema en el que los mayores puedan vivir con tranquilidad."}
+   ],
+   gloss:[
+     {w:"高齢化", r:"こうれいか", m:"envejecimiento (de la población)"},
+     {w:"お年より", r:"おとしより", m:"personas mayores"},
+     {w:"減って", r:"へって", m:"disminuir (減る)"},
+     {w:"ささえる", r:"ささえる", m:"sostener · apoyar"},
+     {w:"安心して", r:"あんしんして", m:"con tranquilidad (安心する)"},
+     {w:"しくみ", r:"しくみ", m:"sistema · mecanismo"}
+   ],
+   q:[
+     {q:"<ruby>日本<rt>にほん</rt></ruby>で <ruby>増<rt>ふ</rt></ruby>え<ruby>続<rt>つづ</rt></ruby>けているのは <ruby>何<rt>なに</rt></ruby>ですか。", o:["お<ruby>年<rt>とし</rt></ruby>よりの <ruby>数<rt>かず</rt></ruby>","<ruby>子<rt>こ</rt></ruby>どもの <ruby>数<rt>かず</rt></ruby>","はたらく <ruby>人<rt>ひと</rt></ruby>の <ruby>数<rt>かず</rt></ruby>"], a:0},
+     {q:"<ruby>何<rt>なに</rt></ruby>が <ruby>心配<rt>しんぱい</rt></ruby>されていますか。", o:["<ruby>社会<rt>しゃかい</rt></ruby>を ささえる ことが むずかしく なる","<ruby>物<rt>もの</rt></ruby>が <ruby>高<rt>たか</rt></ruby>く なる","<ruby>学校<rt>がっこう</rt></ruby>が <ruby>増<rt>ふ</rt></ruby>える"], a:0}
+   ]
+ },
+ { id:"r-n3-19", lvl:"N3", title:"一人暮らし", mins:3,
+   paras:[
+     {jp:"大学に 入って、私は 初めて 一人暮らしを 始めました。", fu:"だいがくに はいって、わたしは はじめて ひとりぐらしを はじめました。", es:"Al entrar en la universidad empecé a vivir solo por primera vez."},
+     {jp:"料理も せんたくも 自分で しなければ ならないので、最初は 大変でした。", fu:"りょうりも せんたくも じぶんで しなければ ならないので、さいしょは たいへんでした。", es:"Como tenía que cocinar y lavar la ropa yo mismo, al principio fue duro."},
+     {jp:"でも、生活に なれるに つれて、自由な 時間の よさも 感じるように なりました。", fu:"でも、せいかつに なれるに つれて、じゆうな じかんの よさも かんじるように なりました。", es:"Pero a medida que me acostumbré, empecé a apreciar lo bueno del tiempo libre."},
+     {jp:"一人暮らしを して、家族の ありがたさが よく わかりました。", fu:"ひとりぐらしを して、かぞくの ありがたさが よく わかりました。", es:"Al vivir solo, comprendí bien lo mucho que hay que agradecer a la familia."}
+   ],
+   gloss:[
+     {w:"一人暮らし", r:"ひとりぐらし", m:"vivir solo"},
+     {w:"最初", r:"さいしょ", m:"al principio"},
+     {w:"なれる", r:"なれる", m:"acostumbrarse (慣れる)"},
+     {w:"自由", r:"じゆう", m:"libertad · libre"},
+     {w:"よさ", r:"よさ", m:"lo bueno · las ventajas"},
+     {w:"ありがたさ", r:"ありがたさ", m:"valor de algo que se agradece"}
+   ],
+   q:[
+     {q:"<ruby>一人暮<rt>ひとりぐ</rt></ruby>らしを <ruby>始<rt>はじ</rt></ruby>めて <ruby>最初<rt>さいしょ</rt></ruby>は どうでしたか。", o:["<ruby>大変<rt>たいへん</rt></ruby>だった","<ruby>楽<rt>らく</rt></ruby>だった","ひまだった"], a:0},
+     {q:"<ruby>一人暮<rt>ひとりぐ</rt></ruby>らしを して <ruby>何<rt>なに</rt></ruby>が わかりましたか。", o:["<ruby>家族<rt>かぞく</rt></ruby>の ありがたさ","<ruby>料理<rt>りょうり</rt></ruby>の レシピ","お<ruby>金<rt>かね</rt></ruby>の <ruby>大切<rt>たいせつ</rt></ruby>さ"], a:0}
+   ]
+ },
+ { id:"r-n3-20", lvl:"N3", title:"キャッシュレス社会", mins:3,
+   paras:[
+     {jp:"最近、現金を 使わずに 買い物を する 人が 増えて きました。", fu:"さいきん、げんきんを つかわずに かいものを する ひとが ふえて きました。", es:"Últimamente ha aumentado la gente que compra sin usar efectivo."},
+     {jp:"スマホや カードで 払えば、財布を 持たなくても よく、とても 便利です。", fu:"すまほや かーどで はらえば、さいふを もたなくても よく、とても べんりです。", es:"Si pagas con el móvil o con tarjeta, no hace falta llevar cartera y es muy cómodo."},
+     {jp:"しかし、お金を 使っている 感覚が うすく なり、使いすぎて しまう 人も います。", fu:"しかし、おかねを つかっている かんかくが うすく なり、つかいすぎて しまう ひとも います。", es:"Sin embargo, la sensación de estar gastando se vuelve más débil y algunos gastan de más."},
+     {jp:"便利さと 注意点の 両方を 知って、上手に 使う ことが 大切です。", fu:"べんりさと ちゅういてんの りょうほうを しって、じょうずに つかう ことが たいせつです。", es:"Es importante conocer tanto las ventajas como los cuidados, y usarlo con cabeza."}
+   ],
+   gloss:[
+     {w:"現金", r:"げんきん", m:"efectivo · dinero en metálico"},
+     {w:"財布", r:"さいふ", m:"cartera · monedero"},
+     {w:"感覚", r:"かんかく", m:"sensación"},
+     {w:"うすく", r:"うすく", m:"débil · tenue (薄い)"},
+     {w:"注意点", r:"ちゅういてん", m:"puntos a tener en cuenta"},
+     {w:"両方", r:"りょうほう", m:"ambos · ambas cosas"}
+   ],
+   q:[
+     {q:"<ruby>現金<rt>げんきん</rt></ruby>を <ruby>使<rt>つか</rt></ruby>わないと <ruby>何<rt>なに</rt></ruby>が <ruby>便利<rt>べんり</rt></ruby>ですか。", o:["<ruby>財布<rt>さいふ</rt></ruby>を <ruby>持<rt>も</rt></ruby>たなくても よい","お<ruby>金<rt>かね</rt></ruby>が <ruby>増<rt>ふ</rt></ruby>える","<ruby>買<rt>か</rt></ruby>い<ruby>物<rt>もの</rt></ruby>が <ruby>安<rt>やす</rt></ruby>く なる"], a:0},
+     {q:"キャッシュレスの <ruby>注意点<rt>ちゅういてん</rt></ruby>は <ruby>何<rt>なに</rt></ruby>ですか。", o:["<ruby>使<rt>つか</rt></ruby>いすぎて しまう こと","おつりが でない こと","<ruby>時間<rt>じかん</rt></ruby>が かかる こと"], a:0}
+   ]
  }
 
 ];
