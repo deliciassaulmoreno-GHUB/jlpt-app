@@ -84,6 +84,9 @@
   .exam-submit:disabled{opacity:.5;}
   .exam-score{font-size:17px; font-weight:800; text-align:center; margin:16px 0 8px; color:var(--ink);}
   #exam,#conv{padding:6px 22px 28px; overflow-y:auto;}
+  .exam-exp{margin-top:11px; font-size:12.5px; line-height:1.6; color:var(--ink-2);
+    background:rgba(62,207,142,.09); border-left:3px solid var(--green); border-radius:9px; padding:9px 12px;}
+  .exam-exp b{color:var(--ink);}
   .tile-ic{width:42px; height:42px; border-radius:13px; background:rgba(39,64,127,.08); color:var(--indigo);
     display:flex; align-items:center; justify-content:center; font-family:var(--jp); font-size:22px; font-weight:700;}
   .tile-ic.g2{background:rgba(201,138,46,.12); color:var(--amber);}
@@ -1569,6 +1572,8 @@ function gradeExam(){
     opts.forEach(function(x){ x.disabled = true; });
     if(sel === ans){ correct++; opts[ans].classList.add("ok"); }
     else { if(opts[ans]) opts[ans].classList.add("ok"); if(sel != null && opts[sel]) opts[sel].classList.add("no"); }
+    var exp = currentExam.questions[parseInt(qb.getAttribute("data-i"), 10)].exp;
+    if(exp && !qb.querySelector(".exam-exp")){ var ed = document.createElement("div"); ed.className = "exam-exp"; ed.innerHTML = exp; qb.appendChild(ed); }
   });
   examView = "result";
   var pct = Math.round(correct / total * 100);
