@@ -87,6 +87,29 @@
   .exam-exp{margin-top:11px; font-size:12.5px; line-height:1.6; color:var(--ink-2);
     background:rgba(62,207,142,.09); border-left:3px solid var(--green); border-radius:9px; padding:9px 12px;}
   .exam-exp b{color:var(--ink);}
+  .conv-head{font-size:15px; font-weight:800; margin:6px 0 2px; color:var(--ink);}
+  .conv-goal{font-size:12.5px; color:var(--muted); margin-bottom:12px;}
+  .conv-chat{display:flex; flex-direction:column; gap:10px; margin-bottom:12px;}
+  .conv-msg{border-radius:15px; padding:11px 14px; max-width:88%; box-shadow:var(--shadow);}
+  .conv-msg.ai{background:var(--card); align-self:flex-start;}
+  .conv-msg.me{background:var(--indigo); color:#fff; align-self:flex-end; font-size:15px;}
+  .conv-jp{font-family:var(--jp); font-size:16.5px; line-height:1.7;}
+  .conv-fu{font-size:12px; color:var(--muted); margin-top:4px;}
+  .conv-es{font-size:12.5px; color:var(--ink-2); margin-top:7px; border-top:1px solid var(--line); padding-top:7px;}
+  .conv-corr{font-size:12.5px; color:#8a5a00; background:rgba(201,138,46,.12); border-radius:9px; padding:7px 10px; margin-top:8px;}
+  .conv-sugs{display:flex; flex-wrap:wrap; gap:7px; margin-bottom:12px;}
+  .conv-sug{border:1.5px solid var(--line); background:var(--card); color:var(--indigo); border-radius:20px;
+    padding:8px 13px; font-size:13.5px; font-family:var(--jp); cursor:pointer;}
+  .conv-controls{position:sticky; bottom:0; background:var(--paper); padding:10px 0 4px; display:flex; flex-direction:column; gap:9px;}
+  .conv-mic{display:block; width:100%; border:none; border-radius:14px; padding:15px; font-size:15.5px; font-weight:800;
+    color:#fff; background:var(--indigo); cursor:pointer;}
+  .conv-mic.rec{background:#B0413E;}
+  .conv-textrow{display:flex; gap:8px;}
+  .conv-textrow input{flex:1; border:1.5px solid var(--line); background:var(--card); color:var(--ink);
+    border-radius:12px; padding:11px 13px; font-size:14px; font-family:var(--jp);}
+  .conv-textrow button{border:none; border-radius:12px; padding:0 18px; font-size:17px; font-weight:800;
+    color:#fff; background:var(--indigo); cursor:pointer;}
+  .conv-status{font-size:12.5px; color:var(--muted); min-height:18px; margin-top:6px;}
   .tile-ic{width:42px; height:42px; border-radius:13px; background:rgba(39,64,127,.08); color:var(--indigo);
     display:flex; align-items:center; justify-content:center; font-family:var(--jp); font-size:22px; font-weight:700;}
   .tile-ic.g2{background:rgba(201,138,46,.12); color:var(--amber);}
@@ -577,12 +600,7 @@
     <button class="back-btn" id="convBack" aria-label="Volver">←</button>
     <span class="eyebrow">Conversación</span>
   </div>
-  <div class="level-title">Test de micrófono</div>
-  <div class="level-help">Antes de la conversación por voz, comprobemos que el micrófono funciona dentro de la app instalada (modo PWA). Pulsa grabar, habla y escúchate.</div>
-  <div class="mic-panel" id="micEnv"></div>
-  <button class="mic-btn" id="micBtn">🎙️ Grabar 3 segundos</button>
-  <div class="mic-status" id="micStatus">Pulsa el botón y di algo en japonés.</div>
-  <audio id="micPlayer" controls hidden style="width:100%; margin-top:12px;"></audio>
+  <div id="convStage"></div>
 </section>
 
 <!-- ===== EXÁMENES · Mini examen por áreas del JLPT ===== -->
@@ -621,6 +639,7 @@
 <script src="reading.js"></script>
 <script src="listening.js"></script>
 <script src="exams.js"></script>
+<script src="scenarios.js"></script>
 <script>
 var C = window.CONTENT || {kanji:[],vocab:[],grammar:[]};
 var ITEMS = [];
@@ -1463,47 +1482,96 @@ function openListen(id){
   show("reader");
 }
 /* ===== CONVERSACIÓN · test de micrófono en modo PWA ===== */
-var micSupported=[];
-function micRow(k, ok, txt){ return '<div class="mic-row"><span class="mk">'+k+'</span><span class="mv '+(ok?'mic-ok':'mic-bad')+'">'+(txt||(ok?'✓':'✗'))+'</span></div>'; }
+/* ===== CONVERSACIÓN por voz ===== */
+var CONV_WORKER = "https://jlpt-conversa.deliciassaulmoreno.workers.dev";
+var convView = "levels", convScenario = null, convHistory = [];
+var convRec = null, convChunks = [], convRecording = false, convMime = "";
+function convScenData(){ return window.SCENARIOS || []; }
+function asTxt(x){ if(x==null) return ""; if(typeof x==="string") return x; if(Array.isArray(x)) return x.map(asTxt).join(" / "); if(typeof x==="object") return x.jp||x.text||JSON.stringify(x); return String(x); }
+function convStatus(m){ var s=document.getElementById("convStatus"); if(s) s.innerHTML=m||""; }
+function convSetMicUI(on){ var b=document.getElementById("convMic"); if(!b) return; b.textContent = on ? "⏹ Parar" : "🎤 Hablar"; b.classList.toggle("rec", on); }
+
 function openConv(){
-  var standalone=(window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || (navigator.standalone===true);
-  var secure=window.isSecureContext===true;
-  var hasGUM=!!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
-  var hasMR=(typeof MediaRecorder!=="undefined");
-  var mimes=['audio/webm','audio/webm;codecs=opus','audio/mp4','audio/aac','audio/ogg'];
-  micSupported=hasMR?mimes.filter(function(m){ try{ return MediaRecorder.isTypeSupported(m); }catch(e){ return false; } }):[];
-  document.getElementById("micEnv").innerHTML=
-    micRow("Modo PWA (standalone)", standalone, standalone?"sí ✓":"no — ábrelo desde el icono")+
-    micRow("Contexto seguro (HTTPS)", secure)+
-    micRow("getUserMedia", hasGUM)+
-    micRow("MediaRecorder", hasMR)+
-    micRow("Formatos", micSupported.length>0, micSupported.length?micSupported.join(", "):"ninguno");
-  var btn=document.getElementById("micBtn"), st=document.getElementById("micStatus"), pl=document.getElementById("micPlayer");
-  pl.hidden=true;
-  if(!hasGUM||!hasMR){ btn.disabled=true; st.innerHTML='<span class="mic-bad">Este navegador no expone las APIs necesarias.</span>'; }
-  else { btn.disabled=false; st.textContent="Pulsa el botón y di algo en japonés."; }
+  convView = "levels";
+  var lvls = {}; convScenData().forEach(function(s){ lvls[s.lvl]=1; });
+  var order = ["N5","N4","N3","N2","N1"].filter(function(l){ return lvls[l]; });
+  var h = '<div class="level-title">Conversación</div><div class="level-help">Elige nivel y escenario y practica hablando. Pulsa 🎤 para hablar (o escribe abajo). Tus fallos se corrigen sobre la marcha.</div>';
+  if(!order.length){ h += '<div class="level-help">Falta el archivo scenarios.js.</div>'; }
+  order.forEach(function(l){ h += '<button class="level-btn" data-l="'+l+'"><div class="level-l"><div class="level-tag">'+l+'</div><div class="level-meta"><div class="lt">Nivel '+l+'</div></div></div><span class="level-arrow">›</span></button>'; });
+  var st = document.getElementById("convStage"); st.innerHTML = h; st.scrollTop = 0;
+  st.querySelectorAll(".level-btn").forEach(function(b){ b.addEventListener("click", function(){ convScenarios(b.getAttribute("data-l")); }); });
   show("conv");
 }
-function runMicTest(){
-  var btn=document.getElementById("micBtn"), st=document.getElementById("micStatus"), pl=document.getElementById("micPlayer");
-  btn.disabled=true; pl.hidden=true; st.textContent="Pidiendo permiso de micrófono…";
+function convScenarios(level){
+  convView = "scenarios";
+  var list = convScenData().filter(function(s){ return s.lvl===level; });
+  var h = '<div class="level-title">'+level+' · elige el escenario</div>';
+  list.forEach(function(s){ h += '<button class="level-btn" data-id="'+s.id+'"><div class="level-l"><div class="level-tag all">会</div><div class="level-meta"><div class="lt">'+s.title+'</div><div class="ls">'+s.goal+'</div></div></div><span class="level-arrow">›</span></button>'; });
+  var st = document.getElementById("convStage"); st.innerHTML = h; st.scrollTop = 0;
+  st.querySelectorAll(".level-btn").forEach(function(b){ b.addEventListener("click", function(){ var s=convScenData().filter(function(x){return x.id===b.getAttribute("data-id");})[0]; if(s) convStart(s); }); });
+  show("conv");
+}
+function convStart(sc){
+  convView = "chat"; convScenario = sc; convHistory = [];
+  var h = '<div class="conv-head">'+sc.title+' · '+sc.lvl+'</div>'+
+          '<div class="conv-goal">🎯 '+sc.goal+'</div>'+
+          '<div class="conv-chat" id="convChat"></div>'+
+          '<div class="conv-sugs" id="convSugs"></div>'+
+          '<div class="conv-controls"><button class="conv-mic" id="convMic">🎤 Hablar</button>'+
+          '<div class="conv-textrow"><input id="convText" placeholder="…o escribe en japonés" autocomplete="off"><button id="convSendText">→</button></div></div>'+
+          '<div class="conv-status" id="convStatus"></div>';
+  var st = document.getElementById("convStage"); st.innerHTML = h; st.scrollTop = 0;
+  convAddAI({ jp: sc.opening.jp, fu: sc.opening.fu, es: sc.opening.es });
+  convHistory.push({ role:"assistant", content: sc.opening.jp });
+  try{ speak(sc.opening.jp); }catch(e){}
+  document.getElementById("convMic").addEventListener("click", convToggleRec);
+  document.getElementById("convSendText").addEventListener("click", convSendTyped);
+  document.getElementById("convText").addEventListener("keydown", function(e){ if(e.key==="Enter") convSendTyped(); });
+  show("conv");
+}
+function convBubble(cls, html){ var d=document.createElement("div"); d.className="conv-msg "+cls; d.innerHTML=html; document.getElementById("convChat").appendChild(d); var stage=document.getElementById("convStage"); stage.scrollTop=stage.scrollHeight; return d; }
+function convAddUser(t){ convBubble("me", asTxt(t)); }
+function convAddAI(data){
+  var corr = (data.correccion && asTxt(data.correccion).trim()) ? '<div class="conv-corr">✎ '+asTxt(data.correccion)+'</div>' : '';
+  convBubble("ai", '<div class="conv-jp">'+asTxt(data.jp)+'</div><div class="conv-fu">'+asTxt(data.fu)+'</div>'+corr+'<div class="conv-es">'+asTxt(data.es)+'</div>');
+}
+function convRenderSugs(arr){
+  var box=document.getElementById("convSugs"); if(!box) return; box.innerHTML="";
+  (Array.isArray(arr)?arr:[]).forEach(function(s){ var t=asTxt(s); if(!t) return; var b=document.createElement("button"); b.className="conv-sug"; b.textContent=t; b.addEventListener("click", function(){ convAddUser(t); convSend(t); }); box.appendChild(b); });
+}
+function convSendTyped(){ var i=document.getElementById("convText"); var t=(i.value||"").trim(); if(!t) return; i.value=""; convAddUser(t); convSend(t); }
+function convSend(text){
+  convStatus("Pensando…"); var sb=document.getElementById("convSugs"); if(sb) sb.innerHTML="";
+  fetch(CONV_WORKER+"/chat",{ method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({ level: convScenario.lvl, scenario: convScenario, history: convHistory, message: text }) })
+    .then(function(r){ return r.json(); }).then(function(j){
+      if(!j.ok){ convStatus('<span class="mic-bad">'+(j.error||"error")+'</span>'); return; }
+      convStatus(""); convHistory.push({ role:"user", content: text });
+      convAddAI(j.data); convHistory.push({ role:"assistant", content: asTxt(j.data.jp) });
+      convRenderSugs(j.data.sugerencias);
+      try{ speak(asTxt(j.data.jp)); }catch(e){}
+    }).catch(function(e){ convStatus('<span class="mic-bad">Fallo de red.</span>'); });
+}
+function convToggleRec(){
+  if(convRecording){ if(convRec && convRec.state!=="inactive") convRec.stop(); return; }
+  if(!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia)){ convStatus('<span class="mic-bad">Micrófono no disponible aquí.</span>'); return; }
   navigator.mediaDevices.getUserMedia({audio:true}).then(function(stream){
-    st.textContent="🔴 Grabando… habla ahora (3 s).";
-    var mt=micSupported[0]||"", rec;
-    try{ rec=new MediaRecorder(stream, mt?{mimeType:mt}:undefined); }catch(e){ rec=new MediaRecorder(stream); }
-    var chunks=[];
-    rec.ondataavailable=function(e){ if(e.data&&e.data.size) chunks.push(e.data); };
-    rec.onstop=function(){
-      stream.getTracks().forEach(function(t){ t.stop(); });
-      var blob=new Blob(chunks, {type: rec.mimeType||mt||"audio/mp4"});
-      btn.disabled=false;
-      if(blob.size<200){ st.innerHTML='<span class="mic-bad">Se grabó pero el audio está vacío ('+blob.size+' bytes). El micro no capta.</span>'; }
-      else { pl.src=URL.createObjectURL(blob); pl.hidden=false; st.innerHTML='<span class="mic-ok">✓ Micrófono OK.</span> '+(blob.size/1024).toFixed(1)+' KB ('+(rec.mimeType||mt)+'). Escúchate abajo.'; }
-    };
-    rec.start(); setTimeout(function(){ if(rec.state!=="inactive") rec.stop(); }, 3000);
-  }).catch(function(err){
-    btn.disabled=false; st.innerHTML='<span class="mic-bad">Falló: '+err.name+'</span> — '+(err.message||"");
-  });
+    var mimes=['audio/webm;codecs=opus','audio/webm','audio/mp4']; convMime="";
+    for(var i=0;i<mimes.length;i++){ try{ if(MediaRecorder.isTypeSupported(mimes[i])){ convMime=mimes[i]; break; } }catch(e){} }
+    try{ convRec = convMime? new MediaRecorder(stream,{mimeType:convMime}) : new MediaRecorder(stream); }catch(e){ convRec=new MediaRecorder(stream); }
+    convChunks=[];
+    convRec.ondataavailable=function(e){ if(e.data&&e.data.size) convChunks.push(e.data); };
+    convRec.onstop=function(){ stream.getTracks().forEach(function(t){ t.stop(); }); convRecording=false; convSetMicUI(false); var blob=new Blob(convChunks,{type: convRec.mimeType||convMime||"audio/webm"}); convSTT(blob); };
+    convRec.start(); convRecording=true; convSetMicUI(true); convStatus("🔴 Grabando… pulsa Parar cuando termines.");
+  }).catch(function(err){ convStatus('<span class="mic-bad">Micrófono: '+err.name+'</span>'); });
+}
+function convSTT(blob){
+  if(!blob || blob.size<300){ convStatus("No se grabó audio. Inténtalo otra vez."); return; }
+  convStatus("Transcribiendo…");
+  fetch(CONV_WORKER+"/stt",{ method:"POST", headers:{"Content-Type":"application/octet-stream"}, body: blob })
+    .then(function(r){ return r.json(); }).then(function(j){
+      if(!j.ok || !j.text || !j.text.trim()){ convStatus("No te entendí; prueba otra vez o escribe."); return; }
+      convAddUser(j.text); convSend(j.text);
+    }).catch(function(e){ convStatus('<span class="mic-bad">Fallo de red (audio).</span>'); });
 }
 /* ===== EXÁMENES · Mini examen por áreas ===== */
 var examView = "levels", examLevel = null, currentExam = null, examAnswers = {};
@@ -1758,8 +1826,11 @@ document.getElementById("examBack").addEventListener("click", function(){
   else if(examView==="areas"){ openExamLevels(); }
   else { show("menu"); renderMenu(); }
 });
-document.getElementById("convBack").addEventListener("click", function(){ show("menu"); renderMenu(); });
-document.getElementById("micBtn").addEventListener("click", runMicTest);
+document.getElementById("convBack").addEventListener("click", function(){
+  if(convView==="chat"){ convScenarios(convScenario ? convScenario.lvl : "N5"); }
+  else if(convView==="scenarios"){ openConv(); }
+  else { show("menu"); renderMenu(); }
+});
 document.getElementById("readLvlBack").addEventListener("click", function(){ show("menu"); renderMenu(); });
 document.getElementById("readListBack").addEventListener("click", function(){ readerMode==="listen" ? openListeningLevels() : openReadingLevels(); });
 document.getElementById("readerClose").addEventListener("click", function(){ stopRead(); readerMode==="listen" ? showListeningList(readListLevel) : showReadingList(readListLevel); });
