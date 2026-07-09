@@ -1399,6 +1399,406 @@ window.READING = [
      {q:"「<ruby>観光公害<rt>かんこうこうがい</rt></ruby>」で <ruby>住民<rt>じゅうみん</rt></ruby>を <ruby>悩<rt>なや</rt></ruby>ませているのは？", o:["ごみや <ruby>騒音<rt>そうおん</rt></ruby>","<ruby>物価<rt>ぶっか</rt></ruby>の <ruby>低下<rt>ていか</rt></ruby>","<ruby>観光客<rt>かんこうきゃく</rt></ruby>の <ruby>減少<rt>げんしょう</rt></ruby>"], a:0},
      {q:"<ruby>今<rt>いま</rt></ruby>、<ruby>課題<rt>かだい</rt></ruby>となっているのは <ruby>何<rt>なに</rt></ruby>ですか。", o:["<ruby>利益<rt>りえき</rt></ruby>と <ruby>生活<rt>せいかつ</rt></ruby>の バランス","<ruby>観光<rt>かんこう</rt></ruby>の <ruby>宣伝<rt>せんでん</rt></ruby>","ホテルの <ruby>建設<rt>けんせつ</rt></ruby>"], a:0}
    ]
+ },
+ { id:"r-n2-11", lvl:"N2", title:"電子書籍と紙の本", mins:4,
+   paras:[
+     {jp:"スマートフォンや タブレットの 普及により、電子書籍で 本を 読む 人が 増えている。", fu:"すまーとふぉんや たぶれっとの ふきゅうにより、でんししょせきで ほんを よむ ひとが ふえている。", es:"Con la difusión de los smartphones y las tabletas, aumenta la gente que lee en libros electrónicos."},
+     {jp:"電子書籍は 場所を とらず、何冊でも 持ち運べるという 便利さが ある。", fu:"でんししょせきは ばしょを とらず、なんさつでも もちはこべるという べんりさが ある。", es:"Los libros electrónicos tienen la comodidad de no ocupar espacio y poder llevar cuantos quieras."},
+     {jp:"一方、紙の 本の ほうが 記憶に 残りやすいと 感じる 人も 多い。", fu:"いっぽう、かみの ほんの ほうが きおくに のこりやすいと かんじる ひとも おおい。", es:"Por otro lado, muchos sienten que el libro en papel se retiene mejor en la memoria."},
+     {jp:"それぞれの 長所を 生かし、目的に 応じて 使い分ける ことが 大切だろう。", fu:"それぞれの ちょうしょを いかし、もくてきに おうじて つかいわける ことが たいせつだろう。", es:"Conviene aprovechar las ventajas de cada uno y usarlos según el propósito."}
+   ],
+   gloss:[
+     {w:"電子書籍", r:"でんししょせき", m:"libro electrónico"},
+     {w:"普及", r:"ふきゅう", m:"difusión · propagación"},
+     {w:"持ち運べる", r:"もちはこべる", m:"poder transportar (持ち運ぶ)"},
+     {w:"記憶", r:"きおく", m:"memoria"},
+     {w:"長所", r:"ちょうしょ", m:"punto fuerte · ventaja"},
+     {w:"使い分ける", r:"つかいわける", m:"usar según el caso"}
+   ],
+   q:[
+     {q:"<ruby>電子書籍<rt>でんししょせき</rt></ruby>の <ruby>便利<rt>べんり</rt></ruby>な <ruby>点<rt>てん</rt></ruby>は？", o:["<ruby>場所<rt>ばしょ</rt></ruby>を とらない","<ruby>安<rt>やす</rt></ruby>い","<ruby>目<rt>め</rt></ruby>に いい"], a:0},
+     {q:"<ruby>紙<rt>かみ</rt></ruby>の <ruby>本<rt>ほん</rt></ruby>の <ruby>長所<rt>ちょうしょ</rt></ruby>として <ruby>挙<rt>あ</rt></ruby>げられているのは？", o:["<ruby>記憶<rt>きおく</rt></ruby>に <ruby>残<rt>のこ</rt></ruby>りやすい","<ruby>軽<rt>かる</rt></ruby>い","<ruby>安<rt>やす</rt></ruby>い"], a:0}
+   ]
+ },
+ { id:"r-n2-12", lvl:"N2", title:"地震への備え", mins:4,
+   paras:[
+     {jp:"日本は 地震が 多い 国であり、日ごろからの 備えが 欠かせない。", fu:"にほんは じしんが おおい くにであり、ひごろからの そなえが かかせない。", es:"Japón es un país con muchos terremotos, y la preparación cotidiana es imprescindible."},
+     {jp:"家庭では、水や 食料、懐中電灯などを 用意しておくと よい。", fu:"かていでは、みずや しょくりょう、かいちゅうでんとう などを よういしておくと よい。", es:"En casa conviene tener preparados agua, comida, una linterna, etc."},
+     {jp:"また、地震が 起きたとき、どこへ 避難するかを 家族で 確認しておく ことが 重要だ。", fu:"また、じしんが おきたとき、どこへ ひなんするかを かぞくで かくにんしておく ことが じゅうようだ。", es:"Además, es importante confirmar en familia adónde evacuar cuando ocurra un terremoto."},
+     {jp:"日ごろの 準備が、いざという ときに 命を 守る ことに つながる。", fu:"ひごろの じゅんびが、いざという ときに いのちを まもる ことに つながる。", es:"La preparación diaria acaba protegiendo la vida en el momento crítico."}
+   ],
+   gloss:[
+     {w:"地震", r:"じしん", m:"terremoto"},
+     {w:"備え", r:"そなえ", m:"preparación · provisión"},
+     {w:"食料", r:"しょくりょう", m:"víveres · alimentos"},
+     {w:"懐中電灯", r:"かいちゅうでんとう", m:"linterna"},
+     {w:"避難", r:"ひなん", m:"evacuación"},
+     {w:"命", r:"いのち", m:"vida"}
+   ],
+   q:[
+     {q:"<ruby>家庭<rt>かてい</rt></ruby>で <ruby>用意<rt>ようい</rt></ruby>しておくと よい <ruby>物<rt>もの</rt></ruby>は？", o:["<ruby>水<rt>みず</rt></ruby>や <ruby>食料<rt>しょくりょう</rt></ruby>","<ruby>本<rt>ほん</rt></ruby>","げんきん"], a:0},
+     {q:"<ruby>家族<rt>かぞく</rt></ruby>で <ruby>確認<rt>かくにん</rt></ruby>しておくべきことは？", o:["どこへ <ruby>避難<rt>ひなん</rt></ruby>するか","<ruby>買<rt>か</rt></ruby>い<ruby>物<rt>もの</rt></ruby>の リスト","<ruby>旅行<rt>りょこう</rt></ruby>の <ruby>計画<rt>けいかく</rt></ruby>"], a:0}
+   ]
+ },
+ { id:"r-n2-13", lvl:"N2", title:"外来語の増加", mins:4,
+   paras:[
+     {jp:"現代の 日本語には、外国から 入ってきた「外来語」が あふれている。", fu:"げんだいの にほんごには、がいこくから はいってきた「がいらいご」が あふれている。", es:"El japonés actual está lleno de 'préstamos lingüísticos' que han entrado del extranjero."},
+     {jp:"特に 英語から 来た 言葉が 多く、カタカナで 表記される。", fu:"とくに えいごから きた ことばが おおく、かたかなで ひょうきされる。", es:"Sobre todo hay muchas palabras venidas del inglés, que se escriben en katakana."},
+     {jp:"便利で 新しい 印象を 与える 一方、意味が わかりにくいと 感じる 人も いる。", fu:"べんりで あたらしい いんしょうを あたえる いっぽう、いみが わかりにくいと かんじる ひとも いる。", es:"Aunque dan una impresión práctica y moderna, hay quien siente que el significado es difícil de entender."},
+     {jp:"特に 高齢者にとっては、外来語の 多い 説明が 負担に なる ことも ある。", fu:"とくに こうれいしゃにとっては、がいらいごの おおい せつめいが ふたんに なる ことも ある。", es:"En especial para los mayores, las explicaciones con muchos préstamos pueden ser una carga."}
+   ],
+   gloss:[
+     {w:"外来語", r:"がいらいご", m:"palabra de origen extranjero · préstamo"},
+     {w:"あふれて", r:"あふれて", m:"rebosar · estar lleno (あふれる)"},
+     {w:"表記", r:"ひょうき", m:"escritura · notación"},
+     {w:"印象", r:"いんしょう", m:"impresión"},
+     {w:"意味", r:"いみ", m:"significado"},
+     {w:"負担", r:"ふたん", m:"carga · peso"}
+   ],
+   q:[
+     {q:"<ruby>外来語<rt>がいらいご</rt></ruby>は <ruby>主<rt>おも</rt></ruby>に どの <ruby>言語<rt>げんご</rt></ruby>から <ruby>来<rt>き</rt></ruby>ていますか。", o:["<ruby>英語<rt>えいご</rt></ruby>","<ruby>中国語<rt>ちゅうごくご</rt></ruby>","フランス<ruby>語<rt>ご</rt></ruby>"], a:0},
+     {q:"<ruby>外来語<rt>がいらいご</rt></ruby>について <ruby>心配<rt>しんぱい</rt></ruby>されていることは？", o:["<ruby>意味<rt>いみ</rt></ruby>が わかりにくい","<ruby>数<rt>かず</rt></ruby>が <ruby>少<rt>すく</rt></ruby>ない","<ruby>書<rt>か</rt></ruby>けない"], a:0}
+   ]
+ },
+ { id:"r-n2-14", lvl:"N2", title:"若者の車離れ", mins:4,
+   paras:[
+     {jp:"近年、車を 持たない 若者が 増え、「車離れ」と 言われている。", fu:"きんねん、くるまを もたない わかものが ふえ、「くるまばなれ」と いわれている。", es:"En los últimos años aumentan los jóvenes que no tienen coche; se habla de 'alejamiento del coche'."},
+     {jp:"都市では 公共交通機関が 発達しており、車が なくても 生活に 困らない。", fu:"としでは こうきょうこうつうきかんが はったつしており、くるまが なくても せいかつに こまらない。", es:"En las ciudades el transporte público está desarrollado y no hay problemas para vivir sin coche."},
+     {jp:"また、車の 購入や 維持には 多くの 費用が かかることも 理由の 一つだ。", fu:"また、くるまの こうにゅうや いじには おおくの ひようが かかることも りゆうの ひとつだ。", es:"Además, una razón es que comprar y mantener un coche cuesta mucho dinero."},
+     {jp:"価値観の 変化とともに、「所有」から「利用」へと 意識が 移りつつある。", fu:"かちかんの へんかとともに、「しょゆう」から「りよう」へと いしきが うつりつつある。", es:"Junto al cambio de valores, la mentalidad va pasando de 'poseer' a 'usar'."}
+   ],
+   gloss:[
+     {w:"若者", r:"わかもの", m:"gente joven"},
+     {w:"公共交通機関", r:"こうきょうこうつうきかん", m:"transporte público"},
+     {w:"発達", r:"はったつ", m:"desarrollo"},
+     {w:"購入", r:"こうにゅう", m:"compra · adquisición"},
+     {w:"維持", r:"いじ", m:"mantenimiento"},
+     {w:"所有", r:"しょゆう", m:"posesión"}
+   ],
+   q:[
+     {q:"<ruby>都市<rt>とし</rt></ruby>で <ruby>車<rt>くるま</rt></ruby>が なくても <ruby>困<rt>こま</rt></ruby>らない <ruby>理由<rt>りゆう</rt></ruby>は？", o:["<ruby>公共交通機関<rt>こうきょうこうつうきかん</rt></ruby>が <ruby>発達<rt>はったつ</rt></ruby>","<ruby>道<rt>みち</rt></ruby>が <ruby>広<rt>ひろ</rt></ruby>い","<ruby>車<rt>くるま</rt></ruby>が <ruby>安<rt>やす</rt></ruby>い"], a:0},
+     {q:"<ruby>若者<rt>わかもの</rt></ruby>の <ruby>意識<rt>いしき</rt></ruby>は どう <ruby>変<rt>か</rt></ruby>わりつつありますか。", o:["「<ruby>所有<rt>しょゆう</rt></ruby>」から「<ruby>利用<rt>りよう</rt></ruby>」へ","「<ruby>利用<rt>りよう</rt></ruby>」から「<ruby>所有<rt>しょゆう</rt></ruby>」へ","<ruby>変<rt>か</rt></ruby>わっていない"], a:0}
+   ]
+ },
+ { id:"r-n2-15", lvl:"N2", title:"副業の広がり", mins:4,
+   paras:[
+     {jp:"働き方が 多様化する 中で、本業の ほかに 副業を 持つ 人が 増えている。", fu:"はたらきかたが たようかする なかで、ほんぎょうの ほかに ふくぎょうを もつ ひとが ふえている。", es:"Con la diversificación del trabajo, aumenta la gente que tiene un empleo secundario además del principal."},
+     {jp:"収入を 増やせるだけでなく、新しい 技能を 身につけられるという 利点も ある。", fu:"しゅうにゅうを ふやせるだけでなく、あたらしい ぎのうを みにつけられるという りてんも ある。", es:"No solo permite aumentar los ingresos, sino que tiene la ventaja de adquirir nuevas habilidades."},
+     {jp:"一方で、働きすぎて 体を こわす 危険も 指摘されている。", fu:"いっぽうで、はたらきすぎて からだを こわす きけんも してきされている。", es:"Por otro lado, se señala el riesgo de trabajar en exceso y dañar la salud."},
+     {jp:"会社も 副業を 認める 動きが 広がり、働き方は ますます 自由に なってきた。", fu:"かいしゃも ふくぎょうを みとめる うごきが ひろがり、はたらきかたは ますます じゆうに なってきた。", es:"También crece el movimiento de empresas que permiten el pluriempleo, y el trabajo se vuelve cada vez más libre."}
+   ],
+   gloss:[
+     {w:"本業", r:"ほんぎょう", m:"empleo principal"},
+     {w:"副業", r:"ふくぎょう", m:"empleo secundario · pluriempleo"},
+     {w:"収入", r:"しゅうにゅう", m:"ingresos"},
+     {w:"技能", r:"ぎのう", m:"habilidad · destreza"},
+     {w:"指摘", r:"してき", m:"señalamiento · indicación"},
+     {w:"認める", r:"みとめる", m:"reconocer · admitir"}
+   ],
+   q:[
+     {q:"<ruby>副業<rt>ふくぎょう</rt></ruby>の <ruby>利点<rt>りてん</rt></ruby>として <ruby>挙<rt>あ</rt></ruby>げられているのは？", o:["<ruby>新<rt>あたら</rt></ruby>しい <ruby>技能<rt>ぎのう</rt></ruby>が <ruby>身<rt>み</rt></ruby>につく","<ruby>休<rt>やす</rt></ruby>みが <ruby>増<rt>ふ</rt></ruby>える","<ruby>通勤<rt>つうきん</rt></ruby>が <ruby>楽<rt>らく</rt></ruby>"], a:0},
+     {q:"<ruby>副業<rt>ふくぎょう</rt></ruby>の <ruby>危険<rt>きけん</rt></ruby>として <ruby>指摘<rt>してき</rt></ruby>されているのは？", o:["<ruby>働<rt>はたら</rt></ruby>きすぎ","お<ruby>金<rt>かね</rt></ruby>の <ruby>使<rt>つか</rt></ruby>いすぎ","<ruby>寝坊<rt>ねぼう</rt></ruby>"], a:0}
+   ]
+ },
+ { id:"r-n2-16", lvl:"N2", title:"プラスチックごみ問題", mins:4,
+   paras:[
+     {jp:"海に 流れ出た プラスチックごみが、世界的な 環境問題と なっている。", fu:"うみに ながれでた ぷらすちっくごみが、せかいてきな かんきょうもんだいと なっている。", es:"La basura plástica que llega al mar se ha convertido en un problema ambiental mundial."},
+     {jp:"分解されずに 長く 残り、魚などの 生き物に 悪影響を 与える。", fu:"ぶんかいされずに ながく のこり、さかななどの いきものに あくえいきょうを あたえる。", es:"No se descompone y permanece mucho tiempo, perjudicando a seres vivos como los peces."},
+     {jp:"そのため、多くの 国で レジ袋の 有料化や 使い捨て 製品の 削減が 進められている。", fu:"そのため、おおくの くにで れじぶくろの ゆうりょうかや つかいすて せいひんの さくげんが すすめられている。", es:"Por eso, en muchos países se avanza en cobrar por las bolsas y reducir los productos de un solo uso."},
+     {jp:"私たち 一人ひとりが ごみを 減らす 努力を する ことが 求められている。", fu:"わたしたち ひとりひとりが ごみを へらす どりょくを する ことが もとめられている。", es:"Se nos pide que cada uno de nosotros haga el esfuerzo de reducir la basura."}
+   ],
+   gloss:[
+     {w:"流れ出た", r:"ながれでた", m:"salir fluyendo · verterse (流れ出る)"},
+     {w:"分解", r:"ぶんかい", m:"descomposición"},
+     {w:"生き物", r:"いきもの", m:"ser vivo"},
+     {w:"有料化", r:"ゆうりょうか", m:"hacer de pago"},
+     {w:"使い捨て", r:"つかいすて", m:"de un solo uso · desechable"},
+     {w:"削減", r:"さくげん", m:"reducción · recorte"}
+   ],
+   q:[
+     {q:"プラスチックごみが <ruby>問題<rt>もんだい</rt></ruby>なのはなぜですか。", o:["<ruby>分解<rt>ぶんかい</rt></ruby>されず <ruby>長<rt>なが</rt></ruby>く <ruby>残<rt>のこ</rt></ruby>る","<ruby>高<rt>たか</rt></ruby>い","<ruby>重<rt>おも</rt></ruby>い"], a:0},
+     {q:"<ruby>多<rt>おお</rt></ruby>くの <ruby>国<rt>くに</rt></ruby>で <ruby>行<rt>おこな</rt></ruby>われていることは？", o:["レジ<ruby>袋<rt>ぶくろ</rt></ruby>の <ruby>有料化<rt>ゆうりょうか</rt></ruby>","プラスチックの <ruby>増産<rt>ぞうさん</rt></ruby>","<ruby>海<rt>うみ</rt></ruby>の <ruby>掃除<rt>そうじ</rt></ruby>の <ruby>禁止<rt>きんし</rt></ruby>"], a:0}
+   ]
+ },
+ { id:"r-n2-17", lvl:"N2", title:"オンライン教育", mins:4,
+   paras:[
+     {jp:"インターネットの 発達により、オンラインで 学べる 環境が 整ってきた。", fu:"いんたーねっとの はったつにより、おんらいんで まなべる かんきょうが ととのってきた。", es:"Con el desarrollo de internet, se ha ido preparando un entorno para aprender en línea."},
+     {jp:"場所や 時間に しばられず、自分の ペースで 学習できる 点が 大きな 魅力だ。", fu:"ばしょや じかんに しばられず、じぶんの ぺーすで がくしゅうできる てんが おおきな みりょくだ。", es:"Su gran atractivo es poder estudiar a tu ritmo, sin estar atado al lugar ni al tiempo."},
+     {jp:"しかし、直接 質問しにくかったり、集中力を 保ちにくかったりする 課題も ある。", fu:"しかし、ちょくせつ しつもんしにくかったり、しゅうちゅうりょくを たもちにくかったり する かだいも ある。", es:"Pero tiene retos como que cuesta preguntar directamente o mantener la concentración."},
+     {jp:"対面と オンラインの 両方の 良さを 組み合わせる 学び方が 広がっている。", fu:"たいめんと おんらいんの りょうほうの よさを くみあわせる まなびかたが ひろがっている。", es:"Se extiende una forma de aprender que combina lo bueno de lo presencial y lo online."}
+   ],
+   gloss:[
+     {w:"発達", r:"はったつ", m:"desarrollo"},
+     {w:"整って", r:"ととのって", m:"prepararse · quedar en orden (整う)"},
+     {w:"しばられず", r:"しばられず", m:"sin estar atado (しばる)"},
+     {w:"魅力", r:"みりょく", m:"atractivo · encanto"},
+     {w:"集中力", r:"しゅうちゅうりょく", m:"capacidad de concentración"},
+     {w:"対面", r:"たいめん", m:"cara a cara · presencial"}
+   ],
+   q:[
+     {q:"オンライン<ruby>教育<rt>きょういく</rt></ruby>の <ruby>魅力<rt>みりょく</rt></ruby>は？", o:["<ruby>自分<rt>じぶん</rt></ruby>の ペースで <ruby>学<rt>まな</rt></ruby>べる","<ruby>安<rt>やす</rt></ruby>い","<ruby>友<rt>とも</rt></ruby>だちが できる"], a:0},
+     {q:"オンライン<ruby>教育<rt>きょういく</rt></ruby>の <ruby>課題<rt>かだい</rt></ruby>として <ruby>挙<rt>あ</rt></ruby>げられているのは？", o:["<ruby>集中力<rt>しゅうちゅうりょく</rt></ruby>を <ruby>保<rt>たも</rt></ruby>ちにくい","お<ruby>金<rt>かね</rt></ruby>が かかる","<ruby>時間<rt>じかん</rt></ruby>が かかる"], a:0}
+   ]
+ },
+ { id:"r-n2-18", lvl:"N2", title:"ゲーム依存", mins:4,
+   paras:[
+     {jp:"スマートフォンの ゲームに 夢中に なり、生活に 支障を きたす 人が 問題に なっている。", fu:"すまーとふぉんの げーむに むちゅうに なり、せいかつに ししょうを きたす ひとが もんだいに なっている。", es:"Se ha vuelto un problema la gente que se obsesiona con los juegos del móvil y perjudica su vida diaria."},
+     {jp:"特に 子どもの 場合、勉強や 睡眠の 時間が 削られる ことが 心配される。", fu:"とくに こどもの ばあい、べんきょうや すいみんの じかんが けずられる ことが しんぱいされる。", es:"En el caso de los niños, preocupa que se les recorte el tiempo de estudio y de sueño."},
+     {jp:"長時間の 使用は 目の 疲れや 運動不足にも つながりやすい。", fu:"ちょうじかんの しようは めの つかれや うんどうぶそくにも つながりやすい。", es:"El uso prolongado tiende a provocar también fatiga ocular y falta de ejercicio."},
+     {jp:"使う 時間を 決め、家族で ルールを つくる ことが 対策として 有効だ。", fu:"つかう じかんを きめ、かぞくで るーるを つくる ことが たいさくとして ゆうこうだ。", es:"Fijar el tiempo de uso y hacer reglas en familia es eficaz como medida."}
+   ],
+   gloss:[
+     {w:"夢中", r:"むちゅう", m:"absorto · obsesionado"},
+     {w:"支障", r:"ししょう", m:"obstáculo · perjuicio"},
+     {w:"削られる", r:"けずられる", m:"ser recortado (削る)"},
+     {w:"使用", r:"しよう", m:"uso"},
+     {w:"対策", r:"たいさく", m:"medida · contramedida"},
+     {w:"有効", r:"ゆうこう", m:"eficaz · válido"}
+   ],
+   q:[
+     {q:"<ruby>子<rt>こ</rt></ruby>どもの <ruby>場合<rt>ばあい</rt></ruby>、<ruby>何<rt>なに</rt></ruby>が <ruby>削<rt>けず</rt></ruby>られると <ruby>心配<rt>しんぱい</rt></ruby>されますか。", o:["<ruby>勉強<rt>べんきょう</rt></ruby>や <ruby>睡眠<rt>すいみん</rt></ruby>の <ruby>時間<rt>じかん</rt></ruby>","お<ruby>金<rt>かね</rt></ruby>","<ruby>友<rt>とも</rt></ruby>だち"], a:0},
+     {q:"<ruby>対策<rt>たいさく</rt></ruby>として <ruby>有効<rt>ゆうこう</rt></ruby>だとされているのは？", o:["<ruby>使<rt>つか</rt></ruby>う <ruby>時間<rt>じかん</rt></ruby>を <ruby>決<rt>き</rt></ruby>める","ゲームを <ruby>買<rt>か</rt></ruby>わない","スマホを <ruby>捨<rt>す</rt></ruby>てる"], a:0}
+   ]
+ },
+ { id:"r-n2-19", lvl:"N2", title:"地産地消", mins:4,
+   paras:[
+     {jp:"その 土地で とれた 食材を、その 地域で 消費する「地産地消」が 注目されている。", fu:"その とちで とれた しょくざいを、その ちいきで しょうひする「ちさんちしょう」が ちゅうもくされている。", es:"Atrae atención el 'consumo local', usar en la zona los alimentos producidos allí mismo."},
+     {jp:"輸送の 距離が 短いため、新鮮な 食材を 手に入れられる。", fu:"ゆそうの きょりが みじかいため、しんせんな しょくざいを てに いれられる。", es:"Como la distancia de transporte es corta, se pueden conseguir alimentos frescos."},
+     {jp:"また、地元の 農業を 支え、地域の 経済を 活性化する 効果も 期待できる。", fu:"また、じもとの のうぎょうを ささえ、ちいきの けいざいを かっせいかする こうかも きたいできる。", es:"Además, cabe esperar el efecto de sostener la agricultura local y dinamizar la economía de la zona."},
+     {jp:"環境への 負担も 少なく、持続可能な 社会に つながると 考えられている。", fu:"かんきょうへの ふたんも すくなく、じぞくかのうな しゃかいに つながると かんがえられている。", es:"Supone menos carga ambiental y se considera que conduce a una sociedad sostenible."}
+   ],
+   gloss:[
+     {w:"食材", r:"しょくざい", m:"ingredientes · alimentos"},
+     {w:"消費", r:"しょうひ", m:"consumo"},
+     {w:"輸送", r:"ゆそう", m:"transporte"},
+     {w:"新鮮", r:"しんせん", m:"fresco"},
+     {w:"農業", r:"のうぎょう", m:"agricultura"},
+     {w:"持続可能", r:"じぞくかのう", m:"sostenible"}
+   ],
+   q:[
+     {q:"「<ruby>地産地消<rt>ちさんちしょう</rt></ruby>」とは <ruby>何<rt>なに</rt></ruby>ですか。", o:["その <ruby>地域<rt>ちいき</rt></ruby>で とれた <ruby>物<rt>もの</rt></ruby>を そこで <ruby>消費<rt>しょうひ</rt></ruby>する","<ruby>外国<rt>がいこく</rt></ruby>から <ruby>輸入<rt>ゆにゅう</rt></ruby>する","<ruby>安<rt>やす</rt></ruby>く <ruby>売<rt>う</rt></ruby>る"], a:0},
+     {q:"<ruby>地産地消<rt>ちさんちしょう</rt></ruby>の <ruby>効果<rt>こうか</rt></ruby>として <ruby>期待<rt>きたい</rt></ruby>されるのは？", o:["<ruby>地域<rt>ちいき</rt></ruby>の <ruby>経済<rt>けいざい</rt></ruby>の <ruby>活性化<rt>かっせいか</rt></ruby>","<ruby>物価<rt>ぶっか</rt></ruby>の <ruby>上昇<rt>じょうしょう</rt></ruby>","<ruby>人口<rt>じんこう</rt></ruby>の <ruby>減少<rt>げんしょう</rt></ruby>"], a:0}
+   ]
+ },
+ { id:"r-n2-20", lvl:"N2", title:"動物の保護", mins:4,
+   paras:[
+     {jp:"開発や 環境の 変化により、絶滅の 危機に ある 動物が 増えている。", fu:"かいはつや かんきょうの へんかにより、ぜつめつの ききに ある どうぶつが ふえている。", es:"Por el desarrollo y los cambios ambientales, aumentan los animales en peligro de extinción."},
+     {jp:"森林の 減少や 密猟が、多くの 生き物の 生存を 脅かしている。", fu:"しんりんの げんしょうや みつりょうが、おおくの いきものの せいぞんを おびやかしている。", es:"La reducción de los bosques y la caza furtiva amenazan la supervivencia de muchos seres vivos."},
+     {jp:"各国は 保護区を 設けたり、法律で 取引を 規制したりして 対応している。", fu:"かっこくは ほごくを もうけたり、ほうりつで とりひきを きせいしたりして たいおうしている。", es:"Los países responden creando reservas o regulando el comercio por ley."},
+     {jp:"生き物の 多様性を 守る ことは、私たち 人間の 未来にも かかわっている。", fu:"いきものの たようせいを まもる ことは、わたしたち にんげんの みらいにも かかわっている。", es:"Proteger la diversidad de los seres vivos atañe también al futuro de nosotros los humanos."}
+   ],
+   gloss:[
+     {w:"絶滅", r:"ぜつめつ", m:"extinción"},
+     {w:"密猟", r:"みつりょう", m:"caza furtiva"},
+     {w:"生存", r:"せいぞん", m:"supervivencia"},
+     {w:"脅かして", r:"おびやかして", m:"amenazar (脅かす)"},
+     {w:"規制", r:"きせい", m:"regulación · restricción"},
+     {w:"多様性", r:"たようせい", m:"diversidad"}
+   ],
+   q:[
+     {q:"<ruby>動物<rt>どうぶつ</rt></ruby>が <ruby>絶滅<rt>ぜつめつ</rt></ruby>の <ruby>危機<rt>きき</rt></ruby>に ある <ruby>原因<rt>げんいん</rt></ruby>は？", o:["<ruby>森林<rt>しんりん</rt></ruby>の <ruby>減少<rt>げんしょう</rt></ruby>や <ruby>密猟<rt>みつりょう</rt></ruby>","<ruby>観光<rt>かんこう</rt></ruby>","<ruby>雨<rt>あめ</rt></ruby>"], a:0},
+     {q:"<ruby>各国<rt>かっこく</rt></ruby>は どう <ruby>対応<rt>たいおう</rt></ruby>していますか。", o:["<ruby>保護区<rt>ほごく</rt></ruby>を <ruby>設<rt>もう</rt></ruby>けたり <ruby>取引<rt>とりひき</rt></ruby>を <ruby>規制<rt>きせい</rt></ruby>","<ruby>動物<rt>どうぶつ</rt></ruby>を <ruby>売<rt>う</rt></ruby>る","<ruby>何<rt>なに</rt></ruby>も しない"], a:0}
+   ]
+ },
+ { id:"r-n1-1", lvl:"N1", title:"終身雇用の終わり", mins:5,
+   paras:[
+     {jp:"かつて日本の企業では、一つの会社に定年まで勤める「終身雇用」が当たり前とされてきた。", fu:"かつてにほんのきぎょうでは、ひとつのかいしゃにていねんまでつとめる「しゅうしんこよう」があたりまえとされてきた。", es:"Antes, en las empresas japonesas se daba por hecho el 'empleo vitalicio': trabajar en una misma compañía hasta la jubilación."},
+     {jp:"しかし、経済の停滞や産業構造の変化に伴い、この制度は崩れつつある。", fu:"しかし、けいざいのていたいやさんぎょうこうぞうのへんかにともない、このせいどはくずれつつある。", es:"Sin embargo, con el estancamiento económico y el cambio de la estructura industrial, este sistema se está desmoronando."},
+     {jp:"企業は柔軟な雇用を求め、労働者もまた、転職を通じて自らの価値を高めようとしている。もはや会社に人生を預ける時代ではないと言わざるを得ない。", fu:"きぎょうはじゅうなんなこようをもとめ、ろうどうしゃもまた、てんしょくをつうじてみずからのかちをたかめようとしている。もはやかいしゃにじんせいをあずけるじだいではないといわざるをえない。", es:"Las empresas buscan contratación flexible y los trabajadores intentan aumentar su valor cambiando de empleo. No queda más remedio que admitir que ya no es época de confiar la vida a una empresa."},
+     {jp:"とはいえ、雇用の安定が失われることへの不安も根強い。個人の自由と生活の保障をどう両立させるかが、今後の課題であろう。", fu:"とはいえ、こようのあんていがうしなわれることへのふあんもねづよい。こじんのじゆうとせいかつのほしょうをどうりょうりつさせるかが、こんごのかだいであろう。", es:"Aun así, persiste la inquietud por perder la estabilidad laboral. El reto será compatibilizar la libertad individual con la garantía de sustento."}
+   ],
+   gloss:[
+     {w:"終身雇用", r:"しゅうしんこよう", m:"empleo vitalicio"},
+     {w:"停滞", r:"ていたい", m:"estancamiento"},
+     {w:"柔軟", r:"じゅうなん", m:"flexible"},
+     {w:"転職", r:"てんしょく", m:"cambio de trabajo"},
+     {w:"根強い", r:"ねづよい", m:"arraigado · persistente"},
+     {w:"両立", r:"りょうりつ", m:"compatibilizar ambas cosas"}
+   ],
+   q:[
+     {q:"<ruby>終身雇用<rt>しゅうしんこよう</rt></ruby>が <ruby>崩<rt>くず</rt></ruby>れつつある <ruby>背景<rt>はいけい</rt></ruby>は<ruby>何<rt>なに</rt></ruby>か。", o:["<ruby>経済<rt>けいざい</rt></ruby>の<ruby>停滞<rt>ていたい</rt></ruby>と<ruby>産業構造<rt>さんぎょうこうぞう</rt></ruby>の<ruby>変化<rt>へんか</rt></ruby>","<ruby>若者<rt>わかもの</rt></ruby>の<ruby>怠惰<rt>たいだ</rt></ruby>","<ruby>法律<rt>ほうりつ</rt></ruby>の<ruby>禁止<rt>きんし</rt></ruby>"], a:0},
+     {q:"<ruby>筆者<rt>ひっしゃ</rt></ruby>が<ruby>述<rt>の</rt></ruby>べる<ruby>今後<rt>こんご</rt></ruby>の<ruby>課題<rt>かだい</rt></ruby>はどれか。", o:["<ruby>自由<rt>じゆう</rt></ruby>と<ruby>保障<rt>ほしょう</rt></ruby>の<ruby>両立<rt>りょうりつ</rt></ruby>","<ruby>終身雇用<rt>しゅうしんこよう</rt></ruby>の<ruby>復活<rt>ふっかつ</rt></ruby>","<ruby>転職<rt>てんしょく</rt></ruby>の<ruby>禁止<rt>きんし</rt></ruby>"], a:0}
+   ]
+ },
+ { id:"r-n1-2", lvl:"N1", title:"言葉は乱れているのか", mins:5,
+   paras:[
+     {jp:"「最近の若者の言葉は乱れている」という嘆きは、いつの時代にも聞かれるものである。", fu:"「さいきんのわかもののことばはみだれている」というなげきは、いつのじだいにもきかれるものである。", es:"El lamento de que 'el habla de los jóvenes de hoy está corrompida' se oye en todas las épocas."},
+     {jp:"しかし言語学の立場から見れば、それは乱れというより変化にほかならない。", fu:"しかしげんごがくのたちばからみれば、それはみだれというよりへんかにほかならない。", es:"Pero desde la lingüística, eso no es corrupción sino, sencillamente, cambio."},
+     {jp:"現在「正しい」とされる言葉遣いも、かつては新奇な表現として批判された歴史を持つ。言葉は生き物であり、固定することなど不可能なのだ。", fu:"げんざい「ただしい」とされることばづかいも、かつてはしんきなひょうげんとしてひはんされたれきしをもつ。ことばはいきものであり、こていすることなどふかのうなのだ。", es:"Incluso el lenguaje hoy considerado 'correcto' fue criticado en su día como expresión novedosa. La lengua es un ser vivo; fijarla es imposible."},
+     {jp:"むろん、場面に応じた言葉遣いの使い分けは重要である。変化を認めることと、無秩序を容認することは、別の問題だからである。", fu:"むろん、ばめんにおうじたことばづかいのつかいわけはじゅうようである。へんかをみとめることと、むちつじょをようにんすることは、べつのもんだいだからである。", es:"Por supuesto, es importante adaptar el registro a cada situación: aceptar el cambio y tolerar el desorden son cuestiones distintas."}
+   ],
+   gloss:[
+     {w:"乱れて", r:"みだれて", m:"corromperse · desordenarse (乱れる)"},
+     {w:"嘆き", r:"なげき", m:"lamento"},
+     {w:"言語学", r:"げんごがく", m:"lingüística"},
+     {w:"新奇", r:"しんき", m:"novedoso · inusual"},
+     {w:"言葉遣い", r:"ことばづかい", m:"manera de hablar · registro"},
+     {w:"容認", r:"ようにん", m:"tolerancia · aceptación"}
+   ],
+   q:[
+     {q:"<ruby>筆者<rt>ひっしゃ</rt></ruby>は<ruby>若者<rt>わかもの</rt></ruby><ruby>言葉<rt>ことば</rt></ruby>をどう<ruby>捉<rt>とら</rt></ruby>えているか。", o:["<ruby>乱<rt>みだ</rt></ruby>れではなく<ruby>変化<rt>へんか</rt></ruby>である","<ruby>直<rt>なお</rt></ruby>すべき<ruby>誤<rt>あやま</rt></ruby>りである","<ruby>無視<rt>むし</rt></ruby>すべきものである"], a:0},
+     {q:"<ruby>筆者<rt>ひっしゃ</rt></ruby>が<ruby>重要<rt>じゅうよう</rt></ruby>だと<ruby>述<rt>の</rt></ruby>べていることは<ruby>何<rt>なに</rt></ruby>か。", o:["<ruby>場面<rt>ばめん</rt></ruby>に<ruby>応<rt>おう</rt></ruby>じた<ruby>使<rt>つか</rt></ruby>い<ruby>分<rt>わ</rt></ruby>け","<ruby>古<rt>ふる</rt></ruby>い<ruby>言葉<rt>ことば</rt></ruby>の<ruby>復活<rt>ふっかつ</rt></ruby>","<ruby>新語<rt>しんご</rt></ruby>の<ruby>禁止<rt>きんし</rt></ruby>"], a:0}
+   ]
+ },
+ { id:"r-n1-3", lvl:"N1", title:"匿名の代償", mins:5,
+   paras:[
+     {jp:"インターネットの匿名性は、自由な発言を可能にする一方で、深刻な問題を生み出している。", fu:"いんたーねっとのとくめいせいは、じゆうなはつげんをかのうにするいっぽうで、しんこくなもんだいをうみだしている。", es:"El anonimato de internet permite expresarse con libertad, pero a la vez genera problemas graves."},
+     {jp:"名前を明かさずに済むという安心感が、時として攻撃的な言動を助長するのである。", fu:"なまえをあかさずにすむというあんしんかんが、ときとしてこうげきてきなげんどうをじょちょうするのである。", es:"La tranquilidad de no tener que revelar el nombre a veces alienta conductas agresivas."},
+     {jp:"誹謗中傷によって心を病み、命を絶つ人さえいる現実を前に、我々は匿名の代償の大きさを認識せざるを得ない。", fu:"ひぼうちゅうしょうによってこころをやみ、いのちをたつひとさえいるげんじつをまえに、われわれはとくめいのだいしょうのおおきさをにんしきせざるをえない。", es:"Ante la realidad de que hay quien enferma e incluso se quita la vida por las difamaciones, no podemos sino reconocer el alto precio del anonimato."},
+     {jp:"規制の強化を求める声もあるが、それが表現の自由を脅かす恐れも否定できない。技術ではなく、使い手の倫理こそが問われている。", fu:"きせいのきょうかをもとめるこえもあるが、それがひょうげんのじゆうをおびやかすおそれもひていできない。ぎじゅつではなく、つかいてのりんりこそがとわれている。", es:"Hay quien pide endurecer la regulación, pero no puede negarse el riesgo de que eso amenace la libertad de expresión. Lo que está en cuestión no es la técnica, sino la ética de quien la usa."}
+   ],
+   gloss:[
+     {w:"匿名性", r:"とくめいせい", m:"anonimato"},
+     {w:"助長", r:"じょちょう", m:"fomentar · alentar (algo malo)"},
+     {w:"誹謗中傷", r:"ひぼうちゅうしょう", m:"difamación e injurias"},
+     {w:"代償", r:"だいしょう", m:"precio · contrapartida"},
+     {w:"規制", r:"きせい", m:"regulación"},
+     {w:"倫理", r:"りんり", m:"ética"}
+   ],
+   q:[
+     {q:"<ruby>匿名性<rt>とくめいせい</rt></ruby>が<ruby>助長<rt>じょちょう</rt></ruby>するものとして<ruby>挙<rt>あ</rt></ruby>げられているのは。", o:["<ruby>攻撃的<rt>こうげきてき</rt></ruby>な<ruby>言動<rt>げんどう</rt></ruby>","<ruby>自由<rt>じゆう</rt></ruby>な<ruby>研究<rt>けんきゅう</rt></ruby>","<ruby>親切<rt>しんせつ</rt></ruby>な<ruby>行動<rt>こうどう</rt></ruby>"], a:0},
+     {q:"<ruby>筆者<rt>ひっしゃ</rt></ruby>が<ruby>最<rt>もっと</rt></ruby>も<ruby>問<rt>と</rt></ruby>われていると<ruby>考<rt>かんが</rt></ruby>えるものは。", o:["<ruby>使<rt>つか</rt></ruby>い<ruby>手<rt>て</rt></ruby>の<ruby>倫理<rt>りんり</rt></ruby>","<ruby>技術<rt>ぎじゅつ</rt></ruby>の<ruby>進歩<rt>しんぽ</rt></ruby>","<ruby>規制<rt>きせい</rt></ruby>の<ruby>撤廃<rt>てっぱい</rt></ruby>"], a:0}
+   ]
+ },
+ { id:"r-n1-4", lvl:"N1", title:"伝統工芸の岐路", mins:5,
+   paras:[
+     {jp:"日本各地に伝わる伝統工芸が、後継者不足という深刻な問題に直面している。", fu:"にほんかくちにつたわるでんとうこうげいが、こうけいしゃぶそくというしんこくなもんだいにちょくめんしている。", es:"La artesanía tradicional de todo Japón afronta el grave problema de la falta de sucesores."},
+     {jp:"何十年もの修業を要する厳しい世界に、あえて飛び込もうとする若者は少ない。", fu:"なんじゅうねんものしゅぎょうをようするきびしいせかいに、あえてとびこもうとするわかものはすくない。", es:"Pocos jóvenes se atreven a lanzarse a un mundo exigente que requiere décadas de aprendizaje."},
+     {jp:"職人の高齢化が進み、このままでは技そのものが失われることを余儀なくされるだろう。", fu:"しょくにんのこうれいかがすすみ、このままではわざそのものがうしなわれることをよぎなくされるだろう。", es:"Los artesanos envejecen y, de seguir así, las propias técnicas se verán condenadas a perderse."},
+     {jp:"一方で、伝統に現代的なデザインを取り入れ、海外市場を開拓する動きも生まれている。守ることと変わることは、必ずしも矛盾しないのかもしれない。", fu:"いっぽうで、でんとうにげんだいてきなでざいんをとりいれ、かいがいしじょうをかいたくするうごきもうまれている。まもることとかわることは、かならずしもむじゅんしないのかもしれない。", es:"Por otro lado, surgen iniciativas que incorporan diseño actual a la tradición y abren mercados en el extranjero. Quizá conservar y cambiar no sean necesariamente contradictorios."}
+   ],
+   gloss:[
+     {w:"伝統工芸", r:"でんとうこうげい", m:"artesanía tradicional"},
+     {w:"後継者", r:"こうけいしゃ", m:"sucesor"},
+     {w:"修業", r:"しゅぎょう", m:"aprendizaje · formación (de oficio)"},
+     {w:"職人", r:"しょくにん", m:"artesano"},
+     {w:"開拓", r:"かいたく", m:"apertura (de mercados) · roturación"},
+     {w:"矛盾", r:"むじゅん", m:"contradicción"}
+   ],
+   q:[
+     {q:"<ruby>伝統工芸<rt>でんとうこうげい</rt></ruby>が<ruby>直面<rt>ちょくめん</rt></ruby>する<ruby>問題<rt>もんだい</rt></ruby>は<ruby>何<rt>なに</rt></ruby>か。", o:["<ruby>後継者<rt>こうけいしゃ</rt></ruby><ruby>不足<rt>ぶそく</rt></ruby>","<ruby>材料<rt>ざいりょう</rt></ruby>の<ruby>値上<rt>ねあ</rt></ruby>がり","<ruby>観光客<rt>かんこうきゃく</rt></ruby>の<ruby>減少<rt>げんしょう</rt></ruby>"], a:0},
+     {q:"<ruby>筆者<rt>ひっしゃ</rt></ruby>の<ruby>考<rt>かんが</rt></ruby>えに<ruby>最<rt>もっと</rt></ruby>も<ruby>近<rt>ちか</rt></ruby>いものはどれか。", o:["<ruby>守<rt>まも</rt></ruby>ることと<ruby>変<rt>か</rt></ruby>わることは<ruby>両立<rt>りょうりつ</rt></ruby>しうる","<ruby>伝統<rt>でんとう</rt></ruby>は<ruby>変<rt>か</rt></ruby>えてはならない","<ruby>海外<rt>かいがい</rt></ruby><ruby>進出<rt>しんしゅつ</rt></ruby>は<ruby>危険<rt>きけん</rt></ruby>だ"], a:0}
+   ]
+ },
+ { id:"r-n1-5", lvl:"N1", title:"ゲノム編集と倫理", mins:5,
+   paras:[
+     {jp:"遺伝子を自在に書き換えるゲノム編集技術は、医療に革命をもたらしうると期待されている。", fu:"いでんしをじざいにかきかえるげのむへんしゅうぎじゅつは、いりょうにかくめいをもたらしうるときたいされている。", es:"La edición genómica, que reescribe los genes a voluntad, promete revolucionar la medicina."},
+     {jp:"難病の治療に道を開く一方で、この技術は重大な倫理的問題をはらんでいる。", fu:"なんびょうのちりょうにみちをひらくいっぽうで、このぎじゅつはじゅうだいなりんりてきもんだいをはらんでいる。", es:"Aunque abre camino al tratamiento de enfermedades incurables, esta técnica encierra graves problemas éticos."},
+     {jp:"受精卵の段階で遺伝子を操作すれば、その影響は本人のみならず子孫にまで及ぶ。能力や容姿を「設計」する行為を、我々は許容すべきなのだろうか。", fu:"じゅせいらんのだんかいでいでんしをそうさすれば、そのえいきょうはほんにんのみならずしそんにまでおよぶ。のうりょくやようしを「せっけい」するこういを、われわれはきょようすべきなのだろうか。", es:"Si se manipulan los genes en el embrión, el efecto alcanza no solo al individuo sino a su descendencia. ¿Debemos permitir 'diseñar' capacidades o apariencia?"},
+     {jp:"科学の進歩を止めることはできまい。だからこそ、技術が可能にすることと、社会が許すべきことの線引きについて、議論を尽くす必要がある。", fu:"かがくのしんぽをとめることはできまい。だからこそ、ぎじゅつがかのうにすることと、しゃかいがゆるすべきことのせんびきについて、ぎろんをつくすひつようがある。", es:"No se podrá frenar el avance científico. Precisamente por eso hay que agotar el debate sobre dónde trazar la línea entre lo técnicamente posible y lo socialmente admisible."}
+   ],
+   gloss:[
+     {w:"遺伝子", r:"いでんし", m:"gen"},
+     {w:"難病", r:"なんびょう", m:"enfermedad incurable o rara"},
+     {w:"はらんで", r:"はらんで", m:"encerrar · contener (un riesgo) (はらむ)"},
+     {w:"受精卵", r:"じゅせいらん", m:"óvulo fecundado · embrión"},
+     {w:"子孫", r:"しそん", m:"descendencia"},
+     {w:"線引き", r:"せんびき", m:"trazar el límite"}
+   ],
+   q:[
+     {q:"ゲノム<ruby>編集<rt>へんしゅう</rt></ruby>の<ruby>倫理的<rt>りんりてき</rt></ruby><ruby>問題<rt>もんだい</rt></ruby>として<ruby>挙<rt>あ</rt></ruby>げられているのは。", o:["<ruby>影響<rt>えいきょう</rt></ruby>が<ruby>子孫<rt>しそん</rt></ruby>にまで<ruby>及<rt>およ</rt></ruby>ぶこと","<ruby>費用<rt>ひよう</rt></ruby>が<ruby>高<rt>たか</rt></ruby>いこと","<ruby>時間<rt>じかん</rt></ruby>がかかること"], a:0},
+     {q:"<ruby>筆者<rt>ひっしゃ</rt></ruby>が<ruby>必要<rt>ひつよう</rt></ruby>だと<ruby>述<rt>の</rt></ruby>べていることは。", o:["<ruby>線引<rt>せんび</rt></ruby>きについて<ruby>議論<rt>ぎろん</rt></ruby>を<ruby>尽<rt>つ</rt></ruby>くすこと","<ruby>研究<rt>けんきゅう</rt></ruby>の<ruby>全面禁止<rt>ぜんめんきんし</rt></ruby>","<ruby>技術<rt>ぎじゅつ</rt></ruby>の<ruby>自由化<rt>じゆうか</rt></ruby>"], a:0}
+   ]
+ },
+ { id:"r-n1-6", lvl:"N1", title:"無縁社会", mins:5,
+   paras:[
+     {jp:"家族、地域、職場。かつて人々を支えていた縁が、急速に細りつつある。", fu:"かぞく、ちいき、しょくば。かつてひとびとをささえていたえんが、きゅうそくにほそりつつある。", es:"Familia, barrio, trabajo. Los lazos que antaño sostenían a las personas se están debilitando a gran velocidad."},
+     {jp:"単身世帯が増加し、誰にも看取られずに亡くなる「孤独死」は、もはや珍しい出来事ではなくなった。", fu:"たんしんせたいがぞうかし、だれにもみとられずになくなる「こどくし」は、もはやめずらしいできごとではなくなった。", es:"Con el aumento de los hogares unipersonales, morir sin nadie al lado —la 'muerte solitaria'— ya no es un suceso raro."},
+     {jp:"こうした「無縁社会」の到来は、個人の自由を尊重してきた社会の、いわば裏の顔にほかならない。", fu:"こうした「むえんしゃかい」のとうらいは、こじんのじゆうをそんちょうしてきたしゃかいの、いわばうらのかおにほかならない。", es:"La llegada de esta 'sociedad sin vínculos' no es sino la otra cara de una sociedad que ha primado la libertad individual."},
+     {jp:"求められているのは、昔ながらの共同体への回帰ではなく、緩やかにつながり直すための新たな仕組みであろう。", fu:"もとめられているのは、むかしながらのきょうどうたいへのかいきではなく、ゆるやかにつながりなおすためのあらたなしくみであろう。", es:"Lo que se necesita no es volver a la comunidad de antaño, sino nuevos mecanismos para reconectarse de forma más laxa."}
+   ],
+   gloss:[
+     {w:"縁", r:"えん", m:"lazo · vínculo"},
+     {w:"単身世帯", r:"たんしんせたい", m:"hogar unipersonal"},
+     {w:"看取られ", r:"みとられ", m:"ser acompañado en la muerte (看取る)"},
+     {w:"孤独死", r:"こどくし", m:"muerte en soledad"},
+     {w:"共同体", r:"きょうどうたい", m:"comunidad"},
+     {w:"回帰", r:"かいき", m:"retorno · regreso"}
+   ],
+   q:[
+     {q:"「<ruby>無縁社会<rt>むえんしゃかい</rt></ruby>」は<ruby>何<rt>なに</rt></ruby>の「<ruby>裏<rt>うら</rt></ruby>の<ruby>顔<rt>かお</rt></ruby>」だと<ruby>述<rt>の</rt></ruby>べられているか。", o:["<ruby>個人<rt>こじん</rt></ruby>の<ruby>自由<rt>じゆう</rt></ruby>を<ruby>尊重<rt>そんちょう</rt></ruby>する<ruby>社会<rt>しゃかい</rt></ruby>","<ruby>経済<rt>けいざい</rt></ruby><ruby>成長<rt>せいちょう</rt></ruby>","<ruby>技術<rt>ぎじゅつ</rt></ruby>の<ruby>発展<rt>はってん</rt></ruby>"], a:0},
+     {q:"<ruby>筆者<rt>ひっしゃ</rt></ruby>が<ruby>求<rt>もと</rt></ruby>めるものはどれか。", o:["<ruby>緩<rt>ゆる</rt></ruby>やかにつながる<ruby>新<rt>あら</rt></ruby>たな<ruby>仕組<rt>しく</rt></ruby>み","<ruby>昔<rt>むかし</rt></ruby>の<ruby>共同体<rt>きょうどうたい</rt></ruby>への<ruby>回帰<rt>かいき</rt></ruby>","<ruby>単身世帯<rt>たんしんせたい</rt></ruby>の<ruby>禁止<rt>きんし</rt></ruby>"], a:0}
+   ]
+ },
+ { id:"r-n1-7", lvl:"N1", title:"活字離れを憂う前に", mins:5,
+   paras:[
+     {jp:"若者の読書量の減少、いわゆる「活字離れ」を憂う声は多い。", fu:"わかもののどくしょりょうのげんしょう、いわゆる「かつじばなれ」をうれうこえはおおい。", es:"Son muchas las voces que lamentan el descenso de la lectura entre los jóvenes, el llamado 'alejamiento de la letra impresa'."},
+     {jp:"しかし、彼らが文字を読まなくなったわけではない。スマートフォンの画面を通じて、膨大な量の文章に日々接している。", fu:"しかし、かれらがもじをよまなくなったわけではない。すまーとふぉんのがめんをつうじて、ぼうだいなりょうのぶんしょうにひびせっしている。", es:"Pero no es que hayan dejado de leer: a través de la pantalla del móvil están en contacto diario con cantidades ingentes de texto."},
+     {jp:"問われるべきは量ではなく質、すなわち、断片的な情報の消費と、一冊の本と向き合う深い読書との違いであろう。", fu:"とわれるべきはりょうではなくしつ、すなわち、だんぺんてきなじょうほうのしょうひと、いっさつのほんとむきあうふかいどくしょとのちがいであろう。", es:"Lo que debe cuestionarse no es la cantidad sino la calidad: la diferencia entre consumir información fragmentaria y la lectura profunda de un libro."},
+     {jp:"長い文章を読み通す体力は、思考の持久力に通じる。それを育てる機会をどう保障するかこそ、大人が考えるべき問題である。", fu:"ながいぶんしょうをよみとおすたいりょくは、しこうのじきゅうりょくにつうじる。それをそだてるきかいをどうほしょうするかこそ、おとながかんがえるべきもんだいである。", es:"La resistencia para leer textos largos se traduce en resistencia para pensar. Cómo garantizar ocasiones de cultivarla es lo que los adultos deberían plantearse."}
+   ],
+   gloss:[
+     {w:"活字離れ", r:"かつじばなれ", m:"alejamiento de la letra impresa"},
+     {w:"憂う", r:"うれう", m:"lamentar · preocuparse por"},
+     {w:"膨大", r:"ぼうだい", m:"enorme · ingente"},
+     {w:"断片的", r:"だんぺんてき", m:"fragmentario"},
+     {w:"読み通す", r:"よみとおす", m:"leer hasta el final"},
+     {w:"持久力", r:"じきゅうりょく", m:"resistencia · aguante"}
+   ],
+   q:[
+     {q:"<ruby>筆者<rt>ひっしゃ</rt></ruby>によれば、<ruby>問<rt>と</rt></ruby>われるべきものは<ruby>何<rt>なに</rt></ruby>か。", o:["<ruby>読書<rt>どくしょ</rt></ruby>の<ruby>質<rt>しつ</rt></ruby>","<ruby>読書<rt>どくしょ</rt></ruby>の<ruby>量<rt>りょう</rt></ruby>","<ruby>本<rt>ほん</rt></ruby>の<ruby>値段<rt>ねだん</rt></ruby>"], a:0},
+     {q:"<ruby>長<rt>なが</rt></ruby>い<ruby>文章<rt>ぶんしょう</rt></ruby>を<ruby>読<rt>よ</rt></ruby>み<ruby>通<rt>とお</rt></ruby>す<ruby>力<rt>ちから</rt></ruby>は<ruby>何<rt>なに</rt></ruby>に<ruby>通<rt>つう</rt></ruby>じるか。", o:["<ruby>思考<rt>しこう</rt></ruby>の<ruby>持久力<rt>じきゅうりょく</rt></ruby>","<ruby>視力<rt>しりょく</rt></ruby>の<ruby>向上<rt>こうじょう</rt></ruby>","<ruby>記憶力<rt>きおくりょく</rt></ruby>の<ruby>低下<rt>ていか</rt></ruby>"], a:0}
+   ]
+ },
+ { id:"r-n1-8", lvl:"N1", title:"気候変動と個人の責任", mins:5,
+   paras:[
+     {jp:"気候変動への対策として、個人のライフスタイルの見直しが盛んに呼びかけられている。", fu:"きこうへんどうへのたいさくとして、こじんのらいふすたいるのみなおしがさかんによびかけられている。", es:"Como medida contra el cambio climático, se insta constantemente a revisar el estilo de vida individual."},
+     {jp:"むろん、一人ひとりの心がけに意味がないわけではない。", fu:"むろん、ひとりひとりのこころがけにいみがないわけではない。", es:"Por supuesto, no es que el esfuerzo de cada persona carezca de sentido."},
+     {jp:"しかし、排出量の大半を占めるのは一部の産業であり、個人の努力のみに責任を帰するのは、問題の本質から目をそらすことにもなりかねない。", fu:"しかし、はいしゅつりょうのたいはんをしめるのはいちぶのさんぎょうであり、こじんのどりょくのみにせきにんをきするのは、もんだいのほんしつからめをそらすことにもなりかねない。", es:"Pero la mayor parte de las emisiones procede de ciertas industrias, y cargar la responsabilidad solo sobre el esfuerzo individual puede desviar la mirada del fondo del problema."},
+     {jp:"個人の行動と、制度や構造の変革。この両輪がそろって初めて、実効性のある対策となるのではないだろうか。", fu:"こじんのこうどうと、せいどやこうぞうのへんかく。このりょうりんがそろってはじめて、じっこうせいのあるたいさくとなるのではないだろうか。", es:"Acción individual y transformación de sistemas y estructuras: solo cuando ambas ruedas giran juntas la respuesta se vuelve realmente eficaz."}
+   ],
+   gloss:[
+     {w:"気候変動", r:"きこうへんどう", m:"cambio climático"},
+     {w:"見直し", r:"みなおし", m:"revisión · replanteamiento"},
+     {w:"排出量", r:"はいしゅつりょう", m:"volumen de emisiones"},
+     {w:"帰する", r:"きする", m:"atribuir (responsabilidad)"},
+     {w:"変革", r:"へんかく", m:"transformación · reforma"},
+     {w:"実効性", r:"じっこうせい", m:"eficacia real"}
+   ],
+   q:[
+     {q:"<ruby>排出量<rt>はいしゅつりょう</rt></ruby>の<ruby>大半<rt>たいはん</rt></ruby>を<ruby>占<rt>し</rt></ruby>めるのは<ruby>何<rt>なに</rt></ruby>か。", o:["<ruby>一部<rt>いちぶ</rt></ruby>の<ruby>産業<rt>さんぎょう</rt></ruby>","<ruby>家庭<rt>かてい</rt></ruby>","<ruby>自動車<rt>じどうしゃ</rt></ruby><ruby>個人<rt>こじん</rt></ruby><ruby>利用<rt>りよう</rt></ruby>"], a:0},
+     {q:"<ruby>筆者<rt>ひっしゃ</rt></ruby>の<ruby>主張<rt>しゅちょう</rt></ruby>に<ruby>最<rt>もっと</rt></ruby>も<ruby>近<rt>ちか</rt></ruby>いものは。", o:["<ruby>個人<rt>こじん</rt></ruby>の<ruby>行動<rt>こうどう</rt></ruby>と<ruby>構造<rt>こうぞう</rt></ruby>の<ruby>変革<rt>へんかく</rt></ruby>の<ruby>両方<rt>りょうほう</rt></ruby>が<ruby>必要<rt>ひつよう</rt></ruby>","<ruby>個人<rt>こじん</rt></ruby>の<ruby>努力<rt>どりょく</rt></ruby>だけで<ruby>十分<rt>じゅうぶん</rt></ruby>","<ruby>対策<rt>たいさく</rt></ruby>は<ruby>不要<rt>ふよう</rt></ruby>"], a:0}
+   ]
+ },
+ { id:"r-n1-9", lvl:"N1", title:"グローバル化と文化の均質化", mins:5,
+   paras:[
+     {jp:"世界のどの都市を訪れても、同じ看板、同じ店、同じ音楽に出会う。", fu:"せかいのどのとしをおとずれても、おなじかんばん、おなじみせ、おなじおんがくにであう。", es:"Visites la ciudad del mundo que visites, te encuentras los mismos carteles, las mismas tiendas, la misma música."},
+     {jp:"グローバル化がもたらした利便性は計り知れないが、その陰で、地域固有の文化が均質化の波にのまれつつある。", fu:"ぐろーばるかがもたらしたりべんせいははかりしれないが、そのかげで、ちいきこゆうのぶんかがきんしつかのなみにのまれつつある。", es:"La comodidad que ha traído la globalización es incalculable, pero a su sombra las culturas propias de cada lugar están siendo engullidas por la ola de homogeneización."},
+     {jp:"言語の消滅はその象徴である。数千あるとされる言語の多くが、今世紀中に話し手を失うと予測されている。", fu:"げんごのしょうめつはそのしょうちょうである。すうせんあるとされるげんごのおおくが、こんせいきちゅうにはなしてをうしなうとよそくされている。", es:"La desaparición de lenguas es su símbolo: se prevé que muchas de las miles que existen pierdan a sus hablantes este siglo."},
+     {jp:"多様性の喪失は、人類全体の選択肢の喪失にほかならない。効率と引き換えに何を失いつつあるのか、立ち止まって考える時期に来ている。", fu:"たようせいのそうしつは、じんるいぜんたいのせんたくしのそうしつにほかならない。こうりつとひきかえになにをうしないつつあるのか、たちどまってかんがえるじきにきている。", es:"Perder diversidad no es sino perder opciones para toda la humanidad. Es hora de detenerse a pensar qué estamos perdiendo a cambio de la eficiencia."}
+   ],
+   gloss:[
+     {w:"利便性", r:"りべんせい", m:"comodidad · conveniencia"},
+     {w:"固有", r:"こゆう", m:"propio · característico"},
+     {w:"均質化", r:"きんしつか", m:"homogeneización"},
+     {w:"消滅", r:"しょうめつ", m:"desaparición · extinción"},
+     {w:"喪失", r:"そうしつ", m:"pérdida"},
+     {w:"引き換え", r:"ひきかえ", m:"a cambio"}
+   ],
+   q:[
+     {q:"<ruby>文化<rt>ぶんか</rt></ruby>の<ruby>均質化<rt>きんしつか</rt></ruby>の<ruby>象徴<rt>しょうちょう</rt></ruby>として<ruby>挙<rt>あ</rt></ruby>げられているのは。", o:["<ruby>言語<rt>げんご</rt></ruby>の<ruby>消滅<rt>しょうめつ</rt></ruby>","<ruby>人口<rt>じんこう</rt></ruby>の<ruby>増加<rt>ぞうか</rt></ruby>","<ruby>貿易<rt>ぼうえき</rt></ruby>の<ruby>拡大<rt>かくだい</rt></ruby>"], a:0},
+     {q:"<ruby>筆者<rt>ひっしゃ</rt></ruby>によれば、<ruby>多様性<rt>たようせい</rt></ruby>の<ruby>喪失<rt>そうしつ</rt></ruby>とは<ruby>何<rt>なに</rt></ruby>の<ruby>喪失<rt>そうしつ</rt></ruby>か。", o:["<ruby>人類<rt>じんるい</rt></ruby>の<ruby>選択肢<rt>せんたくし</rt></ruby>","<ruby>経済<rt>けいざい</rt></ruby><ruby>成長<rt>せいちょう</rt></ruby>","<ruby>観光<rt>かんこう</rt></ruby><ruby>資源<rt>しげん</rt></ruby>"], a:0}
+   ]
+ },
+ { id:"r-n1-10", lvl:"N1", title:"デジタル化の陰で", mins:5,
+   paras:[
+     {jp:"行政手続きから買い物まで、あらゆるサービスのデジタル化が急速に進んでいる。", fu:"ぎょうせいてつづきからかいものまで、あらゆるさーびすのでじたるかがきゅうそくにすすんでいる。", es:"De los trámites administrativos a las compras, la digitalización de todos los servicios avanza a gran velocidad."},
+     {jp:"効率化の恩恵は大きい。しかし、機器の操作に不慣れな高齢者などが、必要なサービスから締め出される事態も生じている。", fu:"こうりつかのおんけいはおおきい。しかし、ききのそうさにふなれなこうれいしゃなどが、ひつようなさーびすからしめだされるじたいもしょうじている。", es:"El beneficio en eficiencia es grande. Pero también ocurre que personas poco habituadas a los dispositivos, como los mayores, quedan excluidas de servicios necesarios."},
+     {jp:"「使えない側」の自己責任として片付けるのは容易だが、それは社会の側の想像力の欠如を示すものと言えなくもない。", fu:"「つかえないがわ」のじこせきにんとしてかたづけるのはよういだが、それはしゃかいのがわのそうぞうりょくのけつじょをしめすものといえなくもない。", es:"Es fácil despacharlo como responsabilidad de 'quien no sabe usarlo', pero cabría decir que eso revela una falta de imaginación por parte de la sociedad."},
+     {jp:"技術は本来、人を排除するためではなく、包摂するためにある。誰一人取り残さないデジタル化こそが、真の進歩と呼ぶに値するだろう。", fu:"ぎじゅつはほんらい、ひとをはいじょするためではなく、ほうせつするためにある。だれひとりとりのこさないでじたるかこそが、しんのしんぽとよぶにあたいするだろう。", es:"La tecnología existe, en origen, no para excluir sino para incluir. Solo una digitalización que no deje a nadie atrás merecerá llamarse verdadero progreso."}
+   ],
+   gloss:[
+     {w:"行政手続き", r:"ぎょうせいてつづき", m:"trámites administrativos"},
+     {w:"恩恵", r:"おんけい", m:"beneficio · favor"},
+     {w:"不慣れ", r:"ふなれ", m:"poco habituado"},
+     {w:"締め出される", r:"しめだされる", m:"quedar excluido (締め出す)"},
+     {w:"欠如", r:"けつじょ", m:"carencia · falta"},
+     {w:"包摂", r:"ほうせつ", m:"inclusión"}
+   ],
+   q:[
+     {q:"デジタル<ruby>化<rt>か</rt></ruby>で<ruby>生<rt>しょう</rt></ruby>じている<ruby>事態<rt>じたい</rt></ruby>は<ruby>何<rt>なに</rt></ruby>か。", o:["<ruby>高齢者<rt>こうれいしゃ</rt></ruby>などがサービスから<ruby>締<rt>し</rt></ruby>め<ruby>出<rt>だ</rt></ruby>される","<ruby>料金<rt>りょうきん</rt></ruby>が<ruby>上<rt>あ</rt></ruby>がる","<ruby>手続<rt>てつづ</rt></ruby>きが<ruby>遅<rt>おそ</rt></ruby>くなる"], a:0},
+     {q:"<ruby>筆者<rt>ひっしゃ</rt></ruby>が「<ruby>真<rt>しん</rt></ruby>の<ruby>進歩<rt>しんぽ</rt></ruby>」と<ruby>呼<rt>よ</rt></ruby>ぶものは。", o:["<ruby>誰一人<rt>だれひとり</rt></ruby><ruby>取<rt>と</rt></ruby>り<ruby>残<rt>のこ</rt></ruby>さないデジタル<ruby>化<rt>か</rt></ruby>","<ruby>最速<rt>さいそく</rt></ruby>のデジタル<ruby>化<rt>か</rt></ruby>","<ruby>紙<rt>かみ</rt></ruby>への<ruby>回帰<rt>かいき</rt></ruby>"], a:0}
+   ]
  }
 
 ];
