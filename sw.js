@@ -10,7 +10,7 @@
    - Vive en una caché aparte que NO se borra al subir de versión, para no tener
      que volver a descargar los audios tras cada actualización de contenido. */
 
-var CACHE = "n1path-v18";                 /* ← subido: fuerza recargar el menú/HTML nuevo y descartar caché vieja */
+var CACHE = "n1path-v20";                 /* ← subido: fuerza recargar el menú/HTML nuevo y descartar caché vieja */
 var AUDIO_CACHE = "n1path-audio-v2";     /* ← persistente: MP3 locales y audio del Worker TTS */
 var CDN_CACHE = "n1path-cdn-v1";         /* ← persistente: librería y datos de trazos (jsDelivr) */
 var SHELL = ["./", "./index.html", "./content.js", "./reading.js", "./listening.js", "./exams.js", "./scenarios.js", "./manifest.json", "./icon.png"];

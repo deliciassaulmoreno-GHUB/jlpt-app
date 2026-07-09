@@ -110,6 +110,42 @@
   .conv-textrow button{border:none; border-radius:12px; padding:0 18px; font-size:17px; font-weight:800;
     color:#fff; background:var(--indigo); cursor:pointer;}
   .conv-status{font-size:12.5px; color:var(--muted); min-height:18px; margin-top:6px;}
+  /* ficha de kanji */
+  #kficha{padding:6px 22px 0; overflow-y:auto;}
+  .kf-top{display:flex; flex-direction:column; align-items:center; margin-top:6px;}
+  .kf-box{width:232px; height:232px;}
+  .kf-tools{display:flex; align-items:center; gap:9px; margin:10px 0 2px;}
+  .kf-strokes{font-size:12px; color:var(--muted); font-weight:700;}
+  .kf-mean{font-size:17px; font-weight:800; text-align:center; margin:8px 0 2px; color:var(--ink);}
+  .kf-sec{font-size:11px; font-weight:700; letter-spacing:1.2px; text-transform:uppercase; color:var(--faint); margin:16px 0 7px;}
+  .kf-block{background:var(--card); border-radius:14px; padding:11px 13px; box-shadow:var(--shadow);}
+  .kf-row{display:flex; align-items:center; gap:10px; padding:5px 0;}
+  .kf-lab{font-size:11.5px; color:var(--muted); min-width:64px; font-weight:700;}
+  .kf-chips{display:flex; flex-wrap:wrap; gap:6px;}
+  .kf-chip{border:1.5px solid var(--line); background:var(--paper); color:var(--ink); border-radius:18px;
+    padding:5px 11px; font-size:14px; font-family:var(--jp); cursor:pointer;}
+  .kf-chip.main{border-color:var(--indigo); color:var(--indigo); font-weight:700;}
+  .kf-snd{font-size:11px; opacity:.55;}
+  .kf-note{font-size:13px; line-height:1.6; color:var(--ink-2); background:rgba(201,138,46,.10);
+    border-radius:12px; padding:10px 13px; margin-top:10px;}
+  .kf-ety{background:rgba(39,64,127,.07);} .kf-reg{background:rgba(62,207,142,.09);}
+  .kf-ej{cursor:pointer; margin-bottom:2px;}
+  .kf-ejw{font-family:var(--jp); font-size:17px;}
+  .kf-ejr{font-size:12px; color:var(--muted); margin-top:3px;}
+  .kf-ejt{font-size:12.5px; color:var(--ink-2); margin-top:5px; border-top:1px solid var(--line); padding-top:5px;}
+  .kf-count{font-size:13px; color:var(--ink-2); margin-bottom:8px;}
+  .kf-wlvl{margin:9px 0 5px;}
+  .kf-tag{font-size:10.5px; padding:3px 9px;}
+  .kf-words{display:flex; flex-direction:column; gap:6px;}
+  .kf-word{display:flex; align-items:baseline; gap:9px; background:var(--card); border-radius:11px;
+    padding:9px 12px; box-shadow:var(--shadow); cursor:pointer;}
+  .kf-ww{font-family:var(--jp); font-size:15.5px; font-weight:700;}
+  .kf-wr{font-size:12px; color:var(--muted);}
+  .kf-wm{font-size:12px; color:var(--ink-2); flex:1;}
+  .kf-more{font-size:11.5px; color:var(--faint); margin-top:4px;}
+  .kf-none{font-size:13px; color:var(--muted);}
+  .kf-foot{display:flex; gap:10px; padding:14px 0 18px;}
+  .kf-foot .btn{flex:1;}
   .tile-ic{width:42px; height:42px; border-radius:13px; background:rgba(39,64,127,.08); color:var(--indigo);
     display:flex; align-items:center; justify-content:center; font-family:var(--jp); font-size:22px; font-weight:700;}
   .tile-ic.g2{background:rgba(201,138,46,.12); color:var(--amber);}
@@ -635,6 +671,20 @@
   <div class="w-foot"><button class="btn" id="wNext">Siguiente →</button></div>
 </section>
 
+<!-- ===== FICHA DE KANJI (Estudiar kanji) ===== -->
+<section class="view" id="kficha">
+  <div class="study-row">
+    <button class="close" id="kfClose" aria-label="Cerrar">✕</button>
+    <div class="tagline" id="kfTag" style="margin:0;">Ficha de kanji</div>
+    <div class="wprog" id="kfProgress"></div>
+  </div>
+  <div id="kfStage"></div>
+  <div class="w-foot kf-foot">
+    <button class="btn ghost" id="kfPrev">← Anterior</button>
+    <button class="btn" id="kfNext">Siguiente →</button>
+  </div>
+</section>
+
 <script src="content.js"></script>
 <script src="reading.js"></script>
 <script src="listening.js"></script>
@@ -771,7 +821,7 @@ function buildFocused(type, level){
 }
 
 function show(v){
-  ["menu","levels","modes","stats","study","quiz","doneView","emptyView","readLevels","readList","reader","writer","conv","exam"].forEach(function(x){
+  ["menu","levels","modes","stats","study","quiz","doneView","emptyView","readLevels","readList","reader","writer","conv","exam","kficha"].forEach(function(x){
     document.getElementById(x).classList.toggle("active", x===v);
   });
 }
@@ -838,7 +888,8 @@ function onLevelChosen(type, level){
 var MODES = {
   kanji: [
     {id:"mix",     name:"Repaso (quiz)",       desc:"Lecturas y significado"},
-    {id:"strokes", name:"Escritura (trazos)",  desc:"Dibuja el kanji trazo a trazo"}
+    {id:"strokes", name:"Escritura (trazos)",  desc:"Dibuja el kanji trazo a trazo"},
+    {id:"ficha",   name:"Estudiar kanji",      desc:"Ficha completa: trazos animados, lecturas y palabras"}
   ],
   vocab: [
     {id:"mix",   name:"Examen mixto",     desc:"Mezcla de todos los tipos"},
@@ -869,6 +920,7 @@ function showModes(type, level){
     b.addEventListener("click", function(){
       selMode=b.getAttribute("data-mode");
       if(selMode==="strokes"){ startWriting(selType, selLevel); }
+      else if(selMode==="ficha"){ startKanjiStudy(selLevel); }
       else { startFocused(selType, selLevel); }
     });
   });
@@ -1517,17 +1569,22 @@ function convStart(sc){
           '<div class="conv-goal">🎯 '+sc.goal+'</div>'+
           '<div class="conv-chat" id="convChat"></div>'+
           '<div class="conv-sugs" id="convSugs"></div>'+
-          '<div class="conv-controls"><button class="conv-mic" id="convMic">🎤 Hablar</button>'+
-          '<div class="conv-textrow"><input id="convText" placeholder="…o escribe en japonés" autocomplete="off"><button id="convSendText">→</button></div></div>'+
+          '<div class="conv-controls"><button class="conv-mic" id="convMic">🎤 Hablar</button></div>'+
           '<div class="conv-status" id="convStatus"></div>';
   var st = document.getElementById("convStage"); st.innerHTML = h; st.scrollTop = 0;
   convAddAI({ jp: sc.opening.jp, fu: sc.opening.fu, es: sc.opening.es });
   convHistory.push({ role:"assistant", content: sc.opening.jp });
   try{ speak(sc.opening.jp); }catch(e){}
   document.getElementById("convMic").addEventListener("click", convToggleRec);
-  document.getElementById("convSendText").addEventListener("click", convSendTyped);
-  document.getElementById("convText").addEventListener("keydown", function(e){ if(e.key==="Enter") convSendTyped(); });
+  convWarmMic();
   show("conv");
+}
+/* Pide el permiso de micrófono nada más entrar al escenario, para estar ya inmerso */
+function convWarmMic(){
+  if(!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia)){ convStatus('<span class="mic-bad">Micrófono no disponible aquí.</span>'); return; }
+  navigator.mediaDevices.getUserMedia({audio:true})
+    .then(function(s){ s.getTracks().forEach(function(t){ t.stop(); }); })
+    .catch(function(err){ convStatus('<span class="mic-bad">Sin permiso de micrófono ('+err.name+'). Actívalo en Ajustes para practicar.</span>'); });
 }
 function convBubble(cls, html){ var d=document.createElement("div"); d.className="conv-msg "+cls; d.innerHTML=html; document.getElementById("convChat").appendChild(d); var stage=document.getElementById("convStage"); stage.scrollTop=stage.scrollHeight; return d; }
 function convAddUser(t){ convBubble("me", asTxt(t)); }
@@ -1539,7 +1596,6 @@ function convRenderSugs(arr){
   var box=document.getElementById("convSugs"); if(!box) return; box.innerHTML="";
   (Array.isArray(arr)?arr:[]).forEach(function(s){ var t=asTxt(s); if(!t) return; var b=document.createElement("button"); b.className="conv-sug"; b.textContent=t; b.addEventListener("click", function(){ convAddUser(t); convSend(t); }); box.appendChild(b); });
 }
-function convSendTyped(){ var i=document.getElementById("convText"); var t=(i.value||"").trim(); if(!t) return; i.value=""; convAddUser(t); convSend(t); }
 function convSend(text){
   convStatus("Pensando…"); var sb=document.getElementById("convSugs"); if(sb) sb.innerHTML="";
   fetch(CONV_WORKER+"/chat",{ method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({ level: convScenario.lvl, scenario: convScenario, history: convHistory, message: text }) })
@@ -1811,6 +1867,100 @@ function wStartQuiz(){
 function wResetCard(){ showWriteCard(); }
 function wNextCard(){ wIdx++; showWriteCard(); }
 
+/* ===== FICHA DE KANJI (Estudiar kanji) ===== */
+var kfList=[], kfIdx=0, kfInstance=null;
+function kanjiWordsFor(ch){
+  var by={}; var total=0;
+  (C.vocab||[]).forEach(function(v){
+    if((v.w||"").indexOf(ch)>=0){ (by[v.lvl]=by[v.lvl]||[]).push(v); total++; }
+  });
+  return {by:by, total:total};
+}
+function kfSpeakable(txt, cls){
+  return '<button class="kf-chip '+(cls||'')+'" data-say="'+escAttr(txt)+'">'+txt+' <span class="kf-snd">🔊</span></button>';
+}
+function startKanjiStudy(level){
+  kfList=[];
+  for(var i=0;i<ITEMS.length;i++){
+    var it=ITEMS[i];
+    if(it.type!=="kanji") continue;
+    if(level!=="all" && it.d.lvl!==level) continue;
+    kfList.push(i);
+  }
+  if(kfList.length===0){ showEmpty("Nada que estudiar","No hay kanji en esta selección."); return; }
+  kfIdx=0;
+  show("kficha"); showKanjiCard();
+}
+function showKanjiCard(){
+  var k=ITEMS[kfList[kfIdx]].d;
+  document.getElementById("kfTag").textContent="Ficha · "+(k.lvl||"");
+  document.getElementById("kfProgress").textContent=(kfIdx+1)+" / "+kfList.length;
+  var h='';
+  h+='<div class="kf-top"><div class="hw-box kf-box"><div id="kfTarget"></div><div class="hw-grid"></div></div>';
+  h+='<div class="kf-tools"><button class="w-btn" id="kfAnim">▶ Ver trazos</button><button class="w-btn" id="kfQuiz">✍ Practicar</button><span class="kf-strokes" id="kfStrokes"></span></div></div>';
+  h+='<div class="kf-mean">'+ (k.mean||"") +'</div>';
+  /* lecturas */
+  h+='<div class="kf-sec">Lecturas</div><div class="kf-block">';
+  if(k.kun){ h+='<div class="kf-row"><span class="kf-lab">訓 kun</span><span class="kf-chips">'+ String(k.kun).split("・").map(function(r){ return kfSpeakable(r); }).join("") +'</span></div>'; }
+  if(k.on){ h+='<div class="kf-row"><span class="kf-lab">音 on</span><span class="kf-chips">'+ String(k.on).split("・").map(function(r){ return kfSpeakable(r); }).join("") +'</span></div>'; }
+  if(k.say){ h+='<div class="kf-row"><span class="kf-lab">habitual</span><span class="kf-chips">'+ kfSpeakable(k.say,"main") +'</span></div>'; }
+  h+='</div>';
+  /* truco / etimología / uso si existen */
+  if(k.tip){ h+='<div class="kf-note">💡 '+k.tip+'</div>'; }
+  if(k.ety){ h+='<div class="kf-sec">Origen e historia</div><div class="kf-note kf-ety">📜 '+k.ety+'</div>'; }
+  if(k.reg){ h+='<div class="kf-sec">Registro y uso</div><div class="kf-note kf-reg">🗣 '+k.reg+'</div>'; }
+  /* ejemplo propio del kanji */
+  if(k.ej){ h+='<div class="kf-sec">Ejemplo</div><div class="kf-block kf-ej" data-say="'+escAttr(k.ej)+'"><div class="kf-ejw">'+k.ej+' <span class="kf-snd">🔊</span></div><div class="kf-ejr">'+(k.ejr||"")+'</div><div class="kf-ejt">'+(k.ejt||"")+'</div></div>'; }
+  /* palabras del vocabulario que lo contienen */
+  var W=kanjiWordsFor(k.c);
+  h+='<div class="kf-sec">En el vocabulario de la app</div>';
+  if(W.total===0){ h+='<div class="kf-none">Todavía no aparece en ninguna palabra del vocabulario cargado.</div>'; }
+  else {
+    h+='<div class="kf-count">Aparece en <b>'+W.total+'</b> '+(W.total===1?'palabra':'palabras')+'.</div>';
+    ["N5","N4","N3","N2","N1"].forEach(function(l){
+      var arr=W.by[l]; if(!arr || !arr.length) return;
+      h+='<div class="kf-wlvl"><span class="level-tag kf-tag">'+l+'</span></div><div class="kf-words">';
+      arr.slice(0,3).forEach(function(v){
+        h+='<div class="kf-word" data-say="'+escAttr(v.w)+'"><span class="kf-ww">'+v.w+'</span><span class="kf-wr">'+(v.r||"")+'</span><span class="kf-wm">'+(v.mean||"")+'</span><span class="kf-snd">🔊</span></div>';
+      });
+      if(arr.length>3){ h+='<div class="kf-more">… y '+(arr.length-3)+' más en '+l+'</div>'; }
+      h+='</div>';
+    });
+  }
+  var st=document.getElementById("kfStage");
+  st.innerHTML=h;
+  var sec=document.getElementById("kficha"); sec.scrollTop=0;
+  /* trazos animados */
+  var target=document.getElementById("kfTarget");
+  kfInstance=null;
+  loadHanziWriter(function(ok){
+    if(!ok){ target.innerHTML='<div class="hw-err">No se pudo cargar el módulo de trazos (necesita conexión la primera vez).</div>'; return; }
+    try{
+      kfInstance=HanziWriter.create(target, k.c, {
+        width:220, height:220, padding:6,
+        showCharacter:false, showOutline:true,
+        strokeColor:"#27407f", radicalColor:"#3b5fc4",
+        outlineColor:"#d9deea", drawingColor:"#111827", drawingWidth:22,
+        charDataLoader:function(ch,onLoad,onError){
+          hwDataLoader(ch,function(d){
+            try{ var el=document.getElementById("kfStrokes"); if(el&&d&&d.strokes) el.textContent=d.strokes.length+" trazos"; }catch(e){}
+            onLoad(d);
+          },onError);
+        },
+        onLoadCharDataError:function(){ target.innerHTML='<div class="hw-err">No hay datos de trazos para «'+k.c+'».</div>'; }
+      });
+      try{ kfInstance.animateCharacter(); }catch(e){}
+    }catch(e){ target.innerHTML='<div class="hw-err">No se pudo iniciar el lienzo.</div>'; }
+  });
+  document.getElementById("kfAnim").addEventListener("click", function(){ if(kfInstance){ try{ kfInstance.animateCharacter(); }catch(e){} } });
+  document.getElementById("kfQuiz").addEventListener("click", function(){ if(kfInstance){ try{ kfInstance.quiz({showHintAfterMisses:2}); }catch(e){} } });
+  st.querySelectorAll("[data-say]").forEach(function(el){
+    el.addEventListener("click", function(){ var t=el.getAttribute("data-say"); if(t){ try{ speak(t); }catch(e){} } });
+  });
+}
+function kfPrevCard(){ if(kfIdx>0){ kfIdx--; showKanjiCard(); } }
+function kfNextCard(){ if(kfIdx<kfList.length-1){ kfIdx++; showKanjiCard(); } else { show("doneView"); renderMenu(); } }
+
 /* ===== EVENTS ===== */
 document.getElementById("greetingRow").addEventListener("click", function(){
   var n=prompt("¿Cómo te llamas? (se guarda solo en tu teléfono)", getName());
@@ -1871,6 +2021,9 @@ document.getElementById("wAnim").addEventListener("click", wAnimate);
 document.getElementById("wQuiz").addEventListener("click", wStartQuiz);
 document.getElementById("wReset").addEventListener("click", wResetCard);
 document.getElementById("wNext").addEventListener("click", wNextCard);
+document.getElementById("kfClose").addEventListener("click", function(){ showModes(selType||"kanji", selLevel||"all"); });
+document.getElementById("kfPrev").addEventListener("click", kfPrevCard);
+document.getElementById("kfNext").addEventListener("click", kfNextCard);
 
 /* ===== Gesto: deslizar de izquierda a derecha para volver atrás ===== */
 function activeViewId(){
@@ -1908,7 +2061,7 @@ function goBack(){
   }, {passive:true});
   document.addEventListener("touchend", function(e){
     if(!ok) return; ok=false;
-    if(activeViewId()==="writer") return;   /* en escritura, deslizar es dibujar: no navegar */
+    if(activeViewId()==="writer" || activeViewId()==="kficha") return;   /* en escritura/ficha, deslizar es dibujar: no navegar */
     var c=e.changedTouches[0]; if(!c) return;
     var dx=c.clientX-x0, dy=c.clientY-y0, dt=Date.now()-t0;
     /* deslizamiento hacia la derecha, claramente horizontal y rápido */
