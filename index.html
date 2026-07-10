@@ -74,6 +74,10 @@
   .mic-btn:disabled{opacity:.5;}
   .mic-status{font-size:13.5px; line-height:1.55; margin-top:12px; color:var(--ink-2);}
   .exam-head{font-size:15px; font-weight:800; margin:6px 0 14px; color:var(--ink);}
+  .exam-subhead{margin-top:22px; font-size:13.5px;}
+  .exam-secdiv{font-size:11px; font-weight:800; letter-spacing:1.1px; text-transform:uppercase; color:var(--faint);
+    margin:20px 0 8px; padding-top:14px; border-top:1px dashed var(--line);}
+  .exam-secdiv:first-child{margin-top:0; padding-top:0; border-top:none;}
   .exam-q{background:var(--card); border-radius:14px; padding:14px 15px; margin-bottom:12px; box-shadow:var(--shadow); text-align:left;}
   .exam-passage{font-size:14px; line-height:1.75; background:rgba(39,64,127,.06); border-radius:11px; padding:11px 13px; margin-bottom:11px;}
   .exam-audio{border:1.5px solid var(--indigo); background:transparent; color:var(--indigo); border-radius:20px; padding:7px 15px; font-size:13px; font-weight:700; margin-bottom:11px; cursor:pointer;}
@@ -172,6 +176,7 @@
 
   /* ===== LEVELS ===== */
   #levels{padding:10px 22px 0; overflow-y:auto;}
+  #modes{padding:10px 22px 0; overflow-y:auto;}
   .back-row{display:flex; align-items:center; gap:12px; margin-bottom:6px;}
   .back-btn{width:34px; height:34px; border-radius:50%; background:var(--line-2); border:none; cursor:pointer;
     display:flex; align-items:center; justify-content:center; font-size:16px; color:var(--ink-2); flex-shrink:0;}
@@ -184,6 +189,7 @@
   .level-tag{font-family:var(--jp); font-weight:700; font-size:16px; color:#fff; background:var(--indigo);
     width:46px; height:38px; border-radius:11px; display:flex; align-items:center; justify-content:center;}
   .level-tag.all{background:var(--amber); font-size:13px;}
+  .level-tag.full{background:var(--teal, #3ecf8e); font-size:13px;}
   .level-meta .lt{font-size:14.5px; font-weight:700;}
   .level-meta .ls{font-size:11.5px; color:var(--muted); margin-top:2px;}
   .level-meta .ls b{color:var(--ink-2);} .level-meta .ls .rep{color:var(--indigo-bright); font-weight:700;}
@@ -1550,7 +1556,7 @@ function openConv(){
   var h = '<div class="level-title">Conversación</div><div class="level-help">Elige nivel y escenario y practica hablando. Pulsa 🎤 para hablar (o escribe abajo). Tus fallos se corrigen sobre la marcha.</div>';
   if(!order.length){ h += '<div class="level-help">Falta el archivo scenarios.js.</div>'; }
   order.forEach(function(l){ h += '<button class="level-btn" data-l="'+l+'"><div class="level-l"><div class="level-tag">'+l+'</div><div class="level-meta"><div class="lt">Nivel '+l+'</div></div></div><span class="level-arrow">›</span></button>'; });
-  var st = document.getElementById("convStage"); st.innerHTML = h; st.scrollTop = 0;
+  var st = document.getElementById("convStage"); st.innerHTML = h; document.getElementById("conv").scrollTop = 0;
   st.querySelectorAll(".level-btn").forEach(function(b){ b.addEventListener("click", function(){ convScenarios(b.getAttribute("data-l")); }); });
   show("conv");
 }
@@ -1559,7 +1565,7 @@ function convScenarios(level){
   var list = convScenData().filter(function(s){ return s.lvl===level; });
   var h = '<div class="level-title">'+level+' · elige el escenario</div>';
   list.forEach(function(s){ h += '<button class="level-btn" data-id="'+s.id+'"><div class="level-l"><div class="level-tag all">会</div><div class="level-meta"><div class="lt">'+s.title+'</div><div class="ls">'+s.goal+'</div></div></div><span class="level-arrow">›</span></button>'; });
-  var st = document.getElementById("convStage"); st.innerHTML = h; st.scrollTop = 0;
+  var st = document.getElementById("convStage"); st.innerHTML = h; document.getElementById("conv").scrollTop = 0;
   st.querySelectorAll(".level-btn").forEach(function(b){ b.addEventListener("click", function(){ var s=convScenData().filter(function(x){return x.id===b.getAttribute("data-id");})[0]; if(s) convStart(s); }); });
   show("conv");
 }
@@ -1571,7 +1577,7 @@ function convStart(sc){
           '<div class="conv-sugs" id="convSugs"></div>'+
           '<div class="conv-controls"><button class="conv-mic" id="convMic">🎤 Hablar</button></div>'+
           '<div class="conv-status" id="convStatus"></div>';
-  var st = document.getElementById("convStage"); st.innerHTML = h; st.scrollTop = 0;
+  var st = document.getElementById("convStage"); st.innerHTML = h; document.getElementById("conv").scrollTop = 0;
   convAddAI({ jp: sc.opening.jp, fu: sc.opening.fu, es: sc.opening.es });
   convHistory.push({ role:"assistant", content: sc.opening.jp });
   try{ speak(sc.opening.jp); }catch(e){}
@@ -1586,7 +1592,7 @@ function convWarmMic(){
     .then(function(s){ s.getTracks().forEach(function(t){ t.stop(); }); })
     .catch(function(err){ convStatus('<span class="mic-bad">Sin permiso de micrófono ('+err.name+'). Actívalo en Ajustes para practicar.</span>'); });
 }
-function convBubble(cls, html){ var d=document.createElement("div"); d.className="conv-msg "+cls; d.innerHTML=html; document.getElementById("convChat").appendChild(d); var stage=document.getElementById("convStage"); stage.scrollTop=stage.scrollHeight; return d; }
+function convBubble(cls, html){ var d=document.createElement("div"); d.className="conv-msg "+cls; d.innerHTML=html; document.getElementById("convChat").appendChild(d); var sec=document.getElementById("conv"); sec.scrollTop=sec.scrollHeight; return d; }
 function convAddUser(t){ convBubble("me", asTxt(t)); }
 function convAddAI(data){
   var corr = (data.correccion && asTxt(data.correccion).trim()) ? '<div class="conv-corr">✎ '+asTxt(data.correccion)+'</div>' : '';
@@ -1642,20 +1648,30 @@ function openExamLevels(){
     h += '<button class="level-btn" data-l="'+l+'"><div class="level-l"><div class="level-tag">'+l+'</div>'+
       '<div class="level-meta"><div class="lt">Nivel '+l+'</div></div></div><span class="level-arrow">›</span></button>';
   });
-  var st = document.getElementById("examStage"); st.innerHTML = h; st.scrollTop = 0;
+  var st = document.getElementById("examStage"); st.innerHTML = h; document.getElementById("exam").scrollTop = 0;
   st.querySelectorAll(".level-btn").forEach(function(b){ b.addEventListener("click", function(){ examAreas(b.getAttribute("data-l")); }); });
   show("exam");
 }
 function examAreas(level){
   examView = "areas"; examLevel = level;
-  var exs = examData().filter(function(e){ return e.lvl === level; });
+  var all = examData().filter(function(e){ return e.lvl === level; });
+  var exs = all.filter(function(e){ return e.kind !== "full"; });
+  var sets = all.filter(function(e){ return e.kind === "full"; });
   var h = '<div class="exam-head">'+level+' · elige la parte</div>';
   exs.forEach(function(e){
     h += '<button class="level-btn" data-id="'+e.id+'"><div class="level-l"><div class="level-tag all">試</div>'+
       '<div class="level-meta"><div class="lt">'+e.title+'</div><div class="ls">'+(e.desc||'')+' · '+e.questions.length+' preguntas</div></div></div>'+
       '<span class="level-arrow">›</span></button>';
   });
-  var st = document.getElementById("examStage"); st.innerHTML = h; st.scrollTop = 0;
+  if(sets.length){
+    h += '<div class="exam-head exam-subhead">🎯 Simulacros completos (todas las secciones)</div>';
+    sets.forEach(function(e){
+      h += '<button class="level-btn" data-id="'+e.id+'"><div class="level-l"><div class="level-tag full">模</div>'+
+        '<div class="level-meta"><div class="lt">'+e.title+'</div><div class="ls">'+(e.desc||'')+' · '+e.questions.length+' preguntas</div></div></div>'+
+        '<span class="level-arrow">›</span></button>';
+    });
+  }
+  var st = document.getElementById("examStage"); st.innerHTML = h; document.getElementById("exam").scrollTop = 0;
   st.querySelectorAll(".level-btn").forEach(function(b){
     b.addEventListener("click", function(){ var ex = examData().filter(function(x){ return x.id === b.getAttribute("data-id"); })[0]; if(ex) runExam(ex); });
   });
@@ -1665,6 +1681,7 @@ function runExam(exam){
   examView = "exam"; currentExam = exam; examAnswers = {};
   var h = '<div class="exam-head">'+exam.title+' · '+exam.lvl+'</div>';
   exam.questions.forEach(function(q, i){
+    if(q.sec){ h += '<div class="exam-secdiv">'+q.sec+'</div>'; }
     h += '<div class="exam-q" data-i="'+i+'" data-a="'+q.a+'">';
     if(q.passage) h += '<div class="exam-passage">'+q.passage+'</div>';
     if(q.audio) h += '<button class="exam-audio" data-audio="'+encodeURIComponent(q.audio)+'">▶ Escuchar</button>';
@@ -1673,7 +1690,7 @@ function runExam(exam){
     h += '</div>';
   });
   h += '<button class="exam-submit" id="examSubmit">Corregir</button><div class="exam-score" id="examScore"></div>';
-  var st = document.getElementById("examStage"); st.innerHTML = h; st.scrollTop = 0;
+  var st = document.getElementById("examStage"); st.innerHTML = h; document.getElementById("exam").scrollTop = 0;
   st.querySelectorAll(".exam-q").forEach(function(qb){
     var opts = qb.querySelectorAll(".qopt");
     opts.forEach(function(b){ b.addEventListener("click", function(){
@@ -2027,7 +2044,7 @@ document.getElementById("kfNext").addEventListener("click", kfNextCard);
 
 /* ===== Gesto: deslizar de izquierda a derecha para volver atrás ===== */
 function activeViewId(){
-  var ids=["reader","readList","readLevels","modes","levels","stats","study","quiz","doneView","emptyView","menu"];
+  var ids=["reader","readList","readLevels","modes","levels","stats","study","quiz","doneView","emptyView","conv","exam","kficha","writer","menu"];
   for(var i=0;i<ids.length;i++){
     var el=document.getElementById(ids[i]);
     if(el && el.classList.contains("active")) return ids[i];
@@ -2039,9 +2056,19 @@ function goBack(){
   var def=document.getElementById("rdDefine");
   if(def && def.classList.contains("show")){ hideDefine(); return; }
   switch(activeViewId()){
-    case "reader":     stopRead(); showReadingList(readListLevel); break;
-    case "readList":   openReadingLevels(); break;
+    case "reader":     stopRead(); readerMode==="listen" ? showListeningList(readListLevel) : showReadingList(readListLevel); break;
+    case "readList":   readerMode==="listen" ? openListeningLevels() : openReadingLevels(); break;
     case "modes":      showLevels(selType); break;
+    case "conv":
+      if(convView==="chat"){ convScenarios(convScenario ? convScenario.lvl : "N5"); }
+      else if(convView==="scenarios"){ openConv(); }
+      else { show("menu"); renderMenu(); }
+      break;
+    case "exam":
+      if(examView==="exam" || examView==="result"){ examAreas(examLevel); }
+      else if(examView==="areas"){ openExamLevels(); }
+      else { show("menu"); renderMenu(); }
+      break;
     case "readLevels":
     case "levels":
     case "stats":
