@@ -730,6 +730,20 @@
         <button id="acctSyncBtn">Sincronizar ahora</button>
         <button id="acctOutBtn" class="ghost">Cerrar sesión</button>
       </div>
+      <div class="acct-row">
+        <button id="acctProfileBtn" class="ghost">Cambiar contraseña</button>
+      </div>
+    </div>
+    <div id="acctProfile" style="display:none">
+      <div class="acct-user">Cambiar contraseña</div>
+      <div class="acct-sub" id="acctProfileWho">—</div>
+      <input id="acctOldPass" type="password" placeholder="contraseña actual" autocomplete="current-password">
+      <input id="acctNewPass" type="password" placeholder="contraseña nueva (mín. 6)" autocomplete="new-password">
+      <input id="acctNewPass2" type="password" placeholder="repite la contraseña nueva" autocomplete="new-password">
+      <div class="acct-row">
+        <button id="acctChangePassBtn">Guardar</button>
+        <button id="acctProfileBackBtn" class="ghost">Volver</button>
+      </div>
     </div>
     <div class="acct-msg" id="acctMsg"></div>
   </div>
@@ -2209,11 +2223,23 @@ function cloudPullIfNewer(){
 }
 
 function acctMsgSet(t){ document.getElementById("acctMsg").textContent = t||""; }
+function acctShowProfile(show){
+  document.getElementById("acctIn").style.display = show ? "none" : (getAuth() ? "" : "none");
+  document.getElementById("acctProfile").style.display = show ? "" : "none";
+  if(show){
+    document.getElementById("acctProfileWho").textContent = (getAuth()||{}).user || "—";
+    document.getElementById("acctOldPass").value = "";
+    document.getElementById("acctNewPass").value = "";
+    document.getElementById("acctNewPass2").value = "";
+  }
+  acctMsgSet("");
+}
 function paintAcct(msg){
   var a=getAuth();
   var chip=document.getElementById("acctChip");
   chip.textContent = a ? ("☁ "+a.user) : "☁ Invitado";
   chip.classList.toggle("on", !!a);
+  document.getElementById("acctProfile").style.display = "none";
   document.getElementById("acctOut").style.display = a ? "none" : "";
   document.getElementById("acctIn").style.display = a ? "" : "none";
   if(a){
@@ -2266,6 +2292,27 @@ document.getElementById("acctModal").addEventListener("click", function(e){ if(e
 document.getElementById("acctLoginBtn").addEventListener("click", function(){ acctAuth(false); });
 document.getElementById("acctRegBtn").addEventListener("click", function(){ acctAuth(true); });
 document.getElementById("acctSyncBtn").addEventListener("click", function(){ acctMsgSet("Sincronizando…"); cloudPush(function(ok){ acctMsgSet(ok?"Sincronizado ✓":"No se pudo sincronizar."); }); });
+document.getElementById("acctProfileBtn").addEventListener("click", function(){ acctShowProfile(true); });
+document.getElementById("acctProfileBackBtn").addEventListener("click", function(){ acctShowProfile(false); });
+document.getElementById("acctChangePassBtn").addEventListener("click", function(){
+  var a=getAuth(); if(!a){ acctShowProfile(false); return; }
+  var op=document.getElementById("acctOldPass").value||"";
+  var np=document.getElementById("acctNewPass").value||"";
+  var np2=document.getElementById("acctNewPass2").value||"";
+  if(!op){ acctMsgSet("Escribe tu contraseña actual."); return; }
+  if(np.length<6){ acctMsgSet("La contraseña nueva debe tener al menos 6 caracteres."); return; }
+  if(np!==np2){ acctMsgSet("Las dos contraseñas nuevas no coinciden."); return; }
+  acctMsgSet("Guardando…");
+  fetch(SYNC_URL+"/change-password", {
+    method:"POST", headers:{ "Content-Type":"application/json", "Authorization":"Bearer "+a.token },
+    body: JSON.stringify({ oldPass:op, newPass:np })
+  }).then(function(r){ return r.json().then(function(j){ return { ok:r.ok, j:j }; }); })
+  .then(function(res){
+    if(!res.ok){ acctMsgSet((res.j&&res.j.error)||"No se pudo cambiar la contraseña."); return; }
+    acctShowProfile(false);
+    paintAcct("Contraseña actualizada ✓");
+  }).catch(function(){ acctMsgSet("No se pudo conectar con el servidor."); });
+});
 document.getElementById("acctOutBtn").addEventListener("click", function(){
   var a=getAuth();
   if(a){ fetch(SYNC_URL+"/logout", { method:"POST", headers:{ "Authorization":"Bearer "+a.token } }).catch(function(){}); }
