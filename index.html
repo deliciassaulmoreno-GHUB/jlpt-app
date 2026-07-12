@@ -207,6 +207,22 @@
     width:46px; height:38px; border-radius:11px; display:flex; align-items:center; justify-content:center;}
   .level-tag.all{background:var(--amber); font-size:13px;}
   .level-tag.full{background:var(--teal, #3ecf8e); font-size:13px;}
+  .level-tag.official{background:#B2493A; font-size:13px;}
+  .official-timer{position:sticky; top:0; z-index:5; background:var(--card); border:1.5px solid var(--line); border-radius:14px;
+    padding:11px 15px; margin-bottom:14px; font-weight:800; font-size:14.5px; color:var(--ink);
+    display:flex; align-items:center; justify-content:space-between; box-shadow:var(--shadow);}
+  .official-timer .ot-time{font-variant-numeric:tabular-nums; color:var(--indigo);}
+  .official-timer.warn .ot-time{color:#B2493A;}
+  .official-timer .ot-sec{font-size:11.5px; font-weight:700; color:var(--muted); text-transform:none;}
+  .official-summary{background:var(--card); border-radius:14px; padding:13px 15px; margin-bottom:10px; box-shadow:var(--shadow);
+    display:flex; align-items:center; justify-content:space-between;}
+  .official-summary .os-title{font-weight:800; font-size:14px; color:var(--ink);}
+  .official-summary .os-score{font-size:14px; font-weight:800; color:var(--indigo);}
+  .official-total{font-size:20px; font-weight:800; text-align:center; margin:18px 0 4px; color:var(--ink);}
+  .official-total.pass{color:var(--green,#2E7D5B);}
+  .official-total.fail{color:#B2493A;}
+  .official-note{font-size:12px; color:var(--muted); text-align:center; margin-bottom:16px; line-height:1.55; padding:0 8px;}
+  .official-intro{font-size:13px; color:var(--ink-2); line-height:1.6; background:rgba(178,73,58,.07); border-radius:12px; padding:12px 14px; margin-bottom:14px;}
   .level-meta .lt{font-size:14.5px; font-weight:700;}
   .level-meta .ls{font-size:11.5px; color:var(--muted); margin-top:2px;}
   .level-meta .ls b{color:var(--ink-2);} .level-meta .ls .rep{color:var(--indigo-bright); font-weight:700;}
@@ -756,6 +772,7 @@
 <script src="reading.js"></script>
 <script src="listening.js"></script>
 <script src="exams.js"></script>
+<script src="official.js"></script>
 <script src="scenarios.js"></script>
 <script>
 var C = window.CONTENT || {kanji:[],vocab:[],grammar:[]};
@@ -1735,9 +1752,22 @@ function examAreas(level){
         '<span class="level-arrow">›</span></button>';
     });
   }
+  var offs = officialData().filter(function(e){ return e.lvl === level; });
+  if(offs.length){
+    h += '<div class="exam-head exam-subhead">⏱️ Examen oficial (formato Noken, cronometrado)</div>';
+    offs.forEach(function(e){
+      var totalMin=0, totalQ=0; e.sections.forEach(function(s){ totalMin+=s.minutes; totalQ+=s.questions.length; });
+      h += '<button class="level-btn" data-off="'+e.id+'"><div class="level-l"><div class="level-tag official">官</div>'+
+        '<div class="level-meta"><div class="lt">'+e.title+'</div><div class="ls">'+(e.desc||'')+' · '+totalMin+' min · '+totalQ+' preguntas</div></div></div>'+
+        '<span class="level-arrow">›</span></button>';
+    });
+  }
   var st = document.getElementById("examStage"); st.innerHTML = h; document.getElementById("exam").scrollTop = 0;
-  st.querySelectorAll(".level-btn").forEach(function(b){
+  st.querySelectorAll(".level-btn[data-id]").forEach(function(b){
     b.addEventListener("click", function(){ var ex = examData().filter(function(x){ return x.id === b.getAttribute("data-id"); })[0]; if(ex) runExam(ex); });
+  });
+  st.querySelectorAll(".level-btn[data-off]").forEach(function(b){
+    b.addEventListener("click", function(){ var ex = officialData().filter(function(x){ return x.id === b.getAttribute("data-off"); })[0]; if(ex) confirmOfficialExam(ex); });
   });
   show("exam");
 }
@@ -1768,6 +1798,7 @@ function runExam(exam){
   show("exam");
 }
 function gradeExam(){
+  if(officialTimerId){ clearInterval(officialTimerId); officialTimerId=null; }
   var correct = 0, total = currentExam.questions.length;
   document.querySelectorAll("#examStage .exam-q").forEach(function(qb){
     qb.classList.add("done");
@@ -1784,8 +1815,86 @@ function gradeExam(){
   var pct = Math.round(correct / total * 100);
   var sc = document.getElementById("examScore");
   sc.innerHTML = "Resultado: " + correct + " / " + total + " (" + pct + "%)";
-  document.getElementById("examSubmit").disabled = true;
+  if(officialExam){
+    officialFinishSection(correct, total);
+  } else {
+    document.getElementById("examSubmit").disabled = true;
+  }
   sc.scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
+/* ===== EXAMEN OFICIAL · simulacro cronometrado con el formato completo del Noken ===== */
+function officialData(){ return window.OFFICIAL_EXAMS || []; }
+var officialExam=null, officialIdx=0, officialScores=[], officialTimerId=null, officialSecondsLeft=0;
+
+function confirmOfficialExam(exam){
+  var totalMin=0, totalQ=0; exam.sections.forEach(function(s){ totalMin+=s.minutes; totalQ+=s.questions.length; });
+  var partes = exam.sections.map(function(s){ return s.title+" ("+s.minutes+" min)"; }).join(" + ");
+  var ok = confirm(
+    exam.title+"\n\n"+totalQ+" preguntas · "+totalMin+" minutos en total, dividido en "+exam.sections.length+" partes cronometradas:\n"+partes+
+    "\n\nCada parte tiene su propio tiempo; al agotarse, se corrige automáticamente y no se puede volver atrás, igual que en el examen real. Puedes hacerlo en varias sesiones si cierras la app, pero dentro de cada sección el reloj no se detiene mientras esté visible.\n\n¿Empezamos?"
+  );
+  if(ok) startOfficialExam(exam);
+}
+function startOfficialExam(exam){
+  officialExam = exam; officialIdx = 0; officialScores = [];
+  startOfficialSection();
+}
+function startOfficialSection(){
+  var section = officialExam.sections[officialIdx];
+  var synthetic = { title: officialExam.title+" · "+section.title, lvl: officialExam.lvl, questions: section.questions };
+  runExam(synthetic);
+  officialSecondsLeft = section.minutes*60;
+  var bar = document.createElement("div");
+  bar.className = "official-timer"; bar.id = "officialTimerBar";
+  bar.innerHTML = '<span class="ot-sec">Parte '+(officialIdx+1)+'/'+officialExam.sections.length+' · '+section.title+'</span><span class="ot-time" id="officialTimeTxt"></span>';
+  var st = document.getElementById("examStage");
+  st.insertBefore(bar, st.firstChild);
+  officialUpdateTimer();
+  officialTimerId = setInterval(function(){
+    officialSecondsLeft--;
+    officialUpdateTimer();
+    if(officialSecondsLeft<=0){ clearInterval(officialTimerId); officialTimerId=null; gradeExam(); }
+  }, 1000);
+}
+function officialUpdateTimer(){
+  var bar=document.getElementById("officialTimerBar"); if(!bar) return;
+  var m=Math.floor(Math.max(0,officialSecondsLeft)/60), s=Math.max(0,officialSecondsLeft)%60;
+  var txt=document.getElementById("officialTimeTxt");
+  if(txt) txt.textContent = (m<10?"0":"")+m+":"+(s<10?"0":"")+s+" restantes";
+  bar.classList.toggle("warn", officialSecondsLeft<=60);
+}
+function officialFinishSection(correct, total){
+  var section = officialExam.sections[officialIdx];
+  officialScores.push({ title: section.title, correct: correct, total: total });
+  var isLast = (officialIdx+1 >= officialExam.sections.length);
+  var btn = document.getElementById("examSubmit");
+  btn.textContent = isLast ? "Ver resultado final ▶" : "Siguiente parte ▶";
+  btn.disabled = false;
+  btn.onclick = function(){
+    officialIdx++;
+    if(isLast){ showOfficialResults(); } else { startOfficialSection(); }
+  };
+}
+function showOfficialResults(){
+  var exam = officialExam;
+  var totalCorrect=0, totalQ=0;
+  var h = '<div class="exam-head">'+exam.title+' · resultado final</div>';
+  officialScores.forEach(function(s){
+    totalCorrect+=s.correct; totalQ+=s.total;
+    var pct=Math.round(s.correct/s.total*100);
+    h += '<div class="official-summary"><span class="os-title">'+s.title+'</span><span class="os-score">'+s.correct+' / '+s.total+' ('+pct+'%)</span></div>';
+  });
+  var pctTotal = Math.round(totalCorrect/totalQ*100);
+  var passed = pctTotal>=55; /* umbral orientativo, no la puntuación escalada oficial */
+  h += '<div class="official-total '+(passed?"pass":"fail")+'">'+totalCorrect+' / '+totalQ+' ('+pctTotal+'%)</div>';
+  h += '<div class="official-note">El JLPT real corrige con una puntuación escalada (no un simple % de aciertos) y exige superar un mínimo en cada sección además del total. Este resultado es solo una referencia orientativa de tu nivel, no una predicción exacta.</div>';
+  h += '<button class="exam-submit" id="officialBackBtn">Volver a exámenes</button>';
+  var st = document.getElementById("examStage"); st.innerHTML = h; document.getElementById("exam").scrollTop = 0;
+  document.getElementById("officialBackBtn").addEventListener("click", function(){
+    officialExam=null; officialIdx=0; officialScores=[];
+    examAreas(examLevel);
+  });
 }
 function showDefine(w,r,m){
   stopRead();
@@ -2054,11 +2163,7 @@ document.getElementById("tileRead").addEventListener("click", openReadingLevels)
 document.getElementById("tileListen").addEventListener("click", openListeningLevels);
 document.getElementById("tileConv").addEventListener("click", openConv);
 document.getElementById("tileExam").addEventListener("click", openExamLevels);
-document.getElementById("examBack").addEventListener("click", function(){
-  if(examView==="exam" || examView==="result"){ examAreas(examLevel); }
-  else if(examView==="areas"){ openExamLevels(); }
-  else { show("menu"); renderMenu(); }
-});
+document.getElementById("examBack").addEventListener("click", examGoBack);
 document.getElementById("convBack").addEventListener("click", function(){
   if(convView==="chat"){ convScenarios(convScenario ? convScenario.lvl : "N5"); }
   else if(convView==="scenarios"){ openConv(); }
@@ -2117,6 +2222,16 @@ function activeViewId(){
   }
   return "menu";
 }
+function examGoBack(){
+  if(officialExam && examView==="exam"){
+    if(!confirm("Tienes un examen oficial cronometrado en curso. Si sales ahora, perderás el progreso de esta parte. ¿Salir de todos modos?")) return;
+  }
+  if(officialTimerId){ clearInterval(officialTimerId); officialTimerId=null; }
+  officialExam=null; officialIdx=0; officialScores=[];
+  if(examView==="exam" || examView==="result"){ examAreas(examLevel); }
+  else if(examView==="areas"){ openExamLevels(); }
+  else { show("menu"); renderMenu(); }
+}
 function goBack(){
   /* si el modal de cuenta está abierto, ciérralo primero */
   var am=document.getElementById("acctModal");
@@ -2133,11 +2248,7 @@ function goBack(){
       else if(convView==="scenarios"){ openConv(); }
       else { show("menu"); renderMenu(); }
       break;
-    case "exam":
-      if(examView==="exam" || examView==="result"){ examAreas(examLevel); }
-      else if(examView==="areas"){ openExamLevels(); }
-      else { show("menu"); renderMenu(); }
-      break;
+    case "exam":       examGoBack(); break;
     case "kficha":     showModes(selType||"kanji", selLevel||"all"); break;
     case "readLevels":
     case "levels":
