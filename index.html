@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Japanese N1 Path</title>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -19,17 +19,17 @@
     --jp:'Hiragino Kaku Gothic ProN','Hiragino Sans',system-ui,sans-serif;
     --ui:system-ui,-apple-system,'Inter',sans-serif;
   }
-  *{box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent;}
+  *{box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; touch-action:manipulation;}
   html,body{height:100%;}
   body{font-family:var(--ui); background:var(--paper); color:var(--ink); -webkit-font-smoothing:antialiased;
-    overflow:hidden; display:flex; flex-direction:column;
+    overflow:hidden; overscroll-behavior:none; display:flex; flex-direction:column;
     padding-top:env(safe-area-inset-top); padding-bottom:env(safe-area-inset-bottom);}
   .topbar{height:14px; flex-shrink:0;}
   .view{flex:1; display:none; flex-direction:column; min-height:0;}
   .view.active{display:flex;}
 
   /* ===== MENU ===== */
-  #menu{padding:10px 22px 0; overflow-y:auto;}
+  #menu{padding:10px 22px 0; overflow-y:auto; overscroll-behavior:contain;}
   .eyebrow{font-size:11px; font-weight:600; letter-spacing:1.4px; color:var(--faint); text-transform:uppercase;}
   .greeting-row{margin-top:5px; cursor:pointer; display:inline-flex; align-items:baseline; gap:8px;}
   .greeting{font-family:var(--jp); font-weight:700; font-size:27px;}
@@ -87,7 +87,7 @@
   .acct-box{background:var(--card); border:1.5px solid var(--line); border-radius:18px; padding:20px; width:100%; max-width:360px; position:relative;}
   .acct-title{font-weight:800; font-size:16px; margin-bottom:12px; color:var(--ink);}
   .acct-box input{width:100%; box-sizing:border-box; border:1.5px solid var(--line); border-radius:10px; padding:10px 12px;
-    font-size:14px; margin-bottom:8px; background:var(--bg); color:var(--ink);}
+    font-size:16px; margin-bottom:8px; background:var(--bg); color:var(--ink);}
   .acct-row{display:flex; gap:8px; margin-top:6px;}
   .acct-row button{flex:1; border:none; border-radius:10px; padding:11px 0; font-weight:800; font-size:14px; cursor:pointer;
     background:var(--indigo); color:#fff;}
@@ -104,7 +104,7 @@
   .exam-submit{display:block; width:100%; border:none; border-radius:14px; padding:15px; font-size:15px; font-weight:700; color:#fff; background:var(--indigo); margin-top:4px; cursor:pointer;}
   .exam-submit:disabled{opacity:.5;}
   .exam-score{font-size:17px; font-weight:800; text-align:center; margin:16px 0 8px; color:var(--ink);}
-  #exam,#conv{padding:6px 22px 28px; overflow-y:auto;}
+  #exam,#conv{padding:6px 22px 28px; overflow-y:auto; overscroll-behavior:contain;}
   .exam-exp{margin-top:11px; font-size:12.5px; line-height:1.6; color:var(--ink-2);
     background:rgba(62,207,142,.09); border-left:3px solid var(--green); border-radius:9px; padding:9px 12px;}
   .exam-exp b{color:var(--ink);}
@@ -132,7 +132,7 @@
     color:#fff; background:var(--indigo); cursor:pointer;}
   .conv-status{font-size:12.5px; color:var(--muted); min-height:18px; margin-top:6px;}
   /* ficha de kanji */
-  #kficha{padding:6px 22px 0; overflow-y:auto;}
+  #kficha{padding:6px 22px 0; overflow-y:auto; overscroll-behavior:contain;}
   .kf-top{display:flex; flex-direction:column; align-items:center; margin-top:6px;}
   .kf-box{width:232px; height:232px;}
   .kf-tools{display:flex; align-items:center; gap:9px; margin:10px 0 2px;}
@@ -192,8 +192,8 @@
   .streak-num{font-size:14px; font-weight:700;} .streak-lbl{font-size:11.5px; color:var(--muted);}
 
   /* ===== LEVELS ===== */
-  #levels{padding:10px 22px 0; overflow-y:auto;}
-  #modes{padding:10px 22px 0; overflow-y:auto;}
+  #levels{padding:10px 22px 0; overflow-y:auto; overscroll-behavior:contain;}
+  #modes{padding:10px 22px 0; overflow-y:auto; overscroll-behavior:contain;}
   .back-row{display:flex; align-items:center; gap:12px; margin-bottom:6px;}
   .back-btn{width:34px; height:34px; border-radius:50%; background:var(--line-2); border:none; cursor:pointer;
     display:flex; align-items:center; justify-content:center; font-size:16px; color:var(--ink-2); flex-shrink:0;}
@@ -213,7 +213,7 @@
   .level-arrow{color:var(--faint); font-size:20px;}
 
   /* ===== STATS ===== */
-  #stats{padding:10px 22px 0; overflow-y:auto;}
+  #stats{padding:10px 22px 0; overflow-y:auto; overscroll-behavior:contain;}
   .stats-title{font-family:var(--jp); font-weight:700; font-size:21px; margin:14px 0 16px;}
   .stat-cards{display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;}
   .stat-card{background:var(--card); border-radius:16px; padding:14px 12px; box-shadow:var(--shadow); text-align:center;}
@@ -231,7 +231,7 @@
 
   /* ===== QUIZ ===== */
   #quiz{padding:6px 22px 0;}
-  .qstage{flex:1; overflow-y:auto; display:flex; flex-direction:column; align-items:center; padding:4px 0 0; min-height:0;}
+  .qstage{flex:1; overflow-y:auto; overscroll-behavior:contain; display:flex; flex-direction:column; align-items:center; padding:4px 0 0; min-height:0;}
   .qstem-box{margin-top:12px; min-width:150px; min-height:120px; padding:14px 22px; background:var(--card); border-radius:24px; box-shadow:var(--shadow);
     display:flex; align-items:center; justify-content:center; flex-shrink:0;}
   .qstem-box .kanji-glyph{font-size:64px;}
@@ -268,7 +268,7 @@
   .count{font-size:13px; font-weight:600; color:var(--muted); font-variant-numeric:tabular-nums;}
   .tagline{margin-top:11px; font-size:11px; font-weight:700; letter-spacing:1.3px; text-transform:uppercase; color:var(--indigo-bright);}
 
-  .stage{flex:1; overflow-y:auto; display:flex; flex-direction:column; align-items:center; padding:4px 0 0; min-height:0;}
+  .stage{flex:1; overflow-y:auto; overscroll-behavior:contain; display:flex; flex-direction:column; align-items:center; padding:4px 0 0; min-height:0;}
   .kanji-box{margin-top:14px; width:200px; height:200px; background:var(--card); border-radius:28px; box-shadow:var(--shadow);
     position:relative; display:flex; align-items:center; justify-content:center; flex-shrink:0;}
   .kanji-box::before{content:""; position:absolute; left:50%; top:24px; bottom:24px; width:1px; background:var(--line-2); transform:translateX(-.5px);}
@@ -325,7 +325,7 @@
 
   @media (prefers-reduced-motion: reduce){*{transition:none !important;}}
   /* ===== LECTURA ===== */
-  #readLevels,#readList{padding:10px 22px 0; overflow-y:auto;}
+  #readLevels,#readList{padding:10px 22px 0; overflow-y:auto; overscroll-behavior:contain;}
   #reader{padding:6px 22px 0;}
   .rd-toolbar{display:flex; gap:8px; margin:8px 0 4px;}
   .rd-tog{flex:1; border:1.5px solid var(--line); background:var(--card); color:var(--muted); border-radius:13px;
@@ -336,7 +336,7 @@
     box-shadow:0 6px 16px -8px rgba(39,64,127,.7); flex:0 0 auto;}
   .rd-play.playing{background:var(--indigo-bright);}
   .rd-para.reading{background:rgba(59,95,196,.08); border-radius:12px; box-shadow:0 0 0 8px rgba(59,95,196,.08);}
-  .rd-stage{flex:1; overflow-y:auto; min-height:0; padding-bottom:24px;}
+  .rd-stage{flex:1; overflow-y:auto; overscroll-behavior:contain; min-height:0; padding-bottom:24px;}
   .rd-title{font-family:var(--jp); font-weight:700; font-size:22px; margin:10px 0 2px;}
   .rd-meta{font-size:12px; color:var(--muted); margin-bottom:12px;}
   .rd-para{margin:0 0 16px;}
@@ -369,11 +369,14 @@
   .rd-define .df-r{font-family:var(--jp); font-size:14px; color:var(--indigo-bright);}
   .rd-define .df-m{font-size:14px; color:var(--ink-2); margin-top:3px;}
   .rd-define .df-spk{margin-left:auto; font-size:22px; cursor:pointer; background:none; border:none;}
-  .rd-define .df-x{position:absolute; top:8px; right:14px; font-size:20px; color:var(--faint); background:none; border:none; cursor:pointer;}
+  .df-x{width:30px; height:30px; border-radius:50%; background:var(--line-2); border:none; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; font-size:14px; color:var(--muted); flex-shrink:0;}
+  .rd-define .df-x{position:absolute; top:10px; right:14px;}
+  .acct-box .df-x{position:absolute; top:14px; right:14px;}
   /* ===== ESCRITURA DE KANJI ===== */
   #writer{padding:6px 22px 0;}
   .wprog{margin-left:auto; font-size:13px; font-weight:700; color:var(--muted);}
-  .w-stage{flex:1; overflow-y:auto; min-height:0; display:flex; flex-direction:column; align-items:center; padding-top:6px;}
+  .w-stage{flex:1; overflow-y:auto; overscroll-behavior:contain; min-height:0; display:flex; flex-direction:column; align-items:center; padding-top:6px;}
   .hw-box{position:relative; width:280px; height:280px; max-width:80vw; max-height:80vw; margin:8px auto 4px;
     border:1.5px solid var(--line); border-radius:20px; background:var(--card); overflow:hidden;}
   #hwTarget{position:absolute; inset:0; display:flex; align-items:center; justify-content:center;}
@@ -886,7 +889,10 @@ function buildFocused(type, level){
 
 function show(v){
   ["menu","levels","modes","stats","study","quiz","doneView","emptyView","readLevels","readList","reader","writer","conv","exam","kficha"].forEach(function(x){
-    document.getElementById(x).classList.toggle("active", x===v);
+    var el=document.getElementById(x);
+    var was=el.classList.contains("active");
+    el.classList.toggle("active", x===v);
+    if(x===v && !was){ el.scrollTop=0; }
   });
 }
 
@@ -1917,6 +1923,7 @@ function showWriteCard(){
       hwInstance=HanziWriter.create(target, k.c, {
         width:HW_SIZE, height:HW_SIZE, padding:6,
         showCharacter:false, showOutline:true,
+        strokeAnimationSpeed:1.5, delayBetweenStrokes:167,
         strokeColor:"#27407f", radicalColor:"#3b5fc4",
         outlineColor:"#d9deea", drawingColor:"#111827", drawingWidth:24,
         charDataLoader:hwDataLoader,
@@ -2014,6 +2021,7 @@ function showKanjiCard(){
       kfInstance=HanziWriter.create(target, k.c, {
         width:220, height:220, padding:6,
         showCharacter:false, showOutline:true,
+        strokeAnimationSpeed:1.5, delayBetweenStrokes:167,
         strokeColor:"#27407f", radicalColor:"#3b5fc4",
         outlineColor:"#d9deea", drawingColor:"#111827", drawingWidth:22,
         charDataLoader:function(ch,onLoad,onError){
@@ -2110,6 +2118,9 @@ function activeViewId(){
   return "menu";
 }
 function goBack(){
+  /* si el modal de cuenta está abierto, ciérralo primero */
+  var am=document.getElementById("acctModal");
+  if(am && am.classList.contains("show")){ am.classList.remove("show"); return; }
   /* si la barra de definición del lector está abierta, ciérrala primero */
   var def=document.getElementById("rdDefine");
   if(def && def.classList.contains("show")){ hideDefine(); return; }
@@ -2127,6 +2138,7 @@ function goBack(){
       else if(examView==="areas"){ openExamLevels(); }
       else { show("menu"); renderMenu(); }
       break;
+    case "kficha":     showModes(selType||"kanji", selLevel||"all"); break;
     case "readLevels":
     case "levels":
     case "stats":
@@ -2153,6 +2165,23 @@ function goBack(){
     if(dx>70 && Math.abs(dx) > Math.abs(dy)*2 && dt<700){ goBack(); }
   }, {passive:true});
 })();
+
+/* ---- Gesto nativo de "volver atrás" del sistema (edge-swipe iOS, botón atrás Android) ----
+   Se mantiene siempre un estado "trampa" en el historial: si el usuario está dentro de la
+   app (no en el menú), el gesto nativo dispara popstate, navegamos un nivel hacia atrás con
+   la misma lógica de goBack() y volvemos a armar la trampa. Si ya está en el menú, no se
+   rearma y el siguiente gesto nativo sale de la PWA con normalidad. */
+function navTrapArm(){ try{ history.pushState({ jlptNav:true }, "", location.href); }catch(e){} }
+function navOverlayOpen(){
+  var am=document.getElementById("acctModal"), def=document.getElementById("rdDefine");
+  return (am && am.classList.contains("show")) || (def && def.classList.contains("show"));
+}
+window.addEventListener("popstate", function(){
+  if(!navOverlayOpen() && activeViewId()==="menu") return;
+  goBack();
+  navTrapArm();
+});
+navTrapArm();
 document.getElementById("qSubmit").addEventListener("click", checkType);
 document.getElementById("qNext").addEventListener("click", nextQuestion);
 document.getElementById("qInput").addEventListener("keydown", function(e){ if(e.key==="Enter"){ e.preventDefault(); checkType(); } });
