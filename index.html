@@ -78,6 +78,23 @@
   .exam-secdiv{font-size:11px; font-weight:800; letter-spacing:1.1px; text-transform:uppercase; color:var(--faint);
     margin:20px 0 8px; padding-top:14px; border-top:1px dashed var(--line);}
   .exam-secdiv:first-child{margin-top:0; padding-top:0; border-top:none;}
+  /* ---- cuenta / sesión en la nube ---- */
+  .acct-chip{margin-top:10px; display:inline-flex; align-items:center; gap:6px; border:1.5px solid var(--line);
+    background:var(--card); color:var(--muted); font-size:12.5px; font-weight:700; padding:6px 12px; border-radius:999px; cursor:pointer;}
+  .acct-chip.on{color:var(--indigo); border-color:var(--indigo);}
+  .acct-modal{position:fixed; inset:0; background:rgba(20,20,30,.45); display:none; align-items:center; justify-content:center; z-index:60; padding:20px;}
+  .acct-modal.show{display:flex;}
+  .acct-box{background:var(--card); border:1.5px solid var(--line); border-radius:18px; padding:20px; width:100%; max-width:360px; position:relative;}
+  .acct-title{font-weight:800; font-size:16px; margin-bottom:12px; color:var(--ink);}
+  .acct-box input{width:100%; box-sizing:border-box; border:1.5px solid var(--line); border-radius:10px; padding:10px 12px;
+    font-size:14px; margin-bottom:8px; background:var(--bg); color:var(--ink);}
+  .acct-row{display:flex; gap:8px; margin-top:6px;}
+  .acct-row button{flex:1; border:none; border-radius:10px; padding:11px 0; font-weight:800; font-size:14px; cursor:pointer;
+    background:var(--indigo); color:#fff;}
+  .acct-row button.ghost{background:transparent; color:var(--indigo); border:1.5px solid var(--indigo);}
+  .acct-user{font-weight:800; font-size:15px; color:var(--ink);}
+  .acct-sub{font-size:12.5px; color:var(--muted); margin:4px 0 8px;}
+  .acct-msg{font-size:12.5px; color:var(--muted); margin-top:10px; min-height:16px;}
   .exam-q{background:var(--card); border-radius:14px; padding:14px 15px; margin-bottom:12px; box-shadow:var(--shadow); text-align:left;}
   .exam-passage{font-size:14px; line-height:1.75; background:rgba(39,64,127,.06); border-radius:11px; padding:11px 13px; margin-bottom:11px;}
   .exam-audio{border:1.5px solid var(--indigo); background:transparent; color:var(--indigo); border-radius:20px; padding:7px 15px; font-size:13px; font-weight:700; margin-bottom:11px; cursor:pointer;}
@@ -411,6 +428,7 @@
     <span class="greeting" id="greeting">Hola</span><span class="edit-ic">✎</span>
   </div>
   <div class="greeting-sub">¿Qué quieres estudiar hoy?</div>
+  <button class="acct-chip" id="acctChip">☁ Invitado</button>
 
   <div class="level-banner">
     <div><div class="lb-eyebrow">Tu nivel</div><div class="lb-level" id="lbLevel">N5</div></div>
@@ -691,6 +709,32 @@
   </div>
 </section>
 
+<!-- ===== CUENTA / SESIÓN EN LA NUBE ===== -->
+<div class="acct-modal" id="acctModal">
+  <div class="acct-box">
+    <button class="df-x" id="acctClose" aria-label="Cerrar">✕</button>
+    <div class="acct-title" id="acctTitle">Tu cuenta</div>
+    <div id="acctOut">
+      <input id="acctUser" placeholder="usuario" autocomplete="username">
+      <input id="acctPass" type="password" placeholder="contraseña" autocomplete="current-password">
+      <input id="acctInvite" placeholder="código de invitación (solo al crear cuenta)">
+      <div class="acct-row">
+        <button id="acctLoginBtn">Entrar</button>
+        <button id="acctRegBtn" class="ghost">Crear cuenta</button>
+      </div>
+    </div>
+    <div id="acctIn" style="display:none">
+      <div class="acct-user" id="acctWho">—</div>
+      <div class="acct-sub" id="acctState">—</div>
+      <div class="acct-row">
+        <button id="acctSyncBtn">Sincronizar ahora</button>
+        <button id="acctOutBtn" class="ghost">Cerrar sesión</button>
+      </div>
+    </div>
+    <div class="acct-msg" id="acctMsg"></div>
+  </div>
+</div>
+
 <script src="content.js"></script>
 <script src="reading.js"></script>
 <script src="listening.js"></script>
@@ -711,7 +755,7 @@ var LEVEL_ORDER = ["N5","N4","N3","N2","N1"];
 
 var mem = {};
 function load(){ try{ var s=localStorage.getItem("jlpt-progress"); return s?JSON.parse(s):{}; }catch(e){ return mem.p||{}; } }
-function save(p){ try{ localStorage.setItem("jlpt-progress", JSON.stringify(p)); }catch(e){ mem.p=p; } }
+function save(p){ try{ localStorage.setItem("jlpt-progress", JSON.stringify(p)); }catch(e){ mem.p=p; } try{ cloudDirty(); }catch(e){} }
 function getName(){ try{ return localStorage.getItem("jlpt-name")||""; }catch(e){ return mem.n||""; } }
 function setName(n){ try{ localStorage.setItem("jlpt-name", n); }catch(e){ mem.n=n; } }
 
@@ -721,7 +765,7 @@ function logToday(){
   try{
     var days=JSON.parse(localStorage.getItem("jlpt-days")||"[]");
     var t=todayStr();
-    if(days.indexOf(t)===-1){ days.push(t); localStorage.setItem("jlpt-days", JSON.stringify(days)); }
+    if(days.indexOf(t)===-1){ days.push(t); localStorage.setItem("jlpt-days", JSON.stringify(days)); try{ cloudDirty(); }catch(e){} }
   }catch(e){}
 }
 function computeStreak(){
@@ -2102,6 +2146,138 @@ document.querySelectorAll(".rate").forEach(function(b){ b.addEventListener("clic
 document.getElementById("resetBtn").addEventListener("click", function(){
   if(confirm("¿Borrar todo tu progreso y empezar de cero? (No borra tu nombre)")){ progress={}; save(progress); renderMenu(); }
 });
+
+/* ---------------- Cuenta y sincronización en la nube ---------------- */
+var SYNC_URL = "https://jlpt-cuenta.deliciassaulmoreno.workers.dev";
+function getAuth(){ try{ return JSON.parse(localStorage.getItem("jlpt-auth")||"null"); }catch(e){ return null; } }
+function setAuth(a){ try{ if(a){ localStorage.setItem("jlpt-auth", JSON.stringify(a)); } else { localStorage.removeItem("jlpt-auth"); } }catch(e){} }
+function localUpdatedAt(){ try{ return parseInt(localStorage.getItem("jlpt-updated")||"0",10)||0; }catch(e){ return 0; } }
+function collectData(){
+  var days; try{ days=JSON.parse(localStorage.getItem("jlpt-days")||"[]"); }catch(e){ days=[]; }
+  return { progress: load(), days: days, name: getName(), updatedAt: localUpdatedAt() || Date.now() };
+}
+function applyData(d){
+  if(!d) return;
+  try{ localStorage.setItem("jlpt-progress", JSON.stringify(d.progress||{})); }catch(e){}
+  try{ localStorage.setItem("jlpt-days", JSON.stringify(d.days||[])); }catch(e){}
+  if(d.name) setName(d.name);
+  try{ localStorage.setItem("jlpt-updated", String(d.updatedAt||Date.now())); }catch(e){}
+  progress = load();
+  renderMenu();
+}
+
+var syncTimer=null, syncBusy=false, syncAgain=false;
+function cloudDirty(){
+  try{ localStorage.setItem("jlpt-updated", String(Date.now())); }catch(e){}
+  if(!getAuth()) return;
+  if(syncTimer) clearTimeout(syncTimer);
+  syncTimer = setTimeout(cloudPush, 4000);
+}
+function cloudPush(cb){
+  if(syncTimer){ clearTimeout(syncTimer); syncTimer=null; }
+  var a=getAuth(); if(!a){ if(cb) cb(false); return; }
+  if(syncBusy){ syncAgain=true; if(cb) cb(false); return; }
+  syncBusy=true;
+  fetch(SYNC_URL+"/sync", {
+    method:"PUT", keepalive:true,
+    headers:{ "Content-Type":"application/json", "Authorization":"Bearer "+a.token },
+    body: JSON.stringify(collectData())
+  }).then(function(r){
+    syncBusy=false;
+    if(r.status===401){ setAuth(null); paintAcct("La sesión caducó. Vuelve a entrar."); if(cb) cb(false); return; }
+    if(r.ok){ try{ localStorage.setItem("jlpt-synced", String(Date.now())); }catch(e){} paintAcct(); if(cb) cb(true); }
+    else { if(cb) cb(false); }
+    if(syncAgain){ syncAgain=false; cloudDirty(); }
+  }).catch(function(){
+    syncBusy=false; syncAgain=false;
+    paintAcct("Sin conexión — se reintentará.");
+    if(cb) cb(false);
+  });
+}
+function cloudPullIfNewer(){
+  var a=getAuth(); if(!a) return;
+  fetch(SYNC_URL+"/sync", { headers:{ "Authorization":"Bearer "+a.token } })
+  .then(function(r){
+    if(r.status===401){ setAuth(null); paintAcct("La sesión caducó. Vuelve a entrar."); return null; }
+    if(r.status===204 || !r.ok) return null;
+    return r.json();
+  })
+  .then(function(cloud){
+    if(cloud && (cloud.updatedAt||0) > localUpdatedAt()){ applyData(cloud); paintAcct("Progreso actualizado desde la nube."); }
+  })
+  .catch(function(){});
+}
+
+function acctMsgSet(t){ document.getElementById("acctMsg").textContent = t||""; }
+function paintAcct(msg){
+  var a=getAuth();
+  var chip=document.getElementById("acctChip");
+  chip.textContent = a ? ("☁ "+a.user) : "☁ Invitado";
+  chip.classList.toggle("on", !!a);
+  document.getElementById("acctOut").style.display = a ? "none" : "";
+  document.getElementById("acctIn").style.display = a ? "" : "none";
+  if(a){
+    document.getElementById("acctWho").textContent = a.user;
+    var s=0; try{ s=parseInt(localStorage.getItem("jlpt-synced")||"0",10)||0; }catch(e){}
+    document.getElementById("acctState").textContent = s ? ("Última sincronización: "+new Date(s).toLocaleString()) : "Aún sin sincronizar en este dispositivo.";
+  }
+  if(msg!==undefined) acctMsgSet(msg);
+}
+function acctAuth(isRegister){
+  var u=(document.getElementById("acctUser").value||"").trim().toLowerCase();
+  var p=document.getElementById("acctPass").value||"";
+  var inv=(document.getElementById("acctInvite").value||"").trim();
+  if(!u || !p){ acctMsgSet("Escribe usuario y contraseña."); return; }
+  if(isRegister && !inv){ acctMsgSet("Para crear cuenta necesitas el código de invitación."); return; }
+  acctMsgSet(isRegister ? "Creando cuenta…" : "Entrando…");
+  fetch(SYNC_URL+(isRegister?"/register":"/login"), {
+    method:"POST", headers:{ "Content-Type":"application/json" },
+    body: JSON.stringify({ user:u, pass:p, invite:inv })
+  }).then(function(r){ return r.json().then(function(j){ return { ok:r.ok, j:j }; }); })
+  .then(function(res){
+    if(!res.ok){ acctMsgSet((res.j&&res.j.error)||"Error al conectar."); return; }
+    setAuth({ user:u, token:res.j.token });
+    document.getElementById("acctPass").value="";
+    afterLogin(isRegister);
+  }).catch(function(){ acctMsgSet("No se pudo conectar con el servidor."); });
+}
+function afterLogin(isRegister){
+  var a=getAuth();
+  fetch(SYNC_URL+"/sync", { headers:{ "Authorization":"Bearer "+a.token } })
+  .then(function(r){ if(r.status===204) return null; return r.ok ? r.json() : null; })
+  .then(function(cloud){
+    var hasCloud = cloud && cloud.progress && Object.keys(cloud.progress).length;
+    var hasLocal = Object.keys(load()).length;
+    if(hasCloud && hasLocal){
+      var useCloud = confirm("Hay progreso guardado en la nube ("+new Date(cloud.updatedAt||0).toLocaleString()+").\n\nAceptar: usar el de la nube en este dispositivo.\nCancelar: conservar el de este dispositivo y subirlo a la nube.");
+      if(useCloud){ applyData(cloud); paintAcct("Sesión iniciada · progreso de la nube cargado."); }
+      else { cloudPush(); paintAcct("Sesión iniciada · subiendo el progreso de este dispositivo."); }
+    } else if(hasCloud){
+      applyData(cloud); paintAcct("Sesión iniciada · progreso de la nube cargado.");
+    } else {
+      cloudPush(); paintAcct(isRegister ? "Cuenta creada · tu progreso ya se guarda en la nube." : "Sesión iniciada · subiendo tu progreso.");
+    }
+  })
+  .catch(function(){ paintAcct("Sesión iniciada, pero no se pudo consultar la nube."); });
+}
+document.getElementById("acctChip").addEventListener("click", function(){ paintAcct(""); document.getElementById("acctModal").classList.add("show"); });
+document.getElementById("acctClose").addEventListener("click", function(){ document.getElementById("acctModal").classList.remove("show"); });
+document.getElementById("acctModal").addEventListener("click", function(e){ if(e.target===this) this.classList.remove("show"); });
+document.getElementById("acctLoginBtn").addEventListener("click", function(){ acctAuth(false); });
+document.getElementById("acctRegBtn").addEventListener("click", function(){ acctAuth(true); });
+document.getElementById("acctSyncBtn").addEventListener("click", function(){ acctMsgSet("Sincronizando…"); cloudPush(function(ok){ acctMsgSet(ok?"Sincronizado ✓":"No se pudo sincronizar."); }); });
+document.getElementById("acctOutBtn").addEventListener("click", function(){
+  var a=getAuth();
+  if(a){ fetch(SYNC_URL+"/logout", { method:"POST", headers:{ "Authorization":"Bearer "+a.token } }).catch(function(){}); }
+  setAuth(null);
+  paintAcct("Sesión cerrada. Tu progreso sigue en este dispositivo.");
+});
+document.addEventListener("visibilitychange", function(){
+  if(document.visibilityState==="hidden" && getAuth() && syncTimer){ cloudPush(); }
+});
+window.addEventListener("online", function(){ if(getAuth()) cloudDirty(); });
+paintAcct();
+cloudPullIfNewer();
 
 renderMenu();
 
