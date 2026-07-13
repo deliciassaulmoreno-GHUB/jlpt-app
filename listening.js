@@ -1007,6 +1007,402 @@ window.LISTENING = [
      { q:"二人は 何年ぶりに 会いましたか。", o:["五年くらい","一年くらい","十年くらい"], a:0 },
      { q:"あの頃、二人は 何でしたか。", o:["学生","社会人","子ども"], a:0 }
    ]
+ },
+
+ { id:"l-n2-5", lvl:"N2", title:"経済ニュース", mins:1,
+   paras:[
+     { jp:"次のニュースです。政府は 本日、新たな 経済対策を 発表しました。", fu:"つぎの ニュースです。せいふは ほんじつ、あらたな けいざいたいさくを はっぴょうしました。", es:"Siguiente noticia. El gobierno anunció hoy nuevas medidas económicas." },
+     { jp:"中小企業への 支援を 強化する 内容と なっています。", fu:"ちゅうしょうきぎょうへの しえんを きょうかする ないようと なっています。", es:"El contenido consiste en reforzar el apoyo a las pequeñas y medianas empresas." },
+     { jp:"専門家は、効果が 表れるまで 数か月 かかると 見ています。", fu:"せんもんかは、こうかが あらわれるまで すうかげつ かかると みています。", es:"Los expertos consideran que tardará varios meses en surtir efecto." },
+     { jp:"詳細については、来週 発表される 見通しです。", fu:"しょうさいに ついては、らいしゅう はっぴょうされる みとおしです。", es:"Se prevé que los detalles se anuncien la próxima semana." }
+   ],
+   gloss:[
+     { w:"経済対策", r:"けいざいたいさく", m:"medida económica" },
+     { w:"中小企業", r:"ちゅうしょうきぎょう", m:"pequeña y mediana empresa" },
+     { w:"見通し", r:"みとおし", m:"previsión, perspectiva" }
+   ],
+   q:[
+     { q:"<ruby>政府<rt>せいふ</rt></ruby>は <ruby>何<rt>なに</rt></ruby>を <ruby>発表<rt>はっぴょう</rt></ruby>しましたか。", o:["<ruby>新<rt>あら</rt></ruby>たな<ruby>経済対策<rt>けいざいたいさく</rt></ruby>","<ruby>増税<rt>ぞうぜい</rt></ruby>","<ruby>選挙<rt>せんきょ</rt></ruby>の<ruby>結果<rt>けっか</rt></ruby>"], a:0 },
+     { q:"<ruby>詳細<rt>しょうさい</rt></ruby>は いつ <ruby>発表<rt>はっぴょう</rt></ruby>されますか。", o:["<ruby>来週<rt>らいしゅう</rt></ruby>","<ruby>明日<rt>あした</rt></ruby>","<ruby>来月<rt>らいげつ</rt></ruby>"], a:0 }
+   ]
+ },
+
+ { id:"l-n2-6", lvl:"N2", title:"上司との評価面談", mins:1,
+   paras:[
+     { jp:"今期の 評価について、フィードバックを させていただきます。", fu:"こんきの ひょうかに ついて、フィードバックを させて いただきます。", es:"Voy a darte feedback sobre la evaluación de este período." },
+     { jp:"プロジェクトの 進行管理は 非常に 高く 評価しています。", fu:"プロジェクトの しんこうかんりは ひじょうに たかく ひょうか しています。", es:"Valoro muy positivamente tu gestión del avance del proyecto." },
+     { jp:"一方で、チーム内の 情報共有には 改善の 余地が あると 感じます。", fu:"いっぽうで、チームないの じょうほうきょうゆうには かいぜんの よちが あると かんじます。", es:"Por otro lado, siento que hay margen de mejora en la comunicación de información dentro del equipo." },
+     { jp:"来期は、その点を 意識して 取り組んでほしいと 思います。", fu:"らいきは、そのてんを いしきして とりくんで ほしいと おもいます。", es:"Me gustaría que en el próximo período trabajaras teniendo eso en cuenta." }
+   ],
+   gloss:[
+     { w:"進行管理", r:"しんこうかんり", m:"gestión del progreso" },
+     { w:"情報共有", r:"じょうほうきょうゆう", m:"compartir información" },
+     { w:"余地", r:"よち", m:"margen" }
+   ],
+   q:[
+     { q:"<ruby>何<rt>なに</rt></ruby>が <ruby>高<rt>たか</rt></ruby>く <ruby>評価<rt>ひょうか</rt></ruby>されましたか。", o:["プロジェクトの<ruby>進行管理<rt>しんこうかんり</rt></ruby>","<ruby>営業成績<rt>えいぎょうせいせき</rt></ruby>","タイピングの<ruby>速<rt>はや</rt></ruby>さ"], a:0 },
+     { q:"<ruby>改善<rt>かいぜん</rt></ruby>の<ruby>余地<rt>よち</rt></ruby>が あるのは <ruby>何<rt>なに</rt></ruby>ですか。", o:["チーム<ruby>内<rt>ない</rt></ruby>の<ruby>情報共有<rt>じょうほうきょうゆう</rt></ruby>","<ruby>遅刻<rt>ちこく</rt></ruby>","<ruby>服装<rt>ふくそう</rt></ruby>"], a:0 }
+   ]
+ },
+
+ { id:"l-n2-7", lvl:"N2", title:"住宅ローンの相談", mins:1,
+   paras:[
+     { jp:"マイホームの 購入を 考えているのですが、ローンについて 相談したくて。", fu:"マイホームの こうにゅうを かんがえて いるのですが、ローンに ついて そうだん したくて。", es:"Estoy pensando en comprar una casa propia y quería consultar sobre el préstamo." },
+     { jp:"ご年収と 頭金の 額を 教えて いただけますか。", fu:"ごねんしゅうと あたまきんの がくを おしえて いただけますか。", es:"¿Podría decirme su ingreso anual y el importe del pago inicial?" },
+     { jp:"年収は 五百万円で、頭金は 三百万円 用意できます。", fu:"ねんしゅうは ごひゃくまんえんで、あたまきんは さんびゃくまんえん よういできます。", es:"Mis ingresos anuales son de cinco millones de yenes, y puedo preparar un pago inicial de tres millones." },
+     { jp:"それでしたら、無理のない 返済計画が 立てられると 思います。", fu:"それでしたら、むりのない へんさいけいかくが たてられると おもいます。", es:"En ese caso, creo que se puede establecer un plan de pago razonable." }
+   ],
+   gloss:[
+     { w:"頭金", r:"あたまきん", m:"pago inicial" },
+     { w:"年収", r:"ねんしゅう", m:"ingreso anual" },
+     { w:"返済計画", r:"へんさいけいかく", m:"plan de pago/amortización" }
+   ],
+   q:[
+     { q:"<ruby>頭金<rt>あたまきん</rt></ruby>は いくら <ruby>用意<rt>ようい</rt></ruby>できますか。", o:["三百万円","五百万円","百万円"], a:0 },
+     { q:"この人は 何を 考えていますか。", o:["マイホームの購入","車の購入","留学"], a:0 }
+   ]
+ },
+
+ { id:"l-n2-8", lvl:"N2", title:"科学番組のナレーション", mins:1,
+   paras:[
+     { jp:"深海には、まだ 解明されていない 生物が 数多く 存在します。", fu:"しんかいには、まだ かいめいされて いない せいぶつが かずおおく そんざいします。", es:"En las profundidades marinas existen numerosos organismos aún sin dilucidar." },
+     { jp:"高い 水圧と 光の 届かない 環境に 適応した 生物たちは、独特な 姿を しています。", fu:"たかい すいあつと ひかりの とどかない かんきょうに てきおうした せいぶつたちは、どくとくな すがたを して います。", es:"Los seres vivos adaptados a la alta presión del agua y a un entorno sin luz tienen formas peculiares." },
+     { jp:"近年の 技術の 進歩により、これまで 見られなかった 生態が 明らかに なりつつ あります。", fu:"きんねんの ぎじゅつの しんぽに より、これまで みられなかった せいたいが あきらかに なりつつ あります。", es:"Gracias a los avances tecnológicos recientes, se están revelando ecologías que antes no se podían observar." },
+     { jp:"次回は、その 最新の 調査結果を 詳しく お伝えします。", fu:"じかいは、その さいしんの ちょうさけっかを くわしく おつたえします。", es:"La próxima vez transmitiremos en detalle los últimos resultados de investigación." }
+   ],
+   gloss:[
+     { w:"解明されていない", r:"かいめいされていない", m:"no dilucidado" },
+     { w:"水圧", r:"すいあつ", m:"presión del agua" },
+     { w:"適応した", r:"てきおうした", m:"adaptado" }
+   ],
+   q:[
+     { q:"深海の生物は 何に 適応していますか。", o:["高い水圧と光が届かない環境","暑さと乾燥","強い風"], a:0 },
+     { q:"次回は 何を 伝えますか。", o:["最新の調査結果","歴史の話","天気予報"], a:0 }
+   ]
+ },
+
+ { id:"l-n2-9", lvl:"N2", title:"引退の挨拶", mins:1,
+   paras:[
+     { jp:"長きに わたり、皆様には 大変 お世話に なりました。", fu:"ながきに わたり、みなさまには たいへん おせわに なりました。", es:"Durante mucho tiempo, todos ustedes me han ayudado enormemente." },
+     { jp:"この会社に 入社してから、三十年 経とうとしています。", fu:"このかいしゃに にゅうしゃしてから、さんじゅうねん たとうと しています。", es:"Están a punto de cumplirse treinta años desde que entré en esta empresa." },
+     { jp:"多くの 困難も ありましたが、皆様の 支えで 乗り越えて こられました。", fu:"おおくの こんなんも ありましたが、みなさまの ささえで のりこえて こられました。", es:"Hubo muchas dificultades, pero pude superarlas gracias al apoyo de todos ustedes." },
+     { jp:"来月をもって 引退いたしますが、今後の 皆様の ご活躍を 心より お祈り申し上げます。", fu:"らいげつを もって いんたい いたしますが、こんごの みなさまの ごかつやくを こころより おいのり もうしあげます。", es:"Me retiro a partir del mes que viene, pero deseo de corazón el éxito de todos ustedes en el futuro." }
+   ],
+   gloss:[
+     { w:"わたり", r:"わたり", m:"a lo largo de (長きにわたり)" },
+     { w:"乗り越えて", r:"のりこえて", m:"superar (una dificultad)" },
+     { w:"引退いたします", r:"いんたいいたします", m:"me retiro (cortés)" }
+   ],
+   q:[
+     { q:"この人は 会社に 何年 勤めましたか。", o:["三十年","二十年","十年"], a:0 },
+     { q:"いつ 引退しますか。", o:["来月","来年","今月"], a:0 }
+   ]
+ },
+
+ { id:"l-n2-10", lvl:"N2", title:"クレーム対応", mins:1,
+   paras:[
+     { jp:"先日 購入した 商品なんですが、初期不良が あったようで。", fu:"せんじつ こうにゅうした しょうひんなんですが、しょきふりょうが あったようで。", es:"Es sobre el producto que compré el otro día, parece que tiene un defecto de fábrica." },
+     { jp:"ご迷惑を おかけし、誠に 申し訳ございません。", fu:"ごめいわくを おかけし、まことに もうしわけございません。", es:"Le pedimos sinceras disculpas por las molestias." },
+     { jp:"すぐに 代替品を お送りするか、返金で 対応させて いただきます。", fu:"すぐに だいたいひんを おおくりするか、へんきんで たいおう させて いただきます。", es:"Le enviaremos de inmediato un producto de reemplazo, o bien le reembolsaremos." },
+     { jp:"では、代替品を お願いします。", fu:"では、だいたいひんを おねがいします。", es:"Entonces, un producto de reemplazo, por favor." }
+   ],
+   gloss:[
+     { w:"初期不良", r:"しょきふりょう", m:"defecto de fábrica" },
+     { w:"代替品", r:"だいたいひん", m:"producto de reemplazo" },
+     { w:"返金", r:"へんきん", m:"reembolso" }
+   ],
+   q:[
+     { q:"お客様は 何を 訴えていますか。", o:["商品の初期不良","配送の遅れ","値段の高さ"], a:0 },
+     { q:"最終的に どう 対応することに なりましたか。", o:["代替品を送る","返金する","何もしない"], a:0 }
+   ]
+ },
+
+ { id:"l-n2-11", lvl:"N2", title:"大学の講義", mins:1,
+   paras:[
+     { jp:"本日は、少子高齢化が 社会に 与える 影響について 講義します。", fu:"ほんじつは、しょうしこうれいかが しゃかいに あたえる えいきょうに ついて こうぎ します。", es:"Hoy daré una clase sobre el impacto de la baja natalidad y el envejecimiento en la sociedad." },
+     { jp:"労働力人口の 減少は、経済成長に 直接的な 影響を 及ぼします。", fu:"ろうどうりょくじんこうの げんしょうは、けいざいせいちょうに ちょくせつてきな えいきょうを およぼします。", es:"La disminución de la población activa tiene un impacto directo en el crecimiento económico." },
+     { jp:"一方で、社会保障制度への 負担も 増大しつつ あります。", fu:"いっぽうで、しゃかいほしょうせいどへの ふたんも ぞうだい しつつ あります。", es:"Por otro lado, la carga sobre el sistema de seguridad social también va en aumento." },
+     { jp:"来週は、諸外国の 対策事例を 比較検討していきます。", fu:"らいしゅうは、しょがいこくの たいさくじれいを ひかくけんとう して いきます。", es:"La próxima semana compararemos ejemplos de medidas de otros países." }
+   ],
+   gloss:[
+     { w:"労働力人口", r:"ろうどうりょくじんこう", m:"población activa" },
+     { w:"社会保障制度", r:"しゃかいほしょうせいど", m:"sistema de seguridad social" },
+     { w:"比較検討", r:"ひかくけんとう", m:"comparar y examinar" }
+   ],
+   q:[
+     { q:"労働力人口の 減少は 何に 影響しますか。", o:["経済成長","出生率","気候"], a:0 },
+     { q:"来週の 講義内容は 何ですか。", o:["諸外国の対策事例の比較","歴史の解説","統計学の基礎"], a:0 }
+   ]
+ },
+
+ { id:"l-n2-12", lvl:"N2", title:"防災訓練の説明", mins:1,
+   paras:[
+     { jp:"本日は、地震を 想定した 避難訓練を 実施いたします。", fu:"ほんじつは、じしんを そうていした ひなんくんれんを じっし いたします。", es:"Hoy realizaremos un simulacro de evacuación asumiendo un terremoto." },
+     { jp:"警報が 鳴りましたら、机の下に 身を 隠してください。", fu:"けいほうが なりましたら、つくえの したに みを かくして ください。", es:"Cuando suene la alarma, refúgiense bajo la mesa." },
+     { jp:"揺れが おさまってから、係員の 指示に 従って 避難口へ 向かってください。", fu:"ゆれが おさまってから、かかりいんの しじに したがって ひなんぐちへ むかって ください。", es:"Una vez que cese el temblor, sigan las instrucciones del personal encargado hacia la salida de evacuación." },
+     { jp:"エレベーターは 絶対に 使用しないよう お願いいたします。", fu:"エレベーターは ぜったいに しようしない よう おねがい いたします。", es:"Les pedimos que bajo ningún concepto usen el ascensor." }
+   ],
+   gloss:[
+     { w:"避難訓練", r:"ひなんくんれん", m:"simulacro de evacuación" },
+     { w:"隠して", r:"かくして", m:"ocultar, refugiar (身を隠す)" },
+     { w:"係員", r:"かかりいん", m:"personal encargado" }
+   ],
+   q:[
+     { q:"警報が 鳴ったら まず 何を しますか。", o:["机の下に隠れる","外に出る","エレベーターに乗る"], a:0 },
+     { q:"何を 使用しては いけませんか。", o:["エレベーター","階段","避難口"], a:0 }
+   ]
+ },
+
+ { id:"l-n2-13", lvl:"N2", title:"ラジオの人生相談", mins:1,
+   paras:[
+     { jp:"今日の お便りは、三十代の 女性からです。", fu:"きょうの おたよりは、さんじゅうだいの じょせいからです。", es:"La carta de hoy es de una mujer de treinta y tantos años." },
+     { jp:"転職を 考えているが、今の 安定した 生活を 手放す ことに 不安を 感じている、との ことです。", fu:"てんしょくを かんがえて いるが、いまの あんていした せいかつを てばなす ことに ふあんを かんじて いる、との ことです。", es:"Dice que está pensando en cambiar de trabajo, pero siente inquietud por dejar su estable vida actual." },
+     { jp:"新しい 挑戦には 常に リスクが 伴いますが、後悔しない 選択を してほしいと 思います。", fu:"あたらしい ちょうせんには つねに リスクが ともないますが、こうかい しない せんたくを して ほしいと おもいます。", es:"Los nuevos retos siempre conllevan riesgos, pero me gustaría que tomara una decisión de la que no se arrepienta." },
+     { jp:"焦らず、自分の 気持ちと じっくり 向き合ってみては いかがでしょうか。", fu:"あせらず、じぶんの きもちと じっくり むきあって みては いかがでしょうか。", es:"¿Qué tal si, sin apresurarse, se enfrenta con calma a sus propios sentimientos?" }
+   ],
+   gloss:[
+     { w:"手放す", r:"てばなす", m:"dejar ir, renunciar a" },
+     { w:"伴います", r:"ともないます", m:"conllevar" },
+     { w:"向き合って", r:"むきあって", m:"enfrentarse a, encarar" }
+   ],
+   q:[
+     { q:"相談者は 何を 考えていますか。", o:["転職","結婚","引っ越し"], a:0 },
+     { q:"相談者は 何に 不安を 感じていますか。", o:["安定した生活を手放すこと","給料が下がること","家族の反対"], a:0 }
+   ]
+ },
+
+ { id:"l-n2-14", lvl:"N2", title:"新入社員研修", mins:1,
+   paras:[
+     { jp:"本日から、社会人としての 基本マナーについて 研修を 行います。", fu:"ほんじつから、しゃかいじんとしての きほんマナーに ついて けんしゅうを おこないます。", es:"A partir de hoy realizaremos la formación sobre modales básicos como miembro de la sociedad laboral." },
+     { jp:"名刺交換の 際は、両手で 丁寧に 差し出すのが 基本です。", fu:"めいしこうかんの さいは、りょうてで ていねいに さしだすのが きほんです。", es:"Al intercambiar tarjetas de visita, lo básico es ofrecerla con ambas manos cuidadosamente." },
+     { jp:"また、メールの 返信は 遅くとも 二十四時間以内に 行うのが 望ましいです。", fu:"また、メールの へんしんは おそくとも にじゅうよじかんいないに おこなうのが のぞましいです。", es:"Además, es deseable responder los correos a más tardar dentro de veinticuatro horas." },
+     { jp:"分からない ことが あれば、遠慮せず 先輩に 質問して くださいね。", fu:"わからない ことが あれば、えんりょせず せんぱいに しつもんして くださいね。", es:"Si tienen alguna duda, pregunten a sus superiores sin dudarlo." }
+   ],
+   gloss:[
+     { w:"名刺交換", r:"めいしこうかん", m:"intercambio de tarjetas de visita" },
+     { w:"差し出す", r:"さしだす", m:"ofrecer, extender (algo)" },
+     { w:"望ましい", r:"のぞましい", m:"deseable" }
+   ],
+   q:[
+     { q:"名刺は どのように 渡しますか。", o:["両手で丁寧に","片手で素早く","相手に投げて"], a:0 },
+     { q:"メールの返信は いつまでに 行うのが 望ましいですか。", o:["二十四時間以内","一週間以内","一時間以内"], a:0 }
+   ]
+ },
+
+ { id:"l-n2-15", lvl:"N2", title:"文化財の保存活動", mins:1,
+   paras:[
+     { jp:"この 古い お寺は、築 五百年を 超える 貴重な 文化財です。", fu:"この ふるい おてらは、ちく ごひゃくねんを こえる きちょうな ぶんかざいです。", es:"Este antiguo templo es un valioso patrimonio cultural con más de quinientos años de antigüedad." },
+     { jp:"長年の 風雨により、建物の 劣化が 進んでいました。", fu:"ながねんの ふうう により、たてものの れっかが すすんで いました。", es:"Con los años de exposición al viento y la lluvia, el deterioro del edificio había avanzado." },
+     { jp:"地域住民の 寄付により、大規模な 修復工事が 実現しました。", fu:"ちいきじゅうみんの きふに より、だいきぼな しゅうふくこうじが じつげん しました。", es:"Gracias a las donaciones de los residentes locales, se hizo realidad una obra de restauración a gran escala." },
+     { jp:"今後も、次の 世代へ 受け継いでいく ための 取り組みが 続けられます。", fu:"こんごも、つぎの せだいへ うけついで いく ための とりくみが つづけられます。", es:"En el futuro también continuarán los esfuerzos para transmitirlo a la siguiente generación." }
+   ],
+   gloss:[
+     { w:"劣化", r:"れっか", m:"deterioro" },
+     { w:"寄付", r:"きふ", m:"donación" },
+     { w:"受け継いでいく", r:"うけついでいく", m:"transmitir, heredar (continuamente)" }
+   ],
+   q:[
+     { q:"修復工事は 何によって 実現しましたか。", o:["地域住民の寄付","国の予算","企業の投資"], a:0 },
+     { q:"このお寺は 築 何年ですか。", o:["五百年以上","百年","千年以上"], a:0 }
+   ]
+ },
+
+ { id:"l-n1-5", lvl:"N1", title:"学会発表の冒頭", mins:1,
+   paras:[
+     { jp:"本日は、貴重な お時間を 頂戴し、誠に ありがとうございます。", fu:"ほんじつは、きちょうな おじかんを ちょうだいし、まことに ありがとうございます。", es:"Hoy les agradezco sinceramente que nos brinden su valioso tiempo." },
+     { jp:"本研究は、従来の 理論では 説明しきれなかった 現象に 着目し、新たな 枠組みを 提示するもの です。", fu:"ほんけんきゅうは、じゅうらいの りろんでは せつめい しきれなかった げんしょうに ちゃくもくし、あらたな わくぐみを ていじする ものです。", es:"Esta investigación se centra en fenómenos que las teorías convencionales no lograban explicar del todo, y propone un nuevo marco." },
+     { jp:"データの 収集にあたっては、複数の 手法を 併用する ことで、信頼性の 向上を 図りました。", fu:"データの しゅうしゅうに あたっては、ふくすうの しゅほうを へいようする ことで、しんらいせいの こうじょうを はかりました。", es:"En la recopilación de datos, combinamos varios métodos para mejorar la fiabilidad." },
+     { jp:"詳しい 分析結果に つきましては、後半で 詳述いたします。", fu:"くわしい ぶんせきけっかに つきましては、こうはんで しょうじゅつ いたします。", es:"Los resultados detallados del análisis se explicarán en la segunda mitad." }
+   ],
+   gloss:[
+     { w:"着目し", r:"ちゃくもくし", m:"centrarse en, prestar atención a" },
+     { w:"併用する", r:"へいようする", m:"usar conjuntamente" },
+     { w:"詳述いたします", r:"しょうじゅついたします", m:"explicaré en detalle (cortés)" }
+   ],
+   q:[
+     { q:"この<ruby>研究<rt>けんきゅう</rt></ruby>は<ruby>何<rt>なに</rt></ruby>に<ruby>着目<rt>ちゃくもく</rt></ruby>していますか。", o:["<ruby>従来<rt>じゅうらい</rt></ruby>の<ruby>理論<rt>りろん</rt></ruby>で<ruby>説明<rt>せつめい</rt></ruby>できない<ruby>現象<rt>げんしょう</rt></ruby>","<ruby>過去<rt>かこ</rt></ruby>の<ruby>歴史<rt>れきし</rt></ruby>","<ruby>他国<rt>たこく</rt></ruby>の<ruby>事例<rt>じれい</rt></ruby>"], a:0 },
+     { q:"データ<ruby>収集<rt>しゅうしゅう</rt></ruby>で<ruby>何<rt>なに</rt></ruby>を 図りましたか。", o:["<ruby>信頼性<rt>しんらいせい</rt></ruby>の<ruby>向上<rt>こうじょう</rt></ruby>","コストの<ruby>削減<rt>さくげん</rt></ruby>","<ruby>時間<rt>じかん</rt></ruby>の<ruby>短縮<rt>たんしゅく</rt></ruby>"], a:0 }
+   ]
+ },
+
+ { id:"l-n1-6", lvl:"N1", title:"企業の謝罪会見", mins:1,
+   paras:[
+     { jp:"この度は、弊社の 製品に 不備が あり、お客様各位に 多大なる ご迷惑を おかけしました こと、深く お詫び申し上げます。", fu:"このたびは、へいしゃの せいひんに ふびが あり、おきゃくさま かくいに ただいなる ごめいわくを おかけしました こと、ふかく おわび もうしあげます。", es:"En esta ocasión, les pedimos profundas disculpas por las grandes molestias causadas a nuestros clientes debido a un defecto en nuestro producto." },
+     { jp:"原因究明に つきましては、第三者委員会を 設置し、徹底的な 調査を 進めて まいる 所存です。", fu:"げんいん きゅうめいに つきましては、だいさんしゃ いいんかいを せっちし、てっていてきな ちょうさを すすめて まいる しょぞんです。", es:"En cuanto a la investigación de la causa, tenemos la intención de establecer un comité de terceros y avanzar en una investigación exhaustiva." },
+     { jp:"再発防止策としては、品質管理体制の 抜本的な 見直しを 行う 予定です。", fu:"さいはつぼうしさく としては、ひんしつかんり たいせいの ばっぽんてきな みなおしを おこなう よていです。", es:"Como medida para prevenir la recurrencia, tenemos previsto revisar radicalmente el sistema de control de calidad." },
+     { jp:"信頼回復に向け、全社を挙げて 取り組む 覚悟で ございます。", fu:"しんらい かいふくに むけ、ぜんしゃを あげて とりくむ かくごで ございます。", es:"Estamos decididos a esforzarnos como empresa entera para recuperar la confianza." }
+   ],
+   gloss:[
+     { w:"究明", r:"きゅうめい", m:"esclarecimiento (de una causa)" },
+     { w:"抜本的な", r:"ばっぽんてきな", m:"radical, de raíz" },
+     { w:"覚悟", r:"かくご", m:"determinación, estar preparado" }
+   ],
+   q:[
+     { q:"<ruby>原因究明<rt>げんいんきゅうめい</rt></ruby>のために<ruby>何<rt>なに</rt></ruby>を設置しますか。", o:["<ruby>第三者委員会<rt>だいさんしゃいいんかい</rt></ruby>","<ruby>新<rt>あたら</rt></ruby>しい<ruby>部署<rt>ぶしょ</rt></ruby>","<ruby>外部<rt>がいぶ</rt></ruby>コンサルタント"], a:0 },
+     { q:"<ruby>再発防止策<rt>さいはつぼうしさく</rt></ruby>は<ruby>何<rt>なに</rt></ruby>ですか。", o:["<ruby>品質管理体制<rt>ひんしつかんりたいせい</rt></ruby>の<ruby>見直<rt>みなお</rt></ruby>し","<ruby>社員<rt>しゃいん</rt></ruby>の<ruby>解雇<rt>かいこ</rt></ruby>","<ruby>製品<rt>せいひん</rt></ruby>の<ruby>販売中止<rt>はんばいちゅうし</rt></ruby>"], a:0 }
+   ]
+ },
+
+ { id:"l-n1-7", lvl:"N1", title:"哲学的なラジオコラム", mins:1,
+   paras:[
+     { jp:"幸福とは 何かという 問いは、古来より 哲学者たちを 悩ませてきた テーマです。", fu:"こうふくとは なにかという といは、こらいより てつがくしゃたちを なやませて きた テーマです。", es:"La pregunta de qué es la felicidad ha sido un tema que ha atormentado a los filósofos desde la antigüedad." },
+     { jp:"物質的な 豊かさが 必ずしも 心の 充足に 結びつくとは 限らない ことは、多くの 研究が 示唆する ところです。", fu:"ぶっしつてきな ゆたかさが かならずしも こころの じゅうそくに むすびつくとは かぎらない ことは、おおくの けんきゅうが しさする ところです。", es:"Que la riqueza material no siempre se traduzca en plenitud espiritual es algo que sugieren muchas investigaciones." },
+     { jp:"むしろ、他者との つながりや、日々の 小さな 達成感こそが、幸福感を 支える 要因と なりうる のでは ないでしょうか。", fu:"むしろ、たしゃとの つながりや、ひびの ちいさな たっせいかん こそが、こうふくかんを ささえる よういんと なりうる のでは ないでしょうか。", es:"Más bien, ¿no podría ser que la conexión con los demás y las pequeñas satisfacciones cotidianas sean los factores que sostienen la sensación de felicidad?" },
+     { jp:"この 問いに 唯一絶対の 答えは 存在しない ものの、考え続ける こと自体に 意義が あると 言えるでしょう。", fu:"この といに ゆいいつぜったいの こたえは そんざい しない ものの、かんがえ つづける こと じたいに いぎが あると いえる でしょう。", es:"Aunque no existe una única respuesta absoluta a esta pregunta, se podría decir que el propio hecho de seguir reflexionando tiene sentido." }
+   ],
+   gloss:[
+     { w:"示唆する", r:"しさする", m:"sugerir" },
+     { w:"なりうる", r:"なりうる", m:"poder llegar a ser" },
+     { w:"意義", r:"いぎ", m:"significado, sentido" }
+   ],
+   q:[
+     { q:"<ruby>筆者<rt>ひっしゃ</rt></ruby>は<ruby>幸福<rt>こうふく</rt></ruby>を支える<ruby>要因<rt>よういん</rt></ruby>として<ruby>何<rt>なに</rt></ruby>を挙げていますか。", o:["<ruby>他者<rt>たしゃ</rt></ruby>とのつながりや<ruby>日々<rt>ひび</rt></ruby>の<ruby>達成感<rt>たっせいかん</rt></ruby>","<ruby>物質的<rt>ぶっしつてき</rt></ruby>な<ruby>豊<rt>ゆた</rt></ruby>かさ","<ruby>社会的<rt>しゃかいてき</rt></ruby>な<ruby>地位<rt>ちい</rt></ruby>"], a:0 },
+     { q:"この<ruby>問<rt>と</rt></ruby>いについて<ruby>筆者<rt>ひっしゃ</rt></ruby>はどう<ruby>述<rt>の</rt></ruby>べていますか。", o:["<ruby>唯一絶対<rt>ゆいいつぜったい</rt></ruby>の<ruby>答<rt>こた</rt></ruby>えはないが<ruby>考<rt>かんが</rt></ruby>え<ruby>続<rt>つづ</rt></ruby>けることに<ruby>意義<rt>いぎ</rt></ruby>がある","<ruby>明確<rt>めいかく</rt></ruby>な<ruby>答<rt>こた</rt></ruby>えがある","<ruby>考<rt>かんが</rt></ruby>えても<ruby>意味<rt>いみ</rt></ruby>がない"], a:0 }
+   ]
+ },
+
+ { id:"l-n1-8", lvl:"N1", title:"裁判の判決要旨", mins:1,
+   paras:[
+     { jp:"本件について、被告の 主張には 一定の 合理性が 認められる ものの、全面的に 採用するには 至らない と 判断する。", fu:"ほんけんに ついて、ひこくの しゅちょうには いっていの ごうりせいが みとめられる ものの、ぜんめんてきに さいようするには いたらない と はんだんする。", es:"Sobre este caso, se reconoce cierta racionalidad en la afirmación del acusado, pero se juzga que no llega a ser adoptada en su totalidad." },
+     { jp:"証拠を 総合的に 勘案した 結果、原告の 主張の 大半に 理由が あると 認められる。", fu:"しょうこを そうごうてきに かんあんした けっか、げんこくの しゅちょうの たいはんに りゆうが あると みとめられる。", es:"Como resultado de considerar las pruebas de forma integral, se reconoce que la mayor parte de la afirmación del demandante tiene fundamento." },
+     { jp:"よって、被告に対し、損害賠償として 五百万円の 支払いを 命じる。", fu:"よって、ひこくに たいし、そんがい ばいしょうとして ごひゃくまんえんの しはらいを めいじる。", es:"Por lo tanto, se ordena al acusado el pago de cinco millones de yenes en concepto de indemnización por daños." },
+     { jp:"なお、控訴期間は 判決言い渡しの 翌日から 二週間以内と する。", fu:"なお、こうそきかんは はんけつ いいわたしの よくじつから にしゅうかんいないと する。", es:"Además, el plazo de apelación será dentro de las dos semanas siguientes al día de la lectura del fallo." }
+   ],
+   gloss:[
+     { w:"勘案した", r:"かんあんした", m:"considerar, tomar en cuenta" },
+     { w:"損害賠償", r:"そんがいばいしょう", m:"indemnización por daños" },
+     { w:"控訴期間", r:"こうそきかん", m:"plazo de apelación" }
+   ],
+   q:[
+     { q:"<ruby>裁判所<rt>さいばんしょ</rt></ruby>は被告に<ruby>何<rt>なに</rt></ruby>を命じましたか。", o:["<ruby>五百万円<rt>ごひゃくまんえん</rt></ruby>の<ruby>支払<rt>しはら</rt></ruby>い","<ruby>謝罪<rt>しゃざい</rt></ruby>のみ","<ruby>禁固刑<rt>きんこけい</rt></ruby>"], a:0 },
+     { q:"<ruby>控訴期間<rt>こうそきかん</rt></ruby>はどのくらいですか。", o:["<ruby>判決<rt>はんけつ</rt></ruby>の<ruby>翌日<rt>よくじつ</rt></ruby>から<ruby>二週間<rt>にしゅうかん</rt></ruby>","<ruby>一<rt>いっ</rt></ruby>か<ruby>月<rt>げつ</rt></ruby>","<ruby>三日<rt>みっか</rt></ruby>"], a:0 }
+   ]
+ },
+
+ { id:"l-n1-9", lvl:"N1", title:"経済アナリストの解説", mins:1,
+   paras:[
+     { jp:"今回の 利上げは、市場の 予想を 上回る 幅と なりました。", fu:"こんかいの りあげは、しじょうの よそうを うわまわる はばと なりました。", es:"Esta subida de tipos ha superado las expectativas del mercado en su magnitud." },
+     { jp:"インフレ抑制を 最優先課題と 位置づける 中央銀行の 姿勢が、色濃く 反映された 結果と 言えます。", fu:"インフレよくせいを さいゆうせん かだいと いちづける ちゅうおうぎんこうの しせいが、いろこく はんえいされた けっかと いえます。", es:"Se puede decir que es el resultado de reflejar claramente la postura del banco central de situar la contención de la inflación como máxima prioridad." },
+     { jp:"一方で、急激な 引き締めは 景気後退を 招く リスクも はらんで おり、今後の 動向が 注視されます。", fu:"いっぽうで、きゅうげきな ひきしめは けいきこうたいを まねく リスクも はらんで おり、こんごの どうこうが ちゅうしされます。", es:"Por otro lado, un endurecimiento brusco también conlleva el riesgo de provocar una recesión, por lo que se vigilará atentamente la evolución futura." },
+     { jp:"市場関係者の 間では、次回会合での 追加利上げの 可能性についても 議論が 交わされています。", fu:"しじょうかんけいしゃの あいだでは、じかいかいごうでの ついかりあげの かのうせいに ついても ぎろんが かわされています。", es:"Entre los participantes del mercado también se debate la posibilidad de una nueva subida de tipos en la próxima reunión." }
+   ],
+   gloss:[
+     { w:"位置づける", r:"いちづける", m:"posicionar, situar" },
+     { w:"はらんで", r:"はらんで", m:"conllevar (un riesgo)" },
+     { w:"注視されます", r:"ちゅうしされます", m:"se vigila atentamente" }
+   ],
+   q:[
+     { q:"<ruby>今回<rt>こんかい</rt></ruby>の<ruby>利上<rt>りあ</rt></ruby>げについて正しいのはどれですか。", o:["<ruby>市場<rt>しじょう</rt></ruby>の<ruby>予想<rt>よそう</rt></ruby>を<ruby>上回<rt>うわまわ</rt></ruby>る<ruby>幅<rt>はば</rt></ruby>だった","<ruby>予想<rt>よそう</rt></ruby>より<ruby>小<rt>ちい</rt></ruby>さかった","<ruby>予想通<rt>よそうどお</rt></ruby>りだった"], a:0 },
+     { q:"<ruby>急激<rt>きゅうげき</rt></ruby>な<ruby>引<rt>ひ</rt></ruby>き<ruby>締<rt>し</rt></ruby>めのリスクは<ruby>何<rt>なに</rt></ruby>ですか。", o:["<ruby>景気後退<rt>けいきこうたい</rt></ruby>を<ruby>招<rt>まね</rt></ruby>くこと","<ruby>物価<rt>ぶっか</rt></ruby>がさらに<ruby>上昇<rt>じょうしょう</rt></ruby>すること","<ruby>失業率<rt>しつぎょうりつ</rt></ruby>が<ruby>下<rt>さ</rt></ruby>がること"], a:0 }
+   ]
+ },
+
+ { id:"l-n1-10", lvl:"N1", title:"文学賞授賞式のスピーチ", mins:1,
+   paras:[
+     { jp:"このたびは、身に余る 栄誉を 賜り、心より 感謝申し上げます。", fu:"このたびは、みにあまる えいよを たまわり、こころより かんしゃ もうしあげます。", es:"En esta ocasión, agradezco de corazón haber recibido un honor que excede mis méritos." },
+     { jp:"この 作品を 書き上げるまでには、幾度となく 筆を 折りそうに なりました。", fu:"この さくひんを かきあげるまでには、いくどとなく ふでを おりそうに なりました。", es:"Hasta terminar esta obra, en numerosas ocasiones estuve a punto de abandonar la pluma." },
+     { jp:"しかし、支えてくださった 多くの 方々の おかげで、こうして 皆様の 前に 立つことが できました。", fu:"しかし、ささえて くださった おおくの かたがたの おかげで、こうして みなさまの まえに たつことが できました。", es:"Sin embargo, gracias a las muchas personas que me apoyaron, he podido estar aquí frente a todos ustedes." },
+     { jp:"今後も 精進を 重ね、読者の 期待に 応えられる 作品を 生み出して 参りたいと 存じます。", fu:"こんごも しょうじんを かさね、どくしゃの きたいに こたえられる さくひんを うみだして まいりたいと ぞんじます。", es:"En el futuro, seguiré esforzándome para crear obras que respondan a las expectativas de los lectores." }
+   ],
+   gloss:[
+     { w:"身に余る", r:"みにあまる", m:"que excede los propios méritos" },
+     { w:"折りそうに", r:"おりそうに", m:"a punto de romperse/abandonar (筆を折る)" },
+     { w:"精進", r:"しょうじん", m:"dedicación, esfuerzo constante" }
+   ],
+   q:[
+     { q:"この<ruby>作品<rt>さくひん</rt></ruby>を<ruby>書<rt>か</rt></ruby>いている<ruby>間<rt>あいだ</rt></ruby>、どうでしたか。", o:["<ruby>何度<rt>なんど</rt></ruby>も<ruby>諦<rt>あきら</rt></ruby>めそうになった","<ruby>順調<rt>じゅんちょう</rt></ruby>に<ruby>進<rt>すす</rt></ruby>んだ","すぐに<ruby>書<rt>か</rt></ruby>き<ruby>終<rt>お</rt></ruby>わった"], a:0 },
+     { q:"<ruby>今後<rt>こんご</rt></ruby>について<ruby>何<rt>なに</rt></ruby>と<ruby>言<rt>い</rt></ruby>っていますか。", o:["<ruby>読者<rt>どくしゃ</rt></ruby>の<ruby>期待<rt>きたい</rt></ruby>に<ruby>応<rt>こた</rt></ruby>える<ruby>作品<rt>さくひん</rt></ruby>を<ruby>作<rt>つく</rt></ruby>りたい","もう<ruby>執筆<rt>しっぴつ</rt></ruby>はしない","<ruby>別<rt>べつ</rt></ruby>の<ruby>分野<rt>ぶんや</rt></ruby>に<ruby>挑戦<rt>ちょうせん</rt></ruby>する"], a:0 }
+   ]
+ },
+
+ { id:"l-n1-11", lvl:"N1", title:"環境政策に関する討論", mins:1,
+   paras:[
+     { jp:"脱炭素社会の 実現に 向けては、産業界の 協力 なくして 語ることは できません。", fu:"だつたんそしゃかいの じつげんに むけては、さんぎょうかいの きょうりょく なくして かたることは できません。", es:"No se puede hablar de la realización de una sociedad descarbonizada sin la cooperación del sector industrial." },
+     { jp:"とはいえ、規制ばかりを 強化しては、企業の 国際競争力を 損なう おそれも あります。", fu:"とはいえ、きせいばかりを きょうかしては、きぎょうの こくさいきょうそうりょくを そこなう おそれも あります。", es:"No obstante, si solo se refuerzan las regulaciones, también existe el riesgo de perjudicar la competitividad internacional de las empresas." },
+     { jp:"重要なのは、規制と 支援策を 両輪として、段階的な 移行を 促す ことでは ないでしょうか。", fu:"じゅうようなのは、きせいと しえんさくを りょうりんとして、だんかいてきな いこうを うながす ことでは ないでしょうか。", es:"Lo importante, ¿no sería fomentar una transición gradual utilizando la regulación y las medidas de apoyo como dos ruedas complementarias?" },
+     { jp:"いずれに せよ、猶予は あまり 残されていない というのが 実情です。", fu:"いずれに せよ、ゆうよは あまり のこされて いない というのが じつじょうです。", es:"En cualquier caso, la realidad es que no queda mucho margen de tiempo." }
+   ],
+   gloss:[
+     { w:"損なう", r:"そこなう", m:"perjudicar, dañar" },
+     { w:"両輪", r:"りょうりん", m:"dos ruedas (complementarias)" },
+     { w:"猶予", r:"ゆうよ", m:"margen de tiempo, aplazamiento" }
+   ],
+   q:[
+     { q:"<ruby>規制強化<rt>きせいきょうか</rt></ruby>の リスクは 何ですか。", o:["<ruby>国際競争力<rt>こくさいきょうそうりょく</rt></ruby>を<ruby>損<rt>そこ</rt></ruby>なうこと","<ruby>失業率<rt>しつぎょうりつ</rt></ruby>が<ruby>上<rt>あ</rt></ruby>がること","<ruby>物価<rt>ぶっか</rt></ruby>が<ruby>下<rt>さ</rt></ruby>がること"], a:0 },
+     { q:"<ruby>話<rt>はな</rt></ruby>し<ruby>手<rt>て</rt></ruby>が 重要だと 考えているのは 何ですか。", o:["<ruby>規制<rt>きせい</rt></ruby>と<ruby>支援策<rt>しえんさく</rt></ruby>を<ruby>両輪<rt>りょうりん</rt></ruby>とした<ruby>段階的<rt>だんかいてき</rt></ruby>な<ruby>移行<rt>いこう</rt></ruby>","<ruby>規制<rt>きせい</rt></ruby>のみの<ruby>強化<rt>きょうか</rt></ruby>","<ruby>支援策<rt>しえんさく</rt></ruby>のみの<ruby>拡大<rt>かくだい</rt></ruby>"], a:0 }
+   ]
+ },
+
+ { id:"l-n1-12", lvl:"N1", title:"歴史ドキュメンタリーのナレーション", mins:1,
+   paras:[
+     { jp:"この 城が 築かれたのは、戦国の 世が 終わりを 告げようとしていた 時代の ことである。", fu:"この しろが きずかれたのは、せんごくの よが おわりを つげようと していた じだいの ことである。", es:"Este castillo fue construido en la época en que la era de los Estados en Guerra estaba a punto de llegar a su fin." },
+     { jp:"当時の 権力者たちは、この 地の 戦略的な 重要性に いち早く 目を つけていた。", fu:"とうじの けんりょくしゃたちは、この ちの せんりゃくてきな じゅうようせいに いちはやく めを つけていた。", es:"Los poderosos de la época se fijaron muy pronto en la importancia estratégica de este lugar." },
+     { jp:"幾多の 戦火を くぐり抜けながらも、この 城は 現在まで その 姿を 留めている。", fu:"いくたの せんかを くぐりぬけながらも、この しろは げんざいまで その すがたを とどめて いる。", es:"Aunque atravesó numerosos conflictos bélicos, este castillo ha conservado su aspecto hasta la actualidad." },
+     { jp:"次回は、この 城を めぐる 攻防の 歴史を、より 詳しく 見て いくことに しよう。", fu:"じかいは、この しろを めぐる こうぼうの れきしを、より くわしく みて いくことに しよう。", es:"La próxima vez, examinaremos con más detalle la historia de las batallas en torno a este castillo." }
+   ],
+   gloss:[
+     { w:"告げようと", r:"つげようと", m:"estar a punto de anunciar/llegar" },
+     { w:"くぐり抜けながらも", r:"くぐりぬけながらも", m:"aunque atravesó" },
+     { w:"攻防", r:"こうぼう", m:"ataque y defensa" }
+   ],
+   q:[
+     { q:"この<ruby>城<rt>しろ</rt></ruby>が<ruby>築<rt>きず</rt></ruby>かれたのは いつですか。", o:["<ruby>戦国<rt>せんごく</rt></ruby>の<ruby>世<rt>よ</rt></ruby>が<ruby>終<rt>お</rt></ruby>わろうとしていた<ruby>時代<rt>じだい</rt></ruby>","<ruby>江戸<rt>えど</rt></ruby>時代<ruby>初期<rt>しょき</rt></ruby>","<ruby>明治<rt>めいじ</rt></ruby>時代"], a:0 },
+     { q:"この<ruby>城<rt>しろ</rt></ruby>について 正しいのは どれですか。", o:["<ruby>幾多<rt>いくた</rt></ruby>の<ruby>戦火<rt>せんか</rt></ruby>を<ruby>経<rt>へ</rt></ruby>て<ruby>現在<rt>げんざい</rt></ruby>まで<ruby>残<rt>のこ</rt></ruby>っている","<ruby>火事<rt>かじ</rt></ruby>で<ruby>焼失<rt>しょうしつ</rt></ruby>した","<ruby>近年<rt>きんねん</rt></ruby>に<ruby>建<rt>た</rt></ruby>てられた"], a:0 }
+   ]
+ },
+
+ { id:"l-n1-13", lvl:"N1", title:"科学技術倫理のシンポジウム", mins:1,
+   paras:[
+     { jp:"人工知能の 発達は、我々の 生活に 計り知れない 恩恵を もたらす 一方で、看過できない 倫理的課題も 突きつけている。", fu:"じんこうちのうの はったつは、われわれの せいかつに はかりしれない おんけいを もたらす いっぽうで、かんかできない りんりてきかだいも つきつけて いる。", es:"El desarrollo de la inteligencia artificial trae beneficios inconmensurables a nuestra vida, pero al mismo tiempo plantea cuestiones éticas que no se pueden pasar por alto." },
+     { jp:"技術の 進歩に 法整備が 追いついていない 現状は、由々しき 事態と 言わざるを 得ない。", fu:"ぎじゅつの しんぽに ほうせいびが おいついて いない げんじょうは、ゆゆしき じたいと いわざるを えない。", es:"La situación actual, en la que el desarrollo legislativo no logra seguir el ritmo del progreso tecnológico, no puede sino calificarse de grave." },
+     { jp:"技術者のみならず、社会全体が この 議論に 主体的に 関与する 姿勢が 求められている。", fu:"ぎじゅつしゃ のみならず、しゃかいぜんたいが この ぎろんに しゅたいてきに かんよする しせいが もとめられて いる。", es:"No solo los técnicos, sino toda la sociedad, deben mostrar una actitud de implicación activa en este debate." },
+     { jp:"利便性の 追求と 倫理的な 配慮を いかに 両立させるか が、今後の 大きな 課題と なろう。", fu:"りべんせいの ついきゅうと りんりてきな はいりょを いかに りょうりつさせるか が、こんごの おおきな かだいと なろう。", es:"Cómo compatibilizar la búsqueda de la conveniencia con la consideración ética será un gran desafío en el futuro." }
+   ],
+   gloss:[
+     { w:"看過できない", r:"かんかできない", m:"que no se puede pasar por alto" },
+     { w:"由々しき", r:"ゆゆしき", m:"grave, serio (由々しき事態)" },
+     { w:"のみならず", r:"のみならず", m:"no solo... (sino también)" }
+   ],
+   q:[
+     { q:"<ruby>現在<rt>げんざい</rt></ruby>の<ruby>問題点<rt>もんだいてん</rt></ruby>は 何ですか。", o:["<ruby>法整備<rt>ほうせいび</rt></ruby>が<ruby>技術<rt>ぎじゅつ</rt></ruby>の<ruby>進歩<rt>しんぽ</rt></ruby>に<ruby>追<rt>お</rt></ruby>いついていないこと","AIの<ruby>開発<rt>かいはつ</rt></ruby>が<ruby>遅<rt>おく</rt></ruby>れていること","<ruby>技術者<rt>ぎじゅつしゃ</rt></ruby>が<ruby>不足<rt>ふそく</rt></ruby>していること"], a:0 },
+     { q:"<ruby>誰<rt>だれ</rt></ruby>が この<ruby>議論<rt>ぎろん</rt></ruby>に<ruby>関与<rt>かんよ</rt></ruby>すべきだと 言っていますか。", o:["<ruby>技術者<rt>ぎじゅつしゃ</rt></ruby>だけでなく<ruby>社会全体<rt>しゃかいぜんたい</rt></ruby>","<ruby>政府<rt>せいふ</rt></ruby>のみ","<ruby>技術者<rt>ぎじゅつしゃ</rt></ruby>のみ"], a:0 }
+   ]
+ },
+
+ { id:"l-n1-14", lvl:"N1", title:"美術評論家の講評", mins:1,
+   paras:[
+     { jp:"本作は、従来の 技法に とらわれない 大胆な 構図が 目を 引く。", fu:"ほんさくは、じゅうらいの ぎほうに とらわれない だいたんな こうずが めを ひく。", es:"Esta obra llama la atención por su composición audaz que no se ata a las técnicas convencionales." },
+     { jp:"一見すると 荒削りな 印象を 受けるかもしれないが、そこには 作家 なりの 緻密な 計算が 見え隠れする。", fu:"いっけんすると あらけずりな いんしょうを うけるかもしれないが、そこには さっか なりの ちみつな けいさんが みえかくれする。", es:"A primera vista podría parecer una impresión tosca, pero en ella se vislumbra un cálculo minucioso propio del artista." },
+     { jp:"色彩の 選択に しても、単なる 装飾に とどまらず、作品全体の 主題と 密接に 結びついている。", fu:"しきさいの せんたくに しても、たんなる そうしょくに とどまらず、さくひんぜんたいの しゅだいと みっせつに むすびついて いる。", es:"Incluso en la elección de los colores, no se limita a la mera decoración, sino que está estrechamente vinculada al tema general de la obra." },
+     { jp:"今後の 更なる 飛躍が 期待される、注目すべき 新進作家の 一人と 言えよう。", fu:"こんごの さらなる ひやくが きたいされる、ちゅうもく すべき しんしんさっかの ひとりと いえよう。", es:"Se puede decir que es uno de los artistas emergentes a los que hay que prestar atención, del que se espera un mayor salto en el futuro." }
+   ],
+   gloss:[
+     { w:"見え隠れする", r:"みえかくれする", m:"vislumbrarse, entreverse" },
+     { w:"とどまらず", r:"とどまらず", m:"sin limitarse a" },
+     { w:"新進作家", r:"しんしんさっか", m:"artista emergente" }
+   ],
+   q:[
+     { q:"この<ruby>作品<rt>さくひん</rt></ruby>の<ruby>特徴<rt>とくちょう</rt></ruby>は 何ですか。", o:["<ruby>従来<rt>じゅうらい</rt></ruby>にとらわれない<ruby>大胆<rt>だいたん</rt></ruby>な<ruby>構図<rt>こうず</rt></ruby>","<ruby>伝統的<rt>でんとうてき</rt></ruby>な<ruby>技法<rt>ぎほう</rt></ruby>の<ruby>忠実<rt>ちゅうじつ</rt></ruby>な<ruby>再現<rt>さいげん</rt></ruby>","<ruby>単色<rt>たんしょく</rt></ruby>のみの<ruby>使用<rt>しよう</rt></ruby>"], a:0 },
+     { q:"<ruby>色彩<rt>しきさい</rt></ruby>の<ruby>選択<rt>せんたく</rt></ruby>について どう 評価していますか。", o:["<ruby>作品<rt>さくひん</rt></ruby>の<ruby>主題<rt>しゅだい</rt></ruby>と<ruby>密接<rt>みっせつ</rt></ruby>に<ruby>結<rt>むす</rt></ruby>びついている","たんなる<ruby>装飾<rt>そうしょく</rt></ruby>にすぎない","<ruby>失敗<rt>しっぱい</rt></ruby>している"], a:0 }
+   ]
+ },
+
+ { id:"l-n1-15", lvl:"N1", title:"組織論に関する講演", mins:1,
+   paras:[
+     { jp:"優れた 組織とは、単に 優秀な 人材を 集めた 組織を 指すのでは ない。", fu:"すぐれた そしきとは、たんに ゆうしゅうな じんざいを あつめた そしきを さすのでは ない。", es:"Una organización excelente no se refiere simplemente a una organización que ha reunido talento excelente." },
+     { jp:"むしろ、各人の 強みを 最大限に 引き出し、相互に 補完し合う 仕組みを 有する 組織 こそが、真に 強い と 言える。", fu:"むしろ、かくじんの つよみを さいだいげんに ひきだし、そうごに ほかんし あう しくみを ゆうする そしき こそが、しんに つよいと いえる。", es:"Más bien, la organización que posee un sistema que extrae al máximo las fortalezas de cada persona y se complementan mutuamente es la que se puede llamar verdaderamente fuerte." },
+     { jp:"そのためには、失敗を 許容する 文化の 醸成が 不可欠である。", fu:"そのためには、しっぱいを きょよう する ぶんかの じょうせいが ふかけつで ある。", es:"Para ello, es indispensable fomentar una cultura que tolere el fracaso." },
+     { jp:"心理的安全性が 確保された 環境 なくして、真の イノベーションは 生まれ得ない のである。", fu:"しんりてきあんぜんせいが かくほ された かんきょう なくして、しんの イノベーションは うまれえない のである。", es:"Sin un entorno con seguridad psicológica garantizada, la verdadera innovación no puede surgir." }
+   ],
+   gloss:[
+     { w:"補完し合う", r:"ほかんしあう", m:"complementarse mutuamente" },
+     { w:"醸成", r:"じょうせい", m:"fomento, cultivo (de una cultura)" },
+     { w:"生まれ得ない", r:"うまれえない", m:"no poder surgir" }
+   ],
+   q:[
+     { q:"<ruby>講演者<rt>こうえんしゃ</rt></ruby>が 考える 真に 強い 組織とは 何ですか。", o:["<ruby>各人<rt>かくじん</rt></ruby>の<ruby>強<rt>つよ</rt></ruby>みを<ruby>引<rt>ひ</rt></ruby>き<ruby>出<rt>だ</rt></ruby>し<ruby>補完<rt>ほかん</rt></ruby>し<ruby>合<rt>あ</rt></ruby>う<ruby>組織<rt>そしき</rt></ruby>","<ruby>優秀<rt>ゆうしゅう</rt></ruby>な<ruby>人材<rt>じんざい</rt></ruby>だけを<ruby>集<rt>あつ</rt></ruby>めた<ruby>組織<rt>そしき</rt></ruby>","<ruby>規則<rt>きそく</rt></ruby>が<ruby>厳<rt>きび</rt></ruby>しい<ruby>組織<rt>そしき</rt></ruby>"], a:0 },
+     { q:"イノベーションに<ruby>不可欠<rt>ふかけつ</rt></ruby>なものは 何ですか。", o:["<ruby>心理的安全性<rt>しんりてきあんぜんせい</rt></ruby>","<ruby>厳<rt>きび</rt></ruby>しい<ruby>競争<rt>きょうそう</rt></ruby>","<ruby>高額<rt>こうがく</rt></ruby>な<ruby>報酬<rt>ほうしゅう</rt></ruby>"], a:0 }
+   ]
  }
 
 ];
