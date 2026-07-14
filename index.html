@@ -208,6 +208,8 @@
   .level-tag.all{background:var(--amber); font-size:13px;}
   .level-tag.full{background:var(--teal, #3ecf8e); font-size:13px;}
   .level-tag.official{background:#B2493A; font-size:13px;}
+  .done-badge{display:inline-flex; align-items:center; justify-content:center; width:16px; height:16px; border-radius:50%;
+    background:var(--green); color:#fff; font-size:10px; font-weight:800; margin-left:6px; vertical-align:middle; flex-shrink:0;}
   .official-timer{position:sticky; top:0; z-index:5; background:var(--card); border:1.5px solid var(--line); border-radius:14px;
     padding:11px 15px; margin-bottom:14px; font-weight:800; font-size:14.5px; color:var(--ink);
     display:flex; align-items:center; justify-content:space-between; box-shadow:var(--shadow);}
@@ -283,6 +285,9 @@
   .progress > span{display:block; height:100%; background:var(--indigo); border-radius:3px; width:0%; transition:width .3s ease;}
   .count{font-size:13px; font-weight:600; color:var(--muted); font-variant-numeric:tabular-nums;}
   .tagline{margin-top:11px; font-size:11px; font-weight:700; letter-spacing:1.3px; text-transform:uppercase; color:var(--indigo-bright);}
+  .peek-btn{align-self:center; margin-top:6px; padding:6px 14px; border-radius:20px; border:1.5px solid var(--line);
+    background:var(--card); color:var(--ink-2); font-size:12px; font-weight:600; cursor:pointer;}
+  .peek-btn:active{background:var(--line-2);}
 
   .stage{flex:1; overflow-y:auto; overscroll-behavior:contain; display:flex; flex-direction:column; align-items:center; padding:4px 0 0; min-height:0;}
   .kanji-box{margin-top:14px; width:200px; height:200px; background:var(--card); border-radius:28px; box-shadow:var(--shadow);
@@ -293,8 +298,8 @@
   .prompt{margin-top:16px; text-align:center; font-size:15px; font-weight:600; color:var(--ink-2);}
   .prompt .small{display:block; font-size:12.5px; color:var(--faint); font-weight:500; margin-top:3px;}
 
-  .back{width:100%; margin-top:16px; opacity:0; max-height:0; overflow:hidden; transition:opacity .3s ease, max-height .45s ease;}
-  .back.show{opacity:1; max-height:1200px;}
+  .back{width:100%; margin-top:16px; opacity:0; max-height:0; overflow:hidden; transition:opacity .3s ease, max-height .6s ease;}
+  .back.show{opacity:1; max-height:6000px;}
   .readings{display:flex; gap:10px; justify-content:center; flex-wrap:wrap;}
   .reading{display:flex; align-items:center; gap:9px; background:var(--card); border-radius:14px; padding:10px 13px; box-shadow:var(--shadow); cursor:pointer;}
   .rlabel{font-size:9.5px; font-weight:700; letter-spacing:.6px; color:var(--faint); text-transform:uppercase;}
@@ -564,6 +569,7 @@
     <span class="count" id="progCount">0 / 0</span>
   </div>
   <div class="tagline" id="studyTag">Kanji</div>
+  <button class="peek-btn" id="peekBtn" style="display:none;">↺ Ver anterior</button>
   <div class="stage" id="stage">
     <div class="kanji-box"><span class="kanji-glyph" id="glyph">字</span></div>
     <div class="prompt" id="prompt">¿Qué significa?<span class="small">Piénsalo, luego revela</span></div>
@@ -790,6 +796,12 @@ var LEVEL_ORDER = ["N5","N4","N3","N2","N1"];
 var mem = {};
 function load(){ try{ var s=localStorage.getItem("jlpt-progress"); return s?JSON.parse(s):{}; }catch(e){ return mem.p||{}; } }
 function save(p){ try{ localStorage.setItem("jlpt-progress", JSON.stringify(p)); }catch(e){ mem.p=p; } try{ cloudDirty(); }catch(e){} }
+function loadDone(){ try{ var s=localStorage.getItem("jlpt-done"); return s?JSON.parse(s):{}; }catch(e){ return {}; } }
+function saveDone(d){ try{ localStorage.setItem("jlpt-done", JSON.stringify(d)); }catch(e){} try{ cloudDirty(); }catch(e){} }
+var doneItems = loadDone();
+function markDone(id){ if(!id || doneItems[id]) return; doneItems[id]=Date.now(); saveDone(doneItems); }
+function isDone(id){ return !!(id && doneItems[id]); }
+function doneBadge(id){ return isDone(id) ? '<span class="done-badge" aria-label="Completado">✓</span>' : ''; }
 function getName(){ try{ return localStorage.getItem("jlpt-name")||""; }catch(e){ return mem.n||""; } }
 function setName(n){ try{ localStorage.setItem("jlpt-name", n); }catch(e){ mem.n=n; } }
 
@@ -828,6 +840,7 @@ function fmt(d){ var m=d*1440;
   return (d/365).toFixed(1)+" a"; }
 
 var progress=load(), queue=[], done=0, total=0, current=null, lastSession=null;
+var lastItem=null, peeking=false, peekReturnRevealed=false;
 
 function isDue(id, now){ var st=progress[id]; return st && new Date(st.due)<=now; }
 function isLearned(id){ return !!progress[id]; }
@@ -1121,7 +1134,7 @@ function startFocused(type, level){
   }
   beginQuiz(q);
 }
-function beginSession(q){ queue=q.queue.slice(); total=queue.length; done=0; show("study"); nextCard(); }
+function beginSession(q){ queue=q.queue.slice(); total=queue.length; done=0; lastItem=null; peeking=false; show("study"); nextCard(); }
 function beginQuiz(q){ queue=q.queue.slice(); total=queue.length; done=0; show("quiz"); nextQuestion(); }
 function showEmpty(title,msg){
   document.getElementById("emptyTitle").textContent=title;
@@ -1183,22 +1196,59 @@ function backHTML(item){
          exampleHTML(d)+
          (d.err? '<div class="gerr"><b>Error común:</b> '+d.err+'</div>' : '');
 }
-function nextCard(){
-  if(queue.length===0){ show("doneView"); renderMenu(); return; }
-  var stage=document.querySelector("#study .stage"); if(stage) stage.scrollTop=0;
-  current=queue.shift(); var item=ITEMS[current];
+function paintCard(idx, revealed){
+  var item=ITEMS[idx];
   var tag=TYPE_LABEL[item.type]; if(item.d.lvl) tag+=" · "+item.d.lvl;
   document.getElementById("studyTag").textContent=tag;
   var g=document.getElementById("glyph");
   var txt=frontText(item); g.textContent=txt; g.style.fontSize=sizeFor(txt)+"px";
   document.getElementById("prompt").innerHTML=promptFor(item)+'<span class="small">Piénsalo, luego revela</span>';
   document.getElementById("back").innerHTML=backHTML(item);
-  document.getElementById("back").classList.remove("show");
+  if(revealed){
+    document.getElementById("back").classList.add("show");
+    document.getElementById("revealBtn").style.display="none";
+    document.querySelectorAll("#back .reading").forEach(function(el){
+      el.addEventListener("click", function(){ speak(el.getAttribute("data-say")); });
+    });
+  } else {
+    document.getElementById("back").classList.remove("show");
+    document.getElementById("revealBtn").style.display="block";
+  }
+}
+function updatePeekBtn(){
+  var b=document.getElementById("peekBtn"); if(!b) return;
+  if(peeking){ b.textContent="→ Volver a la actual"; b.style.display="block"; }
+  else if(lastItem!=null){ b.textContent="↺ Ver anterior"; b.style.display="block"; }
+  else { b.style.display="none"; }
+}
+function nextCard(){
+  if(queue.length===0){ show("doneView"); renderMenu(); return; }
+  var stage=document.querySelector("#study .stage"); if(stage) stage.scrollTop=0;
+  if(current!=null) lastItem=current;
+  peeking=false;
+  current=queue.shift();
+  paintCard(current, false);
   document.getElementById("ratings").classList.remove("show");
-  document.getElementById("revealBtn").style.display="block";
   document.getElementById("progCount").textContent=done+" / "+total;
   document.getElementById("progBar").style.width=(total?(done/total*100):0)+"%";
+  updatePeekBtn();
 }
+function peekPrevious(){
+  if(peeking || lastItem==null) return;
+  peekReturnRevealed = document.getElementById("back").classList.contains("show");
+  peeking=true;
+  document.getElementById("ratings").classList.remove("show");
+  paintCard(lastItem, true);
+  updatePeekBtn();
+}
+function returnFromPeek(){
+  if(!peeking) return;
+  peeking=false;
+  paintCard(current, peekReturnRevealed);
+  if(peekReturnRevealed) document.getElementById("ratings").classList.add("show");
+  updatePeekBtn();
+}
+function togglePeek(){ if(peeking) returnFromPeek(); else peekPrevious(); }
 function reveal(){
   var item=ITEMS[current], now=new Date(), st=progress[item.id]||null;
   document.getElementById("iv1").textContent=fmt(schedule(st,1,now).iv);
@@ -1213,6 +1263,7 @@ function reveal(){
   });
 }
 function rate(r){
+  if(peeking) return;
   var item=ITEMS[current];
   progress[item.id]=schedule(progress[item.id]||null, r, new Date());
   save(progress); logToday(); done+=1; nextCard();
@@ -1446,7 +1497,7 @@ function showReadingList(level){
   ps.forEach(function(p){
     html+='<button class="level-btn" data-rid="'+p.id+'">'+
       '<div class="level-l"><div class="level-tag all">読</div>'+
-      '<div class="level-meta"><div class="lt">'+p.title+'</div>'+
+      '<div class="level-meta"><div class="lt">'+p.title+doneBadge(p.id)+'</div>'+
       '<div class="ls">'+p.paras.length+' párrafos · ~'+p.mins+' min</div></div></div>'+
       '<span class="level-arrow">›</span></button>';
   });
@@ -1551,7 +1602,7 @@ function showListeningList(level){
   ps.forEach(function(p){
     html+='<button class="level-btn" data-lid="'+p.id+'">'+
       '<div class="level-l"><div class="level-tag all">聴</div>'+
-      '<div class="level-meta"><div class="lt">'+p.title+'</div>'+
+      '<div class="level-meta"><div class="lt">'+p.title+doneBadge(p.id)+'</div>'+
       '<div class="ls">audio · ~'+p.mins+' min</div></div></div>'+
       '<span class="level-arrow">›</span></button>';
   });
@@ -1645,7 +1696,7 @@ function convScenarios(level){
   convView = "scenarios";
   var list = convScenData().filter(function(s){ return s.lvl===level; });
   var h = '<div class="level-title">'+level+' · elige el escenario</div>';
-  list.forEach(function(s){ h += '<button class="level-btn" data-id="'+s.id+'"><div class="level-l"><div class="level-tag all">会</div><div class="level-meta"><div class="lt">'+s.title+'</div><div class="ls">'+s.goal+'</div></div></div><span class="level-arrow">›</span></button>'; });
+  list.forEach(function(s){ h += '<button class="level-btn" data-id="'+s.id+'"><div class="level-l"><div class="level-tag all">会</div><div class="level-meta"><div class="lt">'+s.title+doneBadge(s.id)+'</div><div class="ls">'+s.goal+'</div></div></div><span class="level-arrow">›</span></button>'; });
   var st = document.getElementById("convStage"); st.innerHTML = h; document.getElementById("conv").scrollTop = 0;
   st.querySelectorAll(".level-btn").forEach(function(b){ b.addEventListener("click", function(){ var s=convScenData().filter(function(x){return x.id===b.getAttribute("data-id");})[0]; if(s) convStart(s); }); });
   show("conv");
@@ -1691,6 +1742,8 @@ function convSend(text){
       convStatus(""); convHistory.push({ role:"user", content: text });
       convAddAI(j.data); convHistory.push({ role:"assistant", content: asTxt(j.data.jp) });
       convRenderSugs(j.data.sugerencias);
+      var userTurns=convHistory.filter(function(m){ return m.role==="user"; }).length;
+      if(userTurns>=3 && convScenario) markDone(convScenario.id);
       try{ speak(asTxt(j.data.jp)); }catch(e){}
     }).catch(function(e){ convStatus('<span class="mic-bad">Fallo de red.</span>'); });
 }
@@ -1741,14 +1794,14 @@ function examAreas(level){
   var h = '<div class="exam-head">'+level+' · elige la parte</div>';
   exs.forEach(function(e){
     h += '<button class="level-btn" data-id="'+e.id+'"><div class="level-l"><div class="level-tag all">試</div>'+
-      '<div class="level-meta"><div class="lt">'+e.title+'</div><div class="ls">'+(e.desc||'')+' · '+e.questions.length+' preguntas</div></div></div>'+
+      '<div class="level-meta"><div class="lt">'+e.title+doneBadge(e.id)+'</div><div class="ls">'+(e.desc||'')+' · '+e.questions.length+' preguntas</div></div></div>'+
       '<span class="level-arrow">›</span></button>';
   });
   if(sets.length){
     h += '<div class="exam-head exam-subhead">🎯 Simulacros completos (todas las secciones)</div>';
     sets.forEach(function(e){
       h += '<button class="level-btn" data-id="'+e.id+'"><div class="level-l"><div class="level-tag full">模</div>'+
-        '<div class="level-meta"><div class="lt">'+e.title+'</div><div class="ls">'+(e.desc||'')+' · '+e.questions.length+' preguntas</div></div></div>'+
+        '<div class="level-meta"><div class="lt">'+e.title+doneBadge(e.id)+'</div><div class="ls">'+(e.desc||'')+' · '+e.questions.length+' preguntas</div></div></div>'+
         '<span class="level-arrow">›</span></button>';
     });
   }
@@ -1758,7 +1811,7 @@ function examAreas(level){
     offs.forEach(function(e){
       var totalMin=0, totalQ=0; e.sections.forEach(function(s){ totalMin+=s.minutes; totalQ+=s.questions.length; });
       h += '<button class="level-btn" data-off="'+e.id+'"><div class="level-l"><div class="level-tag official">官</div>'+
-        '<div class="level-meta"><div class="lt">'+e.title+'</div><div class="ls">'+(e.desc||'')+' · '+totalMin+' min · '+totalQ+' preguntas</div></div></div>'+
+        '<div class="level-meta"><div class="lt">'+e.title+doneBadge(e.id)+'</div><div class="ls">'+(e.desc||'')+' · '+totalMin+' min · '+totalQ+' preguntas</div></div></div>'+
         '<span class="level-arrow">›</span></button>';
     });
   }
@@ -1819,6 +1872,7 @@ function gradeExam(){
     officialFinishSection(correct, total);
   } else {
     document.getElementById("examSubmit").disabled = true;
+    markDone(currentExam.id);
   }
   sc.scrollIntoView({ behavior: "smooth", block: "center" });
 }
@@ -1878,6 +1932,7 @@ function officialFinishSection(correct, total){
 }
 function showOfficialResults(){
   var exam = officialExam;
+  markDone(exam.id);
   var totalCorrect=0, totalQ=0;
   var h = '<div class="exam-head">'+exam.title+' · resultado final</div>';
   officialScores.forEach(function(s){
@@ -1947,9 +2002,17 @@ function playPassageFile(src){
   }catch(e){ toParas(); }
 }
 /* Lectura párrafo a párrafo: voz natural del Worker si hay endpoint; si no, voz del sistema */
+function ttsClean(text){
+  /* Elimina los espacios "de lectura" (半角/全角) usados como ayuda visual en las
+     transcripciones, para que la voz sintetizada no introduzca pausas artificiales. */
+  return (text||"").replace(/[ \u3000]+/g,"");
+}
 function readSeq(){
-  if(!rdPlaying || !rdCurrent || rdIdx>=rdCurrent.paras.length){ stopRead(); return; }
-  var idx=rdIdx, text=rdCurrent.paras[idx].jp;
+  if(!rdPlaying || !rdCurrent || rdIdx>=rdCurrent.paras.length){
+    if(rdCurrent && rdIdx>=rdCurrent.paras.length) markDone(rdCurrent.id);
+    stopRead(); return;
+  }
+  var idx=rdIdx, text=ttsClean(rdCurrent.paras[idx].jp);
   paraHighlight(idx);
   if(TTS_ENDPOINT){
     var a=getRdAudio(), moved=false;
@@ -2203,6 +2266,7 @@ document.getElementById("doneAgain").addEventListener("click", function(){
 });
 document.getElementById("emptyBack").addEventListener("click", function(){ show("menu"); renderMenu(); });
 document.getElementById("revealBtn").addEventListener("click", reveal);
+document.getElementById("peekBtn").addEventListener("click", togglePeek);
 document.getElementById("qClose").addEventListener("click", function(){ show("menu"); renderMenu(); });
 document.getElementById("wClose").addEventListener("click", function(){ show("menu"); renderMenu(); });
 document.getElementById("wAnim").addEventListener("click", wAnimate);
@@ -2308,15 +2372,16 @@ function setAuth(a){ try{ if(a){ localStorage.setItem("jlpt-auth", JSON.stringif
 function localUpdatedAt(){ try{ return parseInt(localStorage.getItem("jlpt-updated")||"0",10)||0; }catch(e){ return 0; } }
 function collectData(){
   var days; try{ days=JSON.parse(localStorage.getItem("jlpt-days")||"[]"); }catch(e){ days=[]; }
-  return { progress: load(), days: days, name: getName(), updatedAt: localUpdatedAt() || Date.now() };
+  return { progress: load(), days: days, done: loadDone(), name: getName(), updatedAt: localUpdatedAt() || Date.now() };
 }
 function applyData(d){
   if(!d) return;
   try{ localStorage.setItem("jlpt-progress", JSON.stringify(d.progress||{})); }catch(e){}
   try{ localStorage.setItem("jlpt-days", JSON.stringify(d.days||[])); }catch(e){}
+  try{ localStorage.setItem("jlpt-done", JSON.stringify(d.done||{})); }catch(e){}
   if(d.name) setName(d.name);
   try{ localStorage.setItem("jlpt-updated", String(d.updatedAt||Date.now())); }catch(e){}
-  progress = load();
+  progress = load(); doneItems = loadDone();
   renderMenu();
 }
 
