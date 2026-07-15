@@ -313,6 +313,15 @@
   .gform b{color:var(--indigo);}
   .gerr{margin-top:11px; background:rgba(176,65,62,.08); border-radius:14px; padding:12px 14px; font-size:12.5px; line-height:1.5; color:var(--ink-2); text-align:left;}
   .gerr b{color:#B0413E;}
+  .gconj{margin-top:11px; background:rgba(46,125,91,.07); border-radius:14px; padding:13px 15px; font-size:12.5px; line-height:1.5; color:var(--ink-2); text-align:left;}
+  .gconj-title{font-weight:700; color:var(--green); margin-bottom:5px; font-size:13px;}
+  .gconj-rule{margin-bottom:9px;}
+  .gconj-group{margin-top:9px;}
+  .gconj-group b{display:block; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.4px; color:var(--muted); margin-bottom:5px;}
+  .conj-row{display:flex; flex-wrap:wrap; align-items:baseline; column-gap:7px; padding:3px 0;}
+  .conj-row .conj-dict, .conj-row .conj-form{font-family:var(--jp); font-size:13.5px; color:var(--ink);}
+  .conj-row .conj-arrow{color:var(--faint);}
+  .conj-row .conj-ex{flex-basis:100%; font-family:var(--jp); font-size:12px; color:var(--muted); margin-top:1px;}
   .example{margin-top:12px; text-align:center; font-family:var(--jp); font-size:16px; color:var(--ink-2);}
   .example .rd{display:block; color:var(--faint); font-size:12px; margin-top:2px;}
   .example .tr{display:block; font-family:var(--ui); font-size:12.5px; color:var(--muted); margin-top:3px;}
@@ -1000,10 +1009,11 @@ var MODES = {
     {id:"type",  name:"Escribir lectura",   desc:"Teclea la lectura en hiragana"}
   ],
   grammar: [
-    {id:"mix",  name:"Examen mixto",        desc:"Mezcla de todos los tipos"},
-    {id:"form", name:"Forma (文法形式)",     desc:"Elige la estructura para la frase"},
-    {id:"ctx",  name:"En contexto",          desc:"¿Qué estructura aparece aquí?"},
-    {id:"mean", name:"Significado / uso",    desc:"Elige qué significa o cómo se usa"}
+    {id:"mix",   name:"Examen mixto",        desc:"Mezcla de todos los tipos"},
+    {id:"form",  name:"Forma (文法形式)",     desc:"Elige la estructura para la frase"},
+    {id:"ctx",   name:"Completar el hueco",  desc:"Construye la frase con la estructura correcta"},
+    {id:"mean",  name:"Significado / uso",   desc:"Elige qué significa o cómo se usa"},
+    {id:"es2ja", name:"Traducción ES→JA",    desc:"Elige la traducción completa correcta"}
   ]
 };
 function showModes(type, level){
@@ -1192,7 +1202,8 @@ function backHTML(item){
   }
   return '<div class="meaning">'+d.mean+'</div>'+
          '<div class="gexp">'+d.exp+'</div>'+
-         (d.form? '<div class="gform"><b>Construcción:</b> '+d.form+'</div>' : '')+
+         (d.conj? conjTableHTML(d.conj) : '')+
+         (d.form? '<div class="gform"><b>'+(d.conj?'En esta construcción:':'Construcción:')+'</b> '+d.form+'</div>' : '')+
          exampleHTML(d)+
          (d.err? '<div class="gerr"><b>Error común:</b> '+d.err+'</div>' : '');
 }
@@ -1328,6 +1339,128 @@ function speak(t){
   }catch(e){ fb(); }
 }
 
+/* ===== TABLAS DE CONJUGACIÓN COMPARTIDAS (para tarjetas de repaso de gramática) =====
+   Cada tabla se define UNA vez y la reutilizan todas las entradas de gramática cuya
+   construcción dependa del grupo verbal (marcadas con el campo `conj` en content.js).
+   g1 = godan (grupo 1), g2 = ichidan (grupo 2), g3 = irregulares (する/来る). */
+var CONJ_TABLES={
+  te:{ name:"Forma て",
+    rule:"Toma el verbo en diccionario. Grupo 1: según el sonido final (う/つ/る→って, ぬ/ぶ/む→んで, く→いて, ぐ→いで, す→して). Grupo 2: quita る y añade て. Irregulares: する→して, 来る→来て.",
+    g1:[{d:"買う",f:"買って",ex:"本を買って帰った。（Compré un libro y volví a casa）"},
+        {d:"待つ",f:"待って",ex:"友達を待っている。（Estoy esperando a un amigo）"},
+        {d:"読む",f:"読んで",ex:"本を読んでいます。（Estoy leyendo un libro）"}],
+    g2:[{d:"食べる",f:"食べて",ex:"ご飯を食べてから寝る。（Como y luego duermo）"},
+        {d:"見る",f:"見て",ex:"映画を見てください。（Mira la película, por favor）"},
+        {d:"起きる",f:"起きて",ex:"朝早く起きて散歩する。（Me levanto temprano y paseo）"}],
+    g3:[{d:"する",f:"して",ex:"勉強して疲れた。（Estudié y me cansé）"},
+        {d:"来る",f:"来て",ex:"友達が来て嬉しい。（Vino un amigo y estoy contento）"}] },
+  nai:{ name:"Forma ない",
+    rule:"Toma el verbo en diccionario. Grupo 1: cambia la vocal final -u por -a y añade ない (う→わない). Grupo 2: quita る y añade ない. Irregulares: する→しない, 来る→来ない.",
+    g1:[{d:"買う",f:"買わない",ex:"お酒を買わない。（No compro alcohol）"},
+        {d:"待つ",f:"待たない",ex:"彼を待たない。（No espero a él）"},
+        {d:"読む",f:"読まない",ex:"新聞を読まない。（No leo el periódico）"}],
+    g2:[{d:"食べる",f:"食べない",ex:"肉を食べない。（No como carne）"},
+        {d:"見る",f:"見ない",ex:"テレビを見ない。（No veo la tele）"},
+        {d:"起きる",f:"起きない",ex:"早く起きない。（No me levanto temprano）"}],
+    g3:[{d:"する",f:"しない",ex:"何もしない。（No hago nada）"},
+        {d:"来る",f:"来ない",ex:"彼は来ない。（Él no viene）"}] },
+  masu:{ name:"Forma ます (raíz 連用形)",
+    rule:"Toma el verbo en diccionario. Grupo 1: cambia la vocal final -u por -i. Grupo 2: quita る. Irregulares: する→し, 来る→来（き）. Este resultado es la base a la que se pegan muchos sufijos (すぎる, はじめる, かた…).",
+    g1:[{d:"買う",f:"買い",ex:"買いすぎた。（Compré de más）"},
+        {d:"待つ",f:"待ち",ex:"待ちきれない。（No puedo esperar más）"},
+        {d:"読む",f:"読み",ex:"読み終わった。（Terminé de leer）"}],
+    g2:[{d:"食べる",f:"食べ",ex:"食べすぎる。（Como de más）"},
+        {d:"見る",f:"見",ex:"見始めた。（Empecé a ver）"},
+        {d:"起きる",f:"起き",ex:"起きにくい。（Es difícil levantarse）"}],
+    g3:[{d:"する",f:"し",ex:"し直す。（Volver a hacer）"},
+        {d:"来る",f:"来（き）",ex:"来やすい。（Es fácil de venir）"}] },
+  volitional:{ name:"Forma volitiva (よう/おう)",
+    rule:"Toma el verbo en diccionario. Grupo 1: cambia -u por -o y añade う. Grupo 2: quita る y añade よう. Irregulares: する→しよう, 来る→来よう.",
+    g1:[{d:"買う",f:"買おう",ex:"新しい服を買おう。（Voy a comprarme ropa nueva）"},
+        {d:"待つ",f:"待とう",ex:"もう少し待とう。（Esperemos un poco más）"},
+        {d:"読む",f:"読もう",ex:"この本を読もう。（Voy a leer este libro）"}],
+    g2:[{d:"食べる",f:"食べよう",ex:"一緒に食べよう。（Comamos juntos）"},
+        {d:"見る",f:"見よう",ex:"映画を見よう。（Veamos una película）"},
+        {d:"起きる",f:"起きよう",ex:"早く起きよう。（Levantémonos temprano）"}],
+    g3:[{d:"する",f:"しよう",ex:"勉強しよう。（Estudiemos）"},
+        {d:"来る",f:"来よう",ex:"また来よう。（Volvamos a venir）"}] },
+  potential:{ name:"Forma potencial (可能形)",
+    rule:"Toma el verbo en diccionario. Grupo 1: cambia -u por -e y añade る. Grupo 2: quita る y añade られる (coloquialmente sin ら: れる). Irregulares: する→できる, 来る→来られる.",
+    g1:[{d:"買う",f:"買える",ex:"これは買える。（Esto se puede comprar）"},
+        {d:"待つ",f:"待てる",ex:"あと5分待てる。（Puedo esperar 5 minutos más）"},
+        {d:"読む",f:"読める",ex:"漢字が読める。（Puedo leer kanji）"}],
+    g2:[{d:"食べる",f:"食べられる",ex:"辛い物が食べられる。（Puedo comer comida picante）"},
+        {d:"見る",f:"見られる",ex:"この映画が見られる。（Puedo ver esta película）"},
+        {d:"起きる",f:"起きられる",ex:"6時に起きられる。（Puedo levantarme a las 6）"}],
+    g3:[{d:"する",f:"できる",ex:"料理ができる。（Sé cocinar）"},
+        {d:"来る",f:"来られる",ex:"明日来られる。（Puedo venir mañana）"}] },
+  passive:{ name:"Voz pasiva (受身形)",
+    rule:"Toma el verbo en diccionario. Grupo 1: cambia -u por -a y añade れる. Grupo 2: quita る y añade られる. Irregulares: する→される, 来る→来られる.",
+    g1:[{d:"叱る",f:"叱られる",ex:"弟に叱られた。（Fui regañado por mi hermano menor）"},
+        {d:"読む",f:"読まれる",ex:"この本は世界中で読まれている。（Este libro se lee en todo el mundo）"},
+        {d:"盗む",f:"盗まれる",ex:"財布を盗まれた。（Me robaron la cartera）"}],
+    g2:[{d:"褒める",f:"褒められる",ex:"先生に褒められた。（Fui elogiado por el profesor）"},
+        {d:"見る",f:"見られる",ex:"誰かに見られている気がする。（Siento que alguien me observa）"},
+        {d:"いじめる",f:"いじめられる",ex:"彼はいじめられた。（Él fue acosado）"}],
+    g3:[{d:"批判する",f:"批判された",ex:"彼の意見は批判された。（Su opinión fue criticada）"},
+        {d:"来る",f:"来られる",ex:"夜中に友達に来られて困った。（Me molestó que un amigo viniera de madrugada）"}] },
+  causative:{ name:"Forma causativa (使役形)",
+    rule:"Toma el verbo en diccionario. Grupo 1: cambia -u por -a y añade せる. Grupo 2: quita る y añade させる. Irregulares: する→させる, 来る→来させる.",
+    g1:[{d:"書く",f:"書かせる",ex:"生徒に漢字を書かせる。（Hago que el alumno escriba kanji）"},
+        {d:"待つ",f:"待たせる",ex:"彼を待たせてしまった。（Le hice esperar）"},
+        {d:"飲む",f:"飲ませる",ex:"子供に薬を飲ませる。（Hago que el niño tome la medicina）"}],
+    g2:[{d:"食べる",f:"食べさせる",ex:"野菜を食べさせる。（Hago que coma verduras）"},
+        {d:"やめる",f:"やめさせる",ex:"仕事をやめさせる。（Hago que deje el trabajo）"},
+        {d:"起きる",f:"起きさせる",ex:"子供を起きさせる。（Hago que el niño se levante）"}],
+    g3:[{d:"する",f:"させる",ex:"彼に勉強させる。（Hago que él estudie）"},
+        {d:"来る",f:"来させる",ex:"彼を来させる。（Hago que él venga）"}] },
+  imperative:{ name:"Forma imperativa (命令形)",
+    rule:"Toma el verbo en diccionario. Grupo 1: cambia -u por -e. Grupo 2: quita る y añade ろ. Irregulares: する→しろ, 来る→来い.",
+    g1:[{d:"行く",f:"行け",ex:"早く行け！（¡Ve rápido!）"},
+        {d:"待つ",f:"待て",ex:"待て！（¡Espera!）"},
+        {d:"読む",f:"読め",ex:"もっと読め。（Lee más）"}],
+    g2:[{d:"食べる",f:"食べろ",ex:"野菜を食べろ。（¡Come verduras!）"},
+        {d:"見る",f:"見ろ",ex:"こっちを見ろ。（¡Mira aquí!）"},
+        {d:"起きる",f:"起きろ",ex:"早く起きろ！（¡Levántate rápido!）"}],
+    g3:[{d:"する",f:"しろ",ex:"勉強しろ。（¡Estudia!）"},
+        {d:"来る",f:"来い",ex:"こっちに来い。（¡Ven aquí!）"}] },
+  ba:{ name:"Forma condicional ば",
+    rule:"Toma el verbo en diccionario. Grupo 1: cambia -u por -e y añade ば. Grupo 2: quita る y añade れば. Irregulares: する→すれば, 来る→来れば.",
+    g1:[{d:"行く",f:"行けば",ex:"早く行けば間に合う。（Si vas rápido, llegarás a tiempo）"},
+        {d:"話す",f:"話せば",ex:"よく話せば分かる。（Si hablas bien, se entiende）"},
+        {d:"読む",f:"読めば",ex:"読めば分かる。（Si lo lees, lo entenderás）"}],
+    g2:[{d:"食べる",f:"食べれば",ex:"野菜を食べれば健康になる。（Si comes verduras, te vuelves sano）"},
+        {d:"見る",f:"見れば",ex:"見れば分かる。（Si lo ves, lo entenderás）"},
+        {d:"起きる",f:"起きれば",ex:"早く起きれば間に合う。（Si te levantas temprano, llegarás a tiempo）"}],
+    g3:[{d:"する",f:"すれば",ex:"努力すれば成功する。（Si te esfuerzas, tendrás éxito）"},
+        {d:"来る",f:"来れば",ex:"彼が来れば話す。（Si él viene, hablaré）"}] },
+  tara:{ name:"Forma たら (pasado + ら)",
+    rule:"Se forma igual que el pasado informal (forma た), añadiendo ら al final; sigue las mismas reglas de sonido que la forma て (買う→買った→買ったら).",
+    g1:[{d:"買う",f:"買ったら",ex:"お金があったら買う。（Si tuviera dinero, lo compraría）"},
+        {d:"飲む",f:"飲んだら",ex:"薬を飲んだら治った。（Cuando tomé la medicina, me curé）"},
+        {d:"話す",f:"話したら",ex:"彼に話したら驚いた。（Cuando se lo dije, se sorprendió）"}],
+    g2:[{d:"食べる",f:"食べたら",ex:"食べたら歯を磨く。（Después de comer, me lavo los dientes）"},
+        {d:"見る",f:"見たら",ex:"見たら分かる。（Si lo ves, lo entenderás）"},
+        {d:"起きる",f:"起きたら",ex:"起きたら電話して。（Cuando te levantes, llámame）"}],
+    g3:[{d:"する",f:"したら",ex:"勉強したら休もう。（Cuando termine de estudiar, descansaré）"},
+        {d:"来る",f:"来たら",ex:"彼が来たら教えて。（Cuando él venga, avísame）"}] }
+};
+function conjRowsHTML(list){
+  return list.map(function(e){
+    return '<div class="conj-row"><span class="conj-dict">'+e.d+'</span><span class="conj-arrow">→</span>'+
+           '<span class="conj-form">'+e.f+'</span><span class="conj-ex">'+e.ex+'</span></div>';
+  }).join('');
+}
+function conjTableHTML(key){
+  var t=CONJ_TABLES[key]; if(!t) return '';
+  return '<div class="gconj"><div class="gconj-title">Cómo se forma: '+t.name+'</div>'+
+         '<div class="gconj-rule">'+t.rule+'</div>'+
+         '<div class="gconj-group"><b>Grupo 1 (godan)</b>'+conjRowsHTML(t.g1)+'</div>'+
+         '<div class="gconj-group"><b>Grupo 2 (ichidan)</b>'+conjRowsHTML(t.g2)+'</div>'+
+         '<div class="gconj-group"><b>Irregulares</b>'+conjRowsHTML(t.g3)+'</div>'+
+         '</div>';
+}
+
 /* ===== QUIZ / EJERCICIOS ===== */
 var qCurrent=null, qAnswered=false;
 function norm(s){ return (s||"").toString().trim().replace(/\s+/g,"").replace(/。/g,""); }
@@ -1370,12 +1503,31 @@ function buildVocabQ(item, sub){
     return {mode:"choice", sentence:d.ej.replace(d.w,"（　　）"), sub:d.ejt, prompt:"Elige la palabra para el hueco:", answer:d.w, options:opt4(d.w, distractField("vocab","w",d.w,3)), item:item};
   return {mode:"choice", stem:d.w, prompt:"¿Qué significa?", answer:d.mean, options:opt4(d.mean, distractField("vocab","mean",d.mean,3)), item:item};
 }
+/* Núcleo del patrón sin 〜 ni aclaraciones entre paréntesis, p.ej. "〜からすれば" -> "からすれば" */
+function grammarCore(pat){
+  return (pat||"").replace(/^〜/,"").replace(/[（(].*?[）)]/g,"").trim();
+}
+/* Intenta blanquear el fragmento de la estructura dentro del ejemplo real (cloze).
+   Solo funciona cuando el núcleo del patrón aparece literalmente en la frase (construcciones
+   que no cambian de forma al conjugarse, p.ej. partículas y conectores). Si no se puede,
+   se devuelve null y la pregunta cae de forma natural a mostrar la frase completa. */
+function grammarBlank(d){
+  var core=grammarCore(d.pat);
+  if(core && d.ej && d.ej.indexOf(core)>=0) return d.ej.replace(core, "（　　）");
+  return null;
+}
 function buildGrammarQ(item, sub){
   var d=item.d;
-  if(sub==="ctx")
+  if(sub==="ctx"){
+    var blanked=grammarBlank(d);
+    if(blanked)
+      return {mode:"choice", sentence:blanked, sub:d.ejt, prompt:"Elige la estructura que completa el hueco:", answer:d.pat, options:opt4(d.pat, distractField("grammar","pat",d.pat,3)), item:item};
     return {mode:"choice", sentence:d.ej, sub:d.ejt, prompt:"¿Qué estructura gramatical se usa aquí?", answer:d.pat, options:opt4(d.pat, distractField("grammar","pat",d.pat,3)), item:item};
+  }
   if(sub==="form")
     return {mode:"choice", sentence:d.ejt, prompt:"¿Con qué estructura se diría en japonés?", answer:d.pat, options:opt4(d.pat, distractField("grammar","pat",d.pat,3)), item:item};
+  if(sub==="es2ja")
+    return {mode:"choice", sentence:d.ejt, prompt:"Elige la traducción completa correcta al japonés:", answer:d.ej, options:opt4(d.ej, distractField("grammar","ej",d.ej,3)), item:item};
   return {mode:"choice", stem:d.pat, prompt:"¿Qué significa o cómo se usa?", answer:d.mean, options:opt4(d.mean, distractField("grammar","mean",d.mean,3)), item:item};
 }
 function makeQuestion(item){
@@ -1385,7 +1537,7 @@ function makeQuestion(item){
     if(sub==="mix" || apps.indexOf(sub)<0) sub=apps[Math.floor(Math.random()*apps.length)];
     return buildVocabQ(item, sub);
   }
-  var gsubs=["mean","ctx","form"], gs=selMode;
+  var gsubs=["mean","ctx","form","es2ja"], gs=selMode;
   if(gs==="mix" || gsubs.indexOf(gs)<0) gs=gsubs[Math.floor(Math.random()*gsubs.length)];
   return buildGrammarQ(item, gs);
 }
@@ -1415,7 +1567,10 @@ function nextQuestion(){
   if(qCurrent.mode==="choice"){
     document.getElementById("qTypeWrap").style.display="none";
     var box=document.getElementById("qChoices"); box.style.display="grid";
-    var html=""; qCurrent.options.forEach(function(opt){ html+='<button class="qopt">'+opt+'</button>'; });
+    var html=""; qCurrent.options.forEach(function(opt){
+      var small = opt.length>16 ? ' style="font-size:13px; line-height:1.4;"' : '';
+      html+='<button class="qopt"'+small+'>'+opt+'</button>';
+    });
     box.innerHTML=html;
     box.querySelectorAll(".qopt").forEach(function(b){ b.addEventListener("click", function(){ if(!qAnswered) checkChoice(b); }); });
   } else {
