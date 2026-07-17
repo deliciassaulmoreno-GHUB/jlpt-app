@@ -326,6 +326,29 @@
   .example .rd{display:block; color:var(--faint); font-size:12px; margin-top:2px;}
   .example .tr{display:block; font-family:var(--ui); font-size:12.5px; color:var(--muted); margin-top:3px;}
 
+  /* ===== Matices de verbos ===== */
+  .tp-title{font-size:20px; font-weight:700; color:var(--ink); line-height:1.3;}
+  .tp-sub{margin-top:4px; font-size:13px; color:var(--muted);}
+  .tp-intro{margin-top:13px; background:var(--card); border-radius:14px; padding:14px 16px; font-size:13.5px; line-height:1.6; color:var(--ink-2); box-shadow:var(--shadow);}
+  .tp-row{margin-top:11px; background:var(--card); border-radius:14px; padding:13px 15px; box-shadow:var(--shadow);}
+  .tp-rtop{display:flex; align-items:center; gap:8px; flex-wrap:wrap;}
+  .tp-tag{font-family:var(--jp); font-size:11px; font-weight:700; color:var(--indigo); background:rgba(39,64,127,.09); border-radius:6px; padding:3px 7px; white-space:nowrap;}
+  .tp-lbl{font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.3px;}
+  .tp-jp{margin-top:8px; font-family:var(--jp); font-size:19px; font-weight:600; color:var(--ink); line-height:1.4;}
+  .tp-rd{font-family:var(--jp); font-size:12px; color:var(--faint); margin-top:1px;}
+  .tp-when{margin-top:7px; font-size:12.5px; line-height:1.55; color:var(--ink-2);}
+  .tp-ex{margin-top:9px; border-top:1px solid var(--line); padding-top:9px; display:flex; align-items:flex-start; gap:9px;}
+  .tp-exl{flex:1;}
+  .tp-ejp{font-family:var(--jp); font-size:14.5px; color:var(--ink); line-height:1.5;}
+  .tp-erd{font-family:var(--jp); font-size:11.5px; color:var(--faint); margin-top:2px;}
+  .tp-ees{font-size:12px; color:var(--muted); margin-top:3px;}
+  .tp-spk{flex:none; width:32px; height:32px; border:none; border-radius:50%; background:rgba(39,64,127,.07); color:var(--indigo); font-size:14px; cursor:pointer;}
+  .tp-spk:active{transform:scale(.92);}
+  .tp-note{margin-top:12px; background:rgba(201,138,46,.09); border-radius:14px; padding:12px 15px; font-size:12.5px; line-height:1.55; color:var(--ink-2);}
+  .tp-note b{color:var(--amber);}
+  .tp-err{margin-top:11px; background:rgba(176,65,62,.08); border-radius:14px; padding:12px 15px; font-size:12.5px; line-height:1.55; color:var(--ink-2);}
+  .tp-err b{color:#B0413E;}
+
   .actions{padding:14px 0 14px; flex-shrink:0;}
   .btn{width:100%; height:56px; border:none; border-radius:17px; background:var(--indigo); color:#fff;
     font-family:var(--ui); font-size:16.5px; font-weight:600; cursor:pointer;
@@ -510,6 +533,10 @@
     <div class="tile" id="tileConv">
       <div class="tile-ic g3">会</div>
       <div><div class="tile-name">Conversación</div><div class="tile-cnt">Prueba de micrófono</div></div>
+    </div>
+    <div class="tile wide" id="tileTips">
+      <div class="tile-ic g2">違</div>
+      <div><div class="tile-name">Matices de verbos</div><div class="tile-cnt" id="cnt-tips">Keigo · transitivos · sinónimos</div></div>
     </div>
     <div class="tile wide" id="tileExam">
       <div class="tile-ic g1">試</div>
@@ -697,6 +724,38 @@
   <div id="convStage"></div>
 </section>
 
+<!-- ===== MATICES DE VERBOS · categorías ===== -->
+<section class="view" id="tipsCats">
+  <div class="back-row">
+    <button class="back-btn" id="tipsCatsBack" aria-label="Volver">←</button>
+    <span class="eyebrow">Matices de verbos</span>
+  </div>
+  <div class="level-title">Matices de verbos</div>
+  <div class="level-help">Verbos que significan lo mismo pero no se usan igual: según a quién respetas, según si la acción ocurre sola o la provocas tú, o según el matiz exacto. Elige un bloque.</div>
+  <div id="tipsCatList"></div>
+</section>
+
+<!-- ===== MATICES DE VERBOS · lista de fichas ===== -->
+<section class="view" id="tipsList">
+  <div class="back-row">
+    <button class="back-btn" id="tipsListBack" aria-label="Volver">←</button>
+    <span class="eyebrow">Matices de verbos</span>
+  </div>
+  <div class="level-title" id="tipsListTitle">Fichas</div>
+  <div class="level-help" id="tipsListHelp"></div>
+  <div id="tipsListItems"></div>
+</section>
+
+<!-- ===== MATICES DE VERBOS · ficha ===== -->
+<section class="view" id="tipsView">
+  <div class="study-row">
+    <button class="close" id="tipsViewClose" aria-label="Cerrar">✕</button>
+    <div class="tagline" id="tipsViewTag" style="margin:0;">Matices</div>
+    <span style="width:38px;"></span>
+  </div>
+  <div class="rd-stage" id="tipsStage"></div>
+</section>
+
 <!-- ===== EXÁMENES · Mini examen por áreas del JLPT ===== -->
 <section class="view" id="exam">
   <div class="back-row">
@@ -789,6 +848,7 @@
 <script src="exams.js"></script>
 <script src="official.js"></script>
 <script src="scenarios.js"></script>
+<script src="tips.js"></script>
 <script>
 var C = window.CONTENT || {kanji:[],vocab:[],grammar:[]};
 var ITEMS = [];
@@ -927,7 +987,7 @@ function buildFocused(type, level){
 }
 
 function show(v){
-  ["menu","levels","modes","stats","study","quiz","doneView","emptyView","readLevels","readList","reader","writer","conv","exam","kficha"].forEach(function(x){
+  ["menu","levels","modes","stats","study","quiz","doneView","emptyView","readLevels","readList","reader","writer","conv","exam","kficha","tipsCats","tipsList","tipsView"].forEach(function(x){
     var el=document.getElementById(x);
     var was=el.classList.contains("active");
     el.classList.toggle("active", x===v);
@@ -970,6 +1030,13 @@ function renderMenu(){
 
   var s=computeStreak();
   document.getElementById("streakNum").textContent = s>0 ? (s+(s===1?" día":" días")) : "Empieza hoy";
+  var tps=tipsData();
+  if(tps.length){
+    var tdone=tps.filter(function(t){ return isDone("tip:"+t.id); }).length;
+    document.getElementById("cnt-tips").textContent = tdone
+      ? (tdone+" de "+tps.length+" fichas vistas")
+      : (tps.length+" fichas · keigo, transitivos, matices");
+  }
   document.getElementById("menuNote").textContent="";
 }
 
@@ -1337,6 +1404,81 @@ function speak(t){
     var pr=a.play();
     if(pr && pr.catch) pr.catch(fb);
   }catch(e){ fb(); }
+}
+
+/* ===== MATICES DE VERBOS ===== */
+var TIPS = window.TIPS || [];
+var tipsCat = null;
+var TIP_CATS = [
+  {id:"keigo",      ic:"敬", name:"Registros de cortesía (敬語)", desc:"El mismo verbo en informal, -masu, sonkeigo y kenjougo"},
+  {id:"jita",       ic:"他", name:"Transitivos e intransitivos", desc:"が pasa solo · を lo hago yo"},
+  {id:"tsukaiwake", ic:"違", name:"Matices de uso (使い分け)",   desc:"Sinónimos que no son intercambiables"}
+];
+function tipsData(){ return window.TIPS || []; }
+function openTipsCats(){
+  var all=tipsData(), html="";
+  if(!all.length){ html='<div class="level-help">Falta el archivo tips.js.</div>'; }
+  TIP_CATS.forEach(function(c){
+    var n=all.filter(function(t){ return t.cat===c.id; }).length;
+    if(!n) return;
+    var done=all.filter(function(t){ return t.cat===c.id && isDone("tip:"+t.id); }).length;
+    html+='<button class="level-btn" data-tcat="'+c.id+'">'+
+      '<div class="level-l"><div class="level-tag all">'+c.ic+'</div>'+
+      '<div class="level-meta"><div class="lt">'+c.name+(done===n?'<span class="done-badge" aria-label="Completado">✓</span>':'')+'</div>'+
+      '<div class="ls">'+c.desc+' · '+n+' fichas'+(done?' · '+done+'/'+n+' vistas':'')+'</div></div></div>'+
+      '<span class="level-arrow">›</span></button>';
+  });
+  document.getElementById("tipsCatList").innerHTML=html;
+  document.querySelectorAll("#tipsCatList .level-btn").forEach(function(b){
+    b.addEventListener("click", function(){ showTipsList(b.getAttribute("data-tcat")); });
+  });
+  show("tipsCats");
+}
+function showTipsList(cat){
+  tipsCat=cat;
+  var c=null; TIP_CATS.forEach(function(x){ if(x.id===cat) c=x; });
+  var ts=tipsData().filter(function(t){ return t.cat===cat; }), html="";
+  document.getElementById("tipsListTitle").textContent=c?c.name:"Fichas";
+  document.getElementById("tipsListHelp").textContent=c?c.desc:"";
+  ts.forEach(function(t){
+    html+='<button class="level-btn" data-tid="'+t.id+'">'+
+      '<div class="level-l"><div class="level-tag">'+t.lvl+'</div>'+
+      '<div class="level-meta"><div class="lt">'+t.title+doneBadge("tip:"+t.id)+'</div>'+
+      '<div class="ls">'+t.sub+'</div></div></div>'+
+      '<span class="level-arrow">›</span></button>';
+  });
+  document.getElementById("tipsListItems").innerHTML=html;
+  document.querySelectorAll("#tipsListItems .level-btn").forEach(function(b){
+    b.addEventListener("click", function(){ openTip(b.getAttribute("data-tid")); });
+  });
+  show("tipsList");
+}
+function openTip(id){
+  var t=null, all=tipsData();
+  for(var i=0;i<all.length;i++){ if(all[i].id===id){ t=all[i]; break; } }
+  if(!t) return;
+  document.getElementById("tipsViewTag").textContent="Matices · "+t.lvl;
+  var h='<div class="tp-title">'+t.title+'</div><div class="tp-sub">'+t.sub+'</div>'+
+        '<div class="tp-intro">'+t.intro+'</div>';
+  t.rows.forEach(function(r){
+    h+='<div class="tp-row"><div class="tp-rtop"><span class="tp-tag">'+r.tag+'</span>'+
+       '<span class="tp-lbl">'+r.lbl+'</span></div>'+
+       '<div class="tp-jp">'+r.jp+'</div>'+
+       (r.rd && r.rd!==r.jp ? '<div class="tp-rd">'+r.rd+'</div>' : '')+
+       '<div class="tp-when">'+r.when+'</div>'+
+       '<div class="tp-ex"><div class="tp-exl"><div class="tp-ejp">'+r.ex+'</div>'+
+       (r.exr? '<div class="tp-erd">'+r.exr+'</div>' : '')+
+       '<div class="tp-ees">'+r.ext+'</div></div>'+
+       '<button class="tp-spk" data-say="'+escAttr(r.ex)+'" aria-label="Escuchar">🔊</button></div></div>';
+  });
+  h+='<div class="tp-note"><b>Detalle:</b> '+t.note+'</div>'+
+     '<div class="tp-err"><b>Error común:</b> '+t.err+'</div>';
+  document.getElementById("tipsStage").innerHTML=h;
+  document.querySelectorAll("#tipsStage .tp-spk").forEach(function(b){
+    b.addEventListener("click", function(){ speak(b.getAttribute("data-say")); });
+  });
+  markDone("tip:"+t.id);
+  show("tipsView");
 }
 
 /* ===== TABLAS DE CONJUGACIÓN COMPARTIDAS (para tarjetas de repaso de gramática) =====
@@ -2381,6 +2523,10 @@ document.getElementById("tileRead").addEventListener("click", openReadingLevels)
 document.getElementById("tileListen").addEventListener("click", openListeningLevels);
 document.getElementById("tileConv").addEventListener("click", openConv);
 document.getElementById("tileExam").addEventListener("click", openExamLevels);
+document.getElementById("tileTips").addEventListener("click", openTipsCats);
+document.getElementById("tipsCatsBack").addEventListener("click", function(){ show("menu"); renderMenu(); });
+document.getElementById("tipsListBack").addEventListener("click", openTipsCats);
+document.getElementById("tipsViewClose").addEventListener("click", function(){ showTipsList(tipsCat); });
 document.getElementById("examBack").addEventListener("click", examGoBack);
 document.getElementById("convBack").addEventListener("click", function(){
   if(convView==="chat"){ convScenarios(convScenario ? convScenario.lvl : "N5"); }
@@ -2468,6 +2614,9 @@ function goBack(){
       else { show("menu"); renderMenu(); }
       break;
     case "exam":       examGoBack(); break;
+    case "tipsView":   showTipsList(tipsCat); break;
+    case "tipsList":   openTipsCats(); break;
+    case "tipsCats":   show("menu"); renderMenu(); break;
     case "kficha":     showModes(selType||"kanji", selLevel||"all"); break;
     case "readLevels":
     case "levels":
