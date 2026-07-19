@@ -238,18 +238,18 @@
   .kp-toggle:active{background:var(--line-2);}
   .kp-count{font-size:12.5px; font-weight:600; color:var(--muted); font-variant-numeric:tabular-nums;}
   .kp-grid{flex:1; overflow-y:auto; overscroll-behavior:contain; min-height:0;
-    display:grid; grid-template-columns:repeat(3,1fr); gap:9px; padding-bottom:16px; align-content:start;}
-  .kp-cell{background:var(--card); border:1.5px solid var(--line); border-radius:15px; padding:9px 5px 8px;
+    display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:6px; padding-bottom:16px; align-content:start;}
+  .kp-cell{background:var(--card); border:1.5px solid var(--line); border-radius:12px; padding:6px 3px 5px; min-width:0;
     display:flex; flex-direction:column; align-items:center; text-align:center; cursor:pointer; position:relative;
     transition:transform .1s ease, border-color .15s ease, background .15s ease;}
   .kp-cell:active{transform:scale(.96);}
   .kp-cell.picked{border-color:var(--indigo); background:rgba(39,64,127,.08);}
-  .kp-cell .kp-glyph{font-family:var(--jp); font-size:26px; font-weight:600; color:var(--ink); line-height:1.1;}
+  .kp-cell .kp-glyph{font-family:var(--jp); font-size:22px; font-weight:600; color:var(--ink); line-height:1.1;}
   .kp-cell.picked .kp-glyph{color:var(--indigo);}
-  .kp-cell .kp-rd{font-family:var(--jp); font-size:9.5px; color:var(--faint); margin-top:3px; line-height:1.35; max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
-  .kp-cell .kp-mean{font-size:9.5px; color:var(--muted); margin-top:2px; line-height:1.3; max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
-  .kp-cell .kp-check{position:absolute; top:5px; right:5px; width:15px; height:15px; border-radius:50%;
-    background:var(--indigo); color:#fff; font-size:9px; font-weight:800; display:none; align-items:center; justify-content:center;}
+  .kp-cell .kp-rd{width:100%; font-family:var(--jp); font-size:9px; color:var(--faint); margin-top:2px; line-height:1.3; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .kp-cell .kp-mean{width:100%; font-size:9px; color:var(--muted); margin-top:1px; line-height:1.25; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .kp-cell .kp-check{position:absolute; top:4px; right:4px; width:13px; height:13px; border-radius:50%;
+    background:var(--indigo); color:#fff; font-size:8px; font-weight:800; display:none; align-items:center; justify-content:center;}
   .kp-cell.picked .kp-check{display:flex;}
   .kp-footer{flex-shrink:0; padding:12px 0 16px;}
   .kp-footer .btn:disabled{opacity:.4; cursor:default;}
@@ -1217,9 +1217,11 @@ function kpToggleAll(){
 function startKanjiCarta(){
   var picked=Object.keys(kpPicked).map(function(s){ return parseInt(s,10); });
   if(!picked.length) return;
-  picked=shuffle(picked);
-  lastSession={focused:true, type:"kanji", level:kpLevel, mode:"carta", picked:picked.map(function(i){ return ITEMS[i].d.c; })};
-  beginQuiz({queue:picked, reviews:0, news:picked.length});
+  kfList=shuffle(picked);
+  selType="kanji"; selLevel=kpLevel;
+  lastSession={focused:false, carta:true, picked:kfList.map(function(i){ return ITEMS[i].d.c; })};
+  kfIdx=0;
+  show("kficha"); showKanjiCard();
 }
 function levelBtnHTML(level, label, c, isAll){
   var dueTxt = c.due>0 ? "<span class='rep'>"+c.due+" repasos</span> · " : "";
@@ -2683,11 +2685,12 @@ document.getElementById("kpStart").addEventListener("click", startKanjiCarta);
 document.getElementById("closeBtn").addEventListener("click", function(){ show("menu"); renderMenu(); });
 document.getElementById("doneBack").addEventListener("click", function(){ show("menu"); renderMenu(); });
 document.getElementById("doneAgain").addEventListener("click", function(){
-  if(lastSession && lastSession.mode==="carta"){
+  if(lastSession && lastSession.carta){
     var byChar={}; lastSession.picked.forEach(function(c){ byChar[c]=true; });
     var q=[];
     for(var i=0;i<ITEMS.length;i++){ if(ITEMS[i].type==="kanji" && byChar[ITEMS[i].d.c]){ q.push(i); } }
-    beginQuiz({queue:shuffle(q), reviews:0, news:q.length});
+    kfList=shuffle(q); kfIdx=0;
+    show("kficha"); showKanjiCard();
   }
   else if(lastSession && lastSession.focused){ selMode=lastSession.mode; startFocused(lastSession.type, lastSession.level); }
   else { startRecommended(); }
