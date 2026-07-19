@@ -249,7 +249,8 @@
 
   /* ===== QUIZ ===== */
   #quiz{padding:6px 22px 0;}
-  .qstage{flex:1; overflow-y:auto; overscroll-behavior:contain; display:flex; flex-direction:column; align-items:center; padding:4px 0 0; min-height:0;}
+  .qstage{flex:1; overflow-y:auto; overscroll-behavior:contain; display:flex; flex-direction:column; align-items:center; padding:4px 0 20px; min-height:0;}
+  .qstage > *{flex-shrink:0;}
   .qstem-box{margin-top:12px; min-width:150px; min-height:120px; padding:14px 22px; background:var(--card); border-radius:24px; box-shadow:var(--shadow);
     display:flex; align-items:center; justify-content:center; flex-shrink:0;}
   .qstem-box .kanji-glyph{font-size:64px;}
@@ -289,7 +290,8 @@
     background:var(--card); color:var(--ink-2); font-size:12px; font-weight:600; cursor:pointer;}
   .peek-btn:active{background:var(--line-2);}
 
-  .stage{flex:1; overflow-y:auto; overscroll-behavior:contain; display:flex; flex-direction:column; align-items:center; padding:4px 0 0; min-height:0;}
+  .stage{flex:1; overflow-y:auto; overscroll-behavior:contain; display:flex; flex-direction:column; align-items:center; padding:4px 0 20px; min-height:0;}
+  .stage > *{flex-shrink:0;}
   .kanji-box{margin-top:14px; width:200px; height:200px; background:var(--card); border-radius:28px; box-shadow:var(--shadow);
     position:relative; display:flex; align-items:center; justify-content:center; flex-shrink:0;}
   .kanji-box::before{content:""; position:absolute; left:50%; top:24px; bottom:24px; width:1px; background:var(--line-2); transform:translateX(-.5px);}
@@ -430,6 +432,7 @@
   #writer{padding:6px 22px 0;}
   .wprog{margin-left:auto; font-size:13px; font-weight:700; color:var(--muted);}
   .w-stage{flex:1; overflow-y:auto; overscroll-behavior:contain; min-height:0; display:flex; flex-direction:column; align-items:center; padding-top:6px;}
+  .w-stage > *{flex-shrink:0;}
   .hw-box{position:relative; width:280px; height:280px; max-width:80vw; max-height:80vw; margin:8px auto 4px;
     border:1.5px solid var(--line); border-radius:20px; background:var(--card); overflow:hidden;}
   #hwTarget{position:absolute; inset:0; display:flex; align-items:center; justify-content:center;}
