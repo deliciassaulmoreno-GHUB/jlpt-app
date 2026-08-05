@@ -629,13 +629,13 @@
       <div class="tile-ic g3">会</div>
       <div><div class="tile-name">Conversación</div><div class="tile-cnt">Prueba de micrófono</div></div>
     </div>
-    <div class="tile wide" id="tileFav">
+    <div class="tile" id="tileFav">
       <div class="tile-ic g3">★</div>
       <div><div class="tile-name">Favoritos</div><div class="tile-cnt" id="cnt-fav">Tus tarjetas marcadas</div></div>
     </div>
-    <div class="tile wide" id="tileTips">
+    <div class="tile" id="tileTips">
       <div class="tile-ic g2">違</div>
-      <div><div class="tile-name">Matices de verbos</div><div class="tile-cnt" id="cnt-tips">Keigo · transitivos · sinónimos</div></div>
+      <div><div class="tile-name">Matices de verbos</div><div class="tile-cnt" id="cnt-tips">Keigo · transitivos</div></div>
     </div>
     <div class="tile wide" id="tileExam">
       <div class="tile-ic g1">試</div>
@@ -1247,13 +1247,13 @@ function renderMenu(){
   if(tps.length){
     var tdone=tps.filter(function(t){ return isDone("tip:"+t.id); }).length;
     document.getElementById("cnt-tips").textContent = tdone
-      ? (tdone+" de "+tps.length+" fichas vistas")
-      : (tps.length+" fichas · keigo, transitivos, matices");
+      ? (tdone+" de "+tps.length+" vistas")
+      : (tps.length+" fichas · keigo");
   }
   var nf=favCount();
   document.getElementById("cnt-fav").textContent = nf
-    ? (nf+(nf===1?" tarjeta guardada":" tarjetas guardadas"))
-    : "Tus tarjetas marcadas con ★";
+    ? (nf+(nf===1?" tarjeta ★":" tarjetas ★"))
+    : "Tus tarjetas ★";
   document.getElementById("menuNote").textContent="";
 }
 
