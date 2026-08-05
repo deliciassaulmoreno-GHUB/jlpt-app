@@ -310,6 +310,71 @@
   .progress > span{display:block; height:100%; background:var(--indigo); border-radius:3px; width:0%; transition:width .3s ease;}
   .count{font-size:13px; font-weight:600; color:var(--muted); font-variant-numeric:tabular-nums;}
   .tagline{margin-top:11px; font-size:11px; font-weight:700; letter-spacing:1.3px; text-transform:uppercase; color:var(--indigo-bright);}
+
+  /* ===== Favoritos (estrella) ===== */
+  .tag-row{display:flex; align-items:center; justify-content:space-between; gap:10px;}
+  .fav-star{flex:none; background:none; border:none; cursor:pointer; padding:4px 6px; font-size:21px;
+    line-height:1; color:var(--line); transition:transform .15s ease, color .15s ease;}
+  .fav-star.on{color:#E0A93B;}
+  .fav-star:active{transform:scale(1.25);}
+  .fav-sec{margin-top:18px; font-size:11px; font-weight:700; letter-spacing:1.2px; color:var(--faint); text-transform:uppercase;}
+  .fav-sec:first-of-type{margin-top:4px;}
+  .fav-row{display:flex; align-items:center; gap:12px; background:var(--card); border:1.5px solid var(--line);
+    border-radius:16px; padding:12px 14px; margin-top:8px; cursor:pointer; text-align:left; width:100%;}
+  .fav-row:active{transform:scale(.985);}
+  .fav-face{font-family:var(--jp); font-size:20px; font-weight:600; color:var(--ink); flex:none; max-width:42%;
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .fav-meta{flex:1; min-width:0;}
+  .fav-mean{font-size:12.5px; color:var(--ink-2); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .fav-lvl{font-size:10.5px; color:var(--faint); margin-top:2px; letter-spacing:.5px;}
+  .fav-x{flex:none; background:none; border:none; color:var(--faint); font-size:17px; cursor:pointer; padding:2px 4px;}
+  .fav-go{margin-top:9px; width:100%;}
+  .fav-empty{font-size:12.5px; color:var(--muted); margin-top:16px; line-height:1.6;}
+
+  /* ===== Enlace a otra gramática desde "Error común" ===== */
+  .glink{font-family:var(--jp); font-size:12.5px; font-weight:700; color:var(--indigo-bright); background:rgba(59,95,196,.10);
+    border:none; border-radius:6px; padding:1px 5px; cursor:pointer;}
+  .glink:active{background:rgba(59,95,196,.2);}
+  .gref-modal{position:fixed; inset:0; background:rgba(12,18,35,.5); z-index:62; display:none; align-items:flex-end; justify-content:center;}
+  .gref-modal.show{display:flex;}
+  .gref-box{background:var(--paper); width:100%; max-width:520px; max-height:86vh; border-radius:22px 22px 0 0;
+    padding:16px 20px 24px; display:flex; flex-direction:column; min-height:0;}
+  .gref-head{display:flex; align-items:flex-start; justify-content:space-between; gap:12px; flex-shrink:0;}
+  .gref-pat{font-family:var(--jp); font-size:21px; font-weight:700; color:var(--ink); line-height:1.3;}
+  .gref-lvl{font-size:11px; font-weight:700; letter-spacing:1.2px; color:var(--faint); text-transform:uppercase; margin-top:2px;}
+  .gref-acts{display:flex; align-items:center; gap:4px; flex:none;}
+  .gref-body{overflow-y:auto; overscroll-behavior:contain; min-height:0; margin-top:6px; padding-bottom:6px;}
+  .gref-body > *{flex-shrink:0;}
+
+  /* ===== Celebración de racha ===== */
+  .celebrate{position:fixed; inset:0; z-index:70; display:none; align-items:center; justify-content:center;
+    background:linear-gradient(160deg, rgba(39,64,127,.96), rgba(20,30,60,.97)); overflow:hidden;}
+  .celebrate.show{display:flex; animation:celIn .35s ease;}
+  @keyframes celIn{from{opacity:0;} to{opacity:1;}}
+  .cel-inner{position:relative; z-index:2; text-align:center; padding:24px; animation:celPop .5s cubic-bezier(.2,1.2,.4,1);}
+  @keyframes celPop{from{transform:scale(.7); opacity:0;} to{transform:scale(1); opacity:1;}}
+  .cel-badge{width:96px; height:96px; margin:0 auto; border-radius:50%; background:rgba(255,255,255,.14);
+    border:2.5px solid #E0A93B; color:#fff; font-size:40px; font-weight:800; display:flex; align-items:center; justify-content:center;
+    animation:celPulse 1.6s ease-in-out infinite;}
+  @keyframes celPulse{0%,100%{transform:scale(1);} 50%{transform:scale(1.07);}}
+  .cel-days{margin-top:10px; font-size:12px; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:rgba(255,255,255,.7);}
+  .cel-jp{margin-top:20px; font-family:var(--jp); font-size:34px; font-weight:700; color:#fff; line-height:1.25;}
+  .cel-ro{margin-top:4px; font-size:13px; color:rgba(255,255,255,.75);}
+  .cel-jp2{margin-top:16px; font-family:var(--jp); font-size:27px; font-weight:700; color:#E0A93B; line-height:1.25;}
+  .cel-ro2{margin-top:4px; font-size:12.5px; color:rgba(255,255,255,.6);}
+  .celebrate .btn{margin-top:26px; font-family:var(--jp); background:#fff; color:var(--indigo);}
+  .cel-confetti{position:absolute; inset:0; z-index:1; pointer-events:none;}
+  .cel-p{position:absolute; top:-24px; width:9px; height:14px; border-radius:2px; opacity:.9;
+    animation:celFall linear forwards;}
+  @keyframes celFall{
+    0%{transform:translateY(-10vh) rotate(0deg); opacity:0;}
+    10%{opacity:.95;}
+    100%{transform:translateY(108vh) rotate(620deg); opacity:.85;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .cel-confetti{display:none;}
+    .cel-inner, .celebrate.show, .cel-badge{animation:none;}
+  }
   .peek-btn{align-self:center; margin-top:6px; padding:6px 14px; border-radius:20px; border:1.5px solid var(--line);
     background:var(--card); color:var(--ink-2); font-size:12px; font-weight:600; cursor:pointer;}
   .peek-btn:active{background:var(--line-2);}
@@ -421,6 +486,9 @@
   .rd-para{margin:0 0 16px;}
   .rd-jp{font-family:var(--jp); font-size:19px; line-height:1.95; color:var(--ink);}
   .rd-jp .rw{color:var(--indigo-bright); border-bottom:1.5px dotted var(--indigo-bright); cursor:pointer;}
+  .rd-jp ruby{ruby-align:center;}
+  .rd-jp rt{font-family:var(--jp); font-size:9.5px; font-weight:600; color:var(--indigo-bright); line-height:1; letter-spacing:0;}
+  .rd-jp .rw-adv{border-bottom-style:solid;}
   .rd-fu{font-family:var(--jp); font-size:13.5px; line-height:1.7; color:var(--muted); margin-top:5px; display:none;}
   .rd-es{font-size:13.5px; line-height:1.6; color:var(--ink-2); margin-top:6px; padding-left:10px; border-left:2.5px solid var(--line); display:none;}
   #reader.show-fu .rd-fu{display:block;} #reader.show-es .rd-es{display:block;}
@@ -561,6 +629,10 @@
       <div class="tile-ic g3">会</div>
       <div><div class="tile-name">Conversación</div><div class="tile-cnt">Prueba de micrófono</div></div>
     </div>
+    <div class="tile wide" id="tileFav">
+      <div class="tile-ic g3">★</div>
+      <div><div class="tile-name">Favoritos</div><div class="tile-cnt" id="cnt-fav">Tus tarjetas marcadas</div></div>
+    </div>
     <div class="tile wide" id="tileTips">
       <div class="tile-ic g2">違</div>
       <div><div class="tile-name">Matices de verbos</div><div class="tile-cnt" id="cnt-tips">Keigo · transitivos · sinónimos</div></div>
@@ -649,7 +721,10 @@
     <div class="progress"><span id="progBar"></span></div>
     <span class="count" id="progCount">0 / 0</span>
   </div>
-  <div class="tagline" id="studyTag">Kanji</div>
+  <div class="tag-row">
+    <div class="tagline" id="studyTag">Kanji</div>
+    <button class="fav-star" id="studyStar" aria-label="Añadir a favoritos">★</button>
+  </div>
   <button class="peek-btn" id="peekBtn" style="display:none;">↺ Ver anterior</button>
   <div class="stage" id="stage">
     <div class="kanji-box"><span class="kanji-glyph" id="glyph">字</span></div>
@@ -796,7 +871,7 @@
   <div class="study-row">
     <button class="close" id="tipsViewClose" aria-label="Cerrar">✕</button>
     <div class="tagline" id="tipsViewTag" style="margin:0;">Matices</div>
-    <span style="width:38px;"></span>
+    <button class="fav-star" id="tipsStar" aria-label="Añadir a favoritos">★</button>
   </div>
   <div class="rd-stage" id="tipsStage"></div>
 </section>
@@ -838,6 +913,7 @@
   <div class="study-row">
     <button class="close" id="kfClose" aria-label="Cerrar">✕</button>
     <div class="tagline" id="kfTag" style="margin:0;">Ficha de kanji</div>
+    <button class="fav-star" id="kfStar" aria-label="Añadir a favoritos">★</button>
     <div class="wprog" id="kfProgress"></div>
   </div>
   <div id="kfStage"></div>
@@ -846,6 +922,48 @@
     <button class="btn" id="kfNext">Siguiente →</button>
   </div>
 </section>
+
+<!-- ===== FAVORITOS ===== -->
+<section class="view" id="favView">
+  <div class="back-row">
+    <button class="back-btn" id="favBack" aria-label="Volver">←</button>
+    <span class="eyebrow">Favoritos</span>
+  </div>
+  <div class="level-title">Tus favoritos</div>
+  <div class="level-help">Las tarjetas que marcaste con ★, agrupadas por tipo. Toca una para verla, o repasa la lista entera.</div>
+  <div id="favList"></div>
+</section>
+
+<!-- ===== MODAL: gramática referenciada desde un "error común" ===== -->
+<div class="gref-modal" id="grefModal">
+  <div class="gref-box">
+    <div class="gref-head">
+      <div>
+        <div class="gref-pat" id="grefTitle">〜</div>
+        <div class="gref-lvl" id="grefLvl"></div>
+      </div>
+      <div class="gref-acts">
+        <button class="fav-star" id="grefStar" aria-label="Añadir a favoritos">★</button>
+        <button class="df-x" id="grefClose" aria-label="Cerrar">✕</button>
+      </div>
+    </div>
+    <div class="gref-body" id="grefBody"></div>
+  </div>
+</div>
+
+<!-- ===== CELEBRACIÓN DE RACHA ===== -->
+<div class="celebrate" id="celebrate">
+  <div class="cel-confetti" id="celConfetti"></div>
+  <div class="cel-inner">
+    <div class="cel-badge" id="celBadge">7</div>
+    <div class="cel-days" id="celDays">días seguidos</div>
+    <div class="cel-jp">よくやった！</div>
+    <div class="cel-ro">Yoku yatta — ¡bien hecho!</div>
+    <div class="cel-jp2">頑張れ！</div>
+    <div class="cel-ro2">Ganbare — ¡sigue así!</div>
+    <button class="btn" id="celClose">続ける</button>
+  </div>
+</div>
 
 <!-- ===== CUENTA / SESIÓN EN LA NUBE ===== -->
 <div class="acct-modal" id="acctModal">
@@ -906,6 +1024,28 @@ var FOCUS_NEW_LIMIT = 12;
 var TYPE_LABEL = {kanji:"Kanji", vocab:"Vocabulario", grammar:"Gramática"};
 var TYPE_SHORT = {kanji:"Kanji", vocab:"Vocab", grammar:"Gram"};
 var LEVEL_ORDER = ["N5","N4","N3","N2","N1"];
+/* Rango de dificultad: N5=1 (más fácil) … N1=5 (más difícil).
+   Se usa para decidir qué palabras llevan furigana en un texto de un nivel dado. */
+var LEVEL_RANK = {N5:1, N4:2, N3:3, N2:4, N1:5};
+var VOCAB_RANK = null, KANJI_RANK = null;
+function buildRankMaps(){
+  if(VOCAB_RANK) return;
+  VOCAB_RANK={}; KANJI_RANK={};
+  (C.vocab||[]).forEach(function(v){
+    var r=LEVEL_RANK[v.lvl]||0;
+    if(!VOCAB_RANK[v.w] || r>VOCAB_RANK[v.w]) VOCAB_RANK[v.w]=r;
+  });
+  (C.kanji||[]).forEach(function(k){ KANJI_RANK[k.c]=LEVEL_RANK[k.lvl]||0; });
+}
+/* Dificultad de una palabra: la del vocabulario si está catalogada; si no,
+   la del kanji más difícil que contenga (así también cubre palabras no listadas). */
+function wordRank(w){
+  buildRankMaps();
+  if(VOCAB_RANK[w]) return VOCAB_RANK[w];
+  var max=0;
+  for(var i=0;i<w.length;i++){ var r=KANJI_RANK[w.charAt(i)]||0; if(r>max) max=r; }
+  return max;
+}
 
 var mem = {};
 function load(){ try{ var s=localStorage.getItem("jlpt-progress"); return s?JSON.parse(s):{}; }catch(e){ return mem.p||{}; } }
@@ -915,6 +1055,32 @@ function saveDone(d){ try{ localStorage.setItem("jlpt-done", JSON.stringify(d));
 var doneItems = loadDone();
 function markDone(id){ if(!id || doneItems[id]) return; doneItems[id]=Date.now(); saveDone(doneItems); }
 function isDone(id){ return !!(id && doneItems[id]); }
+
+/* ===== FAVORITOS =====
+   Se guardan por id de ítem ("k:字", "v:私", "g:〜ので", "t:keigo-iku"), así el
+   propio prefijo determina en qué lista aparece (kanji / vocabulario / gramática / matices). */
+function loadFavs(){ try{ var s=localStorage.getItem("jlpt-fav"); return s?JSON.parse(s):{}; }catch(e){ return {}; } }
+function saveFavs(f){ try{ localStorage.setItem("jlpt-fav", JSON.stringify(f)); }catch(e){} try{ cloudDirty(); }catch(e){} }
+var favItems = loadFavs();
+function isFav(id){ return !!(id && favItems[id]); }
+function toggleFav(id){
+  if(!id) return false;
+  if(favItems[id]){ delete favItems[id]; } else { favItems[id]=Date.now(); }
+  saveFavs(favItems);
+  return isFav(id);
+}
+function favCount(){ return Object.keys(favItems).length; }
+var FAV_CATS = [
+  {id:"k", ic:"字", name:"Kanji"},
+  {id:"v", ic:"語", name:"Vocabulario"},
+  {id:"g", ic:"文", name:"Gramática"},
+  {id:"t", ic:"違", name:"Matices de verbos"}
+];
+function favIdsOf(cat){
+  return Object.keys(favItems)
+    .filter(function(id){ return id.indexOf(cat+":")===0; })
+    .sort(function(a,b){ return favItems[b]-favItems[a]; });
+}
 function doneBadge(id){ return isDone(id) ? '<span class="done-badge" aria-label="Completado">✓</span>' : ''; }
 function getName(){ try{ return localStorage.getItem("jlpt-name")||""; }catch(e){ return mem.n||""; } }
 function setName(n){ try{ localStorage.setItem("jlpt-name", n); }catch(e){ mem.n=n; } }
@@ -1032,12 +1198,14 @@ function buildFocused(type, level){
 }
 
 function show(v){
-  ["menu","levels","modes","stats","study","quiz","doneView","emptyView","readLevels","readList","reader","writer","conv","exam","kficha","tipsCats","tipsList","tipsView","kanjiPicker"].forEach(function(x){
+  ["menu","levels","modes","stats","study","quiz","doneView","emptyView","readLevels","readList","reader","writer","conv","exam","kficha","tipsCats","tipsList","tipsView","kanjiPicker","favView"].forEach(function(x){
     var el=document.getElementById(x);
     var was=el.classList.contains("active");
     el.classList.toggle("active", x===v);
     if(x===v && !was){ el.scrollTop=0; }
   });
+  /* al terminar cualquier práctica, comprobar si toca celebrar la racha */
+  if(v==="doneView"){ try{ maybeCelebrate(); }catch(e){} }
 }
 
 /* ===== RENDER MENU ===== */
@@ -1082,6 +1250,10 @@ function renderMenu(){
       ? (tdone+" de "+tps.length+" fichas vistas")
       : (tps.length+" fichas · keigo, transitivos, matices");
   }
+  var nf=favCount();
+  document.getElementById("cnt-fav").textContent = nf
+    ? (nf+(nf===1?" tarjeta guardada":" tarjetas guardadas"))
+    : "Tus tarjetas marcadas con ★";
   document.getElementById("menuNote").textContent="";
 }
 
@@ -1339,6 +1511,163 @@ function showEmpty(title,msg){
   show("emptyView");
 }
 
+/* ===== ENLACES ENTRE GRAMÁTICAS =====
+   Muchos "Error común" mencionan otra estructura ("Confundirlo con ましょうか…").
+   Se detectan esas menciones y se convierten en enlaces que abren la ficha
+   de la gramática referenciada, sin salir de la tarjeta actual. */
+var GRAM_IDX=null;
+function buildGramIdx(){
+  if(GRAM_IDX) return GRAM_IDX;
+  GRAM_IDX=[];
+  (C.grammar||[]).forEach(function(g,i){
+    var core=grammarCore(g.pat);
+    if(core && core.length>=2) GRAM_IDX.push({core:core, i:i});
+  });
+  /* de más largo a más corto: así 〜ましょうか gana sobre 〜ましょう */
+  GRAM_IDX.sort(function(a,b){ return b.core.length-a.core.length; });
+  return GRAM_IDX;
+}
+function linkGrammarRefs(text, selfPat){
+  if(!text) return text;
+  var idx=buildGramIdx(), store=[], selfCore=grammarCore(selfPat||"");
+  idx.forEach(function(e){
+    if(e.core===selfCore) return;
+    var at=text.indexOf(e.core);
+    if(at<0) return;
+    var token="\u0001"+store.length+"\u0001";
+    store.push('<button class="glink" data-gi="'+e.i+'">'+e.core+'</button>');
+    text=text.slice(0,at)+token+text.slice(at+e.core.length);
+  });
+  store.forEach(function(h,i){
+    text=text.replace("\u0001"+i+"\u0001", function(){ return h; });
+  });
+  return text;
+}
+function openGrammarRef(i){
+  var g=(C.grammar||[])[i]; if(!g) return;
+  var item={id:"g:"+g.pat, type:"grammar", d:g};
+  document.getElementById("grefTitle").textContent=g.pat;
+  document.getElementById("grefLvl").textContent=g.lvl||"";
+  /* dentro del modal no se vuelven a linkificar referencias, para no encadenar saltos */
+  document.getElementById("grefBody").innerHTML=backHTML(item, true);
+  document.getElementById("grefStar").className="fav-star"+(isFav(item.id)?" on":"");
+  document.getElementById("grefStar").setAttribute("data-fid", item.id);
+  document.getElementById("grefModal").classList.add("show");
+  document.querySelectorAll("#grefBody .reading").forEach(function(el){
+    el.addEventListener("click", function(){ speak(el.getAttribute("data-say")); });
+  });
+}
+function closeGrammarRef(){ document.getElementById("grefModal").classList.remove("show"); }
+
+/* ===== VISTA DE FAVORITOS ===== */
+function itemById(id){
+  for(var i=0;i<ITEMS.length;i++){ if(ITEMS[i].id===id) return {it:ITEMS[i], idx:i}; }
+  return null;
+}
+function favFace(id){
+  if(id.indexOf("t:")===0){
+    var t=null, all=tipsData();
+    for(var j=0;j<all.length;j++){ if("t:"+all[j].id===id){ t=all[j]; break; } }
+    return t? {face:t.title, mean:t.sub, lvl:t.lvl} : null;
+  }
+  var f=itemById(id); if(!f) return null;
+  var d=f.it.d;
+  if(f.it.type==="kanji")  return {face:d.c,   mean:d.mean, lvl:d.lvl};
+  if(f.it.type==="vocab")  return {face:d.w,   mean:d.mean, lvl:d.lvl};
+  return {face:d.pat, mean:d.mean, lvl:d.lvl};
+}
+function renderFavs(){
+  var html="", any=false;
+  FAV_CATS.forEach(function(c){
+    var ids=favIdsOf(c.id).filter(function(id){ return !!favFace(id); });
+    if(!ids.length) return;
+    any=true;
+    html+='<div class="fav-sec">'+c.name+' · '+ids.length+'</div>';
+    ids.forEach(function(id){
+      var f=favFace(id);
+      html+='<div class="fav-row" data-fid="'+escAttr(id)+'">'+
+        '<div class="fav-face">'+f.face+'</div>'+
+        '<div class="fav-meta"><div class="fav-mean">'+(f.mean||"")+'</div>'+
+        '<div class="fav-lvl">'+(f.lvl||"")+'</div></div>'+
+        '<button class="fav-x" data-unfav="'+escAttr(id)+'" aria-label="Quitar de favoritos">✕</button></div>';
+    });
+    if(c.id!=="t"){
+      html+='<button class="btn ghost fav-go" data-favgo="'+c.id+'">Repasar estos '+ids.length+'</button>';
+    }
+  });
+  if(!any){
+    html='<div class="fav-empty">Todavía no has marcado ninguna tarjeta. Toca la ★ en una tarjeta de repaso, en una ficha de kanji o en una ficha de matices para guardarla aquí.</div>';
+  }
+  document.getElementById("favList").innerHTML=html;
+  document.querySelectorAll("#favList .fav-row").forEach(function(row){
+    row.addEventListener("click", function(){ openFav(row.getAttribute("data-fid")); });
+  });
+  document.querySelectorAll("#favList .fav-x").forEach(function(b){
+    b.addEventListener("click", function(e){
+      e.stopPropagation();
+      toggleFav(b.getAttribute("data-unfav")); renderFavs(); renderMenu();
+    });
+  });
+  document.querySelectorAll("#favList [data-favgo]").forEach(function(b){
+    b.addEventListener("click", function(){ startFavSession(b.getAttribute("data-favgo")); });
+  });
+  show("favView");
+}
+function openFav(id){
+  if(id.indexOf("t:")===0){
+    tipsCat=null; openTip(id.slice(2));
+    return;
+  }
+  var f=itemById(id); if(!f) return;
+  lastSession={focused:false, favs:true, favCat:id.charAt(0)};
+  beginSession({queue:[f.idx], reviews:0, news:1});
+}
+function startFavSession(cat){
+  var q=[];
+  favIdsOf(cat).forEach(function(id){ var f=itemById(id); if(f) q.push(f.idx); });
+  if(!q.length) return;
+  lastSession={focused:false, favs:true, favCat:cat};
+  beginSession({queue:shuffle(q), reviews:0, news:q.length});
+}
+/* Refresca la estrella visible de la vista actual */
+function syncStar(elId, itemId){
+  var el=document.getElementById(elId); if(!el) return;
+  el.className="fav-star"+(isFav(itemId)?" on":"");
+  el.setAttribute("data-fid", itemId||"");
+}
+
+/* ===== CELEBRACIÓN DE RACHA =====
+   Se dispara al terminar cualquier práctica cuando la racha llega a un múltiplo
+   de 7 (7, 14, 21…). Solo una vez por día, aunque se hagan varias sesiones. */
+function celebratedOn(){ try{ return localStorage.getItem("jlpt-celebrated")||""; }catch(e){ return ""; } }
+function setCelebratedOn(d){ try{ localStorage.setItem("jlpt-celebrated", d); }catch(e){} }
+function celConfetti(){
+  var box=document.getElementById("celConfetti"); if(!box) return;
+  var cols=["#E0A93B","#3B5FC4","#2E7D5B","#FFFFFF","#B2493A"], h="";
+  for(var i=0;i<34;i++){
+    var left=Math.random()*100, dur=(2.6+Math.random()*2.2).toFixed(2), del=(Math.random()*1.6).toFixed(2);
+    var c=cols[i%cols.length], w=6+Math.floor(Math.random()*6);
+    h+='<span class="cel-p" style="left:'+left.toFixed(1)+'%; width:'+w+'px; background:'+c+
+       '; animation-duration:'+dur+'s; animation-delay:'+del+'s;"></span>';
+  }
+  box.innerHTML=h;
+}
+function maybeCelebrate(){
+  var s=computeStreak();
+  if(s<7 || s%7!==0) return;
+  var t=todayStr();
+  if(celebratedOn()===t) return;
+  setCelebratedOn(t);
+  document.getElementById("celBadge").textContent=s;
+  document.getElementById("celDays").textContent=s+" días seguidos";
+  celConfetti();
+  document.getElementById("celebrate").classList.add("show");
+}
+function closeCelebrate(){
+  document.getElementById("celebrate").classList.remove("show");
+  document.getElementById("celConfetti").innerHTML="";
+}
+
 /* ===== CARD RENDERING ===== */
 function sizeFor(text){
   var n=text.length;
@@ -1372,7 +1701,7 @@ function promptFor(item){
   if(item.type==="vocab") return "¿Qué significa?";
   return "¿Qué significa y cómo se usa?";
 }
-function backHTML(item){
+function backHTML(item, noLinks){
   var d=item.d;
   if(item.type==="kanji"){
     var chips='';
@@ -1387,12 +1716,13 @@ function backHTML(item){
     return '<div class="readings">'+readingChip("Lectura",d.r,d.r)+'</div>'+
            '<div class="meaning">'+d.mean+'</div>'+exampleHTML(d);
   }
+  var errHTML = d.err ? (noLinks ? d.err : linkGrammarRefs(d.err, d.pat)) : "";
   return '<div class="meaning">'+d.mean+'</div>'+
          '<div class="gexp">'+d.exp+'</div>'+
          (d.conj? conjTableHTML(d.conj) : '')+
          (d.form? '<div class="gform"><b>'+(d.conj?'En esta construcción:':'Construcción:')+'</b> '+d.form+'</div>' : '')+
          exampleHTML(d)+
-         (d.err? '<div class="gerr"><b>Error común:</b> '+d.err+'</div>' : '');
+         (d.err? '<div class="gerr"><b>Error común:</b> '+errHTML+'</div>' : '');
 }
 function paintCard(idx, revealed){
   var item=ITEMS[idx];
@@ -1402,6 +1732,7 @@ function paintCard(idx, revealed){
   var txt=frontText(item); g.textContent=txt; g.style.fontSize=sizeFor(txt)+"px";
   document.getElementById("prompt").innerHTML=promptFor(item)+'<span class="small">Piénsalo, luego revela</span>';
   document.getElementById("back").innerHTML=backHTML(item);
+  syncStar("studyStar", item.id);
   if(revealed){
     document.getElementById("back").classList.add("show");
     document.getElementById("revealBtn").style.display="none";
@@ -1594,6 +1925,7 @@ function openTip(id){
   h+='<div class="tp-note"><b>Detalle:</b> '+t.note+'</div>'+
      '<div class="tp-err"><b>Error común:</b> '+t.err+'</div>';
   document.getElementById("tipsStage").innerHTML=h;
+  syncStar("tipsStar", "t:"+t.id);
   document.querySelectorAll("#tipsStage .tp-spk").forEach(function(b){
     b.addEventListener("click", function(){ speak(b.getAttribute("data-say")); });
   });
@@ -1925,12 +2257,28 @@ function showReadingList(level){
   show("readList");
 }
 function escAttr(s){ return (s||"").replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;"); }
-function hlGloss(jp, gloss){
-  (gloss||[]).forEach(function(g){
+/* Resalta el vocabulario del glosario dentro del texto japonés.
+   Si la palabra es de un nivel MÁS DIFÍCIL que el del texto (p.ej. una palabra
+   N4 dentro de una lectura N5), se le añade furigana inline permanente para no
+   frenar la lectura. Las palabras del propio nivel se dejan limpias.
+   La sustitución se hace por tokens (y de la palabra más larga a la más corta)
+   para no reemplazar dentro del HTML ya insertado. */
+function hlGloss(jp, gloss, lvl){
+  var base=LEVEL_RANK[lvl]||0, store=[];
+  var list=(gloss||[]).slice().sort(function(a,b){ return (b.w||"").length-(a.w||"").length; });
+  list.forEach(function(g){
+    if(!g.w) return;
     var idx=jp.indexOf(g.w);
     if(idx<0) return;
-    var span='<span class="rw" data-r="'+escAttr(g.r)+'" data-m="'+escAttr(g.m)+'" data-w="'+escAttr(g.w)+'">'+g.w+'</span>';
-    jp=jp.slice(0,idx)+span+jp.slice(idx+g.w.length);
+    var adv = base>0 && wordRank(g.w)>base;
+    var inner = adv ? '<ruby>'+g.w+'<rt>'+g.r+'</rt></ruby>' : g.w;
+    var html='<span class="rw'+(adv?' rw-adv':'')+'" data-r="'+escAttr(g.r)+'" data-m="'+escAttr(g.m)+'" data-w="'+escAttr(g.w)+'">'+inner+'</span>';
+    var token="\u0000"+store.length+"\u0000";
+    store.push(html);
+    jp=jp.slice(0,idx)+token+jp.slice(idx+g.w.length);
+  });
+  store.forEach(function(h,i){
+    jp=jp.replace("\u0000"+i+"\u0000", function(){ return h; });
   });
   return jp;
 }
@@ -1941,7 +2289,7 @@ function openPassage(id){
   document.getElementById("readerTag").textContent="Lectura · "+p.lvl;
   var h='<div class="rd-title">'+p.title+'</div><div class="rd-meta">'+p.lvl+' · ~'+p.mins+' min de lectura</div>';
   p.paras.forEach(function(pa){
-    h+='<div class="rd-para"><div class="rd-jp">'+hlGloss(pa.jp, p.gloss)+'</div>'+
+    h+='<div class="rd-para"><div class="rd-jp">'+hlGloss(pa.jp, p.gloss, p.lvl)+'</div>'+
        '<div class="rd-fu">'+pa.fu+'</div><div class="rd-es">'+pa.es+'</div></div>';
   });
   if(p.gloss && p.gloss.length){
@@ -2048,7 +2396,7 @@ function openListen(id){
   h+='<button class="ls-reveal" id="lsReveal">Ver transcripción y vocabulario</button>';
   h+='<div class="ls-transcript">';
   p.paras.forEach(function(pa){
-    h+='<div class="rd-para"><div class="rd-jp">'+hlGloss(pa.jp, p.gloss)+'</div>'+
+    h+='<div class="rd-para"><div class="rd-jp">'+hlGloss(pa.jp, p.gloss, p.lvl)+'</div>'+
        '<div class="rd-fu">'+pa.fu+'</div><div class="rd-es">'+pa.es+'</div></div>';
   });
   if(p.gloss && p.gloss.length){
@@ -2600,6 +2948,7 @@ function showKanjiCard(){
   }
   var st=document.getElementById("kfStage");
   st.innerHTML=h;
+  syncStar("kfStar", "k:"+k.c);
   var sec=document.getElementById("kficha"); sec.scrollTop=0;
   /* trazos animados */
   var target=document.getElementById("kfTarget");
@@ -2643,6 +2992,30 @@ document.getElementById("tileRead").addEventListener("click", openReadingLevels)
 document.getElementById("tileListen").addEventListener("click", openListeningLevels);
 document.getElementById("tileConv").addEventListener("click", openConv);
 document.getElementById("tileExam").addEventListener("click", openExamLevels);
+document.getElementById("tileFav").addEventListener("click", renderFavs);
+document.getElementById("favBack").addEventListener("click", function(){ show("menu"); renderMenu(); });
+/* estrellas: mismo comportamiento en tarjeta de repaso, ficha de kanji, matices y modal */
+["studyStar","kfStar","tipsStar","grefStar"].forEach(function(sid){
+  var el=document.getElementById(sid); if(!el) return;
+  el.addEventListener("click", function(){
+    var fid=el.getAttribute("data-fid"); if(!fid) return;
+    var on=toggleFav(fid);
+    el.className="fav-star"+(on?" on":"");
+  });
+});
+/* enlaces a otra gramática dentro de "Error común" (delegación: sirve en tarjeta y modal) */
+document.addEventListener("click", function(e){
+  var t=e.target;
+  if(!t || !t.classList || !t.classList.contains("glink")) return;
+  e.preventDefault(); e.stopPropagation();
+  var gi=parseInt(t.getAttribute("data-gi"),10);
+  if(!isNaN(gi)) openGrammarRef(gi);
+});
+document.getElementById("grefClose").addEventListener("click", closeGrammarRef);
+document.getElementById("grefModal").addEventListener("click", function(e){
+  if(e.target===document.getElementById("grefModal")) closeGrammarRef();
+});
+document.getElementById("celClose").addEventListener("click", closeCelebrate);
 document.getElementById("tileTips").addEventListener("click", openTipsCats);
 document.getElementById("tipsCatsBack").addEventListener("click", function(){ show("menu"); renderMenu(); });
 document.getElementById("tipsListBack").addEventListener("click", openTipsCats);
@@ -2728,6 +3101,12 @@ function examGoBack(){
   else { show("menu"); renderMenu(); }
 }
 function goBack(){
+  /* la celebración es lo más superpuesto: se cierra primero */
+  var cel=document.getElementById("celebrate");
+  if(cel && cel.classList.contains("show")){ closeCelebrate(); return; }
+  /* ficha de gramática referenciada */
+  var gr=document.getElementById("grefModal");
+  if(gr && gr.classList.contains("show")){ closeGrammarRef(); return; }
   /* si el modal de cuenta está abierto, ciérralo primero */
   var am=document.getElementById("acctModal");
   if(am && am.classList.contains("show")){ am.classList.remove("show"); return; }
@@ -2749,6 +3128,7 @@ function goBack(){
     case "tipsCats":   show("menu"); renderMenu(); break;
     case "kficha":     showModes(selType||"kanji", selLevel||"all"); break;
     case "kanjiPicker": showModes("kanji", kpLevel||"all"); break;
+    case "favView":    show("menu"); renderMenu(); break;
     case "readLevels":
     case "levels":
     case "stats":
@@ -2784,7 +3164,9 @@ function goBack(){
 function navTrapArm(){ try{ history.pushState({ jlptNav:true }, "", location.href); }catch(e){} }
 function navOverlayOpen(){
   var am=document.getElementById("acctModal"), def=document.getElementById("rdDefine");
-  return (am && am.classList.contains("show")) || (def && def.classList.contains("show"));
+  var gr=document.getElementById("grefModal"), cel=document.getElementById("celebrate");
+  return (am && am.classList.contains("show")) || (def && def.classList.contains("show")) ||
+         (gr && gr.classList.contains("show")) || (cel && cel.classList.contains("show"));
 }
 window.addEventListener("popstate", function(){
   if(!navOverlayOpen() && activeViewId()==="menu") return;
@@ -2807,16 +3189,17 @@ function setAuth(a){ try{ if(a){ localStorage.setItem("jlpt-auth", JSON.stringif
 function localUpdatedAt(){ try{ return parseInt(localStorage.getItem("jlpt-updated")||"0",10)||0; }catch(e){ return 0; } }
 function collectData(){
   var days; try{ days=JSON.parse(localStorage.getItem("jlpt-days")||"[]"); }catch(e){ days=[]; }
-  return { progress: load(), days: days, done: loadDone(), name: getName(), updatedAt: localUpdatedAt() || Date.now() };
+  return { progress: load(), days: days, done: loadDone(), favs: loadFavs(), name: getName(), updatedAt: localUpdatedAt() || Date.now() };
 }
 function applyData(d){
   if(!d) return;
   try{ localStorage.setItem("jlpt-progress", JSON.stringify(d.progress||{})); }catch(e){}
   try{ localStorage.setItem("jlpt-days", JSON.stringify(d.days||[])); }catch(e){}
   try{ localStorage.setItem("jlpt-done", JSON.stringify(d.done||{})); }catch(e){}
+  if(d.favs) { try{ localStorage.setItem("jlpt-fav", JSON.stringify(d.favs)); }catch(e){} }
   if(d.name) setName(d.name);
   try{ localStorage.setItem("jlpt-updated", String(d.updatedAt||Date.now())); }catch(e){}
-  progress = load(); doneItems = loadDone();
+  progress = load(); doneItems = loadDone(); favItems = loadFavs();
   renderMenu();
 }
 
