@@ -418,6 +418,11 @@
   .example .tr{display:block; font-family:var(--ui); font-size:12.5px; color:var(--muted); margin-top:3px;}
 
   /* ===== Matices de verbos ===== */
+  /* Estas vistas no tenían padding ni scroll propios: el contenido llegaba pegado
+     a los bordes y, como body tiene overflow:hidden, se recortaba sin poder desplazarlo.
+     Se alinean con el resto de vistas (#levels, #readList, #reader). */
+  #favView,#tipsCats,#tipsList{padding:10px 22px 20px; overflow-y:auto; overscroll-behavior:contain;}
+  #tipsView{padding:6px 22px 0;}
   .tp-title{font-family:var(--jp); font-size:21px; font-weight:700; color:var(--ink); line-height:1.3;}
   .tp-sub{margin-top:4px; font-size:13px; color:var(--muted);}
   .tp-intro{margin-top:13px; background:var(--card); border-radius:14px; padding:14px 16px; font-size:13.5px; line-height:1.6; color:var(--ink-2); box-shadow:var(--shadow);}
