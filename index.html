@@ -385,6 +385,7 @@
   .streak-lost .sl-go:active{transform:scale(.96);}
 
   /* Resultado del examen de recuperación */
+  .acct-hint{font-size:11.5px; color:var(--muted); margin:-4px 0 8px; line-height:1.45;}
   .rec-modal{position:fixed; inset:0; background:rgba(12,18,35,.55); z-index:64; display:none; align-items:center; justify-content:center; padding:24px;}
   .rec-modal.show{display:flex;}
   .rec-box{background:var(--card); border-radius:22px; padding:26px 22px; max-width:360px; width:100%; text-align:center; box-shadow:var(--shadow);}
@@ -1034,7 +1035,8 @@
     <button class="df-x" id="acctClose" aria-label="Cerrar">✕</button>
     <div class="acct-title" id="acctTitle">Tu cuenta</div>
     <div id="acctOut">
-      <input id="acctUser" type="email" inputmode="email" placeholder="correo electrónico" autocomplete="email" autocapitalize="off" spellcheck="false">
+      <input id="acctUser" type="text" inputmode="email" placeholder="correo electrónico" autocomplete="email" autocapitalize="off" spellcheck="false">
+      <div class="acct-hint" id="acctHint">Tu correo es tu identificador único.</div>
       <input id="acctPass" type="password" placeholder="contraseña" autocomplete="current-password">
       <input id="acctInvite" placeholder="código de invitación (solo al crear cuenta)">
       <div class="acct-row">
@@ -3436,11 +3438,17 @@ function paintAcct(msg){
 }
 function validEmail(s){ return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(s); }
 function acctAuth(isRegister){
+  /* El identificador se normaliza siempre (minúsculas y sin espacios) para que
+     Saul@X.com y saul@x.com sean la MISMA cuenta y no se dupliquen. */
   var u=(document.getElementById("acctUser").value||"").trim().toLowerCase();
   var p=document.getElementById("acctPass").value||"";
   var inv=(document.getElementById("acctInvite").value||"").trim();
   if(!u || !p){ acctMsgSet("Escribe tu correo y la contraseña."); return; }
-  if(!validEmail(u)){ acctMsgSet("Ese correo no parece válido."); return; }
+  /* Al CREAR cuenta se exige correo (identificador único y recuperable).
+     Al ENTRAR se acepta también un usuario antiguo, para no dejar fuera
+     a las cuentas creadas antes de este cambio. */
+  if(isRegister && !validEmail(u)){ acctMsgSet("Para crear la cuenta necesitas un correo válido."); return; }
+  if(!isRegister && !validEmail(u) && u.indexOf("@")>=0){ acctMsgSet("Ese correo no parece válido."); return; }
   if(isRegister && !inv){ acctMsgSet("Para crear cuenta necesitas el código de invitación."); return; }
   acctMsgSet(isRegister ? "Creando cuenta…" : "Entrando…");
   fetch(SYNC_URL+(isRegister?"/register":"/login"), {
