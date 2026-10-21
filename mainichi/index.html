@@ -399,6 +399,12 @@
     <label class="f" for="acUser">Correo</label><input type="email" id="acUser" autocomplete="username">
     <label class="f" for="acPass">Contraseña</label><input type="password" id="acPass" autocomplete="current-password">
     <button class="btn" id="acLogin">Entrar</button>
+    <button class="link" id="acShowReg" style="margin-top:8px;">¿No tienes cuenta con correo? Crear una</button>
+    <div id="acReg" class="hidden">
+      <label class="f" for="acInvite">Código de invitación</label><input type="text" id="acInvite" autocomplete="off">
+      <div class="f-help">Pon tu correo y la contraseña nueva arriba, el código aquí, y pulsa «Crear cuenta».</div>
+      <button class="btn ghost" id="acRegister">Crear cuenta</button>
+    </div>
   </div>
   <div id="acIn" class="hidden">
     <p><b id="acWho"></b></p>
@@ -1352,20 +1358,28 @@ function closeAcct(){
 document.getElementById("hAcct").addEventListener("click", openAcct);
 document.getElementById("acClose").addEventListener("click", closeAcct);
 document.getElementById("lyAcct").addEventListener("click", function(e){ if(e.target===this) closeAcct(); });
-document.getElementById("acLogin").addEventListener("click", function(){
+document.getElementById("acShowReg").addEventListener("click", function(){ document.getElementById("acReg").classList.toggle("hidden"); });
+document.getElementById("acLogin").addEventListener("click", function(){ acAuth(false); });
+document.getElementById("acRegister").addEventListener("click", function(){ acAuth(true); });
+/* Entrar o crear cuenta: mismo worker y mismas reglas que N1 Path (correo + código de invitación al crear) */
+function acAuth(isRegister){
   var u=(document.getElementById("acUser").value||"").trim().toLowerCase(), p=document.getElementById("acPass").value||"";
+  var inv=(document.getElementById("acInvite").value||"").trim();
   if(!u || !p){ acMsg("Escribe tu correo y la contraseña."); return; }
-  acMsg("Entrando…");
-  fetch(SYNC_URL+"/login", {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({user:u, pass:p})})
+  if(isRegister && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(u)){ acMsg("Para crear la cuenta necesitas un correo válido."); return; }
+  if(isRegister && p.length<6){ acMsg("La contraseña debe tener al menos 6 caracteres."); return; }
+  if(isRegister && !inv){ acMsg("Falta el código de invitación."); return; }
+  acMsg(isRegister ? "Creando cuenta…" : "Entrando…");
+  fetch(SYNC_URL+(isRegister?"/register":"/login"), {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({user:u, pass:p, invite:inv})})
   .then(function(r){ return r.json().then(function(j){ return {ok:r.ok, j:j}; }); })
   .then(function(res){
     if(!res.ok){ acMsg((res.j && res.j.error)||"No se pudo entrar."); return; }
     setAuth({user:u, token:res.j.token}); document.getElementById("acPass").value="";
     acMsg("Sesión iniciada. Sincronizando…");
-    cloudPull(function(){ paintAcct(); acMsg(serverMissing ? "Sesión iniciada. Ojo: el worker aún no tiene la parte de 毎日 (LEEME, paso 2)." : "Sesión iniciada · progreso sincronizado."); });
+    cloudPull(function(){ paintAcct(); acMsg(isRegister ? "Cuenta creada · ya estás dentro." : (serverMissing ? "Sesión iniciada. Ojo: el worker aún no tiene la parte de 毎日 (LEEME, paso 2)." : "Sesión iniciada · progreso sincronizado.")); });
   })
   .catch(function(){ acMsg("No se pudo conectar con el servidor."); });
-});
+}
 document.getElementById("acSync").addEventListener("click", function(){ acMsg("Sincronizando…"); serverMissing=false; cloudPull(function(){ paintAcct(); acMsg(serverMissing?"El worker aún no tiene la parte de 毎日.":"Sincronizado ✓"); }); });
 document.getElementById("acLogout").addEventListener("click", function(){
   var a=getAuth(); if(a) fetch(SYNC_URL+"/logout", {method:"POST", headers:{"Authorization":"Bearer "+a.token}}).catch(function(){});
