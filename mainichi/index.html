@@ -220,6 +220,11 @@
   .hours label{font-size:11.5px; color:var(--muted); font-weight:700; display:block; margin-bottom:4px;}
   .msg{font-size:13px; color:var(--muted); margin-top:8px; line-height:1.4; min-height:1em;}
   .msg.err{color:var(--red);}
+  .steps{font-size:13.5px; line-height:1.5; padding-left:20px; margin-top:10px; color:var(--ink-2);}
+  .steps li{margin-bottom:6px;}
+  .steps b{color:var(--ink);}
+  .link-box{display:flex; gap:6px; margin-top:10px;}
+  .link-box input{font-size:12.5px; padding:10px; font-family:ui-monospace,Menlo,monospace;}
   .warn{font-size:13px; background:var(--amber-soft); border-radius:12px; padding:10px 12px; line-height:1.45; margin-top:8px;}
 
   .toast{position:fixed; left:50%; bottom:calc(24px + env(safe-area-inset-bottom)); transform:translateX(-50%) translateY(20px);
@@ -356,6 +361,9 @@
     <label class="f">Sin cuenta ni servidor</label>
     <button class="btn small ghost" id="stIcs">📅 Añadir avisos al Calendario</button>
     <div class="f-help">Crea eventos diarios con alarma a esas horas. En iPhone, si no se abre desde la app, abre esta página en Safari.</div>
+    <label class="f">⏰ Alarma que no se puede ignorar (Atajos del iPhone)</label>
+    <div class="f-help">Si a la hora del rescate o de la última llamada aún no has cumplido, el iPhone suena como una alarma hasta que la apagues. Gratis y sin instalar nada.</div>
+    <div id="stAlarm"></div>
   </div>
 
   <div class="card">
@@ -455,6 +463,7 @@ var D=(function(){ var d=null; try{ d=JSON.parse(lsGet(DATA_KEY)||"null"); }catc
 function save(sync){
   D.target={ day:today(), mins:goalToday() };      /* para el servidor de avisos */
   D.streak=streakInfo().streak;
+  try{ D.tz=Intl.DateTimeFormat().resolvedOptions().timeZone||D.tz; }catch(e){}   /* para el enlace de estado (alarma de Atajos) */
   D.updatedAt=Date.now();
   lsSet(DATA_KEY, JSON.stringify(D));
   if(sync) cloudDirty();
@@ -1088,7 +1097,58 @@ function renderSettings(){
   document.getElementById("cAfter").value=c.after||"";
   document.getElementById("cWhere").value=c.where||"";
   document.getElementById("cStake").value=c.stake||"";
-  renderHours(); renderPush(); renderAcctBox();
+  renderHours(); renderPush(); renderAlarm(); renderAcctBox();
+}
+
+/* ---------------- alarma con Atajos del iPhone ----------------
+   Una automatización de Atajos consulta /m/status?k=<clave> a las horas de rescate y
+   última llamada; si responde "pendiente", inicia un temporizador de 1 s, que suena
+   como una alarma (también en silencio) hasta que lo apagas. */
+var STATUS_KEY="mai-statuskey";
+function statusUrl(k){ return SYNC_URL+"/m/status?k="+k; }
+function renderAlarm(){
+  var box=document.getElementById("stAlarm"), k=lsGet(STATUS_KEY);
+  if(!getAuth()){ box.innerHTML='<div class="warn">Necesitas entrar con tu cuenta (☁) para obtener tu enlace.</div>'; return; }
+  if(!k){
+    box.innerHTML='<button class="btn small" id="alGet" style="margin-top:10px;">Obtener mi enlace</button><div class="msg" id="alMsg"></div>';
+    document.getElementById("alGet").addEventListener("click", function(){ fetchStatusKey(false); });
+    return;
+  }
+  var hs=D.commit.hours||[], h1=hs[1]!=null?pad(hs[1])+":00":"21:00", h2=hs[2]!=null?pad(hs[2])+":00":"23:00";
+  box.innerHTML='<div class="link-box"><input type="text" id="alUrl" readonly value="'+esc(statusUrl(k))+'"><button class="btn small" id="alCopy">Copiar</button></div>'+
+    '<div class="row" style="margin-top:8px;"><button class="btn small ghost" id="alTest">Probar enlace</button><button class="btn small ghost" id="alNew">Cambiar enlace</button></div><div class="msg" id="alMsg"></div>'+
+    '<ol class="steps">'+
+    '<li>App <b>Reloj</b> → Temporizador → <b>Al finalizar</b>: elige un sonido fuerte (p. ej. «Radar»).</li>'+
+    '<li>App <b>Atajos</b> → Automatización → <b>＋</b> → <b>Hora del día</b> → '+h1+', Diariamente → <b>Ejecutar inmediatamente</b> → Siguiente → <b>Nuevo atajo en blanco</b>.</li>'+
+    '<li>Añade la acción <b>Obtener contenido de URL</b> y pega tu enlace.</li>'+
+    '<li>Añade <b>Si</b>: «Contenido de URL» <b>contiene</b> <code>pendiente</code>.</li>'+
+    '<li>Dentro del «Si», añade <b>Iniciar temporizador</b> de <b>1 segundo</b>. Si quieres, también <b>Mostrar notificación</b> con «Contenido de URL» (te dice los minutos que faltan).</li>'+
+    '<li>Repite lo mismo a las <b>'+h2+'</b> (en Atajos puedes duplicar la automatización y cambiar la hora).</li>'+
+    '</ol><div class="f-help">El enlace solo dice «pendiente» o «hecho»: no da acceso a tu cuenta ni a tu progreso. Si alguna vez lo compartes sin querer, pulsa «Cambiar enlace».</div>';
+  document.getElementById("alCopy").addEventListener("click", function(){
+    var inp=document.getElementById("alUrl"); inp.select();
+    var done=function(){ toast("Enlace copiado."); };
+    if(navigator.clipboard) navigator.clipboard.writeText(inp.value).then(done, function(){ try{ document.execCommand("copy"); done(); }catch(e){} });
+    else { try{ document.execCommand("copy"); done(); }catch(e){} }
+  });
+  document.getElementById("alTest").addEventListener("click", function(){
+    var m=document.getElementById("alMsg"); m.textContent="Consultando…"; m.classList.remove("err");
+    cloudPush(function(){
+      fetch(statusUrl(k), {cache:"no-store"}).then(function(r){ return r.text().then(function(t){ return {ok:r.ok, t:t}; }); })
+      .then(function(x){ m.textContent= x.ok ? "Ahora mismo responde: «"+x.t+"»" : "Error: "+x.t; m.classList.toggle("err", !x.ok); })
+      .catch(function(){ m.textContent="No se pudo conectar."; m.classList.add("err"); });
+    });
+  });
+  document.getElementById("alNew").addEventListener("click", function(){
+    if(confirm("El enlace actual dejará de funcionar y tendrás que pegar el nuevo en tus automatizaciones de Atajos. ¿Seguir?")) fetchStatusKey(true);
+  });
+}
+function fetchStatusKey(rotate){
+  var m=document.getElementById("alMsg"); if(m){ m.textContent="Pidiendo enlace…"; m.classList.remove("err"); }
+  fetch(SYNC_URL+"/m/key", {method:"POST", headers:authHeaders(), body:JSON.stringify({rotate:!!rotate})})
+  .then(function(res){ if(!res.ok) return serverError(res); return res.json(); })
+  .then(function(j){ lsSet(STATUS_KEY, j.key); renderAlarm(); cloudPush(); })
+  .catch(function(e){ var mm=document.getElementById("alMsg"); if(mm){ mm.textContent=e.message||"No se pudo obtener el enlace."; mm.classList.add("err"); } });
 }
 document.getElementById("cSave").addEventListener("click", function(){
   var c=D.commit;
@@ -1309,7 +1369,7 @@ document.getElementById("acLogin").addEventListener("click", function(){
 document.getElementById("acSync").addEventListener("click", function(){ acMsg("Sincronizando…"); serverMissing=false; cloudPull(function(){ paintAcct(); acMsg(serverMissing?"El worker aún no tiene la parte de 毎日.":"Sincronizado ✓"); }); });
 document.getElementById("acLogout").addEventListener("click", function(){
   var a=getAuth(); if(a) fetch(SYNC_URL+"/logout", {method:"POST", headers:{"Authorization":"Bearer "+a.token}}).catch(function(){});
-  setAuth(null); paintAcct(); acMsg("Sesión cerrada. Tu progreso sigue en este dispositivo.");
+  setAuth(null); lsDel(STATUS_KEY); paintAcct(); acMsg("Sesión cerrada. Tu progreso sigue en este dispositivo.");
 });
 
 /* Importa de N1 Path las tarjetas de los niveles y tipos que estudias aquí (sin pisar lo más reciente) */
