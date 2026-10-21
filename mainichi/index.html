@@ -1,0 +1,1449 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>毎日 · Mainichi</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="毎日">
+<meta name="theme-color" content="#27407F">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="icon" href="icon.png">
+<style>
+  :root{
+    --paper:#F5F6F9; --card:#FFFFFF; --ink:#161F38; --ink-2:#3A4359;
+    --muted:#7D869B; --faint:#AEB5C6; --indigo:#27407F; --indigo-bright:#3B5FC4;
+    --shu:#D2492F; --shu-soft:#FBE9E5; --amber:#C98A2E; --amber-soft:#FBF1E1;
+    --green:#2E7D5B; --green-soft:#E3F2EA; --red:#B83A2E; --red-soft:#FBE7E4;
+    --line:#E7E9F0; --line-2:#EEF0F5; --cell:#E9ECF3; --cell-part:#B9C5E6;
+    --shadow:0 1px 2px rgba(22,31,56,.04), 0 14px 34px -14px rgba(22,31,56,.16);
+    --jp:'Hiragino Kaku Gothic ProN','Hiragino Sans','Yu Gothic','Meiryo',system-ui,sans-serif;
+    --ui:system-ui,-apple-system,'Segoe UI','Inter',sans-serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --paper:#10141F; --card:#1A2030; --ink:#E9ECF4; --ink-2:#C3C9D8;
+      --muted:#8A93A8; --faint:#5D6579; --indigo:#8EA7EC; --indigo-bright:#9DB4F5;
+      --shu:#F0705A; --shu-soft:#3A2220; --amber:#E2B05A; --amber-soft:#352B1A;
+      --green:#5CC092; --green-soft:#183026; --red:#F07A6C; --red-soft:#3A1F1C;
+      --line:#2A3144; --line-2:#232A3B; --cell:#252C3E; --cell-part:#3B4C7A;
+      --shadow:0 1px 2px rgba(0,0,0,.3), 0 14px 34px -14px rgba(0,0,0,.5);
+    }
+  }
+  *{box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; touch-action:manipulation;}
+  html,body{min-height:100%;}
+  body{font-family:var(--ui); background:var(--paper); color:var(--ink); -webkit-font-smoothing:antialiased;
+    padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom);}
+  button{font-family:inherit; color:inherit;}
+  .wrap{max-width:520px; margin:0 auto; padding:14px 16px 40px;}
+  .view{display:none;}
+  .view.on{display:block;}
+  .hidden{display:none !important;}
+  .jp{font-family:var(--jp);}
+
+  /* ---------- cabecera ---------- */
+  .top{display:flex; align-items:center; gap:10px; margin:4px 0 14px;}
+  .brand{font-family:var(--jp); font-weight:800; font-size:26px; letter-spacing:.02em; color:var(--ink);}
+  .brand small{font-family:var(--ui); font-weight:600; font-size:12px; color:var(--muted); margin-left:6px; letter-spacing:0;}
+  .top .sp{flex:1;}
+  .icon-btn{width:40px; height:40px; border-radius:12px; border:1px solid var(--line); background:var(--card);
+    display:flex; align-items:center; justify-content:center; font-size:17px; cursor:pointer; box-shadow:var(--shadow);}
+  .icon-btn.on{color:var(--indigo); border-color:var(--indigo);}
+
+  .card{background:var(--card); border-radius:20px; padding:16px; box-shadow:var(--shadow); margin-bottom:14px;}
+  .card h3{font-size:13px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; margin-bottom:10px;}
+
+  /* ---------- racha ---------- */
+  .streak-row{display:flex; gap:8px; margin-bottom:14px;}
+  .pill{flex:1; background:var(--card); border-radius:16px; padding:10px 12px; box-shadow:var(--shadow); text-align:center;}
+  .pill b{display:block; font-size:22px; font-weight:800; line-height:1.15;}
+  .pill span{font-size:11.5px; color:var(--muted); font-weight:600;}
+  .pill.fire b{color:var(--shu);}
+  .pill.shield b{color:var(--amber);}
+
+  /* ---------- avisos en portada ---------- */
+  .banner{border-radius:16px; padding:13px 14px; margin-bottom:14px; font-size:14px; line-height:1.45;}
+  .banner b{display:block; font-size:15px; margin-bottom:2px;}
+  .banner.rescue{background:var(--shu-soft); color:var(--ink); border:1.5px solid var(--shu);}
+  .banner.shield{background:var(--amber-soft); border:1.5px solid var(--amber);}
+  .banner.broken{background:var(--red-soft); border:1.5px solid var(--red);}
+  .banner.info{background:var(--card); border:1.5px dashed var(--line);}
+  .banner .stake{margin-top:6px; font-style:italic;}
+  .banner button{margin-top:8px;}
+
+  /* ---------- anillo de hoy ---------- */
+  .today{display:flex; flex-direction:column; align-items:center; padding:20px 16px 18px;}
+  .ring{position:relative; width:188px; height:188px;}
+  .ring svg{width:100%; height:100%; transform:rotate(-90deg);}
+  .ring .bg{stroke:var(--line-2);}
+  .ring .fg{stroke:var(--indigo); transition:stroke-dashoffset .6s ease;}
+  .ring.done .fg{stroke:var(--green);}
+  .ring.rescue .fg{stroke:var(--shu);}
+  .ring-in{position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;}
+  .ring-big{font-size:40px; font-weight:800; font-variant-numeric:tabular-nums; line-height:1;}
+  .ring-small{font-size:13px; color:var(--muted); margin-top:4px; font-weight:600;}
+  .ring-kanji{font-family:var(--jp); font-size:15px; color:var(--muted); margin-top:3px;}
+  .today .sub{font-size:13.5px; color:var(--muted); margin-top:12px; text-align:center;}
+
+  .btn{display:block; width:100%; border:0; border-radius:16px; padding:16px; font-size:17px; font-weight:700;
+    background:var(--indigo); color:#fff; cursor:pointer; margin-top:14px; box-shadow:0 10px 24px -12px rgba(39,64,127,.7);}
+  @media (prefers-color-scheme: dark){ .btn{color:#10141F;} }
+  .btn.green{background:var(--green);}
+  .btn.shu{background:var(--shu);}
+  .btn.ghost{background:transparent; color:var(--indigo); border:1.5px solid var(--line); box-shadow:none;}
+  .btn.small{display:inline-block; width:auto; padding:10px 14px; font-size:14px; margin-top:0; border-radius:12px;}
+  .btn:disabled{opacity:.45;}
+  .row{display:flex; gap:8px; flex-wrap:wrap;}
+  .row > .btn{flex:1;}
+
+  .why{font-size:15px; line-height:1.5;}
+  .why q{font-style:italic;}
+  .why .plan{margin-top:8px; font-size:13.5px; color:var(--muted);}
+  .why .edit{float:right; font-size:12.5px; color:var(--indigo-bright); cursor:pointer; font-weight:600; background:none; border:0;}
+
+  /* ---------- calendario ---------- */
+  .cal{display:grid; grid-auto-flow:column; grid-template-rows:repeat(7, auto); gap:3px;}
+  .cal i{display:block; min-width:0; aspect-ratio:1; border-radius:4px; background:var(--cell);}
+  .cal i.part{background:var(--cell-part);}
+  .cal i.done{background:var(--indigo);}
+  .cal i.shield{background:var(--amber);}
+  .cal i.rescue{background:var(--shu);}
+  .cal i.now{outline:2px solid var(--ink); outline-offset:1px;}
+  .cal i.fut{background:transparent;}
+  .legend{display:flex; gap:12px; flex-wrap:wrap; margin-top:10px; font-size:11.5px; color:var(--muted);}
+  .legend span::before{content:""; display:inline-block; width:10px; height:10px; border-radius:3px; margin-right:5px; vertical-align:-1px; background:var(--c);}
+
+  .week{display:grid; grid-template-columns:repeat(3,1fr); gap:8px; text-align:center;}
+  .week b{display:block; font-size:21px; font-weight:800;}
+  .week span{font-size:11.5px; color:var(--muted); font-weight:600;}
+
+  .prog-l{display:flex; justify-content:space-between; font-size:13px; margin:10px 0 4px;}
+  .prog-l b{font-family:var(--jp);}
+  .prog-l span{color:var(--muted); font-variant-numeric:tabular-nums;}
+  .bar{height:8px; border-radius:6px; background:var(--line-2); overflow:hidden; display:flex;}
+  .bar .m{background:var(--indigo);}
+  .bar .l{background:var(--cell-part);}
+
+  .links{display:flex; gap:8px; flex-wrap:wrap;}
+  .link{font-size:13.5px; color:var(--indigo-bright); background:none; border:0; cursor:pointer; font-weight:600; padding:6px 0;}
+
+  /* ---------- sesión ---------- */
+  .s-top{display:flex; align-items:center; gap:10px; margin:2px 0 12px;}
+  .s-bar{flex:1; height:10px; border-radius:6px; background:var(--line-2); overflow:hidden;}
+  .s-bar div{height:100%; background:var(--indigo); width:0; transition:width .5s ease;}
+  .s-bar.done div{background:var(--green);}
+  .s-bar.rescue div{background:var(--shu);}
+  .s-time{font-variant-numeric:tabular-nums; font-weight:700; font-size:14px; min-width:96px; text-align:right;}
+  .s-meta{display:flex; justify-content:space-between; font-size:12px; color:var(--muted); margin-bottom:10px; font-weight:600;}
+  .tag{display:inline-block; font-size:11.5px; font-weight:700; padding:4px 9px; border-radius:8px; background:var(--line-2); color:var(--ink-2);}
+  .tag.new{background:var(--shu-soft); color:var(--shu);}
+  .tag.again{background:var(--amber-soft); color:var(--amber);}
+  .tag.extra{background:var(--green-soft); color:var(--green);}
+
+  .q{background:var(--card); border-radius:22px; padding:20px 16px 18px; box-shadow:var(--shadow); min-height:200px;}
+  .q-prompt{font-size:14px; color:var(--muted); font-weight:600; margin:12px 0 6px; text-align:center;}
+  .q-stem{font-family:var(--jp); font-weight:700; text-align:center; color:var(--ink); line-height:1.3; margin:10px 0 6px; word-break:keep-all; overflow-wrap:anywhere;}
+  .q-stem.k{font-size:92px; font-weight:500;}
+  .q-stem.w{font-size:40px;}
+  .q-stem.s{font-size:22px; line-height:1.6; font-weight:500; text-align:left;}
+  .q-stem.es{font-family:var(--ui); font-size:20px; font-weight:600; line-height:1.45;}
+  .q-stem .gap{color:var(--indigo-bright); font-weight:800;}
+  .opts{display:grid; gap:9px; margin-top:16px;}
+  .opt{border:1.5px solid var(--line); background:var(--card); border-radius:14px; padding:14px 14px; font-size:16px; text-align:left;
+    cursor:pointer; line-height:1.35; min-height:52px; font-family:var(--jp);}
+  .opt.big{font-size:30px; text-align:center; font-weight:600;}
+  .opts.two{grid-template-columns:1fr 1fr;}
+  .opt.ok{border-color:var(--green); background:var(--green-soft);}
+  .opt.bad{border-color:var(--red); background:var(--red-soft);}
+  .opt:disabled{cursor:default; color:var(--ink);}
+  .opt.dim{opacity:.5;}
+
+  .fb{margin-top:14px; border-top:1px solid var(--line); padding-top:14px;}
+  .fb-res{font-weight:800; font-size:16px; margin-bottom:8px;}
+  .fb-res.ok{color:var(--green);} .fb-res.bad{color:var(--red);}
+  .info-h{display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;}
+  .info-w{font-family:var(--jp); font-size:30px; font-weight:700;}
+  .info-k{font-family:var(--jp); font-size:64px; font-weight:500; line-height:1.1;}
+  .info-r{font-family:var(--jp); font-size:16px; color:var(--indigo-bright); font-weight:600;}
+  .info-mean{font-size:17px; font-weight:700; margin:6px 0;}
+  .chips{display:flex; gap:8px; flex-wrap:wrap; margin:6px 0;}
+  .chip{font-family:var(--jp); font-size:14px; background:var(--line-2); border-radius:10px; padding:6px 10px;}
+  .chip em{font-family:var(--ui); font-style:normal; font-size:11px; color:var(--muted); font-weight:700; margin-right:6px;}
+  .ex{margin-top:10px; background:var(--paper); border-radius:12px; padding:10px 12px;}
+  .ex .j{font-family:var(--jp); font-size:16.5px; line-height:1.6;}
+  .ex .r{font-family:var(--jp); font-size:12.5px; color:var(--muted); margin-top:2px;}
+  .ex .t{font-size:13.5px; color:var(--ink-2); margin-top:4px;}
+  .gx{font-size:14px; line-height:1.55; margin-top:8px; color:var(--ink-2);}
+  .gx b{color:var(--ink);}
+  .gx.err{background:var(--amber-soft); border-radius:12px; padding:9px 11px;}
+  .spk{border:0; background:var(--line-2); border-radius:10px; width:34px; height:34px; cursor:pointer; font-size:15px; flex:none;}
+  .grade{display:flex; gap:8px; margin-top:14px;}
+  .grade button{flex:1; border-radius:14px; padding:13px 6px; font-weight:700; font-size:14.5px; cursor:pointer; border:1.5px solid var(--line); background:var(--card);}
+  .grade button.main{flex:1.6; background:var(--indigo); color:#fff; border-color:var(--indigo);}
+  @media (prefers-color-scheme: dark){ .grade button.main{color:#10141F;} }
+  .grade small{display:block; font-weight:600; font-size:11px; opacity:.75; margin-top:2px;}
+
+  /* ---------- capas ---------- */
+  .layer{position:fixed; inset:0; background:rgba(16,20,31,.55); display:none; align-items:flex-end; justify-content:center; z-index:50;
+    padding:16px; padding-bottom:calc(16px + env(safe-area-inset-bottom));}
+  .layer.on{display:flex;}
+  .sheet{background:var(--card); border-radius:24px; padding:20px 18px; width:100%; max-width:520px; max-height:88vh; overflow:auto;}
+  .sheet h2{font-size:20px; margin-bottom:6px;}
+  .sheet p{font-size:14.5px; color:var(--ink-2); line-height:1.5; margin-bottom:8px;}
+  .celebrate{text-align:center;}
+  .celebrate .big{font-family:var(--jp); font-size:44px; font-weight:800; color:var(--green); margin:8px 0;}
+  .celebrate .num{font-size:15px; color:var(--muted); margin-bottom:6px;}
+  .pause{align-items:center; background:rgba(16,20,31,.7);}
+  .pause .sheet{text-align:center;}
+  .pause .big{font-size:44px; margin-bottom:6px;}
+
+  /* ---------- formularios ---------- */
+  label.f{display:block; font-size:13px; font-weight:700; color:var(--ink-2); margin:12px 0 5px;}
+  .f-help{font-size:12.5px; color:var(--muted); line-height:1.45; margin-top:4px;}
+  input[type=text], input[type=email], input[type=password], textarea, select{width:100%; border:1.5px solid var(--line); border-radius:12px; padding:12px;
+    font-size:16px; background:var(--paper); color:var(--ink); font-family:var(--ui);}
+  textarea{resize:vertical; min-height:70px; line-height:1.45;}
+  .seg{display:flex; gap:6px; flex-wrap:wrap;}
+  .seg button{border:1.5px solid var(--line); background:var(--card); border-radius:11px; padding:9px 13px; font-size:14px; font-weight:700; cursor:pointer;}
+  .seg button.on{background:var(--indigo); border-color:var(--indigo); color:#fff;}
+  @media (prefers-color-scheme: dark){ .seg button.on{color:#10141F;} }
+  .stepper{display:flex; align-items:center; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--line-2);}
+  .stepper:last-child{border-bottom:0;}
+  .stepper span{font-size:14.5px;}
+  .stepper div{display:flex; align-items:center; gap:10px;}
+  .stepper button{width:34px; height:34px; border-radius:10px; border:1.5px solid var(--line); background:var(--card); font-size:18px; cursor:pointer;}
+  .stepper b{min-width:24px; text-align:center; font-variant-numeric:tabular-nums;}
+  .hours{display:grid; grid-template-columns:repeat(3,1fr); gap:8px;}
+  .hours label{font-size:11.5px; color:var(--muted); font-weight:700; display:block; margin-bottom:4px;}
+  .msg{font-size:13px; color:var(--muted); margin-top:8px; line-height:1.4; min-height:1em;}
+  .msg.err{color:var(--red);}
+  .warn{font-size:13px; background:var(--amber-soft); border-radius:12px; padding:10px 12px; line-height:1.45; margin-top:8px;}
+
+  .toast{position:fixed; left:50%; bottom:calc(24px + env(safe-area-inset-bottom)); transform:translateX(-50%) translateY(20px);
+    background:var(--ink); color:var(--paper); padding:12px 16px; border-radius:14px; font-size:14px; font-weight:600; opacity:0;
+    transition:all .25s ease; z-index:80; max-width:90vw; text-align:center; pointer-events:none;}
+  .toast.on{opacity:1; transform:translateX(-50%) translateY(0);}
+
+  .ob-steps{display:flex; gap:6px; margin-bottom:14px;}
+  .ob-steps i{flex:1; height:4px; border-radius:3px; background:var(--line);}
+  .ob-steps i.on{background:var(--indigo);}
+  .ob-hero{font-family:var(--jp); font-size:58px; font-weight:800; color:var(--indigo); line-height:1; margin:6px 0 10px;}
+  .ob-list{font-size:14.5px; line-height:1.55; padding-left:18px; color:var(--ink-2); margin:6px 0 4px;}
+  .ob-list li{margin-bottom:6px;}
+  .empty{text-align:center; color:var(--muted); padding:30px 10px; font-size:15px; line-height:1.5;}
+</style>
+</head>
+<body>
+
+<!-- =================== HOY =================== -->
+<section class="view wrap" id="vHome">
+  <div class="top">
+    <div class="brand">毎日<small>15分の約束</small></div>
+    <div class="sp"></div>
+    <button class="icon-btn" id="hAcct" aria-label="Cuenta">☁</button>
+    <button class="icon-btn" id="hSet" aria-label="Ajustes">⚙</button>
+  </div>
+
+  <div class="streak-row">
+    <div class="pill fire"><b id="hStreak">0</b><span>días seguidos</span></div>
+    <div class="pill shield"><b id="hShields">0</b><span>protectores</span></div>
+    <div class="pill"><b id="hBest">0</b><span>mejor racha</span></div>
+  </div>
+
+  <div id="hBanner"></div>
+
+  <div class="card today">
+    <div class="ring" id="hRing">
+      <svg viewBox="0 0 120 120"><circle class="bg" cx="60" cy="60" r="52" fill="none" stroke-width="10"/>
+        <circle class="fg" id="hRingFg" cx="60" cy="60" r="52" fill="none" stroke-width="10" stroke-linecap="round" stroke-dasharray="326.73" stroke-dashoffset="326.73"/></svg>
+      <div class="ring-in"><div class="ring-big" id="hMin">0</div><div class="ring-small" id="hGoal">de 15 min</div><div class="ring-kanji" id="hKanji">今日</div></div>
+    </div>
+    <button class="btn" id="hGo">Empezar mis 15 minutos</button>
+    <div class="sub" id="hSub"></div>
+  </div>
+
+  <div class="card why" id="hWhy"></div>
+
+  <div class="card">
+    <h3>Constancia</h3>
+    <div class="cal" id="hCal"></div>
+    <div class="legend">
+      <span style="--c:var(--indigo)">Cumplido</span>
+      <span style="--c:var(--cell-part)">A medias</span>
+      <span style="--c:var(--amber)">Protector</span>
+      <span style="--c:var(--shu)">Rescatado</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Últimos 7 días</h3>
+    <div class="week" id="hWeek"></div>
+  </div>
+
+  <div class="card">
+    <h3>Lo que ya dominas</h3>
+    <div id="hProg"></div>
+    <div class="legend">
+      <span style="--c:var(--indigo)">Dominado (lo recordarás 3 semanas o más)</span>
+      <span style="--c:var(--cell-part)">En aprendizaje</span>
+    </div>
+  </div>
+
+  <div class="links">
+    <button class="link" id="hShare">📤 Compartir mi progreso de hoy</button>
+  </div>
+</section>
+
+<!-- =================== SESIÓN =================== -->
+<section class="view wrap" id="vSession">
+  <div class="s-top">
+    <button class="icon-btn" id="sClose" aria-label="Salir">✕</button>
+    <div class="s-bar" id="sBar"><div></div></div>
+    <div class="s-time" id="sTime">0:00 / 15:00</div>
+  </div>
+  <div class="s-meta"><span id="sLeft"></span><span id="sScore"></span></div>
+  <div id="sStage"></div>
+</section>
+
+<!-- =================== AJUSTES =================== -->
+<section class="view wrap" id="vSettings">
+  <div class="top">
+    <button class="icon-btn" id="stBack" aria-label="Volver">←</button>
+    <div class="brand" style="font-size:22px;">Ajustes</div>
+  </div>
+
+  <div class="card">
+    <h3>Objetivo diario</h3>
+    <div class="seg" id="stGoal"></div>
+    <div class="f-help" id="stGoalHelp">Solo cuenta el tiempo en que estás estudiando de verdad: si pasas 90 s sin tocar nada, el reloj se para.</div>
+  </div>
+
+  <div class="card">
+    <h3>Qué estudiar</h3>
+    <label class="f">Niveles</label>
+    <div class="seg" id="stLevels"></div>
+    <label class="f">Tipos</label>
+    <div class="seg" id="stKinds"></div>
+    <label class="f">Elementos nuevos al día</label>
+    <div id="stNew"></div>
+    <div class="f-help">Los repasos pendientes van siempre primero. Más nuevos hoy = más repasos los próximos días.</div>
+    <label class="f">Retención objetivo</label>
+    <div class="seg" id="stRet"></div>
+  </div>
+
+  <div class="card">
+    <h3>Mi compromiso</h3>
+    <label class="f" for="cWhy">¿Por qué estudias japonés?</label>
+    <textarea id="cWhy" placeholder="Ej.: Quiero aprobar el N1 en diciembre y leer novelas sin diccionario."></textarea>
+    <label class="f" for="cAfter">Lo haré justo después de…</label>
+    <input type="text" id="cAfter" placeholder="Ej.: el café de la mañana">
+    <label class="f" for="cWhere">…y en…</label>
+    <input type="text" id="cWhere" placeholder="Ej.: el sofá, antes de mirar el correo">
+    <label class="f" for="cStake">Si rompo la racha, yo…</label>
+    <input type="text" id="cStake" placeholder="Ej.: dono 10 € y se lo cuento a Laura">
+    <div class="f-help">Lo verás al abrir la app y en el último aviso del día. Una apuesta real (y alguien que lo sepa) funciona mucho mejor que la fuerza de voluntad.</div>
+    <button class="btn small" id="cSave" style="margin-top:12px;">Guardar compromiso</button>
+  </div>
+
+  <div class="card">
+    <h3>Avisos</h3>
+    <div class="hours" id="stHours"></div>
+    <div class="f-help">Solo te avisa si ese día aún no has cumplido. El primero es tu hora de estudio; los otros dos, el rescate y la última llamada.</div>
+    <div id="stPush"></div>
+    <label class="f">Sin cuenta ni servidor</label>
+    <button class="btn small ghost" id="stIcs">📅 Añadir avisos al Calendario</button>
+    <div class="f-help">Crea eventos diarios con alarma a esas horas. En iPhone, si no se abre desde la app, abre esta página en Safari.</div>
+  </div>
+
+  <div class="card">
+    <h3>Cuenta y copia</h3>
+    <div id="stAcct"></div>
+    <div class="row" style="margin-top:10px;">
+      <button class="btn small ghost" id="stImport">⇣ Traer lo que ya sé de N1 Path</button>
+    </div>
+    <div class="msg" id="stImportMsg"></div>
+    <div class="row" style="margin-top:10px;">
+      <button class="btn small ghost" id="stExport">Exportar copia</button>
+      <button class="btn small ghost" id="stRestore">Restaurar copia</button>
+      <input type="file" id="stFile" accept="application/json" class="hidden">
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Instalar en el iPhone</h3>
+    <p class="f-help" style="font-size:13.5px;">Safari → botón Compartir → «Añadir a pantalla de inicio». Ábrela siempre desde el icono 毎日: así funcionan los avisos y el número rojo del icono con los minutos que te faltan.</p>
+  </div>
+</section>
+
+<!-- =================== CAPAS =================== -->
+<div class="layer" id="lyOnboard"><div class="sheet" id="obSheet"></div></div>
+<div class="layer" id="lyCelebrate"><div class="sheet celebrate" id="celSheet"></div></div>
+<div class="layer" id="lyQuit"><div class="sheet" id="quitSheet"></div></div>
+<div class="layer pause" id="lyPause"><div class="sheet"><div class="big">⏸</div><h2>En pausa</h2>
+  <p>El tiempo solo cuenta mientras estudias. Toca para seguir.</p><button class="btn" id="pauseGo">Seguir</button></div></div>
+<div class="layer" id="lyAcct"><div class="sheet">
+  <h2>Cuenta</h2>
+  <p>Es la misma cuenta de N1 Path. Sirve para guardar tu progreso en la nube y para que te lleguen los avisos.</p>
+  <div id="acOut">
+    <label class="f" for="acUser">Correo</label><input type="email" id="acUser" autocomplete="username">
+    <label class="f" for="acPass">Contraseña</label><input type="password" id="acPass" autocomplete="current-password">
+    <button class="btn" id="acLogin">Entrar</button>
+  </div>
+  <div id="acIn" class="hidden">
+    <p><b id="acWho"></b></p>
+    <p class="f-help" id="acState"></p>
+    <div class="row" style="margin-top:10px;"><button class="btn small ghost" id="acSync">Sincronizar ahora</button><button class="btn small ghost" id="acLogout">Cerrar sesión</button></div>
+  </div>
+  <div class="msg" id="acMsg"></div>
+  <button class="btn ghost" id="acClose">Cerrar</button>
+</div></div>
+<div class="toast" id="toast"></div>
+
+<script src="../content.js"></script>
+<script>
+/* =========================================================================
+   毎日 · Mainichi — 15 minutos al día de kanji, vocabulario y gramática
+   Lee el contenido de la app principal (../content.js) y guarda su propio
+   progreso (FSRS-5, mismo formato e ids que N1 Path: k:字 · v:語 · g:〜文).
+   Todo lo que hace por la constancia:
+     · el reloj solo cuenta tiempo activo (90 s sin tocar nada → pausa)
+     · racha diaria con protectores (1 por cada 7 días, máx. 2) y rescate
+       (si fallas un día, al siguiente puedes salvarla haciendo el doble)
+     · bajar el objetivo solo vale a partir de mañana; subirlo, al momento
+     · salir antes de cumplir pide confirmación
+     · avisos push escalonados (hora del plan, rescate, última llamada) solo
+       si ese día aún no has cumplido · número rojo en el icono con los
+       minutos que faltan · alternativa sin servidor: eventos de Calendario
+     · compromiso escrito (por qué, cuándo y dónde, y qué pasa si fallas)
+   ========================================================================= */
+"use strict";
+var SYNC_URL="https://jlpt-cuenta.deliciassaulmoreno.workers.dev";
+var TTS_ENDPOINT="https://jlpt-tts.deliciassaulmoreno.workers.dev";
+var VAPID_PUBLIC="BKelbnig1tArVRN286zg3wkw90nRbCscJnOKg_LqFQRxDrpNMZXse7BYDBoO2hswSXoYXqpKdz1sAC64KzqJkz4";
+var DATA_KEY="mai-data", AUTH_KEY="mai-auth", REMIND_KEY="mai-remind";
+var IDLE_MS=90000;                 /* sin tocar nada durante 90 s → el reloj se para */
+var MAX_SHIELDS=2, SHIELD_EVERY=7;
+var MASTER_DAYS=21;                /* estabilidad a partir de la cual se considera "dominado" */
+var LEVELS=["N3","N2","N1"];
+var KIND_NAME={k:"Kanji", v:"Vocabulario", g:"Gramática"};
+
+/* ---------------- almacenamiento ---------------- */
+var memStore={};
+function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return memStore[k]==null ? null : memStore[k]; } }
+function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){ memStore[k]=v; } }
+function lsDel(k){ try{ localStorage.removeItem(k); }catch(e){ delete memStore[k]; } }
+function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+
+function defaults(){
+  return { v:1, cards:{}, days:{}, stats:{}, done:{}, frozen:{}, shields:0, best:0, shieldDay:"",
+    lastCheck:"", rescue:null, notice:null, onboarded:false, target:null, streak:0, updatedAt:0,
+    settings:{ goal:15, goalNext:null, levels:["N2","N1"], kinds:{k:true,v:true,g:true}, newK:5, newV:8, newG:3, retention:0.9 },
+    commit:{ why:"", after:"", where:"", stake:"", hours:[9,21,23] } };
+}
+function fillData(d){
+  var b=defaults(), k;
+  if(!d || typeof d!=="object" || Array.isArray(d)) return b;
+  for(k in b) if(d[k]==null) d[k]=b[k];
+  for(k in b.settings) if(d.settings[k]==null) d.settings[k]=b.settings[k];
+  for(k in b.commit) if(d.commit[k]==null) d.commit[k]=b.commit[k];
+  return d;
+}
+var D=(function(){ var d=null; try{ d=JSON.parse(lsGet(DATA_KEY)||"null"); }catch(e){} return fillData(d); })();
+function save(sync){
+  D.target={ day:today(), mins:goalToday() };      /* para el servidor de avisos */
+  D.streak=streakInfo().streak;
+  D.updatedAt=Date.now();
+  lsSet(DATA_KEY, JSON.stringify(D));
+  if(sync) cloudDirty();
+}
+
+/* ---------------- días (el día de estudio empieza a las 4:00) ---------------- */
+function pad(n){ return (n<10?"0":"")+n; }
+function dayKey(ms){ var d=new Date((ms==null?Date.now():ms)-4*3600000); return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate()); }
+function today(){ return dayKey(); }
+function shiftDay(k,n){ var p=k.split("-"), d=new Date(+p[0], +p[1]-1, +p[2]+n, 12); return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate()); }
+function dayDate(k){ var p=k.split("-"); return new Date(+p[0], +p[1]-1, +p[2], 12); }
+function goalMins(){ return D.settings.goal||15; }
+function goalToday(){ return (D.rescue && D.rescue.day===today()) ? goalMins()*2 : goalMins(); }
+function secsToday(){ return D.days[today()]||0; }
+function covered(k){ return !!(D.done[k] || D.frozen[k]); }
+function streakEnding(k){ var n=0; while(covered(k) && n<10000){ n++; k=shiftDay(k,-1); } return n; }
+function streakInfo(){ var t=today(); return { streak: covered(t) ? streakEnding(t) : streakEnding(shiftDay(t,-1)), todayDone: !!D.done[t] }; }
+function fmtClock(s){ s=Math.max(0,Math.floor(s)); return Math.floor(s/60)+":"+pad(s%60); }
+
+/* Al empezar cada día: aplica el cambio de objetivo pendiente y decide qué pasa con
+   los días que faltan desde la última vez (protectores, rescate o racha rota). */
+var pullDone=true;              /* con cuenta: no se decide nada hasta traer lo estudiado en otros dispositivos */
+function reconcile(){
+  var t=today();
+  if(D.lastCheck===t || !pullDone) return;
+  var g=D.settings.goalNext;
+  if(g && g.from<=t){ D.settings.goal=g.val; D.settings.goalNext=null; }
+  if(D.rescue && D.rescue.day!==t) D.rescue=null;
+  D.notice=null;
+  var y=shiftDay(t,-1);
+  if(!covered(y)){
+    var last=null, d=shiftDay(y,-1);
+    for(var i=0;i<400;i++){ if(covered(d)){ last=d; break; } d=shiftDay(d,-1); }
+    if(last){
+      var miss=[], was=streakEnding(last);
+      d=shiftDay(last,1);
+      while(d<t){ miss.push(d); d=shiftDay(d,1); }
+      if(miss.length<=D.shields){
+        miss.forEach(function(m){ D.frozen[m]="shield"; });
+        D.shields-=miss.length;
+        D.notice={kind:"shield", n:miss.length, day:t};
+      } else if(miss.length-D.shields===1){
+        var use=miss.slice(0, D.shields);
+        use.forEach(function(m){ D.frozen[m]="shield"; });
+        D.shields-=use.length;
+        D.rescue={day:t, miss:miss[miss.length-1], was:was};
+        D.notice={kind:"rescue", used:use.length, day:t};
+      } else {
+        D.notice={kind:"broken", was:was, missed:miss.length, day:t};
+      }
+    }
+  }
+  D.lastCheck=t;
+  save(true);
+}
+
+/* ---------------- contenido ---------------- */
+var C=window.CONTENT||{kanji:[],vocab:[],grammar:[]};
+var ITEMS=[], BYID={}, BYTYPE={k:[],v:[],g:[]};
+function addItem(id,t,d){ if(BYID[id]) return; var it={id:id, t:t, lvl:d.lvl||"", d:d}; ITEMS.push(it); BYID[id]=it; BYTYPE[t].push(it); }
+(C.kanji||[]).forEach(function(k){ if(k.c) addItem("k:"+k.c, "k", k); });
+(C.vocab||[]).forEach(function(v){ if(v.w) addItem("v:"+v.w, "v", v); });
+(C.grammar||[]).forEach(function(g){ if(g.pat) addItem("g:"+g.pat, "g", g); });
+function inPool(it){ return D.settings.levels.indexOf(it.lvl)>=0 && !!D.settings.kinds[it.t]; }
+function pool(){ return ITEMS.filter(inPool); }
+
+/* ===== PLANIFICADOR FSRS-5 (el mismo de N1 Path: misma tarjeta, mismos ids) ===== */
+var FSRS_W=[0.40255,1.18385,3.173,15.69105,7.1949,0.5345,1.4604,0.0046,1.54575,0.1192,1.01925,1.9395,0.11,0.29605,2.2698,0.2315,2.9898,0.51655,0.6621];
+var FSRS_DECAY=-0.5, FSRS_FACTOR=19/81, DAY_MS=86400000, MIN_MS=60000, MAX_IVL_DAYS=3650;
+function desiredRetention(){ var r=+D.settings.retention; return (r>=0.7 && r<=0.97) ? r : 0.9; }
+function fsrsR(elapsedDays, S){ return Math.pow(1+FSRS_FACTOR*elapsedDays/S, FSRS_DECAY); }
+function fsrsInterval(S){ return S/FSRS_FACTOR*(Math.pow(desiredRetention(),1/FSRS_DECAY)-1); }
+function clampD(d){ return Math.min(10, Math.max(1, d)); }
+function fsrsD0(g){ return clampD(FSRS_W[4]-Math.exp(FSRS_W[5]*(g-1))+1); }
+function fsrsNextD(D0,g){ var d2=D0+(-FSRS_W[6]*(g-3))*(10-D0)/9; return clampD(FSRS_W[7]*fsrsD0(4)+(1-FSRS_W[7])*d2); }
+function fsrsRecallS(Dd,S,R,g){
+  var hard=(g===2)?FSRS_W[15]:1, easy=(g===4)?FSRS_W[16]:1;
+  return S*(Math.exp(FSRS_W[8])*(11-Dd)*Math.pow(S,-FSRS_W[9])*(Math.exp(FSRS_W[10]*(1-R))-1)*hard*easy+1);
+}
+function fsrsForgetS(Dd,S,R){
+  var s=FSRS_W[11]*Math.pow(Dd,-FSRS_W[12])*(Math.pow(S+1,FSRS_W[13])-1)*Math.exp(FSRS_W[14]*(1-R));
+  return Math.min(s, S);
+}
+function fsrsShortS(S,g){ return S*Math.exp(FSRS_W[17]*(g-3+FSRS_W[18])); }
+function r2(x){ return Math.round(x*100)/100; }
+function toMin(ms){ return Math.round(ms/MIN_MS); }
+function dayStartMs(ms){ var d=new Date(ms); if(d.getHours()<4) d.setDate(d.getDate()-1); d.setHours(4,0,0,0); return d.getTime(); }
+function validCard(c){ return !!(c && c.s!=null && typeof c.due==="number" && typeof c.last==="number"); }
+function cardDueMs(c){ return c ? c.due*MIN_MS : 0; }
+function cardR(c, nowMs){ if(!validCard(c)) return 0; return fsrsR(Math.max(0,(nowMs-c.last*MIN_MS)/DAY_MS), Math.max(0.01,c.s)); }
+/* Resultado de cada nota (1 Otra vez · 2 Difícil · 3 Bien · 4 Fácil) */
+function scheduleAll(c, now){
+  var nowMs=(now||new Date()).getTime(), out={}, raw={};
+  if(!validCard(c)) c=null;
+  for(var g=1; g<=4; g++){
+    var S, Dd, state, lapses=c?(c.lapses||0):0, ivDays=null;
+    if(!c){
+      S=FSRS_W[g-1]; Dd=fsrsD0(g);
+      if(g===1){ state=1; ivDays=1/1440; }
+      else { state=2; if(g===2) ivDays=1; }
+    } else {
+      var elapsed=Math.max(0,(nowMs-c.last*MIN_MS)/DAY_MS);
+      Dd=fsrsNextD(c.d, g);
+      if(c.st===2 && elapsed>=1){
+        var R=fsrsR(elapsed, c.s);
+        if(g===1){ S=fsrsForgetS(c.d, c.s, R); lapses++; state=3; ivDays=5/1440; }
+        else { S=fsrsRecallS(c.d, c.s, R, g); state=2; }
+      } else {
+        S=fsrsShortS(c.s, g);
+        if(g===1){ if(c.st===2) lapses++; state=(c.st===2||c.st===3)?3:1; ivDays=5/1440; }
+        else { state=2; }
+      }
+    }
+    S=Math.max(0.05, Math.min(S, 36500));
+    if(state===2 && ivDays==null) ivDays=fsrsInterval(S);
+    raw[g]={S:S, D:Dd, state:state, lapses:lapses, iv:ivDays};
+  }
+  function days(x){ if(x>=7) x=x*(0.95+Math.random()*0.1); return Math.max(1, Math.min(MAX_IVL_DAYS-2, Math.round(x))); }
+  if(raw[2].state===2) raw[2].iv=days(raw[2].iv);
+  if(raw[3].state===2) raw[3].iv=days(raw[3].iv);
+  if(raw[4].state===2) raw[4].iv=days(raw[4].iv);
+  if(raw[2].state===2 && raw[3].state===2) raw[2].iv=Math.min(raw[2].iv, raw[3].iv);
+  if(raw[3].state===2 && raw[2].state===2) raw[3].iv=Math.max(raw[3].iv, raw[2].iv+(c && c.st===2 ? 1 : 0));
+  if(raw[4].state===2) raw[4].iv=Math.max(raw[4].iv, raw[3].iv+1);
+  var today0=toMin(dayStartMs(nowMs)), first=c ? ((c.first && c.first>=today0) ? c.first : undefined) : toMin(nowMs);
+  for(var k=1; k<=4; k++){
+    var o=raw[k], dueMs=(o.state===2) ? dayStartMs(nowMs)+o.iv*DAY_MS : nowMs+o.iv*DAY_MS;
+    out[k]={ card:{s:r2(o.S), d:r2(o.D), due:toMin(dueMs), last:toMin(nowMs), first:first,
+                   reps:(c?(c.reps||0):0)+1, lapses:o.lapses, st:o.state}, iv:o.iv };
+  }
+  return out;
+}
+function fmtIv(days){ if(days<1){ var m=Math.round(days*1440); return m<60 ? m+" min" : Math.round(days*24)+" h"; }
+  if(days<30) return Math.round(days)+" d"; if(days<365) return Math.round(days/30)+" m"; return (Math.round(days/36.5)/10)+" a"; }
+
+/* ---------------- preguntas ---------------- */
+function rnd(n){ return Math.floor(Math.random()*n); }
+function shuffle(a){ for(var i=a.length-1;i>0;i--){ var j=rnd(i+1), t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
+function hasKanji(s){ return /[㐀-䶿一-鿿々]/.test(s||""); }
+function kata2hira(s){ return (s||"").replace(/[ァ-ヶ]/g,function(c){ return String.fromCharCode(c.charCodeAt(0)-0x60); }); }
+/* todas las lecturas de un kanji en hiragana, para no ofrecer como "incorrecta" una lectura válida */
+function kanjiReadings(d){
+  var set={};
+  ((d.on||"")+"・"+(d.kun||"")).split(/[・、,\s]+/).forEach(function(r){
+    r=kata2hira(r).replace(/[-‐.。]/g,""); if(!r) return;
+    set[r.replace(/[（(].*?[）)]/g,"")]=1; set[r.replace(/[（()）]/g,"")]=1;
+  });
+  if(d.say) set[d.say]=1;
+  return set;
+}
+/* Distractores del mismo tipo: se prefieren del mismo nivel y de longitud parecida */
+function distract(it, field, n, accept){
+  var ans=it.d[field], L=(ans||"").length, src=BYTYPE[it.t], seen={}, c=[];
+  seen[ans]=1;
+  for(var tries=0; tries<600 && c.length<36; tries++){
+    var o=src[rnd(src.length)], v=o.d[field];
+    if(!v || seen[v] || o===it) continue;
+    if(accept && !accept(o, v)) continue;
+    seen[v]=1; c.push({v:v, sc:(o.lvl===it.lvl?2:0) - Math.min(4, Math.abs(v.length-L))*0.6 + Math.random()*1.4});
+  }
+  c.sort(function(a,b){ return b.sc-a.sc; });
+  return c.slice(0,n).map(function(x){ return x.v; });
+}
+function opts(ans, others){ return shuffle([ans].concat(others)); }
+/* Núcleo(s) del patrón para el hueco: sin 〜, sin paréntesis, cada variante por separado */
+function patVariants(pat){
+  return (pat||"").replace(/[（(].*?[）)]/g,"").split(/[／\/・、,]|\s+/)
+    .map(function(s){ return s.replace(/^[〜~]+|[〜~]+$/g,"").replace(/[〜~]/g,"").trim(); }).filter(Boolean);
+}
+function grammarBlank(d){
+  if(!d.ej) return null;
+  var vs=patVariants(d.pat), best=null, i, v;
+  for(i=0;i<vs.length;i++){ v=vs[i]; var at=d.ej.indexOf(v); if(at>=0) return d.ej.slice(0,at)+"\u0000"+d.ej.slice(at+v.length); }
+  /* forma conjugada (済む → 済んだ): el trozo común más largo, si cubre ≥60 % del patrón */
+  for(i=0;i<vs.length;i++){
+    v=vs[i]; var need=Math.max(2, Math.ceil(v.length*0.6));
+    for(var s=0; s<v.length; s++) for(var e=v.length; e-s>=need; e--){
+      var sub=v.slice(s,e), p=d.ej.indexOf(sub);
+      if(p>=0){ if(!best || sub.length>best.len) best={at:p, len:sub.length}; break; }
+    }
+  }
+  return best ? d.ej.slice(0,best.at)+"\u0000"+d.ej.slice(best.at+best.len) : null;
+}
+function gapHTML(s){ var i=s.indexOf("\u0000"); return esc(s.slice(0,i))+'<span class="gap">（　　）</span>'+esc(s.slice(i+1)); }
+
+/* Mientras una tarjeta es joven (o nueva) se pregunta en el sentido fácil (reconocer);
+   cuando ya está asentada (estabilidad ≥ 4 días) se pasa a producir y a frases con hueco. */
+function modesFor(it, mature){
+  var d=it.d;
+  if(it.t==="k"){
+    var hasWord=d.ej && d.ejr && d.ej!==d.c && d.ej.indexOf(d.c)>=0 && d.ej.length<=6;
+    if(!mature) return hasWord ? ["mean","read","word"] : ["mean","read"];
+    return hasWord ? ["word","word","rev","read","mean"] : ["rev","read","mean"];
+  }
+  if(it.t==="v"){
+    var hk=hasKanji(d.w), fill=d.ej && d.ej.indexOf(d.w)>=0;
+    if(!mature) return hk ? ["mean","read"] : ["mean"];
+    var m=["rev","mean"]; if(hk){ m.push("write","read"); } if(fill){ m.push("fill","fill"); }
+    return m;
+  }
+  if(!mature) return ["mean","ctx"];
+  return ["ctx","ctx","form","mean"];
+}
+function buildQ(it, mature){
+  var d=it.d, ms=modesFor(it, mature), m=ms[rnd(ms.length)];
+  if(it.t==="k"){
+    if(m==="read"){ var rs=kanjiReadings(d);
+      return {stem:d.c, cls:"k", prompt:"Lectura principal", answer:d.say, options:opts(d.say, distract(it,"say",3,function(o,v){ return !rs[v]; }))}; }
+    if(m==="word") return {stem:d.ej, cls:"w", prompt:"¿Cómo se lee?", answer:d.ejr, options:opts(d.ejr, distract(it,"ejr",3))};
+    if(m==="rev") return {stem:d.mean, cls:"es", prompt:"¿Qué kanji es?", answer:d.c, options:opts(d.c, distract(it,"c",3)), big:true};
+    return {stem:d.c, cls:"k", prompt:"¿Qué significa?", answer:d.mean, options:opts(d.mean, distract(it,"mean",3))};
+  }
+  if(it.t==="v"){
+    if(m==="read") return {stem:d.w, cls:"w", prompt:"¿Cómo se lee?", answer:d.r, options:opts(d.r, distract(it,"r",3))};
+    if(m==="write") return {stem:d.r, cls:"w", prompt:"¿Cómo se escribe?", answer:d.w, options:opts(d.w, distract(it,"w",3,function(o){ return hasKanji(o.d.w) && o.d.r!==d.r; }))};
+    if(m==="fill") return {stemHTML:gapHTML(d.ej.replace(d.w,"\u0000")), cls:"s", prompt:"Completa la frase", answer:d.w, options:opts(d.w, distract(it,"w",3))};
+    if(m==="rev") return {stem:d.mean, cls:"es", prompt:"¿Cómo se dice en japonés?", answer:d.w, options:opts(d.w, distract(it,"w",3))};
+    return {stem:d.w, cls:"w", prompt:"¿Qué significa?", answer:d.mean, options:opts(d.mean, distract(it,"mean",3))};
+  }
+  if(m==="ctx"){
+    var b=grammarBlank(d);
+    if(b) return {stemHTML:gapHTML(b), cls:"s", prompt:"¿Qué estructura completa la frase?", answer:d.pat, options:opts(d.pat, distract(it,"pat",3))};
+    return {stem:d.ej, cls:"s", prompt:"¿Qué estructura se usa en esta frase?", answer:d.pat, options:opts(d.pat, distract(it,"pat",3))};
+  }
+  if(m==="form") return {stem:d.ejt, cls:"es", prompt:"¿Con qué estructura se dice en japonés?", answer:d.pat, options:opts(d.pat, distract(it,"pat",3))};
+  return {stem:d.pat, cls:"w", prompt:"¿Qué significa?", answer:d.mean, options:opts(d.mean, distract(it,"mean",3))};
+}
+
+/* ---------------- ficha completa (al estudiar algo nuevo y tras responder) ---------------- */
+function spk(text){ return text ? '<button class="spk" data-say="'+esc(text)+'" aria-label="Escuchar">🔊</button>' : ''; }
+function exHTML(d){
+  if(!d.ej) return '';
+  return '<div class="ex"><div class="info-h" style="justify-content:space-between; flex-wrap:nowrap;"><div class="j">'+esc(d.ej)+'</div>'+spk(d.ej)+'</div>'+
+    (d.ejr?'<div class="r">'+esc(d.ejr)+'</div>':'')+(d.ejt?'<div class="t">'+esc(d.ejt)+'</div>':'')+'</div>';
+}
+function infoHTML(it){
+  var d=it.d;
+  if(it.t==="k"){
+    var ch='';
+    if(d.on) ch+='<span class="chip"><em>ON</em>'+esc(d.on)+'</span>';
+    if(d.kun) ch+='<span class="chip"><em>KUN</em>'+esc(d.kun)+'</span>';
+    return '<div class="info-h"><span class="info-k">'+esc(d.c)+'</span><span class="info-r">'+esc(d.say||"")+'</span>'+spk(d.say)+'</div>'+
+      '<div class="info-mean">'+esc(d.mean)+'</div><div class="chips">'+ch+'</div>'+exHTML(d);
+  }
+  if(it.t==="v"){
+    return '<div class="info-h"><span class="info-w">'+esc(d.w)+'</span><span class="info-r">'+esc(d.r||"")+'</span>'+spk(d.r||d.w)+'</div>'+
+      '<div class="info-mean">'+esc(d.mean)+'</div>'+exHTML(d);
+  }
+  return '<div class="info-h"><span class="info-w" style="font-size:26px;">'+esc(d.pat)+'</span></div>'+
+    '<div class="info-mean">'+esc(d.mean)+'</div>'+
+    (d.exp?'<div class="gx">'+esc(d.exp)+'</div>':'')+
+    (d.form?'<div class="gx"><b>Construcción:</b> '+esc(d.form)+'</div>':'')+
+    exHTML(d)+
+    (d.err?'<div class="gx err"><b>Ojo:</b> '+esc(d.err)+'</div>':'');
+}
+
+/* ---------------- audio ---------------- */
+var audioEl=null;
+function systemSpeak(t){
+  try{
+    if(!("speechSynthesis" in window)) return;
+    var u=new SpeechSynthesisUtterance(t); u.lang="ja-JP"; u.rate=0.95;
+    var v=(speechSynthesis.getVoices()||[]).filter(function(x){ return /^ja/i.test(x.lang||""); })[0]; if(v) u.voice=v;
+    speechSynthesis.cancel(); speechSynthesis.speak(u);
+  }catch(e){}
+}
+function speak(t){
+  if(!t) return;
+  var fell=false; function fb(){ if(!fell){ fell=true; systemSpeak(t); } }
+  try{
+    if(!audioEl){ audioEl=new Audio(); audioEl.preload="none"; }
+    audioEl.onerror=fb;
+    audioEl.src=TTS_ENDPOINT+"/tts?text="+encodeURIComponent(t);
+    var p=audioEl.play(); if(p && p.catch) p.catch(fb);
+  }catch(e){ fb(); }
+}
+document.addEventListener("click", function(e){ var b=e.target.closest && e.target.closest("[data-say]"); if(b){ e.stopPropagation(); speak(b.getAttribute("data-say")); } }, true);
+
+/* ---------------- vistas ---------------- */
+var view="home";
+function show(v){
+  view=v;
+  ["home","session","settings"].forEach(function(x){ document.getElementById("v"+x.charAt(0).toUpperCase()+x.slice(1)).classList.toggle("on", x===v); });
+  window.scrollTo(0,0);
+  if(v!=="session"){ paused=false; layer("lyPause", false); }
+  if(v==="home") renderHome();
+  if(v==="settings") renderSettings();
+}
+function layer(id, on){ document.getElementById(id).classList.toggle("on", !!on); }
+var toastT=null;
+function toast(t){ var el=document.getElementById("toast"); el.textContent=t; el.classList.add("on"); clearTimeout(toastT); toastT=setTimeout(function(){ el.classList.remove("on"); }, 2600); }
+
+/* ---------------- portada ---------------- */
+function counts(){
+  var now=Date.now(), due=0, fresh={k:0,v:0,g:0}, intro=introducedToday();
+  pool().forEach(function(it){ var c=D.cards[it.id]; if(validCard(c)){ if(cardDueMs(c)<=now) due++; } else fresh[it.t]++; });
+  var nw=Math.min(fresh.k, Math.max(0,D.settings.newK-intro.k))+Math.min(fresh.v, Math.max(0,D.settings.newV-intro.v))+Math.min(fresh.g, Math.max(0,D.settings.newG-intro.g));
+  return {due:due, nw:nw};
+}
+function introducedToday(){
+  var from=toMin(dayStartMs(Date.now())), o={k:0,v:0,g:0};
+  for(var id in D.cards){ var c=D.cards[id]; if(c && c.first && c.first>=from){ var t=id.charAt(0); if(o[t]!=null) o[t]++; } }
+  return o;
+}
+function renderHome(){
+  reconcile();
+  var si=streakInfo(), secs=secsToday(), goal=goalToday(), frac=Math.min(1, secs/(goal*60)), done=!!D.done[today()];
+  document.getElementById("hStreak").textContent=si.streak;
+  document.getElementById("hShields").textContent=D.shields+"/"+MAX_SHIELDS;
+  document.getElementById("hBest").textContent=Math.max(D.best, si.streak);
+  var ring=document.getElementById("hRing");
+  ring.className="ring"+(done?" done":(D.rescue?" rescue":""));
+  var fg=document.getElementById("hRingFg");
+  fg.setAttribute("stroke-dashoffset", (326.73*(1-frac)).toFixed(1));
+  fg.style.opacity= frac>0.005 ? 1 : 0;              /* con 0 min, sin el punto del extremo redondeado */
+  document.getElementById("hMin").textContent=Math.floor(secs/60);
+  document.getElementById("hGoal").textContent="de "+goal+" min";
+  document.getElementById("hKanji").textContent=done ? "完了 ✓" : "今日";
+  var go=document.getElementById("hGo"), left=Math.max(0, Math.ceil((goal*60-secs)/60));
+  go.className="btn"+(done?" green":(D.rescue?" shu":""));
+  go.textContent= done ? "Hecho por hoy ✓ · Seguir un poco" : (secs>0 ? "Seguir · me faltan "+left+" min" : "Empezar mis "+goal+" minutos");
+  var c=counts();
+  document.getElementById("hSub").innerHTML= ITEMS.length ? (c.due+(c.due===1?" repaso pendiente":" repasos pendientes")+" · "+c.nw+(c.nw===1?" nuevo":" nuevos")+" para hoy") : '<span style="color:var(--red)">No se ha podido cargar el contenido (../content.js).</span>';
+  renderBanner(); renderWhy(); renderCal(); renderWeek(); renderProg();
+  updateBadge();
+}
+function renderBanner(){
+  var n=D.notice, h="", t=today(), st=D.commit.stake;
+  if(D.rescue && D.rescue.day===t && !D.done[t]){
+    h='<div class="banner rescue"><b>🚑 Rescate de racha</b>Ayer no llegaste. Si hoy haces <b style="display:inline">'+goalToday()+' min</b> (el doble), tu racha de '+D.rescue.was+' días sigue viva'+(n && n.used ? ' (ya has gastado '+n.used+' protector'+(n.used>1?'es':'')+')' : '')+'. Si no, mañana vuelve a 0.</div>';
+  } else if(n && n.day===t && n.kind==="shield"){
+    h='<div class="banner shield"><b>🛡 Protector usado</b>'+(n.n>1 ? 'Se han gastado '+n.n+' protectores' : 'Se ha gastado un protector')+' para salvar tu racha. Quedan '+D.shields+'. Se gana uno nuevo cada '+SHIELD_EVERY+' días cumplidos.</div>';
+  } else if(n && n.day===t && n.kind==="broken"){
+    h='<div class="banner broken"><b>Se rompió la racha de '+n.was+' día'+(n.was>1?'s':'')+'</b>Pasa. Lo que importa es no fallar dos veces seguidas: hoy empieza la siguiente.'+
+      (st ? '<div class="stake">Tu compromiso era: «'+esc(st)+'». Cúmplelo: es lo que hace que la próxima vez funcione.</div>' : '')+'</div>';
+  } else if(!D.commit.why && D.onboarded){
+    h='<div class="banner info"><b>Falta tu porqué</b>Escribir por qué estudias y cuándo lo harás duplica las probabilidades de mantener el hábito.<br><button class="btn small ghost" id="bnWhy">Escribirlo ahora</button></div>';
+  }
+  var box=document.getElementById("hBanner"); box.innerHTML=h;
+  var b=document.getElementById("bnWhy"); if(b) b.addEventListener("click", function(){ show("settings"); setTimeout(function(){ document.getElementById("cWhy").focus(); }, 200); });
+}
+function planText(){
+  var c=D.commit, h=(c.hours||[])[0];
+  if(!c.after && !c.where) return h!=null ? "A las "+h+":00." : "";
+  return ("Después de "+(c.after||"…")).replace(/^Después de el /i,"Después del ")+(c.where?", en "+c.where:"")+(h!=null?" (aviso a las "+h+":00)":"")+".";
+}
+function renderWhy(){
+  var c=D.commit, el=document.getElementById("hWhy");
+  if(!c.why && !c.after){ el.classList.add("hidden"); return; }
+  el.classList.remove("hidden");
+  el.innerHTML='<button class="edit" id="whyEdit">Editar</button>'+(c.why ? '<q>'+esc(c.why)+'</q>' : '')+
+    '<div class="plan">'+esc(planText())+'</div>';
+  document.getElementById("whyEdit").addEventListener("click", function(){ show("settings"); });
+}
+function renderCal(){
+  var t=today(), weeks=18, td=dayDate(t), dow=(td.getDay()+6)%7;      /* 0 = lunes */
+  var start=shiftDay(t, -(weeks-1)*7-dow), h="";
+  for(var i=0;i<weeks*7;i++){
+    var k=shiftDay(start,i), cls="";
+    if(k>t) cls="fut";
+    else if(D.frozen[k]) cls=D.frozen[k]==="rescue" ? "rescue" : "shield";
+    else if(D.done[k]) cls="done";
+    else if(D.days[k]) cls="part";
+    if(k===t) cls+=" now";
+    var m=Math.round((D.days[k]||0)/60);
+    h+='<i class="'+cls+'" title="'+k+(m?' · '+m+' min':'')+'"></i>';
+  }
+  var cal=document.getElementById("hCal");
+  cal.style.gridTemplateColumns="repeat("+weeks+", minmax(0,1fr))";
+  cal.innerHTML=h;
+}
+function renderWeek(){
+  var t=today(), dd=0, secs=0, n=0, ok=0;
+  for(var i=0;i<7;i++){ var k=shiftDay(t,-i); if(covered(k)) dd++; secs+=D.days[k]||0; var s=D.stats[k]; if(s){ n+=s.n||0; ok+=s.ok||0; } }
+  document.getElementById("hWeek").innerHTML=
+    '<div><b>'+dd+'/7</b><span>días cumplidos</span></div>'+
+    '<div><b>'+Math.round(secs/60)+'</b><span>minutos</span></div>'+
+    '<div><b>'+(n?Math.round(ok*100/n)+'%':'—')+'</b><span>aciertos ('+n+')</span></div>';
+}
+function renderProg(){
+  var h="", lv=LEVELS.filter(function(l){ return D.settings.levels.indexOf(l)>=0; });
+  ["k","v","g"].forEach(function(t){
+    if(!D.settings.kinds[t]) return;
+    lv.forEach(function(l){
+      var tot=0, mast=0, lrn=0;
+      BYTYPE[t].forEach(function(it){ if(it.lvl!==l) return; tot++; var c=D.cards[it.id]; if(validCard(c)){ if(c.s>=MASTER_DAYS) mast++; else lrn++; } });
+      if(!tot) return;
+      h+='<div class="prog-l"><b>'+KIND_NAME[t]+' '+l+'</b><span>'+mast+' / '+tot+(lrn?' · '+lrn+' en curso':'')+'</span></div>'+
+         '<div class="bar"><div class="m" style="width:'+(mast*100/tot)+'%"></div><div class="l" style="width:'+(lrn*100/tot)+'%"></div></div>';
+    });
+  });
+  document.getElementById("hProg").innerHTML=h || '<div class="f-help">Elige qué estudiar en Ajustes.</div>';
+}
+
+/* ---------------- reloj de tiempo activo ---------------- */
+var lastAct=Date.now(), paused=false, tickN=0;
+function onAct(){ lastAct=Date.now(); if(paused){ paused=false; layer("lyPause", false); } }
+["pointerdown","keydown","touchstart","wheel"].forEach(function(ev){ document.addEventListener(ev, onAct, {passive:true, capture:true}); });
+document.getElementById("pauseGo").addEventListener("click", onAct);
+setInterval(function(){
+  if(view!=="session" || document.hidden) return;
+  if(document.getElementById("lyCelebrate").classList.contains("on") || document.getElementById("lyQuit").classList.contains("on")) return;
+  if(Date.now()-lastAct > IDLE_MS){ if(!paused){ paused=true; layer("lyPause", true); } return; }
+  var t=today(); D.days[t]=(D.days[t]||0)+1; tickN++;
+  paintTimer(); checkGoal();
+  if(tickN%15===0) save(false);
+  if(tickN%120===0) cloudDirty();
+}, 1000);
+function paintTimer(){
+  var secs=secsToday(), goal=goalToday(), done=!!D.done[today()];
+  var bar=document.getElementById("sBar");
+  bar.className="s-bar"+(done?" done":(D.rescue?" rescue":""));
+  bar.firstElementChild.style.width=Math.min(100, secs*100/(goal*60))+"%";
+  document.getElementById("sTime").textContent=fmtClock(secs)+" / "+goal+":00";
+}
+function checkGoal(){
+  var t=today(); if(D.done[t]) return;
+  if(secsToday() < goalToday()*60) return;
+  var rescued=false, earned=false;
+  D.done[t]=1;
+  if(D.rescue && D.rescue.day===t){ D.frozen[D.rescue.miss]="rescue"; D.rescue=null; rescued=true; }
+  D.notice=null;
+  var s=streakInfo().streak;
+  if(s>D.best) D.best=s;
+  if(s>0 && s%SHIELD_EVERY===0 && D.shieldDay!==t && D.shields<MAX_SHIELDS){ D.shields++; D.shieldDay=t; earned=true; }
+  save(false); cloudPush();
+  updateBadge();
+  celebrate(s, earned, rescued);
+}
+var CHEERS=["今日も完了！","よくできました！","お疲れさま！","一歩前進！","継続は力なり"];
+function celebrate(s, earned, rescued){
+  var h='<div class="big">'+CHEERS[rnd(CHEERS.length)]+'</div>'+
+    '<div class="num">'+Math.floor(secsToday()/60)+' minutos cumplidos · 🔥 racha de '+s+' día'+(s>1?'s':'')+'</div>';
+  if(rescued) h+='<p>🚑 Racha rescatada. Ayer cuenta como hecho.</p>';
+  if(earned) h+='<p>🛡 ¡Has ganado un protector! Si un día no puedes, salvará tu racha.</p>';
+  else if(D.shields<MAX_SHIELDS) h+='<p>Próximo protector en '+(SHIELD_EVERY - (s%SHIELD_EVERY))+' día'+((SHIELD_EVERY-(s%SHIELD_EVERY))>1?'s':'')+'.</p>';
+  h+='<div class="row"><button class="btn ghost" id="celEnd">Terminar</button><button class="btn green" id="celMore">Seguir un poco</button></div>';
+  document.getElementById("celSheet").innerHTML=h;
+  layer("lyCelebrate", true);
+  document.getElementById("celEnd").addEventListener("click", function(){ layer("lyCelebrate", false); endSession(); });
+  document.getElementById("celMore").addEventListener("click", function(){ layer("lyCelebrate", false); onAct(); });
+}
+
+/* ---------------- sesión ---------------- */
+var SES=null;
+function levelInterleave(list){
+  var by={}; list.forEach(function(it){ (by[it.lvl]=by[it.lvl]||[]).push(it); });
+  var ls=Object.keys(by), out=[], i=0, more=true;
+  while(more){ more=false; ls.forEach(function(l){ if(by[l][i]){ out.push(by[l][i]); more=true; } }); i++; }
+  return out;
+}
+function startSession(){
+  if(!ITEMS.length){ toast("No hay contenido cargado."); return; }
+  reconcile();
+  var now=Date.now(), due=[], fresh={k:[],v:[],g:[]}, R={};
+  pool().forEach(function(it){
+    var c=D.cards[it.id];
+    if(validCard(c)){ if(cardDueMs(c)<=now){ due.push(it); R[it.id]=cardR(c, now); } }
+    else fresh[it.t].push(it);
+  });
+  due.sort(function(a,b){ return R[a.id]-R[b.id]; });
+  var intro=introducedToday();
+  SES={ due:due, fresh:{k:levelInterleave(fresh.k), v:levelInterleave(fresh.v), g:levelInterleave(fresh.g)},
+        newLeft:{k:Math.max(0,D.settings.newK-intro.k), v:Math.max(0,D.settings.newV-intro.v), g:Math.max(0,D.settings.newG-intro.g)},
+        later:[], sinceNew:0, kindTurn:0, seen:{}, recent:[], extraTurn:0, n:0, ok:0, cur:null };
+  lastAct=Date.now(); paused=false;
+  show("session"); paintTimer(); nextCard();
+}
+function newAvailable(ignoreLimit){
+  return ["k","v","g"].some(function(t){ return SES.fresh[t].length && (ignoreLimit || SES.newLeft[t]>0); });
+}
+function takeNew(ignoreLimit){
+  var order=["k","v","g"];
+  for(var i=0;i<3;i++){
+    var t=order[(SES.kindTurn+i)%3];
+    if(SES.fresh[t].length && (ignoreLimit || SES.newLeft[t]>0)){
+      SES.kindTurn=(SES.kindTurn+i+1)%3;
+      if(SES.newLeft[t]>0) SES.newLeft[t]--;
+      return SES.fresh[t].shift();
+    }
+  }
+  return null;
+}
+function pickNext(){
+  SES.later.forEach(function(x){ x.wait--; });
+  for(var i=0;i<SES.later.length;i++){ if(SES.later[i].wait<=0) return {it:BYID[SES.later.splice(i,1)[0].id], kind:"again"}; }
+  if(newAvailable(false) && (SES.sinceNew>=2 || !SES.due.length)){ SES.sinceNew=0; return {it:takeNew(false), kind:"new"}; }
+  if(SES.due.length){ SES.sinceNew++; return {it:SES.due.shift(), kind:"due"}; }
+  if(SES.later.length){ SES.later.sort(function(a,b){ return a.wait-b.wait; }); return {it:BYID[SES.later.shift().id], kind:"again"}; }
+  /* Todo lo de hoy está hecho: práctica extra para completar los minutos.
+     Primero lo más flojo que no hayas visto en esta sesión. Después se alterna un elemento
+     nuevo con un repaso de lo más débil (lo de hoy incluido, salvo las últimas 8 tarjetas),
+     para que los minutos extra no se conviertan en una montaña de repasos mañana. */
+  var now=Date.now(), weak=null, wr=0.86;
+  pool().forEach(function(it){ var c=D.cards[it.id]; if(!validCard(c) || SES.seen[it.id]) return; var r=cardR(c, now); if(r<wr){ wr=r; weak=it; } });
+  if(weak) return {it:weak, kind:"extra"};
+  SES.extraTurn=(SES.extraTurn||0)+1;
+  if(SES.extraTurn%2===1 && newAvailable(true)) return {it:takeNew(true), kind:"new"};
+  var recent={}; SES.recent.forEach(function(id){ recent[id]=1; });
+  weak=null; wr=2;
+  pool().forEach(function(it){ var c=D.cards[it.id]; if(!validCard(c) || recent[it.id]) return; var r=cardR(c, now)+(c.reps||0)*0.002; if(r<wr){ wr=r; weak=it; } });
+  if(weak) return {it:weak, kind:"extra"};
+  if(newAvailable(true)) return {it:takeNew(true), kind:"new"};
+  return null;
+}
+var KIND_TAG={new:'<span class="tag new">Nuevo</span>', again:'<span class="tag again">Otra vez</span>', due:'<span class="tag">Repaso</span>', extra:'<span class="tag extra">Extra</span>'};
+function paintMeta(){
+  var nl=SES.newLeft.k+SES.newLeft.v+SES.newLeft.g;
+  document.getElementById("sLeft").textContent=SES.due.length+" repasos · "+nl+" nuevos"+(SES.later.length?" · "+SES.later.length+" por repetir":"");
+  document.getElementById("sScore").textContent=SES.n ? (SES.ok+"/"+SES.n+" ✓") : "";
+}
+function nextCard(){
+  var p=pickNext();
+  if(!p || !p.it){ document.getElementById("sStage").innerHTML='<div class="q empty">No queda nada pendiente en lo que has elegido.<br>Añade niveles o tipos en Ajustes.</div>'; return; }
+  SES.cur=p; SES.seen[p.it.id]=1;
+  SES.recent.push(p.it.id); if(SES.recent.length>8) SES.recent.shift();
+  paintMeta();
+  if(p.kind==="new") renderStudy(p); else renderQuestion(p);
+}
+function headTag(p){ return '<div style="display:flex; gap:6px; justify-content:center;">'+KIND_TAG[p.kind]+'<span class="tag">'+KIND_NAME[p.it.t]+' '+esc(p.it.lvl)+'</span></div>'; }
+function renderStudy(p){
+  var st=document.getElementById("sStage");
+  st.innerHTML='<div class="q">'+headTag(p)+'<div style="margin-top:12px;">'+infoHTML(p.it)+'</div>'+
+    '<button class="btn" id="stuGo">Ya lo tengo · pregúntame</button></div>';
+  document.getElementById("stuGo").addEventListener("click", function(){ renderQuestion(p); });
+}
+function renderQuestion(p){
+  var c=D.cards[p.it.id], mature=p.kind!=="new" && validCard(c) && c.s>=4;
+  var q=buildQ(p.it, mature); q.t0=Date.now(); SES.q=q;
+  var stem=q.stemHTML!=null ? q.stemHTML : esc(q.stem);
+  var h='<div class="q">'+headTag(p)+'<div class="q-prompt">'+esc(q.prompt)+'</div>'+
+    '<div class="q-stem '+q.cls+'">'+stem+'</div><div class="opts'+(q.big?' two':'')+'">';
+  q.options.forEach(function(o,i){ h+='<button class="opt'+(q.big?' big':'')+'" data-i="'+i+'">'+esc(o)+'</button>'; });
+  h+='</div><div id="fb"></div></div>';
+  var st=document.getElementById("sStage"); st.innerHTML=h;
+  st.querySelectorAll(".opt").forEach(function(b){ b.addEventListener("click", function(){ answer(+b.getAttribute("data-i")); }); });
+}
+function answer(i){
+  var q=SES.q, p=SES.cur; if(!q || q.done) return; q.done=true;
+  var ok=q.options[i]===q.answer, t=today();
+  document.querySelectorAll("#sStage .opt").forEach(function(b,j){
+    b.disabled=true;
+    if(q.options[j]===q.answer) b.classList.add("ok"); else if(j===i) b.classList.add("bad"); else b.classList.add("dim");
+  });
+  SES.n++; if(ok) SES.ok++;
+  var s=D.stats[t]||(D.stats[t]={n:0,ok:0,nw:0}); s.n++; if(ok) s.ok++; if(p.kind==="new") s.nw++;
+  var oc=scheduleAll(D.cards[p.it.id]||null, new Date()), h;
+  h='<div class="fb"><div class="fb-res '+(ok?'ok':'bad')+'">'+(ok?'✓ Correcto':'✗ Era: '+esc(q.answer))+'</div>'+infoHTML(p.it);
+  if(ok){
+    h+='<div class="grade"><button data-g="2">Dudé<small>'+fmtIv(oc[2].iv)+'</small></button>'+
+       '<button class="main" data-g="3">Siguiente →<small>'+fmtIv(oc[3].iv)+'</small></button>'+
+       '<button data-g="4">Fácil<small>'+fmtIv(oc[4].iv)+'</small></button></div>';
+  } else {
+    h+='<div class="grade"><button class="main" data-g="1">Siguiente →<small>vuelve en unos minutos</small></button></div>';
+  }
+  h+='</div>';
+  var fb=document.getElementById("fb"); fb.innerHTML=h;
+  fb.querySelectorAll("[data-g]").forEach(function(b){ b.addEventListener("click", function(){ grade(+b.getAttribute("data-g"), oc); }); });
+  setTimeout(function(){ fb.scrollIntoView({behavior:"smooth", block:"nearest"}); }, 60);
+  paintMeta();
+}
+function grade(g, oc){
+  var p=SES.cur; if(!p) return;
+  var card=oc[g].card;
+  D.cards[p.it.id]=card;
+  if(card.st!==2) SES.later.push({id:p.it.id, wait:3});     /* fallada o aún aprendiendo: vuelve dentro de 3 tarjetas */
+  SES.cur=null; SES.q=null;
+  save(false); cloudDirty();
+  nextCard();
+}
+function endSession(){ SES=null; save(true); cloudPush(); show("home"); }
+document.getElementById("sClose").addEventListener("click", function(){
+  if(D.done[today()]){ endSession(); return; }
+  var left=Math.max(1, Math.ceil((goalToday()*60-secsToday())/60)), si=streakInfo();
+  document.getElementById("quitSheet").innerHTML='<h2>Te faltan '+left+' min</h2>'+
+    '<p>'+(si.streak ? 'Tu racha de '+si.streak+' día'+(si.streak>1?'s':'')+' depende de hoy. ' : '')+'Lo difícil ya lo has hecho: empezar. '+left+' minutos más y está.</p>'+
+    (D.commit.why ? '<p><i>«'+esc(D.commit.why)+'»</i></p>' : '')+
+    '<button class="btn" id="qStay">Sigo · '+left+' min más</button><button class="btn ghost" id="qLeave">Salir igualmente</button>';
+  layer("lyQuit", true);
+  document.getElementById("qStay").addEventListener("click", function(){ layer("lyQuit", false); onAct(); });
+  document.getElementById("qLeave").addEventListener("click", function(){ layer("lyQuit", false); endSession(); });
+});
+
+/* ---------------- icono con los minutos que faltan ---------------- */
+function updateBadge(){
+  try{
+    if(!("setAppBadge" in navigator)) return;
+    if(D.done[today()]) navigator.clearAppBadge().catch(function(){});
+    else navigator.setAppBadge(Math.max(1, Math.ceil((goalToday()*60-secsToday())/60))).catch(function(){});
+  }catch(e){}
+}
+
+/* ---------------- ajustes ---------------- */
+function segHTML(items, isOn){ return items.map(function(x){ return '<button data-v="'+x[0]+'" class="'+(isOn(x[0])?'on':'')+'">'+x[1]+'</button>'; }).join(""); }
+function bindSeg(id, fn){ document.getElementById(id).querySelectorAll("button").forEach(function(b){ b.addEventListener("click", function(){ fn(b.getAttribute("data-v")); }); }); }
+function renderSettings(){
+  var S=D.settings;
+  document.getElementById("stGoal").innerHTML=segHTML([[10,"10 min"],[15,"15 min"],[20,"20 min"],[30,"30 min"]], function(v){ return +v===S.goal; });
+  bindSeg("stGoal", function(v){
+    v=+v; if(v===S.goal){ S.goalNext=null; save(true); renderSettings(); return; }
+    if(v>S.goal){ S.goal=v; S.goalNext=null; save(true); toast("Objetivo: "+v+" min desde hoy."); renderSettings(); return; }
+    if(!confirm("Te comprometiste a "+S.goal+" minutos.\n\nSi bajas a "+v+", el cambio vale a partir de mañana (hoy sigues con "+S.goal+"). ¿Seguro?")) return;
+    S.goalNext={from:shiftDay(today(),1), val:v}; save(true); renderSettings();
+  });
+  document.getElementById("stGoalHelp").textContent= S.goalNext ? ("Desde mañana: "+S.goalNext.val+" min. Hoy sigues con "+S.goal+".") :
+    "Solo cuenta el tiempo en que estás estudiando de verdad: si pasas 90 s sin tocar nada, el reloj se para.";
+  document.getElementById("stLevels").innerHTML=segHTML(LEVELS.map(function(l){ return [l,l]; }), function(v){ return S.levels.indexOf(v)>=0; });
+  bindSeg("stLevels", function(v){
+    var i=S.levels.indexOf(v);
+    if(i>=0){ if(S.levels.length===1){ toast("Deja al menos un nivel."); return; } S.levels.splice(i,1); } else S.levels.push(v);
+    save(true); renderSettings();
+  });
+  document.getElementById("stKinds").innerHTML=segHTML([["k","Kanji"],["v","Vocabulario"],["g","Gramática"]], function(v){ return !!S.kinds[v]; });
+  bindSeg("stKinds", function(v){
+    if(S.kinds[v] && ["k","v","g"].filter(function(t){ return S.kinds[t]; }).length===1){ toast("Deja al menos un tipo."); return; }
+    S.kinds[v]=!S.kinds[v]; save(true); renderSettings();
+  });
+  var nh="";
+  [["newK","Kanji"],["newV","Vocabulario"],["newG","Gramática"]].forEach(function(x){
+    nh+='<div class="stepper"><span>'+x[1]+'</span><div><button data-k="'+x[0]+'" data-d="-1">−</button><b>'+S[x[0]]+'</b><button data-k="'+x[0]+'" data-d="1">+</button></div></div>';
+  });
+  var ne=document.getElementById("stNew"); ne.innerHTML=nh;
+  ne.querySelectorAll("button").forEach(function(b){ b.addEventListener("click", function(){
+    var k=b.getAttribute("data-k"); S[k]=Math.max(0, Math.min(40, S[k]+(+b.getAttribute("data-d")))); save(true); renderSettings();
+  }); });
+  document.getElementById("stRet").innerHTML=segHTML([[0.85,"85 %"],[0.9,"90 %"],[0.95,"95 %"]], function(v){ return +v===S.retention; });
+  bindSeg("stRet", function(v){ S.retention=+v; save(true); renderSettings(); });
+
+  var c=D.commit;
+  document.getElementById("cWhy").value=c.why||"";
+  document.getElementById("cAfter").value=c.after||"";
+  document.getElementById("cWhere").value=c.where||"";
+  document.getElementById("cStake").value=c.stake||"";
+  renderHours(); renderPush(); renderAcctBox();
+}
+document.getElementById("cSave").addEventListener("click", function(){
+  var c=D.commit;
+  c.why=document.getElementById("cWhy").value.trim().slice(0,300);
+  c.after=document.getElementById("cAfter").value.trim().slice(0,80);
+  c.where=document.getElementById("cWhere").value.trim().slice(0,80);
+  c.stake=document.getElementById("cStake").value.trim().slice(0,120);
+  save(true); toast("Compromiso guardado.");
+});
+var HOUR_LABEL=["Tu hora","Rescate","Última llamada"];
+function renderHours(){
+  var hs=D.commit.hours||[], h="";
+  for(var i=0;i<3;i++){
+    h+='<div><label>'+HOUR_LABEL[i]+'</label><select data-i="'+i+'"><option value="">—</option>';
+    for(var x=6;x<=24;x++){ var v=x%24; h+='<option value="'+v+'"'+(hs[i]===v?' selected':'')+'>'+pad(v)+':00</option>'; }
+    h+='</select></div>';
+  }
+  var box=document.getElementById("stHours"); box.innerHTML=h;
+  box.querySelectorAll("select").forEach(function(s){ s.addEventListener("change", function(){
+    var arr=(D.commit.hours||[]).slice(); arr[+s.getAttribute("data-i")]= s.value==="" ? null : +s.value;
+    D.commit.hours=arr; save(true);
+    if(getRemind().on) pushSubscribe(true);
+  }); });
+}
+function hoursClean(){ var seen={}; return (D.commit.hours||[]).filter(function(h){ if(h==null || seen[h]) return false; seen[h]=1; return true; }); }
+
+/* ---------------- avisos push ---------------- */
+function getRemind(){ try{ return JSON.parse(lsGet(REMIND_KEY)||"null")||{on:false}; }catch(e){ return {on:false}; } }
+function setRemind(r){ lsSet(REMIND_KEY, JSON.stringify(r)); }
+function isStandalone(){ return window.navigator.standalone===true || (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches); }
+function pushWhyNot(){
+  if(!("serviceWorker" in navigator) || !("PushManager" in window) || !("Notification" in window)){
+    if(/iPhone|iPad|iPod/.test(navigator.userAgent) && !isStandalone()) return "En iPhone, primero añade la app a la pantalla de inicio (Compartir → «Añadir a pantalla de inicio») y ábrela desde el icono.";
+    return "Este navegador no admite notificaciones.";
+  }
+  if(!getAuth()) return "Para los avisos necesitas entrar con tu cuenta (☁). Mientras, usa el Calendario.";
+  return "";
+}
+function renderPush(){
+  var box=document.getElementById("stPush"), why=pushWhyNot(), r=getRemind();
+  if(why){ box.innerHTML='<div class="warn">'+why+'</div>'; return; }
+  box.innerHTML='<div class="row" style="margin-top:10px;"><button class="btn small'+(r.on?' ghost':'')+'" id="pToggle">'+(r.on?'Desactivar avisos':'🔔 Activar avisos')+'</button>'+
+    (r.on?'<button class="btn small ghost" id="pTest">Probar ahora</button>':'')+'</div><div class="msg" id="pMsg">'+(r.on?'Activados: '+hoursClean().map(function(h){ return pad(h)+":00"; }).join(" · "):'')+'</div>';
+  document.getElementById("pToggle").addEventListener("click", function(){ getRemind().on ? pushUnsubscribe() : pushSubscribe(false); });
+  var t=document.getElementById("pTest"); if(t) t.addEventListener("click", pushTest);
+}
+function pMsg(t, err){ var m=document.getElementById("pMsg"); if(m){ m.textContent=t; m.classList.toggle("err", !!err); } }
+function b64uToBytes(s){ s=s.replace(/-/g,"+").replace(/_/g,"/"); while(s.length%4) s+="="; var r=atob(s), a=new Uint8Array(r.length); for(var i=0;i<r.length;i++) a[i]=r.charCodeAt(i); return a; }
+function authHeaders(){ var a=getAuth(); return {"Content-Type":"application/json", "Authorization":"Bearer "+(a?a.token:"")}; }
+function serverError(res){
+  if(res.status===404) return Promise.reject(new Error("Tu servidor (worker jlpt-cuenta) aún no tiene la parte de 毎日. Pega el worker nuevo (LEEME, paso 2)."));
+  return res.json().catch(function(){ return {}; }).then(function(j){ throw new Error(j.error||("Error del servidor ("+res.status+")")); });
+}
+function pushSubscribe(silent){
+  if(pushWhyNot()){ renderPush(); return; }
+  pMsg("Activando…");
+  Promise.resolve(Notification.permission==="granted" ? "granted" : Notification.requestPermission())
+  .then(function(perm){
+    if(perm!=="granted") throw new Error("Permiso de notificaciones denegado. Actívalo en Ajustes del iPhone → Notificaciones → 毎日.");
+    return navigator.serviceWorker.ready;
+  })
+  .then(function(reg){ return reg.pushManager.getSubscription().then(function(s){ return s || reg.pushManager.subscribe({userVisibleOnly:true, applicationServerKey:b64uToBytes(VAPID_PUBLIC)}); }); })
+  .then(function(sub){
+    var tz="Europe/Madrid"; try{ tz=Intl.DateTimeFormat().resolvedOptions().timeZone||tz; }catch(e){}
+    return fetch(SYNC_URL+"/m/push/subscribe", {method:"POST", headers:authHeaders(), body:JSON.stringify({sub:sub.toJSON(), hours:hoursClean(), tz:tz})});
+  })
+  .then(function(res){
+    if(!res.ok) return serverError(res);
+    setRemind({on:true}); renderPush(); cloudPush();
+    if(!silent) toast("Avisos activados.");
+  })
+  .catch(function(e){ renderPush(); pMsg((e && e.message)||"No se pudo activar.", true); });
+}
+function pushUnsubscribe(){
+  navigator.serviceWorker.ready.then(function(reg){ return reg.pushManager.getSubscription(); })
+  .then(function(sub){
+    if(sub && getAuth()) fetch(SYNC_URL+"/m/push/unsubscribe", {method:"POST", headers:authHeaders(), body:JSON.stringify({endpoint:sub.endpoint})}).catch(function(){});
+    return true;      /* la suscripción se conserva: puede usarla también N1 Path desde este mismo navegador */
+  })
+  .catch(function(){})
+  .then(function(){ setRemind({on:false}); renderPush(); });
+}
+function pushTest(){
+  pMsg("Enviando aviso de prueba…");
+  navigator.serviceWorker.ready.then(function(reg){ return reg.pushManager.getSubscription(); })
+  .then(function(sub){
+    if(!sub) throw new Error("Este dispositivo no está suscrito: desactiva y vuelve a activar.");
+    return fetch(SYNC_URL+"/m/push/test", {method:"POST", headers:authHeaders(), body:JSON.stringify({endpoint:sub.endpoint})});
+  })
+  .then(function(res){ pMsg(res.ok ? "Enviado. Debería llegarte en unos segundos." : "El servidor no pudo enviarlo ("+res.status+").", !res.ok); })
+  .catch(function(e){ pMsg(e.message||"No se pudo enviar.", true); });
+}
+
+/* ---------------- Calendario (.ics), sin servidor ---------------- */
+document.getElementById("stIcs").addEventListener("click", function(){
+  var hs=hoursClean(); if(!hs.length){ toast("Elige al menos una hora."); return; }
+  var t=new Date(), ymd=t.getFullYear()+pad(t.getMonth()+1)+pad(t.getDate()), stamp=new Date().toISOString().replace(/[-:]/g,"").replace(/\.\d+/,"");
+  var url=location.href.split("?")[0].split("#")[0]+"?go=1";
+  var names=["毎日 · "+goalMins()+" min de japonés","毎日 · rescate: ¿has hecho tus "+goalMins()+" min?","毎日 · última llamada para tu racha"];
+  var plan=planText(), L=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Mainichi//ES","CALSCALE:GREGORIAN"];
+  hs.forEach(function(h,i){
+    L.push("BEGIN:VEVENT","UID:mainichi-"+i+"-"+ymd+"@jlpt-app","DTSTAMP:"+stamp,"DTSTART:"+ymd+"T"+pad(h)+"0000","DURATION:PT15M","RRULE:FREQ=DAILY",
+      "SUMMARY:"+names[Math.min(i,2)],"DESCRIPTION:"+(plan?plan.replace(/[,;]/g,"\\$&")+"\\n":"")+url,"URL:"+url,
+      "BEGIN:VALARM","ACTION:DISPLAY","DESCRIPTION:"+names[Math.min(i,2)],"TRIGGER:PT0M","END:VALARM","END:VEVENT");
+  });
+  L.push("END:VCALENDAR");
+  var blob=new Blob([L.join("\r\n")], {type:"text/calendar;charset=utf-8"}), a=document.createElement("a");
+  a.href=URL.createObjectURL(blob); a.download="mainichi-avisos.ics"; document.body.appendChild(a); a.click();
+  setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 4000);
+});
+
+/* ---------------- cuenta y sincronización (la misma cuenta que N1 Path) ---------------- */
+function getAuth(){ try{ return JSON.parse(lsGet(AUTH_KEY)||"null"); }catch(e){ return null; } }
+function setAuth(a){ if(a) lsSet(AUTH_KEY, JSON.stringify(a)); else lsDel(AUTH_KEY); }
+var syncTimer=null, syncBusy=false, syncAgain=false, syncFails=0, serverMissing=false;
+function cloudDirty(){
+  if(!getAuth() || serverMissing) return;
+  if(syncTimer) clearTimeout(syncTimer);
+  syncTimer=setTimeout(cloudPush, 5000);
+}
+/* Mezcla dos copias sin perder estudio de ninguna: por tarjeta gana el repaso más reciente,
+   por día el mayor tiempo; días cumplidos y protegidos se suman. Lo demás, de la más nueva. */
+function mergeData(A, B){
+  A=fillData(A); B=fillData(B);
+  var newer=(B.updatedAt||0)>(A.updatedAt||0) ? B : A, older=newer===A ? B : A;
+  var out=JSON.parse(JSON.stringify(newer)), k;
+  for(k in older.cards){ var a=older.cards[k], b=out.cards[k];
+    if(validCard(a) && (!validCard(b) || a.last>b.last || (a.last===b.last && (a.reps||0)>(b.reps||0)))) out.cards[k]=a; }
+  for(k in older.days) out.days[k]=Math.max(out.days[k]||0, older.days[k]||0);
+  for(k in older.stats){ if(!out.stats[k] || (older.stats[k].n||0)>(out.stats[k].n||0)) out.stats[k]=older.stats[k]; }
+  for(k in older.done) out.done[k]=1;
+  for(k in older.frozen) if(!out.frozen[k]) out.frozen[k]=older.frozen[k];
+  out.best=Math.max(out.best||0, older.best||0);
+  return out;
+}
+function cloudPush(cb){
+  if(syncTimer){ clearTimeout(syncTimer); syncTimer=null; }
+  var a=getAuth(); if(!a || serverMissing){ if(cb) cb(false); return; }
+  if(syncBusy){ syncAgain=true; if(cb) cb(false); return; }
+  syncBusy=true;
+  var body=JSON.stringify(D);
+  fetch(SYNC_URL+"/m/sync", {method:"PUT", keepalive:body.length<60000, headers:authHeaders(), body:body})
+  .then(function(r){
+    syncBusy=false;
+    if(r.status===401){ setAuth(null); acMsg("La sesión caducó. Vuelve a entrar."); if(cb) cb(false); return; }
+    if(r.status===404){ serverMissing=true; if(cb) cb(false); return; }
+    if(r.ok){ syncFails=0; lsSet("mai-synced", String(Date.now())); if(cb) cb(true); }
+    else { retryLater(); if(cb) cb(false); }
+    if(syncAgain){ syncAgain=false; cloudDirty(); }
+  })
+  .catch(function(){ syncBusy=false; syncAgain=false; retryLater(); if(cb) cb(false); });
+}
+function retryLater(){ syncFails++; if(syncTimer) clearTimeout(syncTimer); syncTimer=setTimeout(cloudPush, Math.min(600000, 30000*Math.pow(2, syncFails-1))); }
+function cloudPull(done){
+  var a=getAuth(); if(!a){ pullDone=true; if(done) done(); return; }
+  function finish(){ var first=!pullDone; pullDone=true; if(first && view==="home") renderHome(); if(done) done(); }
+  fetch(SYNC_URL+"/m/sync", {headers:{"Authorization":"Bearer "+a.token}})
+  .then(function(r){
+    if(r.status===401){ setAuth(null); return null; }
+    if(r.status===404){ serverMissing=true; return null; }
+    serverMissing=false;
+    if(r.status===204 || !r.ok) return null;
+    return r.json();
+  })
+  .then(function(cloud){
+    if(cloud){
+      D=mergeData(D, cloud); lsSet(DATA_KEY, JSON.stringify(D));
+      if(view==="home" && pullDone) renderHome();
+    }
+    cloudPush();
+    finish();
+  })
+  .catch(function(){ finish(); });
+}
+function acMsg(t){ var m=document.getElementById("acMsg"); if(m) m.textContent=t||""; }
+function paintAcct(){
+  var a=getAuth();
+  document.getElementById("hAcct").classList.toggle("on", !!a);
+  document.getElementById("acOut").classList.toggle("hidden", !!a);
+  document.getElementById("acIn").classList.toggle("hidden", !a);
+  if(a){
+    document.getElementById("acWho").textContent=a.user;
+    var s=parseInt(lsGet("mai-synced")||"0",10)||0;
+    document.getElementById("acState").textContent= serverMissing ? "El worker aún no tiene la parte de 毎日 (LEEME, paso 2): el progreso se guarda solo en este dispositivo." :
+      (s ? "Última sincronización: "+new Date(s).toLocaleString() : "Aún sin sincronizar.");
+  }
+}
+function renderAcctBox(){
+  var a=getAuth(), box=document.getElementById("stAcct");
+  box.innerHTML= a ? '<div class="f-help" style="font-size:14px;">☁ '+esc(a.user)+(serverMissing?' · <span style="color:var(--red)">falta actualizar el worker</span>':'')+'</div>' :
+    '<div class="f-help" style="font-size:14px;">Sin cuenta: el progreso solo está en este dispositivo.</div><button class="btn small" id="stLogin" style="margin-top:8px;">Entrar con mi cuenta de N1 Path</button>';
+  var b=document.getElementById("stLogin"); if(b) b.addEventListener("click", openAcct);
+}
+var obResume=false;              /* se abrió la cuenta desde la bienvenida: al cerrar, se vuelve a ella */
+function openAcct(){ paintAcct(); acMsg(""); layer("lyAcct", true); }
+function closeAcct(){
+  layer("lyAcct", false);
+  if(obResume){ obResume=false; layer("lyOnboard", true); renderOnboard(); }
+  else if(view==="settings") renderSettings();
+}
+document.getElementById("hAcct").addEventListener("click", openAcct);
+document.getElementById("acClose").addEventListener("click", closeAcct);
+document.getElementById("lyAcct").addEventListener("click", function(e){ if(e.target===this) closeAcct(); });
+document.getElementById("acLogin").addEventListener("click", function(){
+  var u=(document.getElementById("acUser").value||"").trim().toLowerCase(), p=document.getElementById("acPass").value||"";
+  if(!u || !p){ acMsg("Escribe tu correo y la contraseña."); return; }
+  acMsg("Entrando…");
+  fetch(SYNC_URL+"/login", {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({user:u, pass:p})})
+  .then(function(r){ return r.json().then(function(j){ return {ok:r.ok, j:j}; }); })
+  .then(function(res){
+    if(!res.ok){ acMsg((res.j && res.j.error)||"No se pudo entrar."); return; }
+    setAuth({user:u, token:res.j.token}); document.getElementById("acPass").value="";
+    acMsg("Sesión iniciada. Sincronizando…");
+    cloudPull(function(){ paintAcct(); acMsg(serverMissing ? "Sesión iniciada. Ojo: el worker aún no tiene la parte de 毎日 (LEEME, paso 2)." : "Sesión iniciada · progreso sincronizado."); });
+  })
+  .catch(function(){ acMsg("No se pudo conectar con el servidor."); });
+});
+document.getElementById("acSync").addEventListener("click", function(){ acMsg("Sincronizando…"); serverMissing=false; cloudPull(function(){ paintAcct(); acMsg(serverMissing?"El worker aún no tiene la parte de 毎日.":"Sincronizado ✓"); }); });
+document.getElementById("acLogout").addEventListener("click", function(){
+  var a=getAuth(); if(a) fetch(SYNC_URL+"/logout", {method:"POST", headers:{"Authorization":"Bearer "+a.token}}).catch(function(){});
+  setAuth(null); paintAcct(); acMsg("Sesión cerrada. Tu progreso sigue en este dispositivo.");
+});
+
+/* Importa de N1 Path las tarjetas de los niveles y tipos que estudias aquí (sin pisar lo más reciente) */
+document.getElementById("stImport").addEventListener("click", function(){
+  var m=document.getElementById("stImportMsg"), a=getAuth();
+  if(!a){ m.textContent="Primero entra con tu cuenta (☁)."; return; }
+  m.textContent="Leyendo tu progreso de N1 Path…";
+  fetch(SYNC_URL+"/sync", {headers:{"Authorization":"Bearer "+a.token}})
+  .then(function(r){ if(r.status===204) return {progress:{}}; if(!r.ok) throw new Error("Error "+r.status); return r.json(); })
+  .then(function(b){
+    var p=(b && b.progress)||{}, n=0, skipped=0;
+    for(var id in p){
+      var it=BYID[id], c=p[id]; if(!it || !inPool(it)) continue;
+      if(!validCard(c)){ skipped++; continue; }
+      /* gana la más reciente; pero si aquí apenas se ha visto (recién introducida) y en N1 Path tiene más historia, gana N1 Path */
+      var mine=D.cards[id], fresher=validCard(mine) && mine.first && (mine.reps||0)<=2 && (c.reps||0)>(mine.reps||0);
+      if(validCard(mine) && mine.last>=c.last && !fresher) continue;
+      D.cards[id]={s:c.s, d:c.d, due:c.due, last:c.last, reps:c.reps||0, lapses:c.lapses||0, st:c.st||2}; n++;
+    }
+    save(true);
+    m.textContent= n ? ("Importadas "+n+" tarjetas: lo que ya sabes no aparecerá como nuevo.") : "No había nada nuevo que importar para los niveles y tipos elegidos.";
+    if(skipped) m.textContent+=" ("+skipped+" en formato antiguo: abre N1 Path una vez para convertirlas.)";
+  })
+  .catch(function(e){ m.textContent="No se pudo leer: "+e.message; });
+});
+
+/* ---------------- copia local ---------------- */
+document.getElementById("stExport").addEventListener("click", function(){
+  var blob=new Blob([JSON.stringify(D)], {type:"application/json"}), a=document.createElement("a");
+  a.href=URL.createObjectURL(blob); a.download="mainichi-"+today()+".json"; document.body.appendChild(a); a.click();
+  setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 4000);
+});
+document.getElementById("stRestore").addEventListener("click", function(){ document.getElementById("stFile").click(); });
+document.getElementById("stFile").addEventListener("change", function(){
+  var f=this.files && this.files[0]; if(!f) return;
+  var rd=new FileReader();
+  rd.onload=function(){
+    try{ var d=JSON.parse(rd.result); if(!d || !d.cards) throw 0;
+      if(!confirm("¿Mezclar esta copia con lo que hay en este dispositivo? No se pierde nada de ninguna de las dos.")) return;
+      D=mergeData(D, d); save(true); toast("Copia restaurada."); renderSettings();
+    }catch(e){ toast("Ese archivo no es una copia de 毎日."); }
+  };
+  rd.readAsText(f);
+  this.value="";
+});
+
+/* ---------------- compartir ---------------- */
+document.getElementById("hShare").addEventListener("click", function(){
+  var si=streakInfo(), t=today(), dd=0; for(var i=0;i<7;i++) if(covered(shiftDay(t,-i))) dd++;
+  var txt="毎日 · "+(D.done[t]?"hoy ✓ "+Math.round(secsToday()/60)+" min":"hoy llevo "+Math.round(secsToday()/60)+"/"+goalToday()+" min")+
+    " · 🔥 racha de "+si.streak+" día"+(si.streak===1?"":"s")+" · esta semana "+dd+"/7";
+  if(navigator.share){ navigator.share({text:txt}).catch(function(){}); }
+  else if(navigator.clipboard){ navigator.clipboard.writeText(txt).then(function(){ toast("Copiado: pégalo a quien te pida cuentas."); }); }
+  else toast(txt);
+});
+
+/* ---------------- primera vez ---------------- */
+var obStep=0;
+function renderOnboard(){
+  var s=document.getElementById("obSheet"), h='<div class="ob-steps">'+[0,1,2].map(function(i){ return '<i class="'+(i<=obStep?'on':'')+'"></i>'; }).join("")+'</div>';
+  if(obStep===0){
+    h+='<div class="ob-hero">毎日</div><h2>'+goalMins()+' minutos. Todos los días.</h2>'+
+      '<p>Solo kanji, vocabulario y gramática. Sin menús: abres, tocas un botón y estudias lo que toca hoy.</p>'+
+      '<ul class="ob-list"><li>El reloj solo cuenta el tiempo real de estudio.</li><li>Cada 7 días seguidos ganas un 🛡 protector para un mal día.</li><li>Si fallas un día, al siguiente puedes rescatar la racha haciendo el doble.</li></ul>'+
+      '<label class="f">¿Qué niveles?</label><div class="seg" id="obLv">'+segHTML(LEVELS.map(function(l){ return [l,l]; }), function(v){ return D.settings.levels.indexOf(v)>=0; })+'</div>'+
+      '<button class="btn" id="obNext">Siguiente</button>';
+  } else if(obStep===1){
+    h+='<h2>Tu compromiso</h2><p>Escribirlo no es un trámite: decidir <b>cuándo y dónde</b> es lo que más ayuda a no saltarse días.</p>'+
+      '<label class="f" for="obWhy">¿Por qué estudias japonés?</label><textarea id="obWhy" placeholder="Ej.: Quiero aprobar el N1 y leer novelas sin diccionario.">'+esc(D.commit.why)+'</textarea>'+
+      '<label class="f" for="obAfter">Lo haré justo después de…</label><input type="text" id="obAfter" placeholder="Ej.: el café de la mañana" value="'+esc(D.commit.after)+'">'+
+      '<label class="f" for="obHour">Hacia las…</label><select id="obHour">'+(function(){ var o=""; for(var x=6;x<=23;x++) o+='<option value="'+x+'"'+((D.commit.hours||[])[0]===x?' selected':'')+'>'+pad(x)+':00</option>'; return o; })()+'</select>'+
+      '<label class="f" for="obStake">Si rompo la racha, yo… <span style="font-weight:500; color:var(--muted)">(opcional, pero funciona)</span></label><input type="text" id="obStake" placeholder="Ej.: dono 10 € y se lo cuento a Laura" value="'+esc(D.commit.stake)+'">'+
+      '<div class="row"><button class="btn ghost" id="obBack">Atrás</button><button class="btn" id="obNext">Siguiente</button></div>';
+  } else {
+    var why=pushWhyNot();
+    h+='<h2>Que te lo recuerden</h2><p>Hasta tres avisos al día, <b>solo si aún no has cumplido</b>: a tu hora, a las 21:00 (rescate) y a las 23:00 (última llamada). Puedes cambiarlas en Ajustes.</p>'+
+      (/iPhone|iPad|iPod/.test(navigator.userAgent) && !isStandalone() ? '<div class="warn">Primero instálala: Compartir → «Añadir a pantalla de inicio», y ábrela desde el icono 毎日.</div>' : '')+
+      '<div class="row" style="margin-top:12px;">'+(getAuth() ? '' : '<button class="btn small ghost" id="obLogin">☁ Entrar con mi cuenta</button>')+
+      '<button class="btn small ghost" id="obPush"'+(why?' disabled':'')+'>🔔 Activar avisos</button><button class="btn small ghost" id="obIcs">📅 Calendario</button></div>'+
+      '<div class="f-help" id="obMsg">'+(why ? esc(why) : '')+'</div>'+
+      '<div class="row"><button class="btn ghost" id="obBack">Atrás</button><button class="btn" id="obNext">Empezar mi día 1</button></div>';
+  }
+  s.innerHTML=h;
+  var lv=document.getElementById("obLv");
+  if(lv) lv.querySelectorAll("button").forEach(function(b){ b.addEventListener("click", function(){
+    var v=b.getAttribute("data-v"), L=D.settings.levels, i=L.indexOf(v);
+    if(i>=0){ if(L.length>1) L.splice(i,1); } else L.push(v);
+    renderOnboard();
+  }); });
+  var back=document.getElementById("obBack"); if(back) back.addEventListener("click", function(){ obCollect(); obStep--; renderOnboard(); });
+  document.getElementById("obNext").addEventListener("click", function(){
+    obCollect();
+    if(obStep<2){ obStep++; renderOnboard(); return; }
+    D.onboarded=true; save(true); layer("lyOnboard", false); renderHome(); startSession();
+  });
+  var lg=document.getElementById("obLogin"); if(lg) lg.addEventListener("click", function(){ obResume=true; layer("lyOnboard", false); openAcct(); });
+  var pb=document.getElementById("obPush"); if(pb) pb.addEventListener("click", function(){
+    var box=document.getElementById("obMsg"); box.textContent="Activando…";
+    renderPush(); pushSubscribe(false);
+    setTimeout(function(){ var pm=document.getElementById("pMsg"); box.textContent= getRemind().on ? "Avisos activados ✓" : ((pm && pm.textContent) || ""); }, 2500);
+  });
+  var ic=document.getElementById("obIcs"); if(ic) ic.addEventListener("click", function(){ document.getElementById("stIcs").click(); });
+}
+function obCollect(){
+  var w=document.getElementById("obWhy"); if(!w) return;
+  D.commit.why=w.value.trim().slice(0,300);
+  D.commit.after=document.getElementById("obAfter").value.trim().slice(0,80);
+  D.commit.stake=document.getElementById("obStake").value.trim().slice(0,120);
+  var hs=(D.commit.hours||[]).slice(); hs[0]=+document.getElementById("obHour").value; D.commit.hours=hs;
+  save(false);
+}
+
+/* ---------------- arranque ---------------- */
+document.getElementById("hGo").addEventListener("click", startSession);
+document.getElementById("hSet").addEventListener("click", function(){ show("settings"); });
+document.getElementById("stBack").addEventListener("click", function(){ show("home"); });
+document.addEventListener("visibilitychange", function(){
+  if(document.hidden){ save(false); updateBadge(); if(getAuth()) cloudPush(); }
+  else { lastAct=Date.now(); if(D.lastCheck!==today() && view==="home") renderHome(); if(getAuth()) cloudPull(); }
+});
+window.addEventListener("online", function(){ if(getAuth()) cloudDirty(); });
+
+if(getAuth()){
+  pullDone=false;
+  cloudPull(function(){ paintAcct(); });
+  setTimeout(function(){ if(!pullDone){ pullDone=true; if(view==="home") renderHome(); } }, 5000);   /* sin red: no esperar más */
+}
+show("home");
+paintAcct();
+if(!D.onboarded){ obStep=0; renderOnboard(); layer("lyOnboard", true); }
+else {
+  try{ var q=new URLSearchParams(location.search); if(q.get("go")==="1"){ history.replaceState(null,"",location.pathname); setTimeout(startSession, 250); } }catch(e){}
+}
+if("serviceWorker" in navigator){ window.addEventListener("load", function(){ navigator.serviceWorker.register("sw.js").catch(function(){}); }); }
+</script>
+</body>
+</html>

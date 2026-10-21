@@ -1,0 +1,29 @@
+{
+  "name": "毎日 · Mainichi",
+  "short_name": "毎日",
+  "description": "15 minutos al día de kanji, vocabulario y gramática JLPT.",
+  "lang": "es",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F5F6F9",
+  "theme_color": "#27407F",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Empezar mis 15 minutos",
+      "short_name": "Empezar",
+      "url": "./?go=1",
+      "icons": [ { "src": "icon.png", "sizes": "512x512", "type": "image/png" } ]
+    }
+  ]
+}
