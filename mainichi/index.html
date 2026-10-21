@@ -559,6 +559,16 @@ function toMin(ms){ return Math.round(ms/MIN_MS); }
 function dayStartMs(ms){ var d=new Date(ms); if(d.getHours()<4) d.setDate(d.getDate()-1); d.setHours(4,0,0,0); return d.getTime(); }
 function validCard(c){ return !!(c && c.s!=null && typeof c.due==="number" && typeof c.last==="number"); }
 function cardDueMs(c){ return c ? c.due*MIN_MS : 0; }
+/* Tarjeta SM-2 de N1 Path antiguo {ease, reps, iv, due:"ISO"} → FSRS (misma conversión que la v39) */
+function normCard(st, nowMs){
+  if(!st) return null;
+  if(validCard(st)) return st;
+  nowMs=nowMs||Date.now();
+  var ease=+st.ease||2.5, iv=Math.max(+st.iv||0, 0), dueMs=Date.parse(st.due)||nowMs;
+  var S=Math.max(0.1, iv), Dd=clampD(5+(2.5-ease)*3.3);
+  var state=((st.reps||0)===0) ? 3 : (iv>=1 ? 2 : 1);
+  return {s:r2(S), d:r2(Dd), due:toMin(dueMs), last:toMin(dueMs-iv*DAY_MS), reps:st.reps||0, lapses:0, st:state};
+}
 function cardR(c, nowMs){ if(!validCard(c)) return 0; return fsrsR(Math.max(0,(nowMs-c.last*MIN_MS)/DAY_MS), Math.max(0.01,c.s)); }
 /* Resultado de cada nota (1 Otra vez · 2 Difícil · 3 Bien · 4 Fácil) */
 function scheduleAll(c, now){
@@ -1394,9 +1404,9 @@ document.getElementById("stImport").addEventListener("click", function(){
   fetch(SYNC_URL+"/sync", {headers:{"Authorization":"Bearer "+a.token}})
   .then(function(r){ if(r.status===204) return {progress:{}}; if(!r.ok) throw new Error("Error "+r.status); return r.json(); })
   .then(function(b){
-    var p=(b && b.progress)||{}, n=0, skipped=0;
+    var p=(b && b.progress)||{}, n=0, skipped=0, now=Date.now();
     for(var id in p){
-      var it=BYID[id], c=p[id]; if(!it || !inPool(it)) continue;
+      var it=BYID[id], c=normCard(p[id], now); if(!it || !inPool(it)) continue;
       if(!validCard(c)){ skipped++; continue; }
       /* gana la más reciente; pero si aquí apenas se ha visto (recién introducida) y en N1 Path tiene más historia, gana N1 Path */
       var mine=D.cards[id], fresher=validCard(mine) && mine.first && (mine.reps||0)<=2 && (c.reps||0)>(mine.reps||0);
@@ -1405,7 +1415,7 @@ document.getElementById("stImport").addEventListener("click", function(){
     }
     save(true);
     m.textContent= n ? ("Importadas "+n+" tarjetas: lo que ya sabes no aparecerá como nuevo.") : "No había nada nuevo que importar para los niveles y tipos elegidos.";
-    if(skipped) m.textContent+=" ("+skipped+" en formato antiguo: abre N1 Path una vez para convertirlas.)";
+    if(skipped) m.textContent+=" ("+skipped+" no se pudieron leer.)";
   })
   .catch(function(e){ m.textContent="No se pudo leer: "+e.message; });
 });
