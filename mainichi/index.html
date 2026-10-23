@@ -142,6 +142,7 @@
   .tag.new{background:var(--shu-soft); color:var(--shu);}
   .tag.again{background:var(--amber-soft); color:var(--amber);}
   .tag.extra{background:var(--green-soft); color:var(--green);}
+  .tag.learn{background:var(--line-2); color:var(--indigo-bright);}
 
   .q{background:var(--card); border-radius:22px; padding:20px 16px 18px; box-shadow:var(--shadow); min-height:200px;}
   .q-prompt{font-size:14px; color:var(--muted); font-weight:600; margin:12px 0 6px; text-align:center;}
@@ -161,6 +162,12 @@
   .opt.bad{border-color:var(--red); background:var(--red-soft);}
   .opt:disabled{cursor:default; color:var(--ink);}
   .opt.dim{opacity:.5;}
+  .typed{margin-top:16px;}
+  .typed input[type=text]{font-family:var(--jp); font-size:24px; text-align:center; padding:14px;}
+  .typed input.ok{border-color:var(--green); background:var(--green-soft);}
+  .typed input.bad{border-color:var(--red); background:var(--red-soft);}
+  .typed .row{margin-top:10px;}
+  .skip{display:block; margin:12px auto 0; background:none; border:0; color:var(--muted); font-size:14.5px; font-weight:600; text-decoration:underline; cursor:pointer; padding:6px;}
 
   .fb{margin-top:14px; border-top:1px solid var(--line); padding-top:14px;}
   .fb-res{font-weight:800; font-size:16px; margin-bottom:8px;}
@@ -630,6 +637,39 @@ function rnd(n){ return Math.floor(Math.random()*n); }
 function shuffle(a){ for(var i=a.length-1;i>0;i--){ var j=rnd(i+1), t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
 function hasKanji(s){ return /[㐀-䶿一-鿿々]/.test(s||""); }
 function kata2hira(s){ return (s||"").replace(/[ァ-ヶ]/g,function(c){ return String.fromCharCode(c.charCodeAt(0)-0x60); }); }
+/* Respuestas escritas: vale hiragana, katakana o rōmaji (sin teclado japonés) */
+var ROMA=(function(){
+  var t={a:"あ",i:"い",u:"う",e:"え",o:"お","-":"ー",nn:"ん","n'":"ん",
+    shi:"し",chi:"ち",tsu:"つ",fu:"ふ",ji:"じ",si:"し",ti:"ち",tu:"つ",hu:"ふ",zi:"じ",di:"ぢ",du:"づ",wo:"を",
+    xtu:"っ",ltu:"っ",xa:"ぁ",xi:"ぃ",xu:"ぅ",xe:"ぇ",xo:"ぉ",xya:"ゃ",xyu:"ゅ",xyo:"ょ"};
+  var rows={k:"かきくけこ",s:"さ・すせそ",t:"た・・てと",n:"なにぬねの",h:"はひ・へほ",m:"まみむめも",y:"や・ゆ・よ",r:"らりるれろ",w:"わ・・・・",
+    g:"がぎぐげご",z:"ざ・ずぜぞ",d:"だ・・でど",b:"ばびぶべぼ",p:"ぱぴぷぺぽ"};
+  for(var c in rows) for(var i=0;i<5;i++) if(rows[c][i]!=="・") t[c+"aiueo"[i]]=rows[c][i];
+  var yo={ky:"き",gy:"ぎ",sh:"し",j:"じ",ch:"ち",ny:"に",hy:"ひ",by:"び",py:"ぴ",my:"み",ry:"り",jy:"じ",cy:"ち",sy:"し",zy:"じ",ty:"ち",dy:"ぢ"};
+  for(var p in yo){ t[p+"a"]=yo[p]+"ゃ"; t[p+"u"]=yo[p]+"ゅ"; t[p+"o"]=yo[p]+"ょ"; }
+  t.she="しぇ"; t.je="じぇ"; t.che="ちぇ";
+  return t;
+})();
+function romaToKana(s){
+  var out="", i=0;
+  s=s.toLowerCase();
+  while(i<s.length){
+    var c=s[i], n=s[i+1]||"";
+    if(c===n && /[bcdfghjkmpqrstvwxyz]/.test(c)){ out+="っ"; i++; continue; }
+    if(c==="n" && n==="n"){ out+="ん"; i+= /[aiueoy]/.test(s[i+2]||"") ? 1 : 2; continue; }   /* onna → おんな, konnichi → こんにち */
+    if(c==="n" && n && !/[aiueoy']/.test(n)){ out+="ん"; i++; continue; }
+    if(c==="n" && !n){ out+="ん"; i++; continue; }
+    var hit=false;
+    for(var L=3; L>=1; L--){ var k=s.substr(i,L); if(ROMA[k]){ out+=ROMA[k]; i+=L; hit=true; break; } }
+    if(!hit){ out+=c; i++; }
+  }
+  return out;
+}
+function normKana(s){
+  s=(s||"").replace(/[\s　・.。、,]/g,"");
+  if(/[a-zA-Z]/.test(s)) s=romaToKana(s);
+  return kata2hira(s);
+}
 /* todas las lecturas de un kanji en hiragana, para no ofrecer como "incorrecta" una lectura válida */
 function kanjiReadings(d){
   var set={};
@@ -768,27 +808,61 @@ function grammarBlank(d){
 }
 function gapHTML(s){ var i=s.indexOf("\u0000"); return esc(s.slice(0,i))+'<span class="gap">（　　）</span>'+esc(s.slice(i+1)); }
 
-/* Mientras una tarjeta es joven (o nueva) se pregunta en el sentido fácil (reconocer);
-   cuando ya está asentada (estabilidad ≥ 4 días) se pasa a producir y a frases con hueco. */
+/* Repasos: mientras una tarjeta es joven se mezclan reconocer y producir; cuando ya está
+   asentada (estabilidad ≥ 4 días) pesan más producir, escribir la lectura y las frases con hueco. */
+function kanjiWord(d){ return !!(d.ej && d.ejr && d.ej!==d.c && d.ej.indexOf(d.c)>=0 && d.ej.length<=6 && !/[^ぁ-ゖー\s]/.test(d.ejr)); }
+function vocabFill(d){ return !!(d.ej && d.ej.indexOf(d.w)>=0); }
 function modesFor(it, mature){
   var d=it.d;
   if(it.t==="k"){
-    var hasWord=d.ej && d.ejr && d.ej!==d.c && d.ej.indexOf(d.c)>=0 && d.ej.length<=6;
-    if(!mature) return hasWord ? ["mean","read","word"] : ["mean","read"];
-    return hasWord ? ["word","word","rev","read","mean"] : ["rev","read","mean"];
+    var hasWord=kanjiWord(d);
+    if(!mature) return hasWord ? ["mean","read","word","rev"] : ["mean","read","rev"];
+    return hasWord ? ["word","type","rev","read","mean"] : ["rev","read","mean"];
   }
   if(it.t==="v"){
-    var hk=hasKanji(d.w), fill=d.ej && d.ej.indexOf(d.w)>=0;
-    if(!mature) return hk ? ["mean","read"] : ["mean"];
-    var m=["rev","mean"]; if(hk){ m.push("write","read"); } if(fill){ m.push("fill","fill"); }
+    var hk=hasKanji(d.w), fill=vocabFill(d);
+    if(!mature) return hk ? ["rev","read","mean","type"] : ["rev","mean"];
+    var m=["rev","mean"]; if(hk){ m.push("write","read","type"); } if(fill){ m.push("fill","fill"); }
     return m;
   }
-  if(!mature) return ["mean","ctx"];
+  if(!mature) return ["mean","ctx","form"];
   return ["ctx","ctx","form","mean"];
 }
-function buildQ(it, mature){
-  var d=it.d, ms=modesFor(it, mature), m=ms[rnd(ms.length)];
+/* Elementos nuevos
+   1. Pretest: antes de ver la ficha se pregunta en un sentido difícil de adivinar (lectura
+      con variantes casi iguales). Intentar recordar antes de estudiar ayuda a fijar, y si ya
+      lo sabías no pierdes tiempo aprendiéndolo.
+   2. Aprendizaje: tras la ficha no se pregunta enseguida. Vuelve 3 veces, cada vez más tarde
+      (a las 3, 8 y 20 tarjetas) y cada vez más difícil: reconocer → producir → escribir o
+      completar una frase. Fallar hace retroceder un paso.
+   3. Lo que no termines vuelve primero en la siguiente sesión. Al completar los pasos pasa al
+      planificador y vuelve mañana: el recuerdo de verdad se mide al día siguiente. */
+var LEARN_WAITS=[3,8,20], LEARN_MAX=5;
+function pretestMode(it){
+  var d=it.d;
+  if(it.t==="k") return kanjiWord(d) ? "word" : "mean";
+  if(it.t==="v") return hasKanji(d.w) ? "read" : "mean";
+  return "mean";
+}
+function learnMode(it, step){
+  var d=it.d;
   if(it.t==="k"){
+    if(step===0) return "mean";
+    if(step===1) return kanjiWord(d) ? "rev" : "read";
+    return kanjiWord(d) ? "type" : "rev";
+  }
+  if(it.t==="v"){
+    var hk=hasKanji(d.w);
+    if(step===0) return "rev";
+    if(step===1) return hk ? "type" : "mean";
+    return vocabFill(d) ? "fill" : (hk ? "write" : "rev");
+  }
+  return ["mean","form","ctx"][step]||"ctx";
+}
+function buildQ(it, mature, force){
+  var d=it.d, ms=modesFor(it, mature), m=force||ms[rnd(ms.length)];
+  if(it.t==="k"){
+    if(m==="type") return {stem:d.ej, cls:"w", prompt:"Escribe la lectura", answer:d.ejr, typed:true};
     var homo=sameOnKanji(d.c).map(function(c){ return KMAP[c]; });
     if(m==="read"){ var rs=kanjiReadings(d);
       return {stem:d.c, cls:"k", prompt:"Lectura principal", answer:d.say,
@@ -802,6 +876,7 @@ function buildQ(it, mature){
   }
   if(it.t==="v"){
     var share=sharingKanji(it), cls=wordClass(d.w), sameCls=function(o){ return wordClass(o.d.w)===cls; };
+    if(m==="type") return {stem:d.w, cls:"w", prompt:"Escribe la lectura", answer:d.r, typed:true};
     if(m==="read") return {stem:d.w, cls:"w", prompt:"¿Cómo se lee?", answer:d.r,
         options:jlptOpts(it, "r", d.r, [{items:readingVariants(d.r), max:2}])};
     if(m==="write"){
@@ -1107,17 +1182,21 @@ function levelInterleave(list){
 function startSession(){
   if(!ITEMS.length){ toast("No hay contenido cargado."); return; }
   reconcile();
-  var now=Date.now(), due=[], fresh={k:[],v:[],g:[]}, R={};
+  var now=Date.now(), due=[], fresh={k:[],v:[],g:[]}, R={}, learning=[];
   pool().forEach(function(it){
     var c=D.cards[it.id];
-    if(validCard(c)){ if(cardDueMs(c)<=now){ due.push(it); R[it.id]=cardR(c, now); } }
+    if(isLearning(c)) learning.push(it);
+    else if(validCard(c)){ if(cardDueMs(c)<=now){ due.push(it); R[it.id]=cardR(c, now); } }
     else fresh[it.t].push(it);
   });
   due.sort(function(a,b){ return R[a.id]-R[b.id]; });
+  learning.sort(function(a,b){ return D.cards[a.id].last-D.cards[b.id].last; });
   var intro=introducedToday();
   SES={ due:due, fresh:{k:levelInterleave(fresh.k), v:levelInterleave(fresh.v), g:levelInterleave(fresh.g)},
         newLeft:{k:Math.max(0,D.settings.newK-intro.k), v:Math.max(0,D.settings.newV-intro.v), g:Math.max(0,D.settings.newG-intro.g)},
-        later:[], sinceNew:0, kindTurn:0, seen:{}, recent:[], extraTurn:0, n:0, ok:0, cur:null };
+        /* lo que quedó a medio aprender en otra sesión va primero (ya ha pasado tiempo: buen momento para recordarlo) */
+        later:learning.map(function(it,i){ return {id:it.id, wait:i*2}; }),
+        sinceNew:0, kindTurn:0, seen:{}, recent:[], extraTurn:0, n:0, ok:0, cur:null };
   lastAct=Date.now(); paused=false;
   show("session"); paintTimer(); nextCard();
 }
@@ -1139,78 +1218,131 @@ function takeNew(ignoreLimit){
 function pickNext(){
   SES.later.forEach(function(x){ x.wait--; });
   for(var i=0;i<SES.later.length;i++){ if(SES.later[i].wait<=0) return {it:BYID[SES.later.splice(i,1)[0].id], kind:"again"}; }
-  if(newAvailable(false) && (SES.sinceNew>=2 || !SES.due.length)){ SES.sinceNew=0; return {it:takeNew(false), kind:"new"}; }
+  if(newAvailable(false) && learningCount()<LEARN_MAX && (SES.sinceNew>=2 || !SES.due.length)){ SES.sinceNew=0; return {it:takeNew(false), kind:"new"}; }
   if(SES.due.length){ SES.sinceNew++; return {it:SES.due.shift(), kind:"due"}; }
-  if(SES.later.length){ SES.later.sort(function(a,b){ return a.wait-b.wait; }); return {it:BYID[SES.later.shift().id], kind:"again"}; }
   /* Todo lo de hoy está hecho: práctica extra para completar los minutos.
+     Lo que está en aprendizaje no se adelanta: el hueco entre repasos es lo que lo fija.
      Primero lo más flojo que no hayas visto en esta sesión. Después se alterna un elemento
      nuevo con un repaso de lo más débil (lo de hoy incluido, salvo las últimas 8 tarjetas),
      para que los minutos extra no se conviertan en una montaña de repasos mañana. */
   var now=Date.now(), weak=null, wr=0.86;
-  pool().forEach(function(it){ var c=D.cards[it.id]; if(!validCard(c) || SES.seen[it.id]) return; var r=cardR(c, now); if(r<wr){ wr=r; weak=it; } });
+  pool().forEach(function(it){ var c=D.cards[it.id]; if(!validCard(c) || isLearning(c) || SES.seen[it.id]) return; var r=cardR(c, now); if(r<wr){ wr=r; weak=it; } });
   if(weak) return {it:weak, kind:"extra"};
   SES.extraTurn=(SES.extraTurn||0)+1;
-  if(SES.extraTurn%2===1 && newAvailable(true)) return {it:takeNew(true), kind:"new"};
+  if(SES.extraTurn%2===1 && newAvailable(true) && learningCount()<LEARN_MAX) return {it:takeNew(true), kind:"new"};
   var recent={}; SES.recent.forEach(function(id){ recent[id]=1; });
   weak=null; wr=2;
-  pool().forEach(function(it){ var c=D.cards[it.id]; if(!validCard(c) || recent[it.id]) return; var r=cardR(c, now)+(c.reps||0)*0.002; if(r<wr){ wr=r; weak=it; } });
+  pool().forEach(function(it){ var c=D.cards[it.id]; if(!validCard(c) || isLearning(c) || recent[it.id]) return; var r=cardR(c, now)+(c.reps||0)*0.002; if(r<wr){ wr=r; weak=it; } });
   if(weak) return {it:weak, kind:"extra"};
+  if(SES.later.length){ SES.later.sort(function(a,b){ return a.wait-b.wait; }); return {it:BYID[SES.later.shift().id], kind:"again"}; }
   if(newAvailable(true)) return {it:takeNew(true), kind:"new"};
   return null;
 }
 var KIND_TAG={new:'<span class="tag new">Nuevo</span>', again:'<span class="tag again">Otra vez</span>', due:'<span class="tag">Repaso</span>', extra:'<span class="tag extra">Extra</span>'};
+function isLearning(c){ return !!(validCard(c) && c.ls!=null); }
+function learningCount(){ var n=0; SES.later.forEach(function(x){ if(isLearning(D.cards[x.id])) n++; }); return n; }
 function paintMeta(){
-  var nl=SES.newLeft.k+SES.newLeft.v+SES.newLeft.g;
-  document.getElementById("sLeft").textContent=SES.due.length+" repasos · "+nl+" nuevos"+(SES.later.length?" · "+SES.later.length+" por repetir":"");
+  var nl=SES.newLeft.k+SES.newLeft.v+SES.newLeft.g, ln=learningCount(), ag=SES.later.length-ln;
+  document.getElementById("sLeft").textContent=SES.due.length+" repasos · "+nl+" nuevos"+(ln?" · "+ln+" aprendiendo":"")+(ag?" · "+ag+" por repetir":"");
   document.getElementById("sScore").textContent=SES.n ? (SES.ok+"/"+SES.n+" ✓") : "";
 }
 function nextCard(){
   var p=pickNext();
   if(!p || !p.it){ document.getElementById("sStage").innerHTML='<div class="q empty">No queda nada pendiente en lo que has elegido.<br>Añade niveles o tipos en Ajustes.</div>'; return; }
+  if(p.kind!=="new" && isLearning(D.cards[p.it.id])) p.kind="learn";
   SES.cur=p; SES.seen[p.it.id]=1;
   SES.recent.push(p.it.id); if(SES.recent.length>8) SES.recent.shift();
   paintMeta();
-  if(p.kind==="new") renderStudy(p); else renderQuestion(p);
+  renderQuestion(p);
 }
-function headTag(p){ return '<div style="display:flex; gap:6px; justify-content:center;">'+KIND_TAG[p.kind]+'<span class="tag">'+KIND_NAME[p.it.t]+' '+esc(p.it.lvl)+'</span></div>'; }
-function renderStudy(p){
-  var st=document.getElementById("sStage");
-  st.innerHTML='<div class="q">'+headTag(p)+'<div style="margin-top:12px;">'+infoHTML(p.it)+'</div>'+
-    '<button class="btn" id="stuGo">Ya lo tengo · pregúntame</button></div>';
-  document.getElementById("stuGo").addEventListener("click", function(){ renderQuestion(p); });
+function headTag(p){
+  var tag=p.kind==="learn" ? '<span class="tag learn">Aprendiendo · '+(D.cards[p.it.id].ls+1)+'/'+LEARN_WAITS.length+'</span>' : KIND_TAG[p.kind];
+  return '<div style="display:flex; gap:6px; justify-content:center;">'+tag+'<span class="tag">'+KIND_NAME[p.it.t]+' '+esc(p.it.lvl)+'</span></div>';
 }
 function renderQuestion(p){
-  var c=D.cards[p.it.id], mature=p.kind!=="new" && validCard(c) && c.s>=4;
-  var q=buildQ(p.it, mature); q.t0=Date.now(); SES.q=q;
+  var c=D.cards[p.it.id], force=null, mature=false;
+  if(p.kind==="new") force=pretestMode(p.it);
+  else if(p.kind==="learn") force=learnMode(p.it, c.ls);
+  else mature=validCard(c) && c.s>=4;
+  var q=buildQ(p.it, mature, force); q.t0=Date.now(); SES.q=q;
   var stem=q.stemHTML!=null ? q.stemHTML : esc(q.stem);
-  var h='<div class="q">'+headTag(p)+'<div class="q-prompt">'+esc(q.prompt)+'</div>'+
-    '<div class="q-stem '+q.cls+'">'+stem+'</div>'+(q.sub?'<div class="q-sub">'+esc(q.sub)+'</div>':'')+'<div class="opts'+(q.big?' two':'')+'">';
-  q.options.forEach(function(o,i){ h+='<button class="opt'+(q.big?' big':'')+'" data-i="'+i+'">'+esc(o)+'</button>'; });
-  h+='</div><div id="fb"></div></div>';
+  var h='<div class="q">'+headTag(p)+'<div class="q-prompt">'+(p.kind==="new"?'¿Lo conoces? · ':'')+esc(q.prompt)+'</div>'+
+    '<div class="q-stem '+q.cls+'">'+stem+'</div>'+(q.sub?'<div class="q-sub">'+esc(q.sub)+'</div>':'');
+  if(q.typed){
+    h+='<div class="typed"><input type="text" id="tIn" lang="ja" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="done" placeholder="hiragana o rōmaji">'+
+       '<div class="row"><button class="btn ghost" id="tNo">No lo sé</button><button class="btn" id="tOk">Comprobar</button></div></div>';
+  } else {
+    h+='<div class="opts'+(q.big?' two':'')+'">';
+    q.options.forEach(function(o,i){ h+='<button class="opt'+(q.big?' big':'')+'" data-i="'+i+'">'+esc(o)+'</button>'; });
+    h+='</div>';
+    if(p.kind==="new") h+='<button class="skip" id="nwSkip">No lo conozco · ver la ficha</button>';
+  }
+  h+='<div id="fb"></div></div>';
   var st=document.getElementById("sStage"); st.innerHTML=h;
   st.querySelectorAll(".opt").forEach(function(b){ b.addEventListener("click", function(){ answer(+b.getAttribute("data-i")); }); });
+  var sk=document.getElementById("nwSkip"); if(sk) sk.addEventListener("click", function(){ answer(-1); });
+  if(q.typed){
+    var inp=document.getElementById("tIn");
+    var go=function(){ if(!normKana(inp.value)){ inp.focus(); return; } answerTyped(inp.value); };
+    document.getElementById("tOk").addEventListener("click", go);
+    document.getElementById("tNo").addEventListener("click", function(){ answerTyped(""); });
+    inp.addEventListener("keydown", function(e){ if(e.key==="Enter" && !e.isComposing){ e.preventDefault(); go(); } });
+    setTimeout(function(){ try{ inp.focus(); }catch(e){} }, 50);
+  }
 }
+/* i = -1: «No lo conozco» (sin elegir opción) */
 function answer(i){
-  var q=SES.q, p=SES.cur; if(!q || q.done) return; q.done=true;
-  var ok=q.options[i]===q.answer, t=today();
+  var q=SES.q; if(!q || q.done) return;
+  var ok=i>=0 && q.options[i]===q.answer;
   document.querySelectorAll("#sStage .opt").forEach(function(b,j){
     b.disabled=true;
     if(q.options[j]===q.answer) b.classList.add("ok"); else if(j===i) b.classList.add("bad"); else b.classList.add("dim");
   });
-  SES.n++; if(ok) SES.ok++;
-  var s=D.stats[t]||(D.stats[t]={n:0,ok:0,nw:0}); s.n++; if(ok) s.ok++; if(p.kind==="new") s.nw++;
-  var oc=scheduleAll(D.cards[p.it.id]||null, new Date()), h;
-  h='<div class="fb"><div class="fb-res '+(ok?'ok':'bad')+'">'+(ok?'✓ Correcto':'✗ Era: '+esc(q.answer))+'</div>'+infoHTML(p.it);
-  if(ok){
-    h+='<div class="grade"><button data-g="2">Dudé<small>'+fmtIv(oc[2].iv)+'</small></button>'+
-       '<button class="main" data-g="3">Siguiente →<small>'+fmtIv(oc[3].iv)+'</small></button>'+
-       '<button data-g="4">Fácil<small>'+fmtIv(oc[4].iv)+'</small></button></div>';
+  var sk=document.getElementById("nwSkip"); if(sk) sk.remove();
+  resolve(ok, i<0);
+}
+function answerTyped(v){
+  var q=SES.q; if(!q || q.done) return;
+  var inp=document.getElementById("tIn"), given=normKana(v), ok=!!given && given===normKana(q.answer);
+  inp.value=given || ""; inp.disabled=true; inp.classList.add(ok?"ok":"bad");
+  document.querySelectorAll("#sStage .typed .row").forEach(function(r){ r.remove(); });
+  resolve(ok, !given, given);
+}
+function resolve(ok, skipped, given){
+  var q=SES.q, p=SES.cur, t=today(); q.done=true;
+  var s=D.stats[t]||(D.stats[t]={n:0,ok:0,nw:0}), h, oc=null, fb=document.getElementById("fb");
+  var res=ok ? '✓ Correcto' : (skipped ? (p.kind==="new" ? 'Nuevo · estúdialo' : 'Era: '+esc(q.answer)) : '✗ Era: '+esc(q.answer)+(given ? ' · escribiste '+esc(given) : ''));
+  h='<div class="fb"><div class="fb-res '+(ok?'ok':'bad')+'">'+res+'</div>'+infoHTML(p.it);
+  if(p.kind==="new"){
+    /* el pretest no cuenta en los aciertos: no saber algo que aún no has estudiado no es un fallo */
+    s.nw++;
+    if(ok) h+='<div class="grade"><button data-n="learn">Ha sido suerte<small>aprenderlo</small></button>'+
+              '<button class="main" data-n="knew">Ya lo sabía<small>vuelve en '+fmtIv(scheduleAll(null, new Date())[3].iv)+'</small></button></div>';
+    else h+='<div class="grade"><button class="main" data-n="learn">Ya lo tengo →<small>te lo preguntaré en un rato</small></button></div>';
   } else {
-    h+='<div class="grade"><button class="main" data-g="1">Siguiente →<small>vuelve en unos minutos</small></button></div>';
+    SES.n++; if(ok) SES.ok++;
+    s.n++; if(ok) s.ok++;
+    if(p.kind==="learn"){
+      var c=D.cards[p.it.id], last=c.ls+1>=LEARN_WAITS.length, nxt=last ? 'aprendido · mañana' : 'paso '+(c.ls+2)+'/'+LEARN_WAITS.length;
+      if(ok) h+='<div class="grade"><button data-l="hard">Dudé<small>'+nxt+'</small></button>'+
+                '<button class="main" data-l="ok">Siguiente →<small>'+nxt+'</small></button></div>';
+      else h+='<div class="grade"><button class="main" data-l="fail">Siguiente →<small>vuelve en unos minutos</small></button></div>';
+    } else {
+      oc=scheduleAll(D.cards[p.it.id]||null, new Date());
+      if(ok){
+        h+='<div class="grade"><button data-g="2">Dudé<small>'+fmtIv(oc[2].iv)+'</small></button>'+
+           '<button class="main" data-g="3">Siguiente →<small>'+fmtIv(oc[3].iv)+'</small></button>'+
+           '<button data-g="4">Fácil<small>'+fmtIv(oc[4].iv)+'</small></button></div>';
+      } else {
+        h+='<div class="grade"><button class="main" data-g="1">Siguiente →<small>vuelve en unos minutos</small></button></div>';
+      }
+    }
   }
   h+='</div>';
-  var fb=document.getElementById("fb"); fb.innerHTML=h;
+  fb.innerHTML=h;
   fb.querySelectorAll("[data-g]").forEach(function(b){ b.addEventListener("click", function(){ grade(+b.getAttribute("data-g"), oc); }); });
+  fb.querySelectorAll("[data-n]").forEach(function(b){ b.addEventListener("click", function(){ introduce(b.getAttribute("data-n")==="knew"); }); });
+  fb.querySelectorAll("[data-l]").forEach(function(b){ b.addEventListener("click", function(){ learnStep(b.getAttribute("data-l")); }); });
   setTimeout(function(){ fb.scrollIntoView({behavior:"smooth", block:"nearest"}); }, 60);
   paintMeta();
 }
@@ -1218,10 +1350,40 @@ function grade(g, oc){
   var p=SES.cur; if(!p) return;
   var card=oc[g].card;
   D.cards[p.it.id]=card;
-  if(card.st!==2) SES.later.push({id:p.it.id, wait:3});     /* fallada o aún aprendiendo: vuelve dentro de 3 tarjetas */
-  SES.cur=null; SES.q=null;
-  save(false); cloudDirty();
-  nextCard();
+  if(card.st!==2) SES.later.push({id:p.it.id, wait:3});     /* fallada: vuelve dentro de 3 tarjetas */
+  afterCard();
+}
+function afterCard(){ SES.cur=null; SES.q=null; save(false); cloudDirty(); nextCard(); }
+/* Pasa al planificador. Al terminar el aprendizaje, el primer repaso es mañana como mucho. */
+function graduate(id, g, capTomorrow){
+  var prev=D.cards[id], now=new Date(), card=scheduleAll(null, now)[g].card;
+  if(prev && prev.first) card.first=prev.first;
+  if(capTomorrow){ var t1=toMin(dayStartMs(now.getTime())+DAY_MS); if(card.due>t1) card.due=t1; }
+  D.cards[id]=card;
+}
+function introduce(knew){
+  var p=SES.cur; if(!p) return;
+  if(knew) graduate(p.it.id, 3, false);
+  else {
+    var card=scheduleAll(null, new Date())[1].card;
+    card.due=card.last; card.ls=0; card.le=0;
+    D.cards[p.it.id]=card;
+    SES.later.push({id:p.it.id, wait:LEARN_WAITS[0]});
+  }
+  afterCard();
+}
+function learnStep(r){
+  var p=SES.cur; if(!p) return;
+  var c=D.cards[p.it.id];
+  c.last=toMin(Date.now()); c.reps=(c.reps||0)+1;
+  if(r==="fail"){ c.le=(c.le||0)+1; c.ls=Math.max(0, c.ls-1); SES.later.push({id:p.it.id, wait:3}); }
+  else {
+    if(r==="hard") c.lh=1;
+    c.ls++;
+    if(c.ls>=LEARN_WAITS.length) graduate(p.it.id, (c.le||c.lh) ? 2 : 3, true);
+    else SES.later.push({id:p.it.id, wait:LEARN_WAITS[c.ls]});
+  }
+  afterCard();
 }
 function endSession(){ SES=null; save(true); cloudPush(); show("home"); }
 document.getElementById("sClose").addEventListener("click", function(){

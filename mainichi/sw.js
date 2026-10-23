@@ -7,7 +7,7 @@
    - Avisos push: los envía el Worker jlpt-cuenta (rutas /m/push/*). Al llegar uno, se
      pone en el icono el número de minutos que faltan; al tocarlo se abre la sesión. */
 
-var CACHE = "mainichi-v3";                /* ← v3: distractores tipo JLPT, examen y ritmo, avisos insistentes */
+var CACHE = "mainichi-v4";                /* ← v4: pretest y aprendizaje en 3 pasos espaciados, respuesta escrita */
 var AUDIO_CACHE = "mainichi-audio-v1";
 var SHELL = ["./", "./index.html", "./manifest.json", "./icon.png", "../content.js"];
 var NET_TIMEOUT = 3000;
