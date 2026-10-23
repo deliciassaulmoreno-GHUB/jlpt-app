@@ -150,6 +150,7 @@
   .q-stem.w{font-size:40px;}
   .q-stem.s{font-size:22px; line-height:1.6; font-weight:500; text-align:left;}
   .q-stem.es{font-family:var(--ui); font-size:20px; font-weight:600; line-height:1.45;}
+  .q-sub{text-align:center; font-size:14px; color:var(--muted); margin-top:-2px;}
   .q-stem .gap{color:var(--indigo-bright); font-weight:800;}
   .opts{display:grid; gap:9px; margin-top:16px;}
   .opt{border:1.5px solid var(--line); background:var(--card); border-radius:14px; padding:14px 14px; font-size:16px; text-align:left;
@@ -288,6 +289,8 @@
     <div class="week" id="hWeek"></div>
   </div>
 
+  <div class="card" id="hExam"></div>
+
   <div class="card">
     <h3>Lo que ya dominas</h3>
     <div id="hProg"></div>
@@ -324,6 +327,13 @@
     <h3>Objetivo diario</h3>
     <div class="seg" id="stGoal"></div>
     <div class="f-help" id="stGoalHelp">Solo cuenta el tiempo en que estás estudiando de verdad: si pasas 90 s sin tocar nada, el reloj se para.</div>
+  </div>
+
+  <div class="card">
+    <h3>Examen</h3>
+    <label class="f" for="stExam">Fecha del JLPT</label>
+    <input type="date" id="stExam">
+    <div class="f-help">Con la fecha, la portada te dice si llegas a tiempo a ver todo lo que estudias y cuántos nuevos al día necesitas. Déjala vacía para no verlo.</div>
   </div>
 
   <div class="card">
@@ -454,7 +464,7 @@ function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,function(c){ ret
 function defaults(){
   return { v:1, cards:{}, days:{}, stats:{}, done:{}, frozen:{}, shields:0, best:0, shieldDay:"",
     lastCheck:"", rescue:null, notice:null, onboarded:false, target:null, streak:0, updatedAt:0,
-    settings:{ goal:15, goalNext:null, levels:["N2","N1"], kinds:{k:true,v:true,g:true}, newK:5, newV:8, newG:3, retention:0.9 },
+    settings:{ goal:15, goalNext:null, levels:["N2","N1"], kinds:{k:true,v:true,g:true}, newK:5, newV:8, newG:3, retention:0.9, examDate:"2026-12-06" },
     commit:{ why:"", after:"", where:"", stake:"", hours:[9,21,23] } };
 }
 function fillData(d){
@@ -644,6 +654,99 @@ function distract(it, field, n, accept){
   return c.slice(0,n).map(function(x){ return x.v; });
 }
 function opts(ans, others){ return shuffle([ans].concat(others)); }
+
+/* ---------------- distractores tipo JLPT ----------------
+   Las opciones incorrectas imitan las trampas del examen en vez de salir al azar:
+   · lecturas casi iguales: vocal larga (しゅうかん/しゅかん), ten-ten (こうか/ごうか),
+     っ (こうか/こっか) y ん
+   · kanji que se leen igual, que además suelen compartir componente (講・構・購)
+   · palabras que comparten un kanji y, en huecos, de la misma clase (verbo con verbo)
+   · patrones de gramática que se parecen (にしろ/にせよ, ものの/ものだから) */
+var KMAP={}, ON_INDEX={}, VOCAB_BY_KANJI={}, VOCAB_BY_READ={};
+function onList(d){ return (d.on||"").split(/[・、,\s]+/).map(function(r){ return kata2hira(r).replace(/[-‐.。]/g,""); }).filter(Boolean); }
+BYTYPE.k.forEach(function(it){ KMAP[it.d.c]=it.d; onList(it.d).forEach(function(r){ (ON_INDEX[r]=ON_INDEX[r]||[]).push(it.d.c); }); });
+BYTYPE.v.forEach(function(it){
+  (VOCAB_BY_READ[it.d.r]=VOCAB_BY_READ[it.d.r]||[]).push(it);
+  var seen={}; (it.d.w.match(/[㐀-䶿一-鿿々]/g)||[]).forEach(function(c){ if(!seen[c]){ seen[c]=1; (VOCAB_BY_KANJI[c]=VOCAB_BY_KANJI[c]||[]).push(it); } });
+});
+function sameOnKanji(c){
+  var out=[], seen={}; seen[c]=1;
+  if(KMAP[c]) onList(KMAP[c]).forEach(function(r){ (ON_INDEX[r]||[]).forEach(function(k){ if(!seen[k]){ seen[k]=1; out.push(k); } }); });
+  return out;
+}
+var DAKU={};
+"かがきぎくぐけげこごさざしじすずせぜそぞただてでとどはばひびふぶへべほぼ".replace(/(.)(.)/g, function(m,a,b){ DAKU[a]=[b]; DAKU[b]=[a]; return m; });
+"はぱひぴふぷへぺほぽ".replace(/(.)(.)/g, function(m,a,b){ DAKU[a].push(b); DAKU[b]=[a]; return m; });
+var O_U_ROW="おこごそぞとどのほぼぽもよょろうくぐすずつづぬふぶぷむゆゅる", SOKUON_OK="かきくけこさしすせそたちつてとぱぴぷぺぽ";
+/* Lecturas que se diferencian de r en un solo detalle, como en 漢字読み */
+function readingVariants(r){
+  var out={}, i, c;
+  if(!r || /[^ぁ-ゖー]/.test(r)) return [];
+  function add(s){ if(s && s!==r) out[s]=1; }
+  for(i=0;i<r.length;i++){
+    c=r[i];
+    var next=r[i+1]||"", stopNext=SOKUON_OK.indexOf(next)>=0 && next!=="";
+    (DAKU[c]||[]).forEach(function(x){ add(r.slice(0,i)+x+r.slice(i+1)); });
+    /* vocal larga: quitar o poner う (しゅうかん/しゅかん); nunca alargando la última sílaba */
+    if(O_U_ROW.indexOf(c)>=0 && c!=="う"){
+      if(next==="う") add(r.slice(0,i+1)+r.slice(i+2));
+      else if((i<r.length-1 || r.length<=2) && next!=="っ") add(r.slice(0,i+1)+"う"+r.slice(i+1));
+    }
+    /* っ donde iría く・き・つ・ち o la う de una vocal larga (がくこう/がっこう, こうか/こっか), y al revés */
+    if(c==="っ"){ add(r.slice(0,i)+"つ"+r.slice(i+1)); add(r.slice(0,i)+"く"+r.slice(i+1)); }
+    else if(i>0 && stopNext && ("くきつち".indexOf(c)>=0 || (c==="う" && O_U_ROW.indexOf(r[i-1])>=0))) add(r.slice(0,i)+"っ"+r.slice(i+1));
+    if(c==="ん" && i>0) add(r.slice(0,i)+r.slice(i+1));
+  }
+  return Object.keys(out);
+}
+/* Clase de palabra aproximada, para que en los huecos compitan verbo con verbo, etc. */
+function wordClass(w){
+  var last=(w||"").slice(-1);
+  if(w.length>1 && /[うくぐすつぬぶむる]/.test(last)) return "v";
+  if(w.length>1 && last==="い" && hasKanji(w)) return "a";
+  return hasKanji(w) ? "n" : "x";
+}
+function bigrams(s){ var o={}; for(var i=0;i<s.length-1;i++) o[s.slice(i,i+2)]=1; return o; }
+function similarGrammar(it, k){
+  var core=patVariants(it.d.pat).join(""), bg=bigrams(core), out=[];
+  BYTYPE.g.forEach(function(o){
+    if(o===it) return;
+    var c2=patVariants(o.d.pat).join(""), b2=bigrams(c2), sc=0;
+    for(var x in b2) if(bg[x]) sc++;
+    if(c2.slice(0,2)===core.slice(0,2)) sc+=1;
+    if(sc>0) out.push({o:o, sc:sc+(o.lvl===it.lvl?0.5:0)+Math.random()*0.5});
+  });
+  out.sort(function(a,b){ return b.sc-a.sc; });
+  return out.slice(0, k||6).map(function(x){ return x.o; });
+}
+/* Rellena n opciones recorriendo los grupos por orden (más parecidos primero) y,
+   si faltan, completa con distract(). bad = valores que no pueden salir como incorrectos. */
+function jlptOpts(it, field, answer, groups, bad, accept){
+  var out=[], have={}; have[answer]=1;
+  for(var g=0; g<groups.length && out.length<3; g++){
+    var arr=shuffle((groups[g].items||[]).slice()), lim=groups[g].max||3, took=0;
+    for(var i=0;i<arr.length && out.length<3 && took<lim;i++){
+      var v=arr[i]; if(!v || have[v] || (bad && bad[v])) continue;
+      have[v]=1; out.push(v); took++;
+    }
+  }
+  if(out.length<3) out=out.concat(distract(it, field, 3-out.length, function(o,v){ return !have[v] && !(bad && bad[v]) && (!accept || accept(o,v)); }));
+  return opts(answer, out);
+}
+function vals(list, field){ return list.map(function(o){ return o.d[field]; }); }
+function sharingKanji(it){
+  var seen={}, out=[]; seen[it.id]=1;
+  (it.d.w.match(/[㐀-䶿一-鿿々]/g)||[]).forEach(function(c){ (VOCAB_BY_KANJI[c]||[]).forEach(function(o){ if(!seen[o.id]){ seen[o.id]=1; out.push(o); } }); });
+  return out;
+}
+/* Palabras falsas cambiando un kanji por otro que se lee igual (講義 → 構義), como en 表記 */
+function fakeSpellings(w){
+  var out=[];
+  for(var i=0;i<w.length;i++){
+    sameOnKanji(w[i]).slice(0,6).forEach(function(k){ out.push(w.slice(0,i)+k+w.slice(i+1)); });
+  }
+  return out;
+}
 /* Núcleo(s) del patrón para el hueco: sin 〜, sin paréntesis, cada variante por separado */
 function patVariants(pat){
   return (pat||"").replace(/[（(].*?[）)]/g,"").split(/[／\/・、,]|\s+/)
@@ -686,26 +789,46 @@ function modesFor(it, mature){
 function buildQ(it, mature){
   var d=it.d, ms=modesFor(it, mature), m=ms[rnd(ms.length)];
   if(it.t==="k"){
+    var homo=sameOnKanji(d.c).map(function(c){ return KMAP[c]; });
     if(m==="read"){ var rs=kanjiReadings(d);
-      return {stem:d.c, cls:"k", prompt:"Lectura principal", answer:d.say, options:opts(d.say, distract(it,"say",3,function(o,v){ return !rs[v]; }))}; }
-    if(m==="word") return {stem:d.ej, cls:"w", prompt:"¿Cómo se lee?", answer:d.ejr, options:opts(d.ejr, distract(it,"ejr",3))};
-    if(m==="rev") return {stem:d.mean, cls:"es", prompt:"¿Qué kanji es?", answer:d.c, options:opts(d.c, distract(it,"c",3)), big:true};
-    return {stem:d.c, cls:"k", prompt:"¿Qué significa?", answer:d.mean, options:opts(d.mean, distract(it,"mean",3))};
+      return {stem:d.c, cls:"k", prompt:"Lectura principal", answer:d.say,
+        options:jlptOpts(it, "say", d.say, [{items:readingVariants(d.say), max:2}], rs)}; }
+    if(m==="word") return {stem:d.ej, cls:"w", prompt:"¿Cómo se lee?", answer:d.ejr,
+        options:jlptOpts(it, "ejr", d.ejr, [{items:readingVariants(d.ejr), max:2}])};
+    if(m==="rev") return {stem:d.mean, cls:"es", prompt:"¿Qué kanji es?", answer:d.c,
+        options:jlptOpts(it, "c", d.c, [{items:homo.map(function(x){ return x.c; }), max:3}]), big:true};
+    return {stem:d.c, cls:"k", prompt:"¿Qué significa?", answer:d.mean,
+        options:jlptOpts(it, "mean", d.mean, [{items:homo.map(function(x){ return x.mean; }), max:2}])};
   }
   if(it.t==="v"){
-    if(m==="read") return {stem:d.w, cls:"w", prompt:"¿Cómo se lee?", answer:d.r, options:opts(d.r, distract(it,"r",3))};
-    if(m==="write") return {stem:d.r, cls:"w", prompt:"¿Cómo se escribe?", answer:d.w, options:opts(d.w, distract(it,"w",3,function(o){ return hasKanji(o.d.w) && o.d.r!==d.r; }))};
-    if(m==="fill") return {stemHTML:gapHTML(d.ej.replace(d.w,"\u0000")), cls:"s", prompt:"Completa la frase", answer:d.w, options:opts(d.w, distract(it,"w",3))};
-    if(m==="rev") return {stem:d.mean, cls:"es", prompt:"¿Cómo se dice en japonés?", answer:d.w, options:opts(d.w, distract(it,"w",3))};
-    return {stem:d.w, cls:"w", prompt:"¿Qué significa?", answer:d.mean, options:opts(d.mean, distract(it,"mean",3))};
+    var share=sharingKanji(it), cls=wordClass(d.w), sameCls=function(o){ return wordClass(o.d.w)===cls; };
+    if(m==="read") return {stem:d.w, cls:"w", prompt:"¿Cómo se lee?", answer:d.r,
+        options:jlptOpts(it, "r", d.r, [{items:readingVariants(d.r), max:2}])};
+    if(m==="write"){
+      var homoW=vals((VOCAB_BY_READ[d.r]||[]).filter(function(o){ return o!==it && hasKanji(o.d.w); }), "w");
+      return {stem:d.r, sub:d.mean, cls:"w", prompt:"¿Cómo se escribe?", answer:d.w,
+        options:jlptOpts(it, "w", d.w, [{items:homoW, max:1}, {items:fakeSpellings(d.w), max:2}, {items:vals(share,"w"), max:3}], null,
+          function(o){ return hasKanji(o.d.w) && o.d.r!==d.r; })};
+    }
+    if(m==="fill") return {stemHTML:gapHTML(d.ej.replace(d.w,"\u0000")), cls:"s", prompt:"Completa la frase", answer:d.w,
+        options:jlptOpts(it, "w", d.w, [{items:vals(share.filter(sameCls),"w"), max:2}], null, sameCls)};
+    if(m==="rev") return {stem:d.mean, cls:"es", prompt:"¿Cómo se dice en japonés?", answer:d.w,
+        options:jlptOpts(it, "w", d.w, [{items:vals(share,"w"), max:2}])};
+    return {stem:d.w, cls:"w", prompt:"¿Qué significa?", answer:d.mean,
+        options:jlptOpts(it, "mean", d.mean, [{items:vals(share,"mean"), max:2}])};
   }
+  var sim=similarGrammar(it, 6);
   if(m==="ctx"){
     var b=grammarBlank(d);
-    if(b) return {stemHTML:gapHTML(b), cls:"s", prompt:"¿Qué estructura completa la frase?", answer:d.pat, options:opts(d.pat, distract(it,"pat",3))};
-    return {stem:d.ej, cls:"s", prompt:"¿Qué estructura se usa en esta frase?", answer:d.pat, options:opts(d.pat, distract(it,"pat",3))};
+    if(b) return {stemHTML:gapHTML(b), cls:"s", prompt:"¿Qué estructura completa la frase?", answer:d.pat,
+        options:jlptOpts(it, "pat", d.pat, [{items:vals(sim,"pat"), max:2}])};
+    return {stem:d.ej, cls:"s", prompt:"¿Qué estructura se usa en esta frase?", answer:d.pat,
+        options:jlptOpts(it, "pat", d.pat, [{items:vals(sim,"pat"), max:2}])};
   }
-  if(m==="form") return {stem:d.ejt, cls:"es", prompt:"¿Con qué estructura se dice en japonés?", answer:d.pat, options:opts(d.pat, distract(it,"pat",3))};
-  return {stem:d.pat, cls:"w", prompt:"¿Qué significa?", answer:d.mean, options:opts(d.mean, distract(it,"mean",3))};
+  if(m==="form") return {stem:d.ejt, cls:"es", prompt:"¿Con qué estructura se dice en japonés?", answer:d.pat,
+      options:jlptOpts(it, "pat", d.pat, [{items:vals(sim,"pat"), max:3}])};
+  return {stem:d.pat, cls:"w", prompt:"¿Qué significa?", answer:d.mean,
+      options:jlptOpts(it, "mean", d.mean, [{items:vals(sim,"mean"), max:2}])};
 }
 
 /* ---------------- ficha completa (al estudiar algo nuevo y tras responder) ---------------- */
@@ -803,7 +926,7 @@ function renderHome(){
   go.textContent= done ? "Hecho por hoy ✓ · Seguir un poco" : (secs>0 ? "Seguir · me faltan "+left+" min" : "Empezar mis "+goal+" minutos");
   var c=counts();
   document.getElementById("hSub").innerHTML= ITEMS.length ? (c.due+(c.due===1?" repaso pendiente":" repasos pendientes")+" · "+c.nw+(c.nw===1?" nuevo":" nuevos")+" para hoy") : '<span style="color:var(--red)">No se ha podido cargar el contenido (../content.js).</span>';
-  renderBanner(); renderWhy(); renderCal(); renderWeek(); renderProg();
+  renderBanner(); renderWhy(); renderCal(); renderWeek(); renderExam(); renderProg();
   updateBadge();
 }
 function renderBanner(){
@@ -858,6 +981,56 @@ function renderWeek(){
     '<div><b>'+dd+'/7</b><span>días cumplidos</span></div>'+
     '<div><b>'+Math.round(secs/60)+'</b><span>minutos</span></div>'+
     '<div><b>'+(n?Math.round(ok*100/n)+'%':'—')+'</b><span>aciertos ('+n+')</span></div>';
+}
+/* ---------------- hacia el examen ----------------
+   Cuánto de lo que estudias has visto ya, a qué ritmo metes elementos nuevos (media de
+   los últimos 14 días, o desde que empezaste si hace menos) y cuántos nuevos al día harían
+   falta para verlo todo antes del examen. Los minutos son una estimación: ~40 s por cada
+   elemento nuevo el primer día, sin contar los repasos que generará después. */
+var NEW_SECS=40;
+function examInfo(){
+  var ex=D.settings.examDate; if(!ex || !/^\d{4}-\d{2}-\d{2}$/.test(ex)) return null;
+  var t=today(), days=Math.round((dayDate(ex)-dayDate(t))/DAY_MS);
+  if(days<0) return {past:true, date:ex};
+  var tot={k:0,v:0,g:0}, seen={k:0,v:0,g:0}, need={}, needSum=0;
+  pool().forEach(function(it){ tot[it.t]++; if(validCard(D.cards[it.id])) seen[it.t]++; });
+  var first=null, k; for(k in D.stats) if(!first || k<first) first=k;
+  var span=first ? Math.min(14, Math.max(1, Math.round((dayDate(t)-dayDate(first))/DAY_MS)+1)) : 14, nw=0;
+  for(var i=0;i<span;i++){ var s=D.stats[shiftDay(t,-i)]; if(s) nw+=s.nw||0; }
+  var studyDays=Math.max(1, days);
+  ["k","v","g"].forEach(function(x){ need[x]=D.settings.kinds[x] ? Math.ceil((tot[x]-seen[x])/studyDays) : 0; needSum+=need[x]; });
+  var T=tot.k+tot.v+tot.g, S=seen.k+seen.v+seen.g, pace=nw/span;
+  return {days:days, date:ex, tot:T, seen:S, pace:pace, proj:Math.min(T, Math.round(S+pace*days)), need:need, needSum:needSum, started:!!first};
+}
+var MONTHS=["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
+function renderExam(){
+  var box=document.getElementById("hExam"), e=examInfo();
+  if(!e){ box.classList.add("hidden"); return; }
+  box.classList.remove("hidden");
+  var dd=dayDate(e.date), when=dd.getDate()+" "+MONTHS[dd.getMonth()];
+  if(e.past){ box.innerHTML='<h3>Examen</h3><div class="f-help" style="font-size:14px;">El examen del '+when+' ya pasó. Pon la fecha del siguiente en Ajustes.</div>'; return; }
+  var pct=function(x){ return e.tot ? Math.round(x*100/e.tot) : 0; }, S=D.settings;
+  var cur=(S.kinds.k?S.newK:0)+(S.kinds.v?S.newV:0)+(S.kinds.g?S.newG:0);
+  var h='<h3>Hacia el JLPT · '+when+'</h3>'+
+    '<div class="prog-l"><b>'+(e.days===0?'Es hoy':'Faltan '+e.days+' día'+(e.days===1?'':'s'))+'</b><span>visto '+e.seen+' / '+e.tot+' ('+pct(e.seen)+' %)</span></div>'+
+    '<div class="bar"><div class="m" style="width:'+pct(e.seen)+'%"></div><div class="l" style="width:'+Math.max(0,pct(e.proj)-pct(e.seen))+'%"></div></div>';
+  if(e.started) h+='<p class="f-help" style="font-size:13.5px; margin-top:10px;">A tu ritmo (<b>'+(Math.round(e.pace*10)/10)+'</b> nuevos al día) llegarás con un <b>'+pct(e.proj)+' %</b> visto.</p>';
+  else h+='<p class="f-help" style="font-size:13.5px; margin-top:10px;">Con tus nuevos al día actuales ('+cur+') verías un '+pct(Math.min(e.tot, e.seen+cur*e.days))+' %.</p>';
+  if(e.seen<e.tot){
+    var parts=[]; if(e.need.k) parts.push("kanji "+e.need.k); if(e.need.v) parts.push("vocabulario "+e.need.v); if(e.need.g) parts.push("gramática "+e.need.g);
+    var mins=Math.round(e.needSum*NEW_SECS/60);
+    h+='<p class="f-help" style="font-size:13.5px;">Para verlo todo: <b>'+e.needSum+' nuevos al día</b> ('+parts.join(" · ")+'), unos <b>'+mins+' min</b> solo de nuevos, más los repasos.</p>';
+    if(mins>goalMins()) h+='<div class="warn">No cabe en '+goalMins()+' minutos. Opciones: subir el objetivo diario, quitar un nivel (por ejemplo N3) o aceptar llegar con una parte vista y priorizar lo más frecuente.</div>';
+    if(cur!==e.needSum) h+='<button class="btn small ghost" id="exApply" style="margin-top:10px;">Ajustar mis nuevos al día a este ritmo</button>';
+  } else h+='<p class="f-help" style="font-size:13.5px;">Ya lo has visto todo: ahora toca repasar para llegar fino.</p>';
+  box.innerHTML=h;
+  var b=document.getElementById("exApply");
+  if(b) b.addEventListener("click", function(){
+    var n=e.need;
+    if(!confirm("Nuevos al día: kanji "+n.k+", vocabulario "+n.v+", gramática "+n.g+" (máximo 40 de cada).\nMás nuevos hoy = más repasos los próximos días. ¿Aplicar?")) return;
+    if(S.kinds.k) S.newK=Math.min(40, n.k); if(S.kinds.v) S.newV=Math.min(40, n.v); if(S.kinds.g) S.newG=Math.min(40, n.g);
+    save(true); toast("Nuevos al día ajustados."); renderHome();
+  });
 }
 function renderProg(){
   var h="", lv=LEVELS.filter(function(l){ return D.settings.levels.indexOf(l)>=0; });
@@ -1011,7 +1184,7 @@ function renderQuestion(p){
   var q=buildQ(p.it, mature); q.t0=Date.now(); SES.q=q;
   var stem=q.stemHTML!=null ? q.stemHTML : esc(q.stem);
   var h='<div class="q">'+headTag(p)+'<div class="q-prompt">'+esc(q.prompt)+'</div>'+
-    '<div class="q-stem '+q.cls+'">'+stem+'</div><div class="opts'+(q.big?' two':'')+'">';
+    '<div class="q-stem '+q.cls+'">'+stem+'</div>'+(q.sub?'<div class="q-sub">'+esc(q.sub)+'</div>':'')+'<div class="opts'+(q.big?' two':'')+'">';
   q.options.forEach(function(o,i){ h+='<button class="opt'+(q.big?' big':'')+'" data-i="'+i+'">'+esc(o)+'</button>'; });
   h+='</div><div id="fb"></div></div>';
   var st=document.getElementById("sStage"); st.innerHTML=h;
@@ -1108,6 +1281,9 @@ function renderSettings(){
   document.getElementById("stRet").innerHTML=segHTML([[0.85,"85 %"],[0.9,"90 %"],[0.95,"95 %"]], function(v){ return +v===S.retention; });
   bindSeg("stRet", function(v){ S.retention=+v; save(true); renderSettings(); });
 
+  var ex=document.getElementById("stExam");
+  ex.value=S.examDate||"";
+  ex.onchange=function(){ S.examDate=ex.value||""; save(true); toast(ex.value ? "Fecha del examen guardada." : "Sin fecha de examen."); };
   var c=D.commit;
   document.getElementById("cWhy").value=c.why||"";
   document.getElementById("cAfter").value=c.after||"";
@@ -1206,9 +1382,17 @@ function pushWhyNot(){
 function renderPush(){
   var box=document.getElementById("stPush"), why=pushWhyNot(), r=getRemind();
   if(why){ box.innerHTML='<div class="warn">'+why+'</div>'; return; }
+  var hs=hoursClean(), from=hs.length>1 ? hs[1] : hs[0], ins=r.insist!==false;
   box.innerHTML='<div class="row" style="margin-top:10px;"><button class="btn small'+(r.on?' ghost':'')+'" id="pToggle">'+(r.on?'Desactivar avisos':'🔔 Activar avisos')+'</button>'+
-    (r.on?'<button class="btn small ghost" id="pTest">Probar ahora</button>':'')+'</div><div class="msg" id="pMsg">'+(r.on?'Activados: '+hoursClean().map(function(h){ return pad(h)+":00"; }).join(" · "):'')+'</div>';
+    (r.on?'<button class="btn small ghost" id="pTest">Probar ahora</button>':'')+'</div>'+
+    '<label class="stepper" style="cursor:pointer;"><span><b>Modo insistente</b><br><small class="f-help">'+(from!=null ? 'Desde las '+pad(from)+':00, un aviso cada 15 min hasta que cumplas.' : 'Un aviso cada 15 min hasta que cumplas.')+'</small></span>'+
+    '<input type="checkbox" id="pInsist"'+(ins?' checked':'')+' style="width:22px; height:22px;"></label>'+
+    '<div class="msg" id="pMsg">'+(r.on?'Activados: '+hs.map(function(h){ return pad(h)+":00"; }).join(" · ")+(ins?' · insistente':''):'')+'</div>';
   document.getElementById("pToggle").addEventListener("click", function(){ getRemind().on ? pushUnsubscribe() : pushSubscribe(false); });
+  document.getElementById("pInsist").addEventListener("change", function(){
+    var nr=getRemind(); nr.insist=this.checked; setRemind(nr);
+    if(nr.on) pushSubscribe(true); else renderPush();
+  });
   var t=document.getElementById("pTest"); if(t) t.addEventListener("click", pushTest);
 }
 function pMsg(t, err){ var m=document.getElementById("pMsg"); if(m){ m.textContent=t; m.classList.toggle("err", !!err); } }
@@ -1229,11 +1413,11 @@ function pushSubscribe(silent){
   .then(function(reg){ return reg.pushManager.getSubscription().then(function(s){ return s || reg.pushManager.subscribe({userVisibleOnly:true, applicationServerKey:b64uToBytes(VAPID_PUBLIC)}); }); })
   .then(function(sub){
     var tz="Europe/Madrid"; try{ tz=Intl.DateTimeFormat().resolvedOptions().timeZone||tz; }catch(e){}
-    return fetch(SYNC_URL+"/m/push/subscribe", {method:"POST", headers:authHeaders(), body:JSON.stringify({sub:sub.toJSON(), hours:hoursClean(), tz:tz})});
+    return fetch(SYNC_URL+"/m/push/subscribe", {method:"POST", headers:authHeaders(), body:JSON.stringify({sub:sub.toJSON(), hours:hoursClean(), tz:tz, insist:getRemind().insist!==false})});
   })
   .then(function(res){
     if(!res.ok) return serverError(res);
-    setRemind({on:true}); renderPush(); cloudPush();
+    var nr=getRemind(); nr.on=true; setRemind(nr); renderPush(); cloudPush();
     if(!silent) toast("Avisos activados.");
   })
   .catch(function(e){ renderPush(); pMsg((e && e.message)||"No se pudo activar.", true); });
@@ -1245,7 +1429,7 @@ function pushUnsubscribe(){
     return true;      /* la suscripción se conserva: puede usarla también N1 Path desde este mismo navegador */
   })
   .catch(function(){})
-  .then(function(){ setRemind({on:false}); renderPush(); });
+  .then(function(){ var nr=getRemind(); nr.on=false; setRemind(nr); renderPush(); });
 }
 function pushTest(){
   pMsg("Enviando aviso de prueba…");
@@ -1469,7 +1653,7 @@ function renderOnboard(){
       '<div class="row"><button class="btn ghost" id="obBack">Atrás</button><button class="btn" id="obNext">Siguiente</button></div>';
   } else {
     var why=pushWhyNot();
-    h+='<h2>Que te lo recuerden</h2><p>Hasta tres avisos al día, <b>solo si aún no has cumplido</b>: a tu hora, a las 21:00 (rescate) y a las 23:00 (última llamada). Puedes cambiarlas en Ajustes.</p>'+
+    h+='<h2>Que te lo recuerden</h2><p>Avisos <b>solo si aún no has cumplido</b>: a tu hora, a las 21:00 (rescate) y a las 23:00 (última llamada). Desde las 21:00, uno <b>cada 15 minutos</b> hasta que cumplas (se puede quitar en Ajustes).</p>'+
       (/iPhone|iPad|iPod/.test(navigator.userAgent) && !isStandalone() ? '<div class="warn">Primero instálala: Compartir → «Añadir a pantalla de inicio», y ábrela desde el icono 毎日.</div>' : '')+
       '<div class="row" style="margin-top:12px;">'+(getAuth() ? '' : '<button class="btn small ghost" id="obLogin">☁ Entrar con mi cuenta</button>')+
       '<button class="btn small ghost" id="obPush"'+(why?' disabled':'')+'>🔔 Activar avisos</button><button class="btn small ghost" id="obIcs">📅 Calendario</button></div>'+
