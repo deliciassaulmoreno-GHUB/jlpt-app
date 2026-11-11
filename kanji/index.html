@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<title>漢字 Kanji</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Kanji">
+<meta name="theme-color" content="#f6f2ea" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#151413" media="(prefers-color-scheme: dark)">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="icon" href="icon.png">
+<style>
+:root{--f:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;--bg:#f6f2ea;--card:#fffdf8;--ink:#1d1b18;--mut:#7b756b;--line:#e4ddd0;--acc:#d2452f;--acc2:#fbe6e1;--ok:#2f8f5b;--ok2:#dff3e7;--warn:#c98a14;--warn2:#fbefd3;--sh:0 1px 2px rgba(0,0,0,.06),0 6px 20px rgba(0,0,0,.05)}
+@media(prefers-color-scheme:dark){:root{--bg:#151413;--card:#211f1d;--ink:#f1ece3;--mut:#9d968a;--line:#35322e;--acc:#ef6a53;--acc2:#3f211c;--ok:#5cc48a;--ok2:#1a3526;--warn:#e4ad3f;--warn2:#3a2e12;--sh:none}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font:16px/1.45 var(--f);overscroll-behavior:none}
+body{touch-action:manipulation;-webkit-user-select:none;user-select:none}
+.ja{font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic","Noto Sans JP",sans-serif}
+.min{font-family:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",serif}
+#app{max-width:520px;margin:0 auto;min-height:100%;display:flex;flex-direction:column;padding:calc(env(safe-area-inset-top) + 12px) 16px calc(env(safe-area-inset-bottom) + 84px)}
+#app.sess{padding-bottom:calc(env(safe-area-inset-bottom) + 16px)}
+h1{font-size:26px;margin:6px 0 2px;letter-spacing:-.02em}
+h2{font-size:14px;margin:22px 0 8px;color:var(--mut);font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+p{margin:6px 0}
+.mut{color:var(--mut)}.sm{font-size:13px}.c{text-align:center}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:var(--sh)}
+.btn{display:block;width:100%;border:0;border-radius:14px;padding:15px 16px;font:600 17px/1.2 var(--f);background:var(--acc);color:#fff;cursor:pointer}
+.btn:active{transform:scale(.98);opacity:.9}
+.btn.sec{background:var(--card);color:var(--ink);border:1px solid var(--line)}
+.btn.ok{background:var(--ok)}
+.btn.small{padding:10px 12px;font-size:15px}
+.row{display:flex;gap:10px}.row>*{flex:1}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 8px;text-align:center}
+.stat b{display:block;font-size:24px;letter-spacing:-.02em}.stat span{font-size:12px;color:var(--mut)}
+.bar{height:8px;background:var(--line);border-radius:9px;overflow:hidden}.bar i{display:block;height:100%;background:var(--acc);border-radius:9px;transition:width .3s}
+.bar.g i{background:var(--ok)}
+.lv{display:grid;grid-template-columns:34px 1fr 78px;gap:10px;align-items:center;margin:9px 0;font-size:14px}
+.lv em{font-style:normal;color:var(--mut);text-align:right;font-variant-numeric:tabular-nums}
+nav{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);display:flex;justify-content:center;padding-bottom:env(safe-area-inset-bottom);z-index:5}
+nav button{flex:1;max-width:173px;border:0;background:none;color:var(--mut);padding:9px 0 8px;font:600 11px var(--f)}
+nav button b{display:block;font-size:21px;font-weight:500;line-height:1.2}
+nav button.on{color:var(--acc)}
+.top{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.top .bar{flex:1}.x{border:0;background:none;color:var(--mut);font-size:26px;line-height:1;padding:4px 6px}
+.tag{display:inline-block;font-size:12px;font-weight:700;padding:3px 9px;border-radius:99px;background:var(--acc2);color:var(--acc)}
+.tag.g{background:var(--ok2);color:var(--ok)}.tag.w{background:var(--warn2);color:var(--warn)}
+.big{font-size:132px;line-height:1.15;text-align:center;margin:6px 0 0;font-weight:500}
+.mean{font-size:25px;font-weight:700;text-align:center;letter-spacing:-.01em;margin:2px 0 4px}
+.rd{text-align:center;color:var(--mut);font-size:15px}
+.chips{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin:12px 0 4px}
+.chip{border:1px solid var(--line);background:var(--bg);border-radius:11px;padding:5px 10px;font-size:14px;display:flex;gap:7px;align-items:center;color:var(--ink)}
+.chip b{font-size:20px;font-weight:500}
+.tip{background:var(--warn2);border-radius:13px;padding:12px 14px;margin-top:12px;font-size:16px}
+.tip small{display:block;font-weight:700;color:var(--warn);font-size:11px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px}
+.exw{display:flex;align-items:center;gap:12px;border-top:1px solid var(--line);margin-top:14px;padding-top:12px}
+.exw .w{font-size:26px}.exw .r{font-size:13px;color:var(--mut)}.exw>div{flex:1}
+.spk{border:1px solid var(--line);background:var(--bg);border-radius:50%;width:42px;height:42px;font-size:18px;flex:none;color:var(--ink)}
+textarea,input[type=text],select{width:100%;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink);font:16px var(--f);padding:10px 12px;-webkit-user-select:text;user-select:text}
+textarea{resize:none;margin-top:10px}
+.grow{flex:1}.foot{position:sticky;bottom:0;padding:12px 0 0;background:linear-gradient(transparent,var(--bg) 26%)}
+.opts{display:grid;gap:10px;margin-top:16px}
+.opt{border:1.5px solid var(--line);background:var(--card);border-radius:14px;padding:15px 14px;font:600 17px/1.25 var(--f);color:var(--ink);text-align:center}
+.opts.k{grid-template-columns:1fr 1fr}.opts.k .opt{font-size:54px;font-weight:500;padding:14px 0}
+.opt.good{border-color:var(--ok);background:var(--ok2);color:var(--ok)}.opt.bad{border-color:var(--acc);background:var(--acc2);color:var(--acc)}
+.q{font-size:14px;color:var(--mut);text-align:center;margin-top:8px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.g4 button{border:0;border-radius:13px;padding:13px 2px;font:700 14px var(--f);color:#fff}
+.g4 small{display:block;font-weight:500;font-size:11px;opacity:.85;margin-top:2px}
+.b1{background:#c7402c}.b2{background:#c98a14}.b3{background:#2f8f5b}.b4{background:#2c79b8}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(48px,1fr));gap:7px}
+.cell{aspect-ratio:1;border:1.5px solid var(--line);background:var(--card);border-radius:11px;font-size:26px;color:var(--ink);padding:0;display:flex;align-items:center;justify-content:center}
+.cell.s1{background:var(--warn2);border-color:transparent}.cell.s2{background:var(--ok2);border-color:transparent}
+.cell.no{background:var(--acc);color:#fff;border-color:var(--acc)}
+.tri .cell{font-size:34px}.tri{grid-template-columns:repeat(4,1fr);gap:10px}
+.tabs{display:flex;gap:6px;margin:10px 0}.tabs button{flex:1;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:8px 0;font:600 14px var(--f)}
+.tabs button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.set{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}.set select{width:auto}.set:last-child{border:0}
+#modal{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9;display:none;align-items:flex-end;justify-content:center}
+#modal.on{display:flex}
+#modal>div{background:var(--bg);width:100%;max-width:520px;max-height:92%;overflow:auto;border-radius:22px 22px 0 0;padding:16px 16px calc(env(safe-area-inset-bottom) + 16px)}
+.flame{font-size:15px;font-weight:700}
+.done{font-size:64px;text-align:center;margin-top:40px}
+.leg{display:flex;gap:14px;font-size:12px;color:var(--mut);margin:8px 0}.leg i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;vertical-align:-1px;border:1px solid var(--line)}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<nav id="nav"></nav>
+<div id="modal" onclick="if(event.target===this)closeModal()"><div id="mbody"></div></div>
+<script src="data.js"></script>
+<script>
+'use strict';
+/* ---------- datos ---------- */
+const K=window.KD.map((r,i)=>({i,c:r[0],l:r[1],m:r[2],on:r[3],kun:r[4],ej:r[5],ejr:r[6],ejt:r[7],tip:r[8],ety:r[9],cs:Array.from(r[10])}));
+const BY=new Map(K.map(k=>[k.c,k]));
+const LS='kanji-v1';
+const W=[0.4872,1.4003,3.7145,13.8206,5.1618,1.2298,0.8975,0.031,1.6474,0.1367,1.0461,2.1072,0.0793,0.3246,1.587,0.2272,2.8755];
+const today=()=>Math.floor((Date.now()-new Date().getTimezoneOffset()*6e4-4*36e5)/864e5);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const $=id=>document.getElementById(id);
+const rnd=n=>Math.floor(Math.random()*n);
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=rnd(i+1);[a[i],a[j]]=[a[j],a[i]]}return a};
+const short=k=>k.m.split(' · ').slice(0,2).join(' · ');
+const first=k=>k.m.split(' · ')[0];
+
+/* ---------- estado ---------- */
+let st=load();
+function load(raw){let s;try{s=JSON.parse(raw||localStorage.getItem(LS))}catch(e){}s=s&&typeof s==='object'?s:{};
+  s.cards=s.cards||{};s.notes=s.notes||{};s.tri=s.tri||{};s.days=s.days||{};s.set=Object.assign({np:10,mr:80,sl:5},s.set);
+  s.streak=s.streak||0;s.fz=s.fz==null?1:s.fz;s.last=s.last||0;return s}
+function save(){try{localStorage.setItem(LS,JSON.stringify(st))}catch(e){}}
+function day(){const t=today();return st.days[t]||(st.days[t]={n:0,r:0,a:0})}
+function checkStreak(){const t=today();if(st.last&&st.last<t-1){const miss=t-1-st.last;if(st.fz>=miss){st.fz-=miss;st.last=t-1}else st.streak=0;save()}}
+function markDone(){const t=today();if(st.last===t)return;st.streak=(st.last===t-1||!st.streak?st.streak:0)+1;st.last=t;if(st.streak%7===0)st.fz=Math.min(2,st.fz+1);save()}
+function answered(){const d=day();d.a++;if(d.a>=15)markDone()}
+
+/* ---------- FSRS-4.5 ---------- */
+const clamp=(x,a,b)=>Math.min(b,Math.max(a,x));
+const d0=g=>clamp(W[4]-(g-3)*W[5],1,10);
+function grade(card,g){const t=today();
+  if(!card.n){card.s=[0.5,1.4,3.7,8][g-1];card.d=d0(g)}
+  else{const el=Math.max(0,t-card.last),r=Math.pow(1+19/81*el/card.s,-0.5),d=card.d;
+    card.d=clamp(W[7]*d0(3)+(1-W[7])*(d-W[6]*(g-3)),1,10);
+    if(g===1){card.s=Math.max(0.3,Math.min(card.s,W[11]*Math.pow(d,-W[12])*(Math.pow(card.s+1,W[13])-1)*Math.exp(W[14]*(1-r))));card.lp=(card.lp||0)+1}
+    else card.s=card.s*(1+Math.exp(W[8])*(11-d)*Math.pow(card.s,-W[9])*(Math.exp(W[10]*(1-r))-1)*(g===2?W[15]:1)*(g===4?W[16]:1))}
+  card.n=(card.n||0)+1;card.last=t;let iv=g===1?1:Math.max(1,Math.round(card.s));if(iv>7)iv=Math.round(iv*(0.95+Math.random()*0.1));card.due=t+iv;delete card.k}
+function preview(card,g){const c=Object.assign({},card);grade(c,g);const iv=c.due-today();return iv<30?iv+' d':iv<365?Math.round(iv/30)+' m':(iv/365).toFixed(1)+' a'}
+
+/* ---------- colas ---------- */
+function dueList(){const t=today();return Object.keys(st.cards).filter(c=>st.cards[c].due<=t&&BY.has(c)).sort((a,b)=>st.cards[a].due-st.cards[b].due)}
+function nextCand(skip){for(const k of K){if(k.l>st.set.sl||st.cards[k.c]||(skip&&skip.has(k.c)))continue;return k}return null}
+function newQuota(){const due=dueList().length;let q=st.set.np-day().n;if(due>300)q=0;else if(due>150)q=Math.min(q,5);return Math.max(0,q)}
+function counts(){let learned=0,solid=0;const lv={5:[0,0],4:[0,0],3:[0,0],2:[0,0],1:[0,0]};
+  for(const k of K){lv[k.l][1]++;const c=st.cards[k.c];if(c){learned++;lv[k.l][0]++;if(c.s>=21)solid++}}return{learned,solid,lv}}
+
+/* ---------- vistas comunes ---------- */
+let tab='hoy',sess=null;
+function nav(){$('nav').style.display=sess?'none':'flex';$('app').className=sess?'sess':'';
+  $('nav').innerHTML=[['hoy','今','Hoy'],['kanji','字','Kanji'],['ajustes','設','Ajustes']].map(([t,i,n])=>`<button class="${tab===t?'on':''}" onclick="go('${t}')"><b class="ja">${i}</b>${n}</button>`).join('')}
+function go(t){tab=t;sess=null;render()}
+function render(){nav();window.scrollTo(0,0);({hoy:vHome,kanji:vBrowse,ajustes:vSet})[tab]()}
+function compName(x){if(window.KR[x])return window.KR[x];const k=BY.get(x);return k?first(k).toLowerCase():''}
+function autoTip(k){const p=k.cs.map(x=>({x,n:compName(x)})).filter(o=>o.n);if(!p.length)return 'Fíjate en su forma e invéntate una imagen para «'+first(k)+'».';
+  return 'Combina '+p.map(o=>o.x+' ('+o.n+')').join(' + ')+' en una sola imagen que te lleve a «'+first(k)+'».'}
+function speak(t){try{const u=new SpeechSynthesisUtterance(t);u.lang='ja-JP';u.rate=.85;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}}
+function cardHTML(k,opt){opt=opt||{};const chips=k.cs.map(x=>{const n=compName(x);return n?`<span class="chip"><b class="ja">${esc(x)}</b>${esc(n)}</span>`:''}).join('');
+  const rd=[k.on,k.kun].filter(Boolean).join('　');const note=st.notes[k.c]||'';
+  return `<div class="card">
+  <div class="big min" lang="ja">${k.c}</div>
+  <div class="mean">${esc(k.m)}</div>
+  ${rd?`<div class="rd ja" lang="ja">${esc(rd)}</div>`:''}
+  ${chips?`<div class="chips">${chips}</div>`:''}
+  <div class="tip"><small>Truco</small>${esc(k.tip||autoTip(k))}</div>
+  ${note&&opt.ro?`<div class="tip" style="background:var(--ok2)"><small style="color:var(--ok)">Mi historia</small>${esc(note)}</div>`:''}
+  ${k.ej?`<div class="exw"><div><div class="w ja" lang="ja">${esc(k.ej)}</div><div class="r"><span class="ja">${esc(k.ejr)}</span> · ${esc(k.ejt)}</div></div><button class="spk" onclick="speak('${esc(k.ejr||k.ej)}')" aria-label="Escuchar">▶</button></div>`:''}
+  ${k.ety&&!opt.ro?`<p class="sm mut" style="margin-top:12px">${esc(k.ety)}</p>`:''}
+  ${opt.ro?'':`<textarea rows="2" placeholder="Mi historia (opcional): escríbela con tus palabras y se te quedará mejor" oninput="setNote('${k.c}',this.value)">${esc(note)}</textarea>`}
+  </div>`}
+function setNote(c,v){v=v.trim();if(v)st.notes[c]=v;else delete st.notes[c];save()}
+function openModal(h){$('mbody').innerHTML=h;$('modal').classList.add('on')}
+function closeModal(){$('modal').classList.remove('on')}
+
+/* ---------- inicio ---------- */
+function vHome(){checkStreak();const due=dueList().length,q=newQuota(),ct=counts(),d=day(),tot=K.filter(k=>k.l<=st.set.sl).length;
+  const left=K.filter(k=>k.l<=st.set.sl&&!st.cards[k.c]).length,doneToday=st.last===today();
+  const end=new Date(Date.now()+left/st.set.np*864e5).toLocaleDateString('es-ES',{day:'numeric',month:'short',year:'numeric'});
+  const rev=Math.min(due,st.set.mr),nothing=!rev&&(!q||!left);
+  $('app').innerHTML=`
+  <div style="display:flex;justify-content:space-between;align-items:center"><h1><span class="min">漢字</span> Kanji</h1><span class="flame">${doneToday?'🔥':'○'} ${st.streak} ${st.streak===1?'día':'días'}${st.fz?` · 🛡${st.fz}`:''}</span></div>
+  <p class="mut">${doneToday?'Hoy ya has cumplido. Lo que hagas de más, suma.':'Una sesión corta hoy mantiene la racha.'}</p>
+  <div class="stats"><div class="stat"><b>${rev}</b><span>repasos</span></div><div class="stat"><b>${left?q:0}</b><span>nuevos hoy</span></div><div class="stat"><b>${ct.learned}</b><span>de ${K.length}</span></div></div>
+  ${nothing?`<div class="card c"><b>Todo al día.</b><p class="mut sm">Vuelve mañana para los siguientes repasos${left?' o aprende más ahora':''}.</p>${left?'<button class="btn sec small" onclick="start(0,1)">Aprender 5 más</button>':''}</div>`:
+  `<button class="btn" onclick="start(0)">Empezar sesión</button>
+  <div style="height:10px"></div><button class="btn sec small" onclick="start(1)">Sesión mínima · 3 min</button>`}
+  ${due>st.set.mr?`<p class="sm mut c">Tienes ${due} repasos acumulados: hoy solo los ${st.set.mr} más urgentes${q<st.set.np-d.n?', y menos kanji nuevos hasta ponerte al día':''}.</p>`:''}
+  ${left>20?`<h2>¿Ya sabes muchos?</h2><div class="card"><p style="margin-top:0">Haz una <b>criba rápida</b>: marcas los que no conoces y el resto se salta, para no perder tiempo con lo que ya sabes.</p><button class="btn sec small" onclick="triage()">Criba rápida</button></div>`:''}
+  <h2>Progreso</h2><div class="card">
+  ${[5,4,3,2,1].map(l=>`<div class="lv"><b>N${l}</b><div class="bar g"><i style="width:${100*ct.lv[l][0]/ct.lv[l][1]}%"></i></div><em>${ct.lv[l][0]}/${ct.lv[l][1]}</em></div>`).join('')}
+  <p class="sm mut" style="margin:12px 0 0">${ct.solid} consolidados (más de 3 semanas de intervalo). ${left?`A ${st.set.np} nuevos al día terminas hacia el ${end}.`:'¡Has visto todos los kanji!'}</p></div>
+  <p class="sm mut c" style="margin-top:18px">Para instalarla: Compartir → «Añadir a pantalla de inicio».</p>`}
+
+/* ---------- sesión ---------- */
+function start(min,extra){const due=dueList();let q=extra?5:newQuota();if(min)q=Math.min(q,3);
+  sess={revs:due.slice(0,min?15:st.set.mr).map(c=>({k:BY.get(c)})),newLeft:q,batch:[],learned:[],q:[],skip:new Set(),done:0,recDone:0};
+  sess.total=sess.revs.length+q*4;step()}
+function quit(){sess=null;render()}
+function frame(body,foot){nav();window.scrollTo(0,0);const p=sess.total?Math.min(100,100*sess.done/sess.total):0;
+  $('app').innerHTML=`<div class="top"><button class="x" onclick="quit()" aria-label="Salir">×</button><div class="bar"><i style="width:${p}%"></i></div></div><div class="grow">${body}</div>${foot?`<div class="foot">${foot}</div>`:''}`}
+function step(){if(!sess)return;
+  if(sess.q.length){const it=sess.q[0];return it.t==='rec'?vRec(it):vMC(it)}
+  if(sess.revs.length)return vRev(sess.revs[0]);
+  if(sess.newLeft>0){const k=nextCand(sess.skip);if(k)return st.tri[k.c]?vStudy(k):vPre(k);sess.newLeft=0}
+  if(sess.batch.length){flush();return step()}
+  if(!sess.recDone&&sess.learned.length){sess.recDone=1;sess.q=shuffle(sess.learned).map(k=>({t:'rec',k}));return step()}
+  finish()}
+function flush(){const b=sess.batch;sess.batch=[];sess.q=shuffle(b).map(k=>({t:'mc1',k})).concat(shuffle(b).map(k=>({t:'mc2',k})))}
+
+/* repaso */
+function vRev(it){const k=it.k;frame(`<div class="c"><span class="tag ${it.again?'w':''}">${it.again?'Otra vez':'Repaso'}</span></div>
+  <div class="big min" lang="ja" style="margin-top:28px">${k.c}</div>
+  ${k.ej?`<p class="c mut ja" lang="ja" style="font-size:24px">${esc(k.ej)}</p>`:''}
+  <p class="q">¿Qué significa? ¿Cómo se lee la palabra?</p>`,`<button class="btn" onclick="revShow()">Mostrar</button>`)}
+function revShow(){const it=sess.revs[0],k=it.k,c=st.cards[k.c];
+  const foot=it.again?`<div class="row"><button class="btn sec" onclick="revGrade(1)">Aún no</button><button class="btn ok" onclick="revGrade(3)">Ya lo tengo</button></div>`:
+  `<div class="g4">${[['No','b1'],['Difícil','b2'],['Bien','b3'],['Fácil','b4']].map(([n,cl],i)=>`<button class="${cl}" onclick="revGrade(${i+1})">${n}<small>${preview(c,i+1)}</small></button>`).join('')}</div>`;
+  frame(cardHTML(k,{ro:1}),foot)}
+function revGrade(g){const it=sess.revs.shift(),c=st.cards[it.k.c];
+  if(!it.again){grade(c,g);day().r++;answered();save()}
+  if(g===1){it.again=1;sess.revs.splice(Math.min(4,sess.revs.length),0,it)}else sess.done++;
+  step()}
+
+/* nuevo: ¿lo conoces? */
+function vPre(k){frame(`<div class="c"><span class="tag g">Nuevo · N${k.l}</span></div>
+  <div class="big min" lang="ja" style="margin-top:28px">${k.c}</div>
+  <p class="q">¿Lo conoces? Intenta decir su significado antes de mirar.</p>`,
+  `<button class="btn" onclick="preShow('${k.c}')">Mostrar</button>`)}
+function preShow(c){const k=BY.get(c);frame(cardHTML(k),`<div class="row"><button class="btn sec" onclick="know('${c}')">Ya lo sabía</button><button class="btn" onclick="learn('${c}')">Aprenderlo</button></div>`)}
+function vStudy(k){frame(`<div class="c" style="margin-bottom:8px"><span class="tag g">Nuevo · N${k.l}</span></div>`+cardHTML(k),`<button class="btn" onclick="learn('${k.c}')">Lo tengo, siguiente</button>`)}
+function know(c){const t=today();st.cards[c]={s:40,d:3,due:t+7+rnd(35),last:t,n:1,k:1};delete st.tri[c];save();step()}
+function learn(c){const t=today(),k=BY.get(c);st.cards[c]={s:1,d:5,due:t+1,last:t,n:0};delete st.tri[c];day().n++;answered();save();
+  sess.batch.push(k);sess.learned.push(k);sess.newLeft--;sess.done++;if(sess.batch.length>=5||sess.newLeft<=0)flush();step()}
+
+/* test de opción múltiple */
+function distract(k,n,key){const pool=K.slice(Math.max(0,k.i-150),k.i+150).filter(o=>o!==k&&key(o)!==key(k));
+  const sc=o=>o.cs.filter(x=>k.cs.includes(x)).length*2+(o.cs.includes(k.c)||k.cs.includes(o.c)?3:0)+Math.random()*2.5;
+  const out=[],seen=new Set();for(const o of pool.map(o=>[sc(o),o]).sort((a,b)=>b[0]-a[0]).map(x=>x[1])){if(seen.has(key(o)))continue;seen.add(key(o));out.push(o);if(out.length===n)break}return out}
+function vMC(it){const k=it.k,m1=it.t==='mc1',opts=shuffle([k].concat(distract(k,3,m1?short:o=>o.c)));it.opts=opts;
+  frame(m1?`<div class="big min" lang="ja" style="margin-top:14px">${k.c}</div><p class="q">¿Qué significa?</p><div class="opts">${opts.map((o,i)=>`<button class="opt" id="o${i}" onclick="mcPick(${i})">${esc(short(o))}</button>`).join('')}</div>`
+  :`<div class="mean" style="margin-top:34px;font-size:30px">${esc(short(k))}</div><p class="q">¿Cuál es el kanji?</p><div class="opts k">${opts.map((o,i)=>`<button class="opt min" lang="ja" id="o${i}" onclick="mcPick(${i})">${o.c}</button>`).join('')}</div>`,'<div id="mcf"></div>')}
+function mcPick(i){const it=sess.q[0];if(it.lock)return;it.lock=1;const ok=it.opts[i]===it.k,ci=it.opts.indexOf(it.k);
+  $('o'+ci).classList.add('good');if(!ok)$('o'+i).classList.add('bad');
+  if(ok){setTimeout(()=>{sess.q.shift();sess.done++;step()},550)}
+  else{$('mcf').innerHTML=`<div class="tip" style="margin-bottom:10px"><small>${it.k.c} · ${esc(first(it.k))}</small>${esc(st.notes[it.k.c]||it.k.tip||autoTip(it.k))}</div><button class="btn" onclick="mcNext()">Continuar</button>`}}
+function mcNext(){const it=sess.q.shift();it.lock=0;sess.q.splice(Math.min(3,sess.q.length),0,it);step()}
+
+/* recuerdo final */
+function vRec(it){const k=it.k;frame(`<div class="c"><span class="tag">Último repaso de hoy</span></div><div class="big min" lang="ja" style="margin-top:28px">${k.c}</div><p class="q">Di el significado en voz alta y comprueba.</p>`,`<button class="btn" onclick="recShow()">Mostrar</button>`)}
+function recShow(){const k=sess.q[0].k;frame(cardHTML(k,{ro:1}),`<div class="row"><button class="btn sec" onclick="recGrade(0)">No me salió</button><button class="btn ok" onclick="recGrade(1)">Me salió</button></div>`)}
+function recGrade(ok){const it=sess.q.shift();if(ok)sess.done++;else sess.q.splice(Math.min(3,sess.q.length),0,it);step()}
+
+function finish(){markDone();const d=day(),more=dueList().length||nextCand();sess.total=0;
+  frame(`<div class="done">🎉</div><h1 class="c">¡Sesión completada!</h1><p class="c mut">Hoy: ${d.n} kanji nuevos · ${d.r} repasos<br>Racha: ${st.streak} ${st.streak===1?'día':'días'}</p>`,
+  `<button class="btn" onclick="quit()">Volver al inicio</button>${more&&nextCand()?'<div style="height:10px"></div><button class="btn sec small" onclick="start(0,1)">Aprender 5 más</button>':''}`)}
+
+/* ---------- criba rápida ---------- */
+let tri=null;
+function triage(){sess={total:0,done:0};const list=[];for(const k of K){if(k.l>st.set.sl||st.cards[k.c]||st.tri[k.c])continue;list.push(k);if(list.length===20)break}
+  if(!list.length)return quit();tri={list,no:new Set()};vTri()}
+function vTri(){const l=tri.list[0].l;frame(`<div class="c"><span class="tag g">Criba · N${l}</span></div><p class="c" style="margin:10px 0 14px"><b>Toca los que NO conozcas.</b><br><span class="mut sm">Sé honesto: los que dejes sin tocar se darán por sabidos y volverán en un repaso dentro de unas semanas.</span></p>
+  <div class="grid tri">${tri.list.map((k,i)=>`<button class="cell min ${tri.no.has(k.c)?'no':''}" lang="ja" onclick="triTap(${i},this)">${k.c}</button>`).join('')}</div>`,
+  `<div class="row"><button class="btn sec" onclick="quit()">Salir</button><button class="btn" onclick="triDone()">Listo, siguiente</button></div>`)}
+function triTap(i,el){const c=tri.list[i].c;if(tri.no.has(c))tri.no.delete(c);else tri.no.add(c);el.classList.toggle('no')}
+function triDone(){const t=today();for(const k of tri.list){if(tri.no.has(k.c))st.tri[k.c]=1;else st.cards[k.c]={s:40,d:3,due:t+7+rnd(40),last:t,n:1,k:1}}save();triage()}
+
+/* ---------- explorar ---------- */
+let bl=5,bq='';
+function vBrowse(){$('app').innerHTML=`<h1>Kanji</h1><input type="text" id="bq" placeholder="Buscar kanji o significado" value="${esc(bq)}" oninput="bq=this.value;bGrid()">
+  <div class="tabs">${[5,4,3,2,1].map(l=>`<button class="${bl===l?'on':''}" onclick="bl=${l};bq='';vBrowse()">N${l}</button>`).join('')}</div>
+  <div class="leg"><span><i></i>Nuevo</span><span><i style="background:var(--warn2)"></i>Aprendiendo</span><span><i style="background:var(--ok2)"></i>Consolidado</span></div><div id="bg" class="grid"></div>`;bGrid()}
+function bGrid(){const q=bq.trim().toLowerCase();const list=q?K.filter(k=>q.includes(k.c)||k.m.toLowerCase().includes(q)).slice(0,240):K.filter(k=>k.l===bl);
+  $('bg').innerHTML=list.map(k=>{const c=st.cards[k.c];return `<button class="cell min ${c?(c.s>=21?'s2':'s1'):''}" lang="ja" onclick="detail('${k.c}')">${k.c}</button>`}).join('')||'<p class="mut">Sin resultados.</p>'}
+function detail(c){const k=BY.get(c),cd=st.cards[c],t=today();
+  openModal(`<div class="top"><span class="tag g">N${k.l}</span><span class="sm mut" style="flex:1">${cd?(cd.due<=t?'Repaso pendiente':'Próximo repaso en '+(cd.due-t)+' d'):'Aún no visto'}</span><button class="x" onclick="closeModal()">×</button></div>${cardHTML(k)}
+  ${cd?`<div style="height:10px"></div><button class="btn sec small" onclick="forget('${c}')">No lo sé bien: volver a aprenderlo</button>`:''}`)}
+function forget(c){delete st.cards[c];st.tri[c]=1;save();closeModal();if(tab==='kanji')bGrid()}
+
+/* ---------- ajustes ---------- */
+function sel(key,opts){return `<select onchange="st.set.${key}=+this.value;save()">${opts.map(([v,n])=>`<option value="${v}" ${st.set[key]===v?'selected':''}>${n}</option>`).join('')}</select>`}
+function vSet(){$('app').innerHTML=`<h1>Ajustes</h1>
+  <div class="card" style="margin-top:12px">
+  <div class="set"><span>Kanji nuevos al día</span>${sel('np',[5,10,15,20,30].map(v=>[v,v]))}</div>
+  <div class="set"><span>Máximo de repasos al día</span>${sel('mr',[40,80,120,200].map(v=>[v,v]))}</div>
+  <div class="set"><span>Niveles incluidos</span>${sel('sl',[[5,'N5 → N1'],[4,'N4 → N1'],[3,'N3 → N1'],[2,'N2 → N1'],[1,'Solo N1']])}</div></div>
+  <h2>Copia de seguridad</h2><div class="card"><p class="sm mut" style="margin-top:0">El progreso se guarda solo en este iPhone. Haz una copia de vez en cuando.</p>
+  <div class="row"><button class="btn sec small" onclick="exp()">Exportar</button><button class="btn sec small" onclick="imp()">Importar</button></div>
+  <textarea id="bk" rows="3" placeholder="Para importar, pega aquí la copia y pulsa Importar"></textarea><p id="bkm" class="sm mut"></p></div>
+  <h2>Zona de peligro</h2><button class="btn sec small" onclick="if(confirm('¿Borrar todo el progreso? No se puede deshacer.')){localStorage.removeItem(LS);st=load();render()}">Borrar todo el progreso</button>
+  <p class="sm mut c" style="margin-top:22px">Datos: KANJIDIC2 y KRADFILE © EDRDG (CC BY-SA 4.0) · kanji-data · Japanese N1 Path.<br>Repaso espaciado FSRS-4.5.</p>`}
+function exp(){const s=JSON.stringify(st);$('bk').value=s;const done=m=>$('bkm').textContent=m;
+  if(navigator.share)navigator.share({title:'Copia Kanji',text:s}).then(()=>done('Copia compartida.'),()=>done('Copia lista en el cuadro: cópiala y guárdala.'));
+  else if(navigator.clipboard)navigator.clipboard.writeText(s).then(()=>done('Copiada al portapapeles.'),()=>done('Copia lista en el cuadro.'));else done('Copia lista en el cuadro.')}
+function imp(){const v=$('bk').value.trim();let o;try{o=JSON.parse(v)}catch(e){}
+  if(!o||typeof o.cards!=='object'){$('bkm').textContent='La copia no es válida.';return}
+  if(!confirm('¿Sustituir el progreso actual por el de la copia?'))return;st=load(v);save();render()}
+
+if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('sw.js').catch(()=>{});
+render();
+</script>
+</body>
+</html>

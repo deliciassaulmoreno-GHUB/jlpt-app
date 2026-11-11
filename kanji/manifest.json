@@ -1,0 +1,11 @@
+{
+  "name": "漢字 Kanji",
+  "short_name": "Kanji",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f6f2ea",
+  "theme_color": "#d2452f",
+  "lang": "es",
+  "icons": [{ "src": "icon.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }]
+}
