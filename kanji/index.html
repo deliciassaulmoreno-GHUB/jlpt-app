@@ -75,7 +75,7 @@ textarea{resize:none;margin-top:10px}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(48px,1fr));gap:7px}
 .cell{aspect-ratio:1;border:1.5px solid var(--line);background:var(--card);border-radius:11px;font-size:26px;color:var(--ink);padding:0;display:flex;align-items:center;justify-content:center}
 .cell.s1{background:var(--warn2);border-color:transparent}.cell.s2{background:var(--ok2);border-color:transparent}
-.cell.no{background:var(--acc);color:#fff;border-color:var(--acc)}
+.cell.no{background:var(--ok);color:#fff;border-color:var(--ok)}
 .tri .cell{font-size:34px}.tri{grid-template-columns:repeat(4,1fr);gap:10px}
 .tabs{display:flex;gap:6px;margin:10px 0}.tabs button{flex:1;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:8px 0;font:600 14px var(--f)}
 .tabs button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
@@ -178,7 +178,7 @@ function vHome(){checkStreak();const due=dueList().length,q=newQuota(),ct=counts
   `<button class="btn" onclick="start(0)">Empezar sesión</button>
   <div style="height:10px"></div><button class="btn sec small" onclick="start(1)">Sesión mínima · 3 min</button>`}
   ${due>st.set.mr?`<p class="sm mut c">Tienes ${due} repasos acumulados: hoy solo los ${st.set.mr} más urgentes${q<st.set.np-d.n?', y menos kanji nuevos hasta ponerte al día':''}.</p>`:''}
-  ${left>20?`<h2>¿Ya sabes muchos?</h2><div class="card"><p style="margin-top:0">Haz una <b>criba rápida</b>: marcas los que no conoces y el resto se salta, para no perder tiempo con lo que ya sabes.</p><button class="btn sec small" onclick="triage()">Criba rápida</button></div>`:''}
+  ${left>20?`<h2>¿Ya sabes muchos?</h2><div class="card"><p style="margin-top:0">Haz una <b>criba rápida</b>: tocas los que ya te sabes y se saltan, para no perder tiempo con ellos.</p><button class="btn sec small" onclick="triage()">Criba rápida</button></div>`:''}
   <h2>Progreso</h2><div class="card">
   ${[5,4,3,2,1].map(l=>`<div class="lv"><b>N${l}</b><div class="bar g"><i style="width:${100*ct.lv[l][0]/ct.lv[l][1]}%"></i></div><em>${ct.lv[l][0]}/${ct.lv[l][1]}</em></div>`).join('')}
   <p class="sm mut" style="margin:12px 0 0">${ct.solid} consolidados (más de 3 semanas de intervalo). ${left?`A ${st.set.np} nuevos al día terminas hacia el ${end}.`:'¡Has visto todos los kanji!'}</p></div>
@@ -251,11 +251,11 @@ function finish(){markDone();const d=day(),more=dueList().length||nextCand();ses
 let tri=null;
 function triage(){sess={total:0,done:0};const list=[];for(const k of K){if(k.l>st.set.sl||st.cards[k.c]||st.tri[k.c])continue;list.push(k);if(list.length===20)break}
   if(!list.length)return quit();tri={list,no:new Set()};vTri()}
-function vTri(){const l=tri.list[0].l;frame(`<div class="c"><span class="tag g">Criba · N${l}</span></div><p class="c" style="margin:10px 0 14px"><b>Toca los que NO conozcas.</b><br><span class="mut sm">Sé honesto: los que dejes sin tocar se darán por sabidos y volverán en un repaso dentro de unas semanas.</span></p>
+function vTri(){const l=tri.list[0].l;frame(`<div class="c"><span class="tag g">Criba · N${l}</span></div><p class="c" style="margin:10px 0 14px"><b>Toca los que YA te sabes.</b><br><span class="mut sm">Los que toques se dan por sabidos y volverán en un repaso dentro de unas semanas. Los que dejes sin tocar se quedan para aprender.</span></p>
   <div class="grid tri">${tri.list.map((k,i)=>`<button class="cell min ${tri.no.has(k.c)?'no':''}" lang="ja" onclick="triTap(${i},this)">${k.c}</button>`).join('')}</div>`,
   `<div class="row"><button class="btn sec" onclick="quit()">Salir</button><button class="btn" onclick="triDone()">Listo, siguiente</button></div>`)}
 function triTap(i,el){const c=tri.list[i].c;if(tri.no.has(c))tri.no.delete(c);else tri.no.add(c);el.classList.toggle('no')}
-function triDone(){const t=today();for(const k of tri.list){if(tri.no.has(k.c))st.tri[k.c]=1;else st.cards[k.c]={s:40,d:3,due:t+7+rnd(40),last:t,n:1,k:1}}save();triage()}
+function triDone(){const t=today();for(const k of tri.list){if(!tri.no.has(k.c))st.tri[k.c]=1;else st.cards[k.c]={s:40,d:3,due:t+7+rnd(40),last:t,n:1,k:1}}save();triage()}
 
 /* ---------- explorar ---------- */
 let bl=5,bq='';
