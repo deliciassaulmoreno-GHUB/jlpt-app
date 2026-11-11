@@ -147,7 +147,13 @@ function render(){nav();window.scrollTo(0,0);({hoy:vHome,kanji:vBrowse,ajustes:v
 function compName(x){if(window.KR[x])return window.KR[x];const k=BY.get(x);return k?first(k).toLowerCase():''}
 function autoTip(k){const p=k.cs.map(x=>({x,n:compName(x)})).filter(o=>o.n);if(!p.length)return 'Fíjate en su forma e invéntate una imagen para «'+first(k)+'».';
   return 'Combina '+p.map(o=>o.x+' ('+o.n+')').join(' + ')+' en una sola imagen que te lleve a «'+first(k)+'».'}
-function speak(t){try{const u=new SpeechSynthesisUtterance(t);u.lang='ja-JP';u.rate=.85;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}}
+const TTS='https://jlpt-tts.deliciassaulmoreno.workers.dev';let audioEl=null;
+function sysSpeak(t){try{if(!('speechSynthesis' in window))return;const u=new SpeechSynthesisUtterance(t);u.lang='ja-JP';u.rate=.9;
+  const v=(speechSynthesis.getVoices()||[]).filter(x=>/^ja/i.test(x.lang||''))[0];if(v)u.voice=v;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}}
+// Mismo audio que Japanese N1 Path / Mainichi (worker jlpt-tts); si falla o no hay red, voz del sistema.
+function speak(t){if(!t)return;let fell=false;const fb=()=>{if(!fell){fell=true;sysSpeak(t)}};
+  try{if(!audioEl){audioEl=new Audio();audioEl.preload='none'}audioEl.onerror=fb;audioEl.src=TTS+'/tts?text='+encodeURIComponent(t);
+    const p=audioEl.play();if(p&&p.catch)p.catch(fb)}catch(e){fb()}}
 function cardHTML(k,opt){opt=opt||{};const chips=k.cs.map(x=>{const n=compName(x);return n?`<span class="chip"><b class="ja">${esc(x)}</b>${esc(n)}</span>`:''}).join('');
   const rd=[k.on,k.kun].filter(Boolean).join('　');const note=st.notes[k.c]||'';
   return `<div class="card">
