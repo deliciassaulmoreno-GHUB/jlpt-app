@@ -286,7 +286,7 @@ function vSet(){$('app').innerHTML=`<h1>Ajustes</h1>
   <div class="row"><button class="btn sec small" onclick="exp()">Exportar</button><button class="btn sec small" onclick="imp()">Importar</button></div>
   <textarea id="bk" rows="3" placeholder="Para importar, pega aquí la copia y pulsa Importar"></textarea><p id="bkm" class="sm mut"></p></div>
   <h2>Zona de peligro</h2><button class="btn sec small" onclick="if(confirm('¿Borrar todo el progreso? No se puede deshacer.')){localStorage.removeItem(LS);st=load();render()}">Borrar todo el progreso</button>
-  <p class="sm mut c" style="margin-top:22px">Datos: KANJIDIC2 y KRADFILE © EDRDG (CC BY-SA 4.0) · kanji-data · Japanese N1 Path.<br>Repaso espaciado FSRS-4.5.</p>`}
+  <p class="sm mut c" style="margin-top:22px">Datos: KANJIDIC2 y KRADFILE © EDRDG (CC BY-SA 4.0) · kanji-data · Japanese N1 Path.<br>Repaso espaciado FSRS-4.5. · Versión 4</p>`}
 function exp(){const s=JSON.stringify(st);$('bk').value=s;const done=m=>$('bkm').textContent=m;
   if(navigator.share)navigator.share({title:'Copia Kanji',text:s}).then(()=>done('Copia compartida.'),()=>done('Copia lista en el cuadro: cópiala y guárdala.'));
   else if(navigator.clipboard)navigator.clipboard.writeText(s).then(()=>done('Copiada al portapapeles.'),()=>done('Copia lista en el cuadro.'));else done('Copia lista en el cuadro.')}
@@ -294,7 +294,10 @@ function imp(){const v=$('bk').value.trim();let o;try{o=JSON.parse(v)}catch(e){}
   if(!o||typeof o.cards!=='object'){$('bkm').textContent='La copia no es válida.';return}
   if(!confirm('¿Sustituir el progreso actual por el de la copia?'))return;st=load(v);save();render()}
 
-if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('sw.js').catch(()=>{});
+if('serviceWorker' in navigator&&location.protocol==='https:'){const had=!!navigator.serviceWorker.controller;let rl=false;
+  // Si llega una versión nueva mientras está abierta, recarga sola (salvo en mitad de una sesión).
+  navigator.serviceWorker.addEventListener('controllerchange',()=>{if(had&&!rl&&!sess){rl=true;location.reload()}});
+  navigator.serviceWorker.register('sw.js').then(r=>{document.addEventListener('visibilitychange',()=>{if(!document.hidden)r.update().catch(()=>{})})}).catch(()=>{})}
 render();
 </script>
 </body>
