@@ -285,8 +285,9 @@ function vSet(){$('app').innerHTML=`<h1>Ajustes</h1>
   <h2>Copia de seguridad</h2><div class="card"><p class="sm mut" style="margin-top:0">El progreso se guarda solo en este iPhone. Haz una copia de vez en cuando.</p>
   <div class="row"><button class="btn sec small" onclick="exp()">Exportar</button><button class="btn sec small" onclick="imp()">Importar</button></div>
   <textarea id="bk" rows="3" placeholder="Para importar, pega aquí la copia y pulsa Importar"></textarea><p id="bkm" class="sm mut"></p></div>
+  <h2>Pantalla de bloqueo</h2><a class="btn sec small" style="display:block;text-align:center;text-decoration:none" href="widget.html" target="_blank">Poner kanji en la pantalla de bloqueo</a>
   <h2>Zona de peligro</h2><button class="btn sec small" onclick="if(confirm('¿Borrar todo el progreso? No se puede deshacer.')){localStorage.removeItem(LS);st=load();render()}">Borrar todo el progreso</button>
-  <p class="sm mut c" style="margin-top:22px">Datos: KANJIDIC2 y KRADFILE © EDRDG (CC BY-SA 4.0) · kanji-data · Japanese N1 Path.<br>Repaso espaciado FSRS-4.5. · Versión 5</p>`}
+  <p class="sm mut c" style="margin-top:22px">Datos: KANJIDIC2 y KRADFILE © EDRDG (CC BY-SA 4.0) · kanji-data · Japanese N1 Path.<br>Repaso espaciado FSRS-4.5. · Versión 6</p>`}
 function exp(){const s=JSON.stringify(st);$('bk').value=s;const done=m=>$('bkm').textContent=m;
   if(navigator.share)navigator.share({title:'Copia Kanji',text:s}).then(()=>done('Copia compartida.'),()=>done('Copia lista en el cuadro: cópiala y guárdala.'));
   else if(navigator.clipboard)navigator.clipboard.writeText(s).then(()=>done('Copiada al portapapeles.'),()=>done('Copia lista en el cuadro.'));else done('Copia lista en el cuadro.')}

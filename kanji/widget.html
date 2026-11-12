@@ -1,0 +1,57 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Widget de kanji</title>
+<style>
+:root{--bg:#faf7f2;--fg:#22201c;--mut:#6f6a61;--card:#fff;--ac:#d2452f;--bd:#e6e0d6}
+@media(prefers-color-scheme:dark){:root{--bg:#171614;--fg:#eee9e0;--mut:#a39d92;--card:#22201d;--bd:#35322d}}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.5 -apple-system,system-ui,sans-serif}
+main{max-width:560px;margin:0 auto;padding:20px 16px 40px}
+h1{font-size:24px;margin:8px 0}h2{font-size:17px;margin:24px 0 8px}
+ol{padding-left:22px;margin:0}li{margin:8px 0}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px}
+pre{white-space:pre-wrap;word-break:break-all;font:12px/1.4 ui-monospace,Menlo,monospace;margin:0 0 12px;color:var(--mut)}
+button,a.btn{display:block;width:100%;box-sizing:border-box;text-align:center;text-decoration:none;border:0;border-radius:12px;padding:13px;font:600 16px -apple-system,system-ui,sans-serif;background:var(--ac);color:#fff}
+a.btn.sec{background:none;color:var(--ac);border:1px solid var(--bd);margin-top:8px}
+.mut{color:var(--mut);font-size:14px}
+</style></head><body><main>
+<h1>漢字 en la pantalla de bloqueo</h1>
+<p class="mut">Un kanji con su lectura y significado, que va cambiando solo a lo largo del día. Se hace con la app gratuita Scriptable; se configura una vez (unos 3 minutos).</p>
+
+<h2>1 · Instala Scriptable</h2>
+<a class="btn sec" href="https://apps.apple.com/app/scriptable/id1405459188">Abrir Scriptable en el App Store</a>
+
+<h2>2 · Copia el código</h2>
+<div class="card"><pre id="code">// Kanji widget
+const u = "https://deliciassaulmoreno-ghub.github.io/jlpt-app/kanji/widget.js";
+const fm = FileManager.local();
+const p = fm.joinPath(fm.documentsDirectory(), "kanji-widget-code.js");
+let code;
+try { const r = new Request(u); r.timeoutInterval = 15; code = await r.loadString(); if (code.includes("ListWidget")) fm.writeString(p, code); else throw 0; }
+catch (e) { code = fm.readString(p); }
+await eval("(async()=>{" + code + "\n})()");</pre>
+<button id="cp">Copiar código</button></div>
+
+<h2>3 · Crea el script</h2>
+<ol>
+<li>Abre <b>Scriptable</b> y pulsa <b>+</b> (arriba a la derecha).</li>
+<li>Mantén pulsado en la zona vacía y elige <b>Pegar</b>.</li>
+<li>Toca el título de arriba y llámalo <b>Kanji</b>. Pulsa <b>Done</b>.</li>
+<li>Tócalo una vez para probar: debe aparecer un kanji.</li>
+</ol>
+
+<h2>4 · Ponlo en la pantalla de bloqueo</h2>
+<ol>
+<li>Con el iPhone bloqueado, mantén pulsada la pantalla → <b>Personalizar</b> → <b>Pantalla de bloqueo</b>.</li>
+<li>Toca la zona de widgets (debajo de la hora) → busca <b>Scriptable</b> → elige el widget <b>rectangular</b>.</li>
+<li>Toca el widget recién añadido → en <b>Script</b> elige <b>Kanji</b>.</li>
+<li>Opcional, en <b>Parameter</b>: los niveles que quieres ver, por ejemplo <b>N1</b> o <b>N2 N1</b>. Vacío = todos.</li>
+<li>Pulsa <b>OK</b>.</li>
+</ol>
+
+<h2>A tener en cuenta</h2>
+<p class="mut">El kanji cambia cuando iOS refresca el widget (suele ser cada 15–60 minutos; no se puede forzar). Los kanji salen al azar del nivel elegido: el widget no puede leer tu progreso de la app. Funciona sin conexión tras la primera carga. También vale como widget de la pantalla de inicio y como línea encima de la hora.</p>
+</main>
+<script>
+document.getElementById('cp').onclick=async function(){const t=document.getElementById('code').textContent;
+  try{await navigator.clipboard.writeText(t)}catch(e){const r=document.createRange();r.selectNodeContents(document.getElementById('code'));const s=getSelection();s.removeAllRanges();s.addRange(r);document.execCommand('copy')}
+  this.textContent='Copiado ✓'};
+</script></body></html>
