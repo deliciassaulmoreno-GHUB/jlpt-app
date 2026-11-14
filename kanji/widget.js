@@ -28,8 +28,8 @@ if (!D) {
   const lv = (par.match(/[1-5]/g) || []).map(Number);
   const pool = lv.length ? D.filter(k => lv.includes(k[1])) : D;
   // Elección fija por tramo de tiempo: así dos widgets juntos enseñan el mismo kanji.
-  let h = Math.imul(slot, 2654435761) >>> 0; h ^= h >>> 15; h = Math.imul(h, 2246822519) >>> 0; h ^= h >>> 13;
-  const [c, n, mean, on, kun, ej, ejr, ejt, tip] = pool[h % pool.length];
+  let h = Math.imul(slot, 2654435761) >>> 0; h ^= h >>> 15; h = Math.imul(h, 2246822519) >>> 0; h = (h ^ (h >>> 13)) >>> 0; // sin signo: si no, el índice puede salir negativo
+  const [c, n, mean, on, kun, ej, ejr, ejt, tip] = (pool.length ? pool : D)[h % (pool.length || D.length)];
   const read = [on, kun].filter(Boolean).join("  ");
   const txt = (st, s, font, lines) => { const t = st.addText(s || ""); t.font = font; t.lineLimit = lines; t.minimumScaleFactor = 0.6; return t; };
   const sys = s => Font.systemFont(s), bold = s => Font.boldSystemFont(s);
