@@ -47,8 +47,21 @@ await eval("(async()=>{" + code + "\n})()");</pre>
 <li>Pulsa <b>OK</b>.</li>
 </ol>
 
+<h2>Tamaños</h2>
+<p class="mut">iOS solo permite estos tamaños; en todos se elige el script <b>Kanji</b>.</p>
+<ol>
+<li><b>1×1</b> (bloqueo, circular): kanji y su primera lectura.</li>
+<li><b>2×1</b> (bloqueo, rectangular): kanji, lecturas y significado.</li>
+<li><b>4×1</b> (bloqueo): pon <b>dos rectangulares</b> seguidos. En el segundo escribe <b>ej</b> en <i>Parameter</i> (con niveles: <b>N1 ej</b>): muestra la palabra de ejemplo del mismo kanji.</li>
+<li><b>Línea sobre la hora</b> (bloqueo): kanji, lectura y significado en una línea.</li>
+<li><b>2×2</b> (inicio, pequeño): kanji, lecturas y significado.</li>
+<li><b>4×2</b> (inicio, mediano): además, la palabra de ejemplo.</li>
+<li><b>4×4</b> (inicio, grande): además, el truco para recordarlo.</li>
+</ol>
+<p class="mut">La pantalla de bloqueo solo tiene una fila de widgets, así que 3×2 y 4×2 no existen ahí; el 4×2 va en la pantalla de inicio (mantén pulsado un hueco → <b>Editar</b> → <b>Añadir widget</b> → Scriptable).</p>
+
 <h2>A tener en cuenta</h2>
-<p class="mut">El kanji cambia cuando iOS refresca el widget (suele ser cada 15–60 minutos; no se puede forzar). Los kanji salen al azar del nivel elegido: el widget no puede leer tu progreso de la app. Funciona sin conexión tras la primera carga. También vale como widget de la pantalla de inicio y como línea encima de la hora.</p>
+<p class="mut">El kanji cambia cada 20 minutos, cuando iOS refresca el widget (a veces tarda más; no se puede forzar). Todos los widgets con los mismos niveles muestran el mismo kanji. Sale al azar del nivel elegido: el widget no puede leer tu progreso de la app. Funciona sin conexión tras la primera carga.</p>
 </main>
 <script>
 document.getElementById('cp').onclick=async function(){const t=document.getElementById('code').textContent;
