@@ -44,18 +44,20 @@ if (!D) {
     txt(w, (on || kun || "").split("・")[0], sys(9), 1).centerAlignText();
   } else if (fam === "accessoryRectangular" && par.includes("ej")) {
     // Segunda mitad del 4x1: palabra de ejemplo
-    w.setPadding(0, 0, 0, 0);
+    w.addAccessoryWidgetBackground = true; // mismo marco que la otra mitad
+    w.setPadding(2, 10, 2, 6);
     txt(w, ej, sys(24), 1);
     txt(w, ejr, sys(11), 1);
     txt(w, ejt, bold(12), 1);
   } else if (fam === "accessoryRectangular") {
     // 2x1: kanji, lecturas y significado
-    w.setPadding(0, 0, 0, 0);
+    w.addAccessoryWidgetBackground = true;
+    w.setPadding(2, 8, 2, 6);
     const row = w.addStack();
     row.layoutHorizontally();
     row.centerAlignContent();
-    txt(row, c, sys(46), 1);
-    row.addSpacer(8);
+    txt(row, c, sys(42), 1);
+    row.addSpacer(6);
     const col = row.addStack();
     col.layoutVertically();
     txt(col, read, sys(12), 2);
