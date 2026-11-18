@@ -85,6 +85,20 @@ textarea{resize:none;margin-top:10px}
 #modal>div{background:var(--bg);width:100%;max-width:520px;max-height:92%;overflow:auto;border-radius:22px 22px 0 0;padding:16px 16px calc(env(safe-area-inset-bottom) + 16px)}
 .flame{font-size:15px;font-weight:700}
 .done{font-size:64px;text-align:center;margin-top:40px}
+.lec{border-top:1px solid var(--line);margin-top:14px;padding-top:8px}
+.lec>small,.wl>small{display:block;font-weight:700;color:var(--mut);font-size:11px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px}
+.lr{display:flex;align-items:center;gap:10px;padding:6px 0}
+.lk{flex:none;width:76px;font-size:13px;font-weight:700;color:var(--acc)}
+.lw{flex:1;min-width:0}.lw .w{font-size:21px}.lw .r{font-size:13px;color:var(--mut)}
+.lr .spk{width:36px;height:36px;font-size:15px}
+.wl{margin-top:12px}.wi{display:flex;gap:10px;align-items:baseline;padding:8px 2px;border-top:1px solid var(--line)}
+.wi .w{font-size:19px;flex:none}.wi .r{font-size:12px;color:var(--mut);flex:none}.wi .m{font-size:14px;flex:1;text-align:right}
+.wbox{position:relative;margin:12px auto 0;width:min(100%,320px);aspect-ratio:1;border:1.5px solid var(--line);border-radius:16px;overflow:hidden;
+  background:var(--card) linear-gradient(var(--line),var(--line)) center/100% 1px no-repeat}
+.wbox:before{content:"";position:absolute;left:50%;top:0;bottom:0;border-left:1px dashed var(--line)}
+.wbox canvas{position:relative;width:100%;height:100%;display:block;touch-action:none}
+.wmsg{text-align:center;font-weight:700;margin:8px 0 0;min-height:22px}
+.prevb{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:5px 10px;font:600 13px var(--f)}
 .leg{display:flex;gap:14px;font-size:12px;color:var(--mut);margin:8px 0}.leg i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;vertical-align:-1px;border:1px solid var(--line)}
 </style>
 </head>
@@ -93,6 +107,7 @@ textarea{resize:none;margin-top:10px}
 <nav id="nav"></nav>
 <div id="modal" onclick="if(event.target===this)closeModal()"><div id="mbody"></div></div>
 <script src="data.js"></script>
+<script src="lect.js"></script>
 <script>
 'use strict';
 /* ---------- datos ---------- */
@@ -163,10 +178,22 @@ function cardHTML(k,opt){opt=opt||{};const chips=k.cs.map(x=>{const n=compName(x
   ${chips?`<div class="chips">${chips}</div>`:''}
   <div class="tip"><small>Truco</small>${esc(k.tip||autoTip(k))}</div>
   ${note&&opt.ro?`<div class="tip" style="background:var(--ok2)"><small style="color:var(--ok)">Mi historia</small>${esc(note)}</div>`:''}
-  ${k.ej?`<div class="exw"><div><div class="w ja" lang="ja">${esc(k.ej)}</div><div class="r"><span class="ja">${esc(k.ejr)}</span> · ${esc(k.ejt)}</div></div><button class="spk" onclick="speak('${esc(k.ejr||k.ej)}')" aria-label="Escuchar">▶</button></div>`:''}
+  ${window.KL&&KL[k.c]?lectHTML(k):k.ej?`<div class="exw"><div><div class="w ja" lang="ja">${esc(k.ej)}</div><div class="r"><span class="ja">${esc(k.ejr)}</span> · ${esc(k.ejt)}</div></div><button class="spk" onclick="speak('${esc(k.ejr||k.ej)}')" aria-label="Escuchar">▶</button></div>`:''}
   ${k.ety&&!opt.ro?`<p class="sm mut" style="margin-top:12px">${esc(k.ety)}</p>`:''}
   ${opt.ro?'':`<textarea rows="2" placeholder="Mi historia (opcional): escríbela con tus palabras y se te quedará mejor" oninput="setNote('${k.c}',this.value)">${esc(note)}</textarea>`}
   </div>`}
+let wid=0;
+function lectHTML(k){const id='mw'+(++wid);
+  return `<div class="lec"><small>Lecturas y ejemplos</small>${KL[k.c].map(r=>`<div class="lr"><span class="lk ja" lang="ja">${esc(r[0]||'otra')}</span>${r[1]?`<div class="lw"><span class="w ja" lang="ja">${esc(r[1])}</span> <span class="r ja" lang="ja">${esc(r[2])}</span><div class="r">${esc(r[3])}${r[4]?' (en)':''}</div></div><button class="spk" onclick="speak('${esc(r[2])}')" aria-label="Escuchar">▶</button>`:'<div class="lw r mut sm">sin palabra frecuente</div>'}</div>`).join('')}</div>
+  <div id="${id}"><button class="btn sec small" style="margin-top:10px" onclick="moreW('${id}','${k.c}')">Ver más palabras</button></div>`}
+// Datos por bloques de 100 kanji (w = palabras, s = trazos), se piden solo cuando hacen falta.
+const SHC={};
+function shard(dir,k){const f=dir+'/'+String(Math.floor(k.i/100)).padStart(2,'0')+'.json';
+  return SHC[f]||(SHC[f]=fetch(f).then(r=>{if(!r.ok)throw new Error(r.status);return r.json()}).catch(e=>{delete SHC[f];throw e}))}
+function moreW(id,c){const k=BY.get(c),box=$(id);box.innerHTML='<p class="sm mut c">Cargando…</p>';
+  shard('w',k).then(W=>{const L=(W[c]||[]).filter(x=>!(KL[c]||[]).some(r=>r[1]===x[0]&&r[2]===x[1]));
+    box.innerHTML=`<div class="wl"><small>${L.length?L.length+' palabras más con '+c:'No hay más palabras frecuentes con '+c}</small>${L.map(x=>`<div class="wi" onclick="speak('${esc(x[1])}')"><span class="w ja" lang="ja">${esc(x[0])}</span><span class="r ja" lang="ja">${esc(x[1])}</span><span class="m">${esc(x[2])}${x[3]&2?' (en)':''}</span></div>`).join('')}</div>`},
+  ()=>{box.innerHTML='<p class="sm mut c">No se pudo cargar (¿sin conexión?).</p>'})}
 function setNote(c,v){v=v.trim();if(v)st.notes[c]=v;else delete st.notes[c];save()}
 function openModal(h){$('mbody').innerHTML=h;$('modal').classList.add('on')}
 function closeModal(){$('modal').classList.remove('on')}
@@ -192,41 +219,54 @@ function vHome(){checkStreak();const due=dueList().length,q=newQuota(),ct=counts
 
 /* ---------- sesión ---------- */
 function start(min,extra){const due=dueList();let q=extra?5:newQuota();if(min)q=Math.min(q,3);
-  sess={revs:due.slice(0,min?15:st.set.mr).map(c=>({k:BY.get(c)})),newLeft:q,batch:[],learned:[],q:[],skip:new Set(),done:0,recDone:0};
-  sess.total=sess.revs.length+q*4;step()}
+  sess={revs:due.slice(0,min?15:st.set.mr).map(c=>({k:BY.get(c)})),newLeft:q,batch:[],learned:[],q:[],skip:new Set(),done:0,recDone:0,hist:[],cur:null};
+  sess.total=sess.revs.length+q*5;
+  // Descarga ya los trazos que hará falta corregir, por si luego se pierde la conexión.
+  const pre=sess.revs.map(r=>r.k);const n=nextCand();if(n)pre.push(n);pre.forEach(k=>shard('s',k).catch(()=>{}));step()}
+// Kanji ya vistos en la sesión, para poder volver a mirarlos (nunca el que se está preguntando).
+function seen(k){const h=sess.hist;const i=h.indexOf(k.c);if(i>=0)h.splice(i,1);h.push(k.c)}
+function prevList(){return sess&&sess.hist?sess.hist.filter(c=>!sess.cur||c!==sess.cur.c).reverse():[]}
+function showPrev(c){const L=prevList();if(!L.length)return;c=c||L[0];
+  openModal(`<div class="top"><span class="sm mut" style="flex:1">Vistos en esta sesión</span><button class="x" onclick="closeModal()">×</button></div>
+  <div class="chips" style="justify-content:flex-start;margin-top:0">${L.slice(0,12).map(x=>`<button class="chip${x===c?' on':''}" style="${x===c?'border-color:var(--acc)':''}" onclick="showPrev('${x}')"><b class="ja">${x}</b></button>`).join('')}</div>${cardHTML(BY.get(c),{ro:1})}`)}
 function quit(){sess=null;render()}
 function frame(body,foot){nav();window.scrollTo(0,0);const p=sess.total?Math.min(100,100*sess.done/sess.total):0;
-  $('app').innerHTML=`<div class="top"><button class="x" onclick="quit()" aria-label="Salir">×</button><div class="bar"><i style="width:${p}%"></i></div></div><div class="grow">${body}</div>${foot?`<div class="foot">${foot}</div>`:''}`}
+  const pv=prevList().length;
+  $('app').innerHTML=`<div class="top"><button class="x" onclick="quit()" aria-label="Salir">×</button><div class="bar"><i style="width:${p}%"></i></div>${pv?'<button class="prevb" onclick="showPrev()">‹ Anterior</button>':''}</div><div class="grow">${body}</div>${foot?`<div class="foot">${foot}</div>`:''}`}
 function step(){if(!sess)return;
-  if(sess.q.length){const it=sess.q[0];return it.t==='rec'?vRec(it):vMC(it)}
+  if(sess.q.length){const it=sess.q[0];return it.t==='rec'?vRec(it):it.t==='wr'?vWr(it.k,'Nuevo · escribir',wrNew):vMC(it)}
   if(sess.revs.length)return vRev(sess.revs[0]);
   if(sess.newLeft>0){const k=nextCand(sess.skip);if(k)return st.tri[k.c]?vStudy(k):vPre(k);sess.newLeft=0}
   if(sess.batch.length){flush();return step()}
   if(!sess.recDone&&sess.learned.length){sess.recDone=1;sess.q=shuffle(sess.learned).map(k=>({t:'rec',k}));return step()}
   finish()}
-function flush(){const b=sess.batch;sess.batch=[];sess.q=shuffle(b).map(k=>({t:'mc1',k})).concat(shuffle(b).map(k=>({t:'mc2',k})))}
+function flush(){const b=sess.batch;sess.batch=[];sess.q=shuffle(b).map(k=>({t:'mc1',k})).concat(shuffle(b).map(k=>({t:'mc2',k})),shuffle(b).map(k=>({t:'wr',k})))}
+function wrNew(ok){const it=sess.q.shift();if(ok)sess.done++;else sess.q.splice(Math.min(3,sess.q.length),0,it);step()}
 
 /* repaso */
-function vRev(it){const k=it.k;frame(`<div class="c"><span class="tag ${it.again?'w':''}">${it.again?'Otra vez':'Repaso'}</span></div>
+function vRev(it){const k=it.k;sess.cur=k;
+  if(!it.wd)return vWr(k,it.again?'Otra vez · escribir':'Repaso · escribir',ok=>{it.wd=1;it.wok=ok;step()});
+  frame(`<div class="c"><span class="tag ${it.again?'w':''}">${it.again?'Otra vez':'Repaso'}</span></div>
   <div class="big min" lang="ja" style="margin-top:28px">${k.c}</div>
   ${k.ej?`<p class="c mut ja" lang="ja" style="font-size:24px">${esc(k.ej)}</p>`:''}
   <p class="q">¿Qué significa? ¿Cómo se lee la palabra?</p>`,`<button class="btn" onclick="revShow()">Mostrar</button>`)}
-function revShow(){const it=sess.revs[0],k=it.k,c=st.cards[k.c];
+function revShow(){const it=sess.revs[0],k=it.k,c=st.cards[k.c];seen(k);
+  const g4=it.wok===false?[['No','b1'],['Difícil','b2']]:[['No','b1'],['Difícil','b2'],['Bien','b3'],['Fácil','b4']];
   const foot=it.again?`<div class="row"><button class="btn sec" onclick="revGrade(1)">Aún no</button><button class="btn ok" onclick="revGrade(3)">Ya lo tengo</button></div>`:
-  `<div class="g4">${[['No','b1'],['Difícil','b2'],['Bien','b3'],['Fácil','b4']].map(([n,cl],i)=>`<button class="${cl}" onclick="revGrade(${i+1})">${n}<small>${preview(c,i+1)}</small></button>`).join('')}</div>`;
+  `${it.wok===false?'<p class="sm c" style="color:var(--acc);margin:0 0 8px">Fallaste la escritura: hoy cuenta como No o Difícil.</p>':''}<div class="g4" style="${it.wok===false?'grid-template-columns:1fr 1fr':''}">${g4.map(([n,cl],i)=>`<button class="${cl}" onclick="revGrade(${i+1})">${n}<small>${preview(c,i+1)}</small></button>`).join('')}</div>`;
   frame(cardHTML(k,{ro:1}),foot)}
 function revGrade(g){const it=sess.revs.shift(),c=st.cards[it.k.c];
   if(!it.again){grade(c,g);day().r++;answered();save()}
-  if(g===1){it.again=1;sess.revs.splice(Math.min(4,sess.revs.length),0,it)}else sess.done++;
+  if(g===1){it.again=1;it.wd=0;it.wok=null;sess.revs.splice(Math.min(4,sess.revs.length),0,it)}else sess.done++;
   step()}
 
 /* nuevo: ¿lo conoces? */
-function vPre(k){frame(`<div class="c"><span class="tag g">Nuevo · N${k.l}</span></div>
+function vPre(k){sess.cur=k;frame(`<div class="c"><span class="tag g">Nuevo · N${k.l}</span></div>
   <div class="big min" lang="ja" style="margin-top:28px">${k.c}</div>
   <p class="q">¿Lo conoces? Intenta decir su significado antes de mirar.</p>`,
   `<button class="btn" onclick="preShow('${k.c}')">Mostrar</button>`)}
-function preShow(c){const k=BY.get(c);frame(cardHTML(k),`<div class="row"><button class="btn sec" onclick="know('${c}')">Ya lo sabía</button><button class="btn" onclick="learn('${c}')">Aprenderlo</button></div>`)}
-function vStudy(k){frame(`<div class="c" style="margin-bottom:8px"><span class="tag g">Nuevo · N${k.l}</span></div>`+cardHTML(k),`<button class="btn" onclick="learn('${k.c}')">Lo tengo, siguiente</button>`)}
+function preShow(c){const k=BY.get(c);seen(k);frame(cardHTML(k),`<div class="row"><button class="btn sec" onclick="know('${c}')">Ya lo sabía</button><button class="btn" onclick="learn('${c}')">Aprenderlo</button></div>`)}
+function vStudy(k){sess.cur=k;seen(k);frame(`<div class="c" style="margin-bottom:8px"><span class="tag g">Nuevo · N${k.l}</span></div>`+cardHTML(k),`<button class="btn" onclick="learn('${k.c}')">Lo tengo, siguiente</button>`)}
 function know(c){const t=today();st.cards[c]={s:40,d:3,due:t+7+rnd(35),last:t,n:1,k:1};delete st.tri[c];save();step()}
 function learn(c){const t=today(),k=BY.get(c);st.cards[c]={s:1,d:5,due:t+1,last:t,n:0};delete st.tri[c];day().n++;answered();save();
   sess.batch.push(k);sess.learned.push(k);sess.newLeft--;sess.done++;if(sess.batch.length>=5||sess.newLeft<=0)flush();step()}
@@ -235,7 +275,7 @@ function learn(c){const t=today(),k=BY.get(c);st.cards[c]={s:1,d:5,due:t+1,last:
 function distract(k,n,key){const pool=K.slice(Math.max(0,k.i-150),k.i+150).filter(o=>o!==k&&key(o)!==key(k));
   const sc=o=>o.cs.filter(x=>k.cs.includes(x)).length*2+(o.cs.includes(k.c)||k.cs.includes(o.c)?3:0)+Math.random()*2.5;
   const out=[],seen=new Set();for(const o of pool.map(o=>[sc(o),o]).sort((a,b)=>b[0]-a[0]).map(x=>x[1])){if(seen.has(key(o)))continue;seen.add(key(o));out.push(o);if(out.length===n)break}return out}
-function vMC(it){const k=it.k,m1=it.t==='mc1',opts=shuffle([k].concat(distract(k,3,m1?short:o=>o.c)));it.opts=opts;
+function vMC(it){sess.cur=it.k;const k=it.k,m1=it.t==='mc1',opts=shuffle([k].concat(distract(k,3,m1?short:o=>o.c)));it.opts=opts;
   frame(m1?`<div class="big min" lang="ja" style="margin-top:14px">${k.c}</div><p class="q">¿Qué significa?</p><div class="opts">${opts.map((o,i)=>`<button class="opt" id="o${i}" onclick="mcPick(${i})">${esc(short(o))}</button>`).join('')}</div>`
   :`<div class="mean" style="margin-top:34px;font-size:30px">${esc(short(k))}</div><p class="q">¿Cuál es el kanji?</p><div class="opts k">${opts.map((o,i)=>`<button class="opt min" lang="ja" id="o${i}" onclick="mcPick(${i})">${o.c}</button>`).join('')}</div>`,'<div id="mcf"></div>')}
 function mcPick(i){const it=sess.q[0];if(it.lock)return;it.lock=1;const ok=it.opts[i]===it.k,ci=it.opts.indexOf(it.k);
@@ -244,9 +284,76 @@ function mcPick(i){const it=sess.q[0];if(it.lock)return;it.lock=1;const ok=it.op
   else{$('mcf').innerHTML=`<div class="tip" style="margin-bottom:10px"><small>${it.k.c} · ${esc(first(it.k))}</small>${esc(st.notes[it.k.c]||it.k.tip||autoTip(it.k))}</div><button class="btn" onclick="mcNext()">Continuar</button>`}}
 function mcNext(){const it=sess.q.shift();it.lock=0;sess.q.splice(Math.min(3,sess.q.length),0,it);step()}
 
+/* escribir el kanji: se dibuja con el dedo y se corrige trazo a trazo contra KanjiVG (orden y forma) */
+let WR=null;const SVGNS='http://www.w3.org/2000/svg';let svgTmp=null;
+function vWr(k,tag,cb){sess.cur=k;WR={k,cb,st:[],cur:null,tpl:null,res:null};
+  const ctx=k.ej&&k.ej.includes(k.c)?k.ej.split(k.c).join('〇'):'';
+  frame(`<div class="c"><span class="tag">${tag}</span></div>
+  <div class="mean" style="margin-top:10px">${esc(short(k))}</div>
+  ${ctx?`<p class="c mut" style="margin:0"><span class="ja" lang="ja" style="font-size:20px">${esc(ctx)}</span> · ${esc(k.ejt)}</p>`:''}
+  <p class="q" style="margin-top:4px">Escribe el kanji<span id="wn"></span></p>
+  <div class="wbox"><canvas id="wc"></canvas></div><div class="wmsg" id="wm"></div>`,
+  `<div id="wf"><div class="row"><button class="btn sec small" onclick="wrUndo()">Deshacer</button><button class="btn sec small" onclick="wrClear()">Borrar</button></div><div style="height:10px"></div><button class="btn" onclick="wrCheck()">Comprobar</button></div>`);
+  const cv=$('wc'),r=cv.getBoundingClientRect(),dpr=window.devicePixelRatio||1;cv.width=r.width*dpr;cv.height=r.height*dpr;WR.cv=cv;WR.px=r.width;
+  const pt=e=>{const b=cv.getBoundingClientRect();return[(e.clientX-b.left)*109/b.width,(e.clientY-b.top)*109/b.height]};
+  cv.onpointerdown=e=>{if(WR.res)return;e.preventDefault();cv.setPointerCapture(e.pointerId);WR.cur=[pt(e)];WR.st.push(WR.cur);wrDraw()};
+  cv.onpointermove=e=>{if(!WR.cur)return;e.preventDefault();WR.cur.push(pt(e));wrDraw()};
+  cv.onpointerup=cv.onpointercancel=()=>{WR.cur=null};
+  shard('s',k).then(S=>{if(WR&&WR.k===k&&S[k.c]){WR.tpl=S[k.c].map(d=>samplePath(d,32));const n=$('wn');if(n)n.textContent=' · '+WR.tpl.length+' trazos'}}).catch(()=>{});
+  wrDraw()}
+function samplePath(d,n){if(!svgTmp){svgTmp=document.createElementNS(SVGNS,'svg');svgTmp.setAttribute('style','position:absolute;width:0;height:0;visibility:hidden');document.body.appendChild(svgTmp)}
+  const p=document.createElementNS(SVGNS,'path');p.setAttribute('d',d);svgTmp.appendChild(p);const L=p.getTotalLength(),o=[];
+  for(let i=0;i<n;i++){const q=p.getPointAtLength(L*i/(n-1));o.push([q.x,q.y])}p.remove();return o}
+function resample(s,n){if(s.length<2)return Array(n).fill(s[0]);const d=[0];for(let i=1;i<s.length;i++)d.push(d[i-1]+Math.hypot(s[i][0]-s[i-1][0],s[i][1]-s[i-1][1]));
+  const L=d[d.length-1]||1,o=[];let j=1;for(let i=0;i<n;i++){const t=L*i/(n-1);while(j<s.length-1&&d[j]<t)j++;const a=d[j-1],b=d[j],f=b>a?(t-a)/(b-a):0;
+    o.push([s[j-1][0]+(s[j][0]-s[j-1][0])*f,s[j-1][1]+(s[j][1]-s[j-1][1])*f])}return o}
+function bbox(ss){let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;for(const s of ss)for(const[x,y]of s){x0=Math.min(x0,x);y0=Math.min(y0,y);x1=Math.max(x1,x);y1=Math.max(y1,y)}return{x0,y0,x1,y1,cx:(x0+x1)/2,cy:(y0+y1)/2,m:Math.max(x1-x0,y1-y0,1)}}
+// Compara trazo a trazo, en orden y en su dirección, tras ajustar tamaño y posición del dibujo al modelo.
+function wrScore(user,tpl){const T=bbox(tpl),U=bbox(user);
+  // Ajusta ancho y alto por separado (salvo en kanji muy planos o muy estrechos, como 一 o 丨).
+  const w=T.x1-T.x0,h=T.y1-T.y0,uw=U.x1-U.x0,uh=U.y1-U.y0,flat=w<25||h<25||uw<8||uh<8;
+  const sx=flat?T.m/U.m:w/uw,sy=flat?T.m/U.m:h/uh;
+  const norm=user.map(s=>resample(s,32).map(([x,y])=>[(x-U.cx)*sx+T.cx,(y-U.cy)*sy+T.cy]));
+  // longitud aproximada con 9 puntos: así el temblor del dedo no la infla
+  const plen=q=>q.filter((_,i)=>i%4==0||i==31).reduce((t,v,i,p)=>i?t+Math.hypot(v[0]-p[i-1][0],v[1]-p[i-1][1]):0,0);
+  const cen=p=>[p.reduce((t,q)=>t+q[0],0)/p.length,p.reduce((t,q)=>t+q[1],0)/p.length];
+  const shp=(a,b)=>{const ca=cen(a),cb=cen(b);return a.reduce((t,p,i)=>t+Math.hypot(p[0]-ca[0]-b[i][0]+cb[0],p[1]-ca[1]-b[i][1]+cb[1]),0)/a.length};
+  const bad=[];for(let i=0;i<Math.min(norm.length,tpl.length);i++){const u=norm[i],t=tpl[i],cu=cen(u),ct=cen(t);
+    // posición del trazo (centro) y forma (sin contar posición), en el sentido correcto
+    const pos=Math.hypot(cu[0]-ct[0],cu[1]-ct[1]),sh=shp(u,t),lu=plen(u),lt=plen(t),thr=Math.min(13,5+.25*lt);
+    const vu=[u[31][0]-u[0][0],u[31][1]-u[0][1]],vt=[t[31][0]-t[0][0],t[31][1]-t[0][1]],nu=Math.hypot(...vu),nt=Math.hypot(...vt);
+    const cos=nu>4&&nt>10?(vu[0]*vt[0]+vu[1]*vt[1])/nu/nt:1;
+    const lenOk=lt<12?lu<30:lu>lt*.45&&lu<lt*2.2;
+    if(pos>20||sh>thr||!lenOk||cos<.5){const rv=shp(u.slice().reverse(),t);bad.push({i,rev:pos<=20&&lenOk&&rv<=thr&&cos<-.5})}}
+  return{ok:norm.length===tpl.length&&!bad.length,bad,n:norm.length,N:tpl.length}}
+function wrDraw(anim){const cv=WR.cv;if(!cv)return;const g=cv.getContext('2d'),s=cv.width/109;g.setTransform(s,0,0,s,0,0);g.clearRect(0,0,109,109);g.lineCap=g.lineJoin='round';
+  const css=getComputedStyle(document.documentElement),ink=css.getPropertyValue('--ink'),ok=css.getPropertyValue('--ok'),bad=css.getPropertyValue('--acc'),mut=css.getPropertyValue('--line');
+  const line=(p,c,w)=>{if(!p.length)return;g.strokeStyle=c;g.lineWidth=w;g.beginPath();g.moveTo(p[0][0],p[0][1]);for(const q of p)g.lineTo(q[0],q[1]);if(p.length===1)g.lineTo(p[0][0]+.1,p[0][1]);g.stroke()};
+  const R=WR.res;
+  if(R&&WR.tpl){WR.tpl.forEach((p,i)=>{const n=anim==null?p.length:Math.max(0,Math.min(p.length,Math.round((anim-i)*p.length)));line(p,mut,5);if(n)line(p.slice(0,n),R.ok?ok:ink,4);
+    if(anim==null||anim>i){g.fillStyle=bad;g.font='bold 7px sans-serif';g.fillText(i+1,p[0][0]-6,p[0][1]-1)}})}
+  WR.st.forEach((p,i)=>line(p,!R?ink:R.ok?'rgba(47,143,91,.35)':(R.bad.some(b=>b.i===i)||i>=R.N?bad:'rgba(120,120,120,.45)'),R?3:4.5))}
+function wrCheck(){if(!WR.st.length){$('wm').textContent='Dibuja el kanji primero.';return}const k=WR.k;
+  if(!WR.tpl){WR.res={ok:null,bad:[],N:0};$('wm').innerHTML=`Compáralo: <span class="min" lang="ja" style="font-size:44px;vertical-align:middle">${k.c}</span>`;
+    $('wf').innerHTML=`<div class="row"><button class="btn sec" onclick="wrEnd(0)">No me salió</button><button class="btn ok" onclick="wrEnd(1)">Me salió</button></div>`;return}
+  const R=WR.res=wrScore(WR.st,WR.tpl);
+  const why=R.ok?'¡Correcto! ✓':R.n!==R.N?`Has hecho ${R.n} trazos; ${k.c} tiene ${R.N}.`:R.bad.length===1?`Revisa el trazo ${R.bad[0].i+1}${R.bad[0].rev?' (va al revés)':''}.`:`Revisa los trazos ${R.bad.map(b=>b.i+1).join(', ')}.`;
+  $('wm').innerHTML=`<span style="color:var(--${R.ok?'ok':'acc'})">${why}</span>`;
+  $('wf').innerHTML=R.ok?`<button class="btn ok" onclick="wrEnd(1)">Continuar</button>`:
+  `<div class="row"><button class="btn sec" onclick="wrRetry()">Repetir</button><button class="btn" onclick="wrEnd(0)">Continuar</button></div><p class="c sm" style="margin:10px 0 0"><a href="#" style="color:var(--mut)" onclick="wrEnd(2);return false">Lo escribí bien, contar como correcto</a></p>`;
+  WR.fail=WR.fail||!R.ok;
+  // Orden de trazos animado.
+  const t0=performance.now(),N=WR.tpl.length,me=WR;(function f(t){if(WR!==me||!WR.res)return;const a=(t-t0)/450;wrDraw(Math.min(a,N));if(a<N)requestAnimationFrame(f)})(t0)}
+function wrRetry(){WR.res=null;WR.st=[];$('wm').textContent='';
+  $('wf').innerHTML=`<div class="row"><button class="btn sec small" onclick="wrUndo()">Deshacer</button><button class="btn sec small" onclick="wrClear()">Borrar</button></div><div style="height:10px"></div><button class="btn" onclick="wrCheck()">Comprobar</button>`;wrDraw()}
+function wrUndo(){WR.st.pop();wrDraw()}
+function wrClear(){WR.st=[];wrDraw()}
+// Un fallo cuenta aunque luego se repita bien; "Lo escribí bien" lo corrige.
+function wrEnd(v){const w=WR;WR=null;w.cb(v===2||(v===1&&!w.fail))}
+
 /* recuerdo final */
-function vRec(it){const k=it.k;frame(`<div class="c"><span class="tag">Último repaso de hoy</span></div><div class="big min" lang="ja" style="margin-top:28px">${k.c}</div><p class="q">Di el significado en voz alta y comprueba.</p>`,`<button class="btn" onclick="recShow()">Mostrar</button>`)}
-function recShow(){const k=sess.q[0].k;frame(cardHTML(k,{ro:1}),`<div class="row"><button class="btn sec" onclick="recGrade(0)">No me salió</button><button class="btn ok" onclick="recGrade(1)">Me salió</button></div>`)}
+function vRec(it){const k=it.k;sess.cur=k;frame(`<div class="c"><span class="tag">Último repaso de hoy</span></div><div class="big min" lang="ja" style="margin-top:28px">${k.c}</div><p class="q">Di el significado en voz alta y comprueba.</p>`,`<button class="btn" onclick="recShow()">Mostrar</button>`)}
+function recShow(){const k=sess.q[0].k;seen(k);frame(cardHTML(k,{ro:1}),`<div class="row"><button class="btn sec" onclick="recGrade(0)">No me salió</button><button class="btn ok" onclick="recGrade(1)">Me salió</button></div>`)}
 function recGrade(ok){const it=sess.q.shift();if(ok)sess.done++;else sess.q.splice(Math.min(3,sess.q.length),0,it);step()}
 
 function finish(){markDone();const d=day(),more=dueList().length||nextCand();sess.total=0;
@@ -287,7 +394,7 @@ function vSet(){$('app').innerHTML=`<h1>Ajustes</h1>
   <textarea id="bk" rows="3" placeholder="Para importar, pega aquí la copia y pulsa Importar"></textarea><p id="bkm" class="sm mut"></p></div>
   <h2>Pantalla de bloqueo</h2><a class="btn sec small" style="display:block;text-align:center;text-decoration:none" href="widget.html" target="_blank">Poner kanji en la pantalla de bloqueo</a>
   <h2>Zona de peligro</h2><button class="btn sec small" onclick="if(confirm('¿Borrar todo el progreso? No se puede deshacer.')){localStorage.removeItem(LS);st=load();render()}">Borrar todo el progreso</button>
-  <p class="sm mut c" style="margin-top:22px">Datos: KANJIDIC2 y KRADFILE © EDRDG (CC BY-SA 4.0) · kanji-data · Japanese N1 Path.<br>Repaso espaciado FSRS-4.5. · Versión 6</p>`}
+  <p class="sm mut c" style="margin-top:22px">Datos: KANJIDIC2 y KRADFILE © EDRDG (CC BY-SA 4.0) · kanji-data · Japanese N1 Path.<br>KanjiVG © Ulrich Apel (CC BY-SA 3.0) · JMdict y JmdictFurigana.<br>Repaso espaciado FSRS-4.5. · Versión 7</p>`}
 function exp(){const s=JSON.stringify(st);$('bk').value=s;const done=m=>$('bkm').textContent=m;
   if(navigator.share)navigator.share({title:'Copia Kanji',text:s}).then(()=>done('Copia compartida.'),()=>done('Copia lista en el cuadro: cópiala y guárdala.'));
   else if(navigator.clipboard)navigator.clipboard.writeText(s).then(()=>done('Copiada al portapapeles.'),()=>done('Copia lista en el cuadro.'));else done('Copia lista en el cuadro.')}

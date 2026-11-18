@@ -1,5 +1,5 @@
-const CACHE='kanji-app-v6';
-const FILES=['./','index.html','data.js','manifest.json','icon.png'];
+const CACHE='kanji-app-v7';
+const FILES=['./','index.html','data.js','lect.js','manifest.json','icon.png'];
 const fresh=u=>fetch(u,{cache:'no-cache'});
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>Promise.all(FILES.map(f=>fresh(f).then(r=>{if(r.ok)return c.put(f,r)})))).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k.startsWith('kanji-app-')&&k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
